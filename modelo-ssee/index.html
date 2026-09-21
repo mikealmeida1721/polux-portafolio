@@ -23,23 +23,23 @@ body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo)
 .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
 .mono{font-family:var(--fuente-mono)}
 /* Distintivo demo */
-.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#1c1917;background:var(--acento);border-radius:999px;padding:5px 14px;opacity:.95;font-weight:700}
-.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:#292524;border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--fondo);background:var(--acento);border-radius:999px;padding:5px 14px;opacity:.95;font-weight:700}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:var(--fondo2);border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
 .volver:hover{color:var(--acento);border-color:var(--acento)}
 /* Header */
 header.site{background:rgba(28,25,23,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--borde);position:sticky;top:0;z-index:50;padding-top:44px}
 .bar{display:flex;align-items:center;gap:14px;padding:14px 0}
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--texto)}
-.logo-slot{width:46px;height:46px;border-radius:10px;border:2px solid var(--acento);background:var(--logo) center/contain no-repeat,#292524;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--acento);font-size:1.2rem;font-family:var(--fuente-mono)}
+.logo-slot{width:46px;height:46px;border-radius:10px;border:2px solid var(--acento);background:var(--logo) center/contain no-repeat,var(--fondo2);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--acento);font-size:1.2rem;font-family:var(--fuente-mono)}
 .brand b{font-family:var(--fuente-titular);letter-spacing:.12em;font-size:1.05rem}
 .brand small{display:block;font-size:.66rem;letter-spacing:.24em;color:var(--muted);text-transform:uppercase;font-family:var(--fuente-mono)}
 nav.menu{margin-left:auto;display:flex;gap:20px;font-size:.85rem;align-items:center;font-family:var(--fuente-mono);letter-spacing:.08em}
 nav.menu a{color:var(--muted);text-decoration:none}
 nav.menu a:hover{color:var(--acento)}
-.btn{display:inline-block;background:var(--acento);color:#1c1917;font-weight:700;text-decoration:none;padding:12px 26px;border-radius:8px;border:none;cursor:pointer;font-size:1rem;font-family:var(--fuente-mono);letter-spacing:.04em}
+.btn{display:inline-block;background:var(--acento);color:var(--fondo);font-weight:700;text-decoration:none;padding:12px 26px;border-radius:8px;border:none;cursor:pointer;font-size:1rem;font-family:var(--fuente-mono);letter-spacing:.04em}
 .btn:hover{background:var(--acento2);color:#fff}
 .btn.ghost{background:transparent;color:var(--acento);border:1px solid var(--acento)}
-.btn.ghost:hover{background:var(--acento);color:#1c1917}
+.btn.ghost:hover{background:var(--acento);color:var(--fondo)}
 /* Hero */
 .hero{position:relative;overflow:hidden;padding:90px 0 70px;text-align:center;border-bottom:1px solid var(--borde)}
 #red{position:absolute;inset:0;opacity:.55}
@@ -73,14 +73,14 @@ p.sub{color:var(--muted);margin-bottom:32px;max-width:640px}
 .term .tbar{display:flex;gap:8px;padding:12px 16px;border-bottom:1px solid var(--borde);align-items:center}
 .term .tbar i{width:11px;height:11px;border-radius:50%;display:block}
 .term .tbar span{margin-left:8px;font-family:var(--fuente-mono);font-size:.75rem;color:var(--muted)}
-#tout{font-family:var(--fuente-mono);font-size:.88rem;padding:22px;min-height:220px;white-space:pre-wrap;color:#d6d3d1}
+#tout{font-family:var(--fuente-mono);font-size:.88rem;padding:22px;min-height:220px;white-space:pre-wrap;color:var(--texto)}
 #tout .p{color:var(--acento)}
 #tout .ok{color:#10b981}
 .cursor{display:inline-block;width:9px;height:16px;background:var(--acento);vertical-align:-3px;animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
 /* Protocolos */
 .protos{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.proto{border:1px solid var(--borde);border-radius:10px;padding:30px 26px;background:linear-gradient(180deg,#292524,#1c1917);text-align:center}
+.proto{border:1px solid var(--borde);border-radius:10px;padding:30px 26px;background:linear-gradient(180deg,var(--fondo2),var(--fondo));text-align:center}
 .proto .num{font-family:var(--fuente-mono);font-size:2.4rem;color:var(--acento);margin-bottom:6px}
 .proto h3{font-family:var(--fuente-titular);letter-spacing:.1em;margin-bottom:10px}
 .proto p{color:var(--muted);font-size:.92rem}
@@ -88,14 +88,14 @@ p.sub{color:var(--muted);margin-bottom:32px;max-width:640px}
 .testis{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .testi{background:var(--tarjeta);border:1px solid var(--borde);border-radius:10px;padding:26px}
 .testi .stars{color:var(--acento);margin-bottom:8px;letter-spacing:.1em}
-.testi p{font-style:italic;color:#d6d3d1}
+.testi p{font-style:italic;color:var(--texto)}
 .testi footer{margin-top:10px;font-size:.85rem;color:var(--muted)}
 .testi .eje{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acento);font-style:normal;font-family:var(--fuente-mono)}
 /* CTA */
 .cta{border:1px solid var(--acento);border-radius:14px;padding:52px 32px;text-align:center;background:radial-gradient(600px 260px at 50% 0,rgba(251,191,36,.12),transparent)}
 .cta h2{font-family:var(--fuente-titular);letter-spacing:.08em;font-size:1.8rem;margin-bottom:10px}
 .cta p{color:var(--muted);margin-bottom:26px}
-footer.site{background:#0c0a09;border-top:1px solid var(--borde);padding:34px 0;text-align:center;font-size:.88rem;color:var(--muted)}
+footer.site{background:var(--fondo);border-top:1px solid var(--borde);padding:34px 0;text-align:center;font-size:.88rem;color:var(--muted)}
 footer.site a{color:var(--acento)}
 @media(max-width:900px){.regs,.protos{grid-template-columns:1fr}.stats .wrap{grid-template-columns:1fr 1fr}.stat{border-left:none;border-top:1px solid var(--borde)}.testis{grid-template-columns:1fr}nav.menu a:not(.btn){display:none}}
 </style>
@@ -200,6 +200,11 @@ footer.site a{color:var(--acento)}
   </div>
 </section>
 
+<section class="pz-ideal" style="padding:60px 20px;text-align:center;border-top:1px solid var(--borde)">
+  <p style="max-width:640px;margin:0 auto;color:var(--muted);font-size:1.02rem;line-height:1.7"><strong style="color:var(--texto);font-size:1.15rem">¿Este estilo es para tu negocio?</strong><br>Ideal para negocios que quieren verse tecnológicos: clínicas modernas, SaaS, tableros y métricas en vivo.</p>
+  <button onclick="var b=document.getElementById('pz-fab');b&&b.click()" style="margin-top:18px;background:var(--acento);color:var(--fondo);border:none;border-radius:999px;padding:13px 30px;font-weight:700;cursor:pointer;font-size:.95rem">Verlo con mis colores 🎨</button>
+  <p style="margin-top:12px;font-size:.82rem;color:var(--muted)">Si te gustaron varios, los combinamos en tu página a medida.</p>
+</section>
 <footer class="site">
   <div class="wrap">
     <p><strong class="mono">NEGOCIO DEMO</strong> · Panel interactivo · Contenido ficticio de demostración</p>
@@ -213,16 +218,20 @@ footer.site a{color:var(--acento)}
   const c=document.getElementById('red'),x=c.getContext('2d');let W,H,pts=[];
   function size(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight}
   size();addEventListener('resize',size);
+  const V=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const hexRGB=h=>{h=(h||'#888888').replace('#','');if(h.length===3)h=h.split('').map(x=>x+x).join('');return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]};
+  let AC=[251,191,36];function refrescar(){AC=hexRGB(V('--acento'));}
+  refrescar();addEventListener('polux-palette',refrescar);
   for(let i=0;i<70;i++)pts.push({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.0009,vy:(Math.random()-.5)*.0009});
   (function tick(){
     x.clearRect(0,0,W,H);
     pts.forEach(p=>{p.x=(p.x+p.vx+1)%1;p.y=(p.y+p.vy+1)%1});
-    x.strokeStyle='rgba(251,191,36,.14)';x.lineWidth=1;
+    x.strokeStyle=`rgba(${AC[0]},${AC[1]},${AC[2]},.14)`;x.lineWidth=1;
     for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
       const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=dx*dx+dy*dy;
       if(d<.012){x.beginPath();x.moveTo(pts[i].x*W,pts[i].y*H);x.lineTo(pts[j].x*W,pts[j].y*H);x.stroke()}
     }
-    x.fillStyle='#fbbf24';
+    x.fillStyle=`rgb(${AC[0]},${AC[1]},${AC[2]})`;
     pts.forEach(p=>{x.beginPath();x.arc(p.x*W,p.y*H,1.6,0,7);x.fill()});
     requestAnimationFrame(tick);
   })();
