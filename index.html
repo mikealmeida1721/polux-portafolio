@@ -250,11 +250,7 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
     <h2 class="sec rv">Chatbots</h2>
     <p class="sub rv">Un recepcionista que nunca duerme: responde preguntas, agenda citas y te avisa lo importante.<br>Toca una burbuja y pruébala en vivo — son <b>demostraciones con respuestas programadas</b>.</p>
   </div>
-  <div class="nube rv cb-row" id="nubeCb" aria-label="Nube de diseños de chatbot: toca una burbuja para probarla">
-    <div class="n-row" data-dir="-1"><div class="n-strip"></div></div>
-    <div class="n-row" data-dir="1"><div class="n-strip"></div></div>
-    <div class="n-row" data-dir="-1"><div class="n-strip"></div></div>
-  </div>
+  <div class="cb-field rv" id="nubeCb" aria-label="Diseños de chatbot subiendo como burbujas: toca una para probarla"></div>
   <div class="wrap" style="text-align:center">
     <a class="btn rv" href="chatbots.html">Ver galería de diseños →</a>
   </div>
@@ -792,94 +788,67 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
 <script src="chatbots-motor.js"></script>
 <script src="chatbot-ui.js"></script>
 <script>
-/* Nube viva de chatbots: 3 filas con scroll nativo + deriva automática, direcciones alternadas (→,←,→) */
+/* Campo ascendente de chatbots: 4 carriles verticales, las burbujas SUBEN en bucle.
+   Sin scroll interno: el movimiento es automático (transform), no pelea con el scroll de la página. */
 (function(){
-  var nube=document.getElementById('nubeCb');
-  if(!nube||!window.CHATBOT_THEMES||!window.CHATBOT_THEMES.length||!window.PoluxChatUI)return;
-  var UI=window.PoluxChatUI;
+  var field=document.getElementById('nubeCb');
+  if(!field||!window.CHATBOT_THEMES||!window.CHATBOT_THEMES.length||!window.PoluxChatUI)return;
+  var UI=window.PoluxChatUI, TH=window.CHATBOT_THEMES;
   var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var rows=Array.prototype.slice.call(nube.querySelectorAll('.n-row'));
-  var per=Math.ceil(window.CHATBOT_THEMES.length/rows.length);
-  function makeTile(t){
+  function makeBit(t,swD){
     var b=document.createElement('button');
-    b.type='button';b.className='cb-tile';b.setAttribute('data-id',t.id);
+    b.type='button';b.className='cb-bit';b.dataset.id=t.id;
     b.setAttribute('aria-label','Probar diseño '+t.nombre);
-    b.innerHTML=UI.cardHTML(t)+
-      '<span class="cb-name">'+UI.esc(t.nombre)+'</span>'+
-      '<span class="cb-sub">'+UI.esc(t.famLabel)+'</span>';
+    var sway=(5.5+((swD||0)%5)*1.3).toFixed(2);
+    b.innerHTML='<span class="cb-sway" style="--sw:'+sway+'s;--swd:-'+(Math.random()*8).toFixed(2)+'s">'+
+      UI.bubbleHTML(t,-(Math.random()*4).toFixed(2))+
+      '<span class="cb-bname">'+UI.esc(t.nombre)+'</span>'+
+      '<span class="cb-bfam">'+UI.esc(t.famLabel)+'</span>'+
+      '<span class="cb-bdemo">DEMO</span></span>';
+    b.addEventListener('click',function(){UI.openTheme(t.id)});
     return b;
   }
-  /* 3 copias idénticas por fila: el bucle infinito se logra envolviendo scrollLeft */
-  var states=rows.map(function(row,ri){
-    var strip=row.querySelector('.n-strip');
-    var set=window.CHATBOT_THEMES.slice(ri*per,(ri+1)*per);
-    for(var c=0;c<3;c++)set.forEach(function(t){strip.appendChild(makeTile(t))});
-    var t0=strip.firstElementChild,step=t0?t0.offsetWidth+12:170;
-    var st={row:row,strip:strip,dir:row.getAttribute('data-dir')==='1'?1:-1,
-      step:step,copyW:step*set.length,paused:false,resumeT:0,
-      downX:0,downY:0,downScroll:0};
-    row.scrollLeft=st.copyW+ri*5*step; /* arrancar en la copia central */
-    return st;
-  });
-  /* Bucle infinito: envolver scrollLeft dentro de la copia central */
-  function wrapRow(st){
-    var row=st.row,C=st.copyW,sl=row.scrollLeft,g=0;
-    while(sl<C&&g++<10)sl+=C;
-    g=0;
-    while(sl>=2*C&&g++<10)sl-=C;
-    if(sl!==row.scrollLeft)row.scrollLeft=sl;
+  if(reduced){
+    /* movimiento desactivado: retícula estática con una muestra */
+    field.classList.add('cb-static');
+    TH.slice(0,20).forEach(function(t,i){field.appendChild(makeBit(t,i))});
+    return;
   }
-  var modalWasOpen=false;
-  states.forEach(function(st){
-    var row=st.row;
-    function pause(){st.paused=true;clearTimeout(st.resumeT)}
-    function resumeSoon(){ /* la deriva vuelve 5s después del último gesto (cubre el momentum de iOS) */
-      clearTimeout(st.resumeT);
-      st.resumeT=setTimeout(function(){if(!UI.isOpen())st.paused=false},5000);
-    }
-    row.addEventListener('pointerdown',function(e){
-      pause();
-      st.downX=e.clientX;st.downY=e.clientY;st.downScroll=row.scrollLeft;
-    },{passive:true});
-    row.addEventListener('wheel',function(){pause();resumeSoon()},{passive:true});
-    row.addEventListener('pointerup',function(){resumeSoon()},{passive:true});
-    row.addEventListener('pointercancel',function(){resumeSoon()},{passive:true});
-    row.addEventListener('scroll',function(){wrapRow(st)},{passive:true});
-    st.strip.addEventListener('click',function(e){
-      var t=e.target&&e.target.closest?e.target.closest('.cb-tile'):null;if(!t)return;
-      if(Math.abs(row.scrollLeft-st.downScroll)>10)return; /* hubo scroll: no fue tap */
-      if(Math.hypot(e.clientX-st.downX,e.clientY-st.downY)>10)return;
-      pause(); /* se reanuda al cerrar el modal */
-      UI.openTheme(t.getAttribute('data-id'));
-    });
-  });
-  /* Vigilante: si pasan 10s sin interacción, la deriva arranca sí o sí */
-  var lastTouch=Date.now();
-  document.addEventListener('pointerdown',function(){lastTouch=Date.now()},{passive:true,capture:true});
-  setInterval(function(){
-    if(reduced||document.hidden||UI.isOpen())return;
-    if(Date.now()-lastTouch>10000){
-      states.forEach(function(st){st.paused=false;clearTimeout(st.resumeT)});
-    }
-  },3000);
-  var visible=true,last=performance.now(),SPEED=40;
-  if('IntersectionObserver' in window){new IntersectionObserver(function(es){visible=es[0].isIntersecting},{threshold:0}).observe(nube)}
-  document.addEventListener('visibilitychange',function(){last=performance.now()});
-  function frame(now){
-    var dt=Math.min(.05,(now-last)/1000);last=now;
-    var mOpen=UI.isOpen();
-    if(modalWasOpen&&!mOpen){states.forEach(function(st){st.paused=false;clearTimeout(st.resumeT)})}
-    modalWasOpen=mOpen;
-    if(visible&&!document.hidden&&!reduced){
-      states.forEach(function(st){
-        if(st.paused||mOpen)return;
-        st.row.scrollLeft+=st.dir*SPEED*dt; /* la deriva mueve scrollLeft; el gesto del usuario lo maneja el navegador */
-        wrapRow(st);
+  var LANES=4, DURS=[42,50,58,64];
+  var lanesEl=document.createElement('div');lanesEl.className='cb-lanes';
+  var cols=[];
+  for(var li=0;li<LANES;li++){
+    var lane=document.createElement('div');lane.className='cb-lane';
+    var col=document.createElement('div');col.className='cb-col';
+    var dur=DURS[li%4];
+    col.style.setProperty('--dur',dur+'s');
+    col.style.setProperty('--del',(-(Math.random()*dur)).toFixed(2)+'s');
+    var set=TH.filter(function(t,i){return i%LANES===li});
+    for(var c=0;c<2;c++){
+      var half=document.createElement('div');half.className='cb-half';
+      if(c===1)half.setAttribute('aria-hidden','true');
+      set.forEach(function(t,i){
+        var bit=makeBit(t,li*7+i);
+        if(c===1)bit.tabIndex=-1;
+        half.appendChild(bit);
       });
+      col.appendChild(half);
     }
-    requestAnimationFrame(frame);
+    lane.appendChild(col);lanesEl.appendChild(lane);cols.push(col);
   }
-  requestAnimationFrame(frame);
+  field.appendChild(lanesEl);
+  /* pausar cuando el modal abre, cuando la pestaña se oculta o el campo sale de vista */
+  var io=null;
+  function refreshPause(){
+    field.classList.toggle('paused',UI.isOpen()||document.hidden||!inView);
+  }
+  var inView=true;
+  if('IntersectionObserver' in window){
+    io=new IntersectionObserver(function(es){inView=es[0].isIntersecting;refreshPause()},{threshold:0});
+    io.observe(field);
+  }
+  document.addEventListener('visibilitychange',refreshPause);
+  setInterval(refreshPause,700);
 })();
 </script>
 
