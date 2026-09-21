@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEGOCIO DEMO — Marca Visual (Modelo base)</title>
+<style>
+/* ============================================================
+   PERSONALIZACIÓN RÁPIDA — cambia logo y colores aquí (2 min)
+   --logo: pega la URL del logo del prospecto (o deja "" y se usa texto)
+   ============================================================ */
+:root{
+  --logo: "";
+  --fondo:#0a0a0c; --fondo2:#101014; --tarjeta:#141419; --borde:#26262e;
+  --acento:#a855f7; --acento2:#d8b4fe;
+  --texto:#f5f3ff; --muted:#8b8798;
+  --fuente-display: "Arial Black", system-ui, sans-serif;
+  --fuente-cuerpo: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fuente-mono: ui-monospace, "Cascadia Mono", Menlo, monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo);line-height:1.6;overflow-x:hidden}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+.mono{font-family:var(--fuente-mono)}
+/* Distintivo demo */
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-family:var(--fuente-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acento);border:1px solid var(--acento);border-radius:999px;padding:5px 14px;background:rgba(10,10,12,.85)}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-family:var(--fuente-mono);font-size:.72rem;color:var(--muted);text-decoration:none;background:rgba(10,10,12,.85);border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.volver:hover{color:var(--acento);border-color:var(--acento)}
+/* Nav */
+nav.top{position:sticky;top:0;z-index:50;background:rgba(10,10,12,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--borde)}
+nav.top .wrap{display:flex;align-items:center;gap:26px;padding:52px 20px 14px}
+.logo-slot{width:42px;height:42px;border-radius:8px;border:1px solid var(--acento);background:var(--logo) center/contain no-repeat, var(--fondo2);display:flex;align-items:center;justify-content:center;font-family:var(--fuente-display);color:var(--acento);font-size:1.1rem}
+nav.top a.link{font-family:var(--fuente-mono);font-size:.85rem;color:var(--muted);text-decoration:none}
+nav.top a.link:hover{color:var(--acento2)}
+/* Hero */
+.hero{padding:90px 0 40px;text-align:center}
+.hero .tag{font-family:var(--fuente-mono);font-size:.85rem;color:var(--acento);letter-spacing:.2em;margin-bottom:18px}
+.hero h1{font-family:var(--fuente-display);font-size:clamp(3rem,10vw,7rem);line-height:.95;letter-spacing:-.01em;text-transform:uppercase}
+.hero h1 .stroke{color:transparent;-webkit-text-stroke:2px var(--acento)}
+.hero .lema{font-family:var(--fuente-mono);margin-top:22px;color:var(--muted);font-size:.95rem}
+.hero .lema b{color:var(--texto)}
+/* Marquee */
+.marquee{border-top:1px solid var(--borde);border-bottom:1px solid var(--borde);overflow:hidden;white-space:nowrap;padding:12px 0;margin:40px 0}
+.marquee span{display:inline-block;font-family:var(--fuente-mono);font-size:.85rem;letter-spacing:.18em;color:var(--muted);padding-right:48px;animation:mq 22s linear infinite}
+.marquee span i{color:var(--acento);font-style:normal}
+@keyframes mq{to{transform:translateX(-50%)}}
+/* Secciones */
+section{padding:64px 0}
+.sec-head{font-family:var(--fuente-mono);font-size:1.05rem;color:var(--acento);margin-bottom:8px}
+h2.tit{font-family:var(--fuente-display);font-size:clamp(1.8rem,4.5vw,2.8rem);text-transform:uppercase;margin-bottom:8px}
+p.sub{color:var(--muted);margin-bottom:30px;max-width:620px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.svc{background:var(--tarjeta);border:1px solid var(--borde);border-radius:6px;padding:28px;transition:border-color .18s,transform .18s}
+.svc:hover{border-color:var(--acento);transform:translateY(-4px)}
+.svc .n{font-family:var(--fuente-mono);color:var(--acento);font-size:.8rem;margin-bottom:10px}
+.svc h3{font-family:var(--fuente-display);font-size:1.15rem;text-transform:uppercase;margin-bottom:8px}
+.svc p{color:var(--muted);font-size:.92rem}
+/* Drop / promo */
+.drop{background:linear-gradient(135deg,var(--tarjeta),var(--fondo2));border:1px solid var(--acento);border-radius:8px;padding:40px;text-align:center;position:relative;overflow:hidden}
+.drop::before{content:"";position:absolute;inset:0;background:radial-gradient(500px 200px at 50% 0,rgba(168,85,247,.18),transparent);pointer-events:none}
+.drop .alerta{font-family:var(--fuente-mono);color:var(--acento2);letter-spacing:.24em;font-size:.8rem;margin-bottom:14px}
+.drop h3{font-family:var(--fuente-display);font-size:clamp(1.6rem,4vw,2.6rem);text-transform:uppercase;margin-bottom:12px}
+.drop p{color:var(--muted);max-width:560px;margin:0 auto 24px}
+.specs{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:28px}
+.spec{border:1px solid var(--borde);border-radius:6px;padding:10px 18px;font-family:var(--fuente-mono);font-size:.78rem}
+.spec b{display:block;color:var(--acento2);font-size:.68rem;letter-spacing:.18em}
+.btn{display:inline-block;background:var(--acento);color:#0a0a0c;font-weight:800;text-decoration:none;padding:14px 34px;border-radius:6px;font-family:var(--fuente-mono);letter-spacing:.06em}
+.btn:hover{background:var(--acento2)}
+/* Conectar */
+.hub{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.hub a{display:flex;align-items:center;justify-content:space-between;background:var(--tarjeta);border:1px solid var(--borde);border-radius:6px;padding:20px 24px;text-decoration:none;color:var(--texto);font-family:var(--fuente-mono);transition:border-color .18s}
+.hub a:hover{border-color:var(--acento)}
+.hub a span:last-child{color:var(--acento)}
+/* Testimonios */
+.testis{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.testi{border-left:3px solid var(--acento);padding:6px 0 6px 22px}
+.testi p{font-size:1.02rem}
+.testi footer{font-family:var(--fuente-mono);font-size:.78rem;color:var(--muted);margin-top:10px}
+.testi .eje{color:var(--acento);font-size:.68rem;letter-spacing:.16em}
+/* Footer */
+footer.big{border-top:1px solid var(--borde);padding:60px 0 30px;text-align:center}
+footer.big .marca{font-family:var(--fuente-display);font-size:clamp(2.4rem,8vw,5rem);text-transform:uppercase;color:transparent;-webkit-text-stroke:1.5px var(--borde);line-height:1}
+footer.big .marca:hover{-webkit-text-stroke:1.5px var(--acento)}
+footer.big p{font-family:var(--fuente-mono);font-size:.78rem;color:var(--muted);margin-top:18px}
+footer.big a{color:var(--acento2)}
+@media(max-width:860px){.grid3{grid-template-columns:1fr}.hub{grid-template-columns:1fr}.testis{grid-template-columns:1fr}nav.top a.link{display:none}}
+</style>
+</head>
+<body>
+<div class="demo-badge">// diseño demo</div>
+<a class="volver" href="../index.html">← portafolio</a>
+
+<nav class="top">
+  <div class="wrap">
+    <span class="logo-slot" data-logo>N</span>
+    <a class="link" href="#servicios">// Servicios</a>
+    <a class="link" href="#promo">// Promo</a>
+    <a class="link" href="#conectar">// Conectar</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="tag">// MARCA VISUAL · MODELO BASE</div>
+    <h1 data-nombre-stroke>Negocio<br><span class="stroke">Demo</span></h1>
+    <p class="lema" data-tagline><b>Solo lo bien hecho se vuelve inolvidable.</b><br>Presencia visual fuerte para negocios que quieren imponer.</p>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <span><i>◆</i> DISEÑO QUE IMPONE <i>◆</i> TU LOGO AQUÍ <i>◆</i> TUS COLORES AQUÍ <i>◆</i> DISEÑO QUE IMPONE <i>◆</i> TU LOGO AQUÍ <i>◆</i> TUS COLORES AQUÍ&nbsp;</span><span><i>◆</i> DISEÑO QUE IMPONE <i>◆</i> TU LOGO AQUÍ <i>◆</i> TUS COLORES AQUÍ <i>◆</i> DISEÑO QUE IMPONE <i>◆</i> TU LOGO AQUÍ <i>◆</i> TUS COLORES AQUÍ&nbsp;</span>
+</div>
+
+<section id="servicios">
+  <div class="wrap">
+    <div class="sec-head">// Servicios</div>
+    <h2 class="tit">Lo que hacemos</h2>
+    <p class="sub">Tres líneas fuertes. Sin rodeos: esto es lo que el negocio demo ofrece.</p>
+    <div class="grid3">
+      <div class="svc"><div class="n">01</div><h3>Servicio Alpha</h3><p>La propuesta principal del negocio, presentada con fuerza visual y cero distracciones.</p></div>
+      <div class="svc"><div class="n">02</div><h3>Servicio Beta</h3><p>El complemento que eleva la experiencia y diferencia a la marca.</p></div>
+      <div class="svc"><div class="n">03</div><h3>Servicio Gamma</h3><p>El detalle premium: lo que los clientes recuerdan y recomiendan.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="promo" style="background:var(--fondo2)">
+  <div class="wrap">
+    <div class="sec-head">// Promo</div>
+    <h2 class="tit">El lanzamiento</h2>
+    <p class="sub">Bloque estilo "drop": ideal para promociones, eventos o aperturas con cupo limitado.</p>
+    <div class="drop">
+      <div class="alerta">// OFERTA EN CAMINO</div>
+      <h3>Gran promo de apertura</h3>
+      <p>Texto de ejemplo: describe aquí la promoción del negocio — descuento, fecha, condiciones — con la urgencia de un lanzamiento real.</p>
+      <div class="specs">
+        <div class="spec"><b>Descuento</b>20% ejemplo</div>
+        <div class="spec"><b>Cupos</b>50</div>
+        <div class="spec"><b>Vigencia</b>30 días</div>
+        <div class="spec"><b>Estado</b>Activa</div>
+      </div>
+      <a class="btn" href="#conectar">QUIERO MI CUPO →</a>
+    </div>
+  </div>
+</section>
+
+<section id="conectar">
+  <div class="wrap">
+    <div class="sec-head">// Conectar</div>
+    <h2 class="tit">Encuéntranos</h2>
+    <p class="sub">Todos los canales del negocio en un solo lugar.</p>
+    <div class="hub">
+      <a href="#"><span>// WhatsApp</span><span>→</span></a>
+      <a href="#"><span>// Instagram</span><span>→</span></a>
+      <a href="#"><span>// TikTok</span><span>→</span></a>
+      <a href="#"><span>// Sitio web</span><span>→</span></a>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--fondo2)">
+  <div class="wrap">
+    <div class="sec-head">// Voces</div>
+    <h2 class="tit">Lo que dicen</h2>
+    <p class="sub">Testimonios de ejemplo — se reemplazan por los reales.</p>
+    <div class="testis">
+      <div class="testi"><p>"Entré por curiosidad y salí cliente de por vida. La experiencia se siente de otro nivel."</p><footer><span class="eje">// EJEMPLO</span><br>— Cliente ejemplo</footer></div>
+      <div class="testi"><p>"Se nota que aquí cuidan cada detalle. Lo recomiendo sin pensarlo dos veces."</p><footer><span class="eje">// EJEMPLO</span><br>— Cliente ejemplo</footer></div>
+    </div>
+  </div>
+</section>
+
+<footer class="big">
+  <div class="wrap">
+    <div class="marca">Negocio Demo</div>
+    <p>Diseño demo por <a href="../index.html">Polux</a> — modelo base personalizable con tu logo y tus colores.</p>
+  </div>
+</footer>
+<script src="../personalizar.js"></script>
+</body>
+</html>
