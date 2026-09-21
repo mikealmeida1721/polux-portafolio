@@ -78,6 +78,18 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
 .om-radio input{accent-color:var(--acento)}
 .om-send{width:100%;background:var(--acento);color:#0A0A0C;border:none;border-radius:999px;padding:15px;font-size:1rem;font-weight:800;cursor:pointer;font-family:inherit}
 .om-send:hover{filter:brightness(1.12)}
+.om-chlab{margin:22px 0 10px;font-weight:800;font-size:1.02rem;color:#fff}
+.om-ch{display:flex;flex-direction:column;gap:10px}
+.om-chb{display:flex;align-items:center;gap:12px;width:100%;border:1px solid rgba(168,85,247,.4);background:#1d1d28;color:#fff;border-radius:16px;padding:14px 16px;font-size:1rem;font-weight:700;cursor:pointer;font-family:inherit;text-align:left}
+.om-chb .ic{font-size:1.5rem;line-height:1}
+.om-chb small{display:block;font-weight:400;color:var(--muted);font-size:.8rem;margin-top:2px}
+.om-chb.wa{background:var(--acento);color:#0A0A0C;border:none}
+.om-chb.wa small{color:#0A0A0C;opacity:.75}
+.om-chb.wa:hover{filter:brightness(1.12)}
+.om-chb:not(.wa):hover{border-color:var(--acento);background:#24242f}
+.om-tag{font-size:.68rem;font-weight:800;background:#0A0A0C;color:var(--acento);border-radius:999px;padding:3px 10px;margin-left:auto;white-space:nowrap}
+.om-copyok{display:none;margin-top:12px;padding:12px 14px;border-radius:14px;background:rgba(168,85,247,.14);border:1px solid var(--acento);font-size:.9rem;text-align:center}
+.om-copyok.show{display:block}
 .om-x{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer}
 .om-note{font-size:.78rem;color:var(--muted);text-align:center;margin-top:12px}
 .om-empty{font-size:.85rem;color:var(--muted);line-height:1.6;margin:0}
@@ -298,7 +310,7 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
       <span class="pm-t">¿Cómo funciona?</span>
       <span class="pm-paso"><b>01</b>Explora en vivo</span><span class="pm-sep">→</span>
       <span class="pm-paso"><b>02</b>Elige y combina</span><span class="pm-sep">→</span>
-      <span class="pm-paso"><b>03</b>Pide tu cotización por WhatsApp</span><span class="pm-sep">→</span>
+      <span class="pm-paso"><b>03</b>Pide tu cotización por WhatsApp, SMS o Instagram</span><span class="pm-sep">→</span>
       <span class="pm-paso"><b>04</b>Lo hacemos tuyo, a medida</span>
     </div>
     <p class="sub rv" style="margin-top:20px">Sin compromiso: exploras, marcas lo que te gusta y te armamos un paquete a tu medida.</p>
@@ -318,7 +330,7 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
   <div class="om" role="dialog" aria-modal="true" aria-label="Pedir cotización personalizada">
     <button class="om-x" id="omX" aria-label="Cerrar">✕</button>
     <h3>Pide tu cotización</h3>
-    <p class="om-sub">Marca lo que te gustó: te armamos un paquete a tu medida y lo enviamos a nuestro WhatsApp.</p>
+    <p class="om-sub">Marca lo que te gustó: te armamos un paquete a tu medida y tú eliges por dónde enviarlo.</p>
     <div class="om-sec">
       <div class="om-lab">Diseño base</div>
       <div class="chips" id="omDesigns"></div>
@@ -346,11 +358,17 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
     </div>
     <div class="om-sec" id="omLogoSec">
       <div class="om-lab">Logo</div>
-      <label class="om-radio"><input type="radio" name="omLogo" value="tengo" checked> Ya tengo logo — lo envío por WhatsApp</label>
+      <label class="om-radio"><input type="radio" name="omLogo" value="tengo" checked> Ya tengo logo — lo envío por el canal que elija</label>
       <label class="om-radio"><input type="radio" name="omLogo" value="disenar"> Quiero que Polux me diseñe uno</label>
     </div>
-    <button class="om-send" id="omSend">Pedir cotización por WhatsApp →</button>
-    <p class="om-note">Al enviar se abre WhatsApp con tu selección lista. Te armamos un paquete a tu medida.</p>
+    <div class="om-chlab">¿Por dónde nos la envías?</div>
+    <div class="om-ch">
+      <button class="om-chb wa" id="omChWa" type="button"><span class="ic">💬</span><span>WhatsApp<small>Se abre con tu selección lista para enviar</small></span><span class="om-tag">recomendado</span></button>
+      <button class="om-chb" id="omChSms" type="button"><span class="ic">✉️</span><span>SMS<small>Mensaje de texto normal al mismo número</small></span></button>
+      <button class="om-chb" id="omChIg" type="button"><span class="ic">📸</span><span>Instagram<small>Se abre el chat de @polux.ssee</small></span></button>
+    </div>
+    <p class="om-copyok" id="omCopyOk">Tu cotización quedó copiada — pégala en el chat ✨</p>
+    <p class="om-note">Elige tu canal: te armamos tu paquete a medida, sin compromiso.</p>
   </div>
 </div>
 <div class="om-back" id="lpBack">
@@ -580,10 +598,10 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   omBack.addEventListener('click',e=>{if(e.target===omBack)closeOm()});
   addEventListener('keydown',e=>{if(e.key==='Escape')closeOm()});
   document.getElementById('traySend').addEventListener('click',()=>window.PoluxOrder.open());
-  document.getElementById('omSend').addEventListener('click',()=>{
+  function buildQuote(){
     const pz0=loadPz(),lgs0=loadLogos(),sis0=loadSis();
     const servsOn=[...omServs.querySelectorAll('input:checked')].length>0;
-    if(picked.size===0&&!pz0.length&&!lgs0.length&&!servsOn&&!sis0.length){say('Elige algo primero: un diseño, un logo, una capacidad…');return}
+    if(picked.size===0&&!pz0.length&&!lgs0.length&&!servsOn&&!sis0.length){say('Elige algo primero: un diseño, un logo, una capacidad…');return null}
     const dis=DESIGNS.filter(d=>picked.has(d.id)).map(d=>d.nombre).join(', ');
     const pz=pz0.map(p=>p.d+': '+p.p).join('; ');
     const servs=[...omServs.querySelectorAll('input:checked')].map(i=>i.value).join(', ');
@@ -597,8 +615,31 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     if(servs)txt+='\n• Me interesa: '+servs;
     txt+='\n• Logo: '+(logo==='tengo'?'ya tengo, lo envío por aquí':'quiero que Polux me diseñe uno');
     if(nom||neg)txt+='\n• Contacto: '+(nom||'—')+' — Negocio: '+(neg||'—');
+    return txt;
+  }
+  document.getElementById('omChWa').addEventListener('click',()=>{
+    const txt=buildQuote();if(txt===null)return;
     closeOm();
     window.open('https://wa.me/'+window.POLUX_WA+'?text='+encodeURIComponent(txt),'_blank');
+  });
+  document.getElementById('omChSms').addEventListener('click',()=>{
+    const txt=buildQuote();if(txt===null)return;
+    closeOm();
+    window.location.href='sms:+'+window.POLUX_WA+'?&body='+encodeURIComponent(txt);
+  });
+  function copyQuote(txt){
+    if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(txt);
+    return new Promise((res,rej)=>{const ta=document.createElement('textarea');ta.value=txt;
+      ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+      try{document.execCommand('copy')?res():rej(new Error('copy'))}catch(e){rej(e)}
+      document.body.removeChild(ta)});
+  }
+  document.getElementById('omChIg').addEventListener('click',()=>{
+    const txt=buildQuote();if(txt===null)return;
+    copyQuote(txt).then(()=>{
+      document.getElementById('omCopyOk').classList.add('show');
+      window.open('https://ig.me/m/polux.ssee','_blank');
+    }).catch(()=>{say('No pudimos copiarla: vuelve a intentarlo')});
   });
   renderOm();paintFavs();measure();kick();goTo(0,true);
   if(/(?:\?|&)pedido=1/.test(location.search))setTimeout(()=>window.PoluxOrder.open(),700);
