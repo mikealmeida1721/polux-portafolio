@@ -347,6 +347,10 @@ details.cv-faq .cv-a{padding:0 20px 18px;color:var(--muted);font-size:.92rem;lin
   .cv-cta-row .btn,.cv-cta-row .btn-ghost{width:100%;text-align:center}
 }
 
+/* Alivio de memoria: el navegador no pinta las secciones largas fuera de vista.
+   iOS recarga la pestaña cuando se queda sin memoria; esto baja la presión. */
+#cvCalc,#cvDiag,#cvTrust,#cvFaq,#logos,#sistemas{content-visibility:auto;contain-intrinsic-size:auto 900px}
+
 /* reveal */
 .rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
 .rv.vis{opacity:1;transform:none}
@@ -377,6 +381,19 @@ details.cv-faq .cv-a{padding:0 20px 18px;color:var(--muted);font-size:.92rem;lin
     <div class="scroll-hint">↓ desliza</div>
   </div>
 </header>
+
+<section id="como" style="padding:34px 0">
+  <div class="wrap">
+    <div class="pasos-mini rv">
+      <span class="pm-t">¿Cómo funciona?</span>
+      <span class="pm-paso"><b>01</b>Explora en vivo</span><span class="pm-sep">→</span>
+      <span class="pm-paso"><b>02</b>Elige y combina</span><span class="pm-sep">→</span>
+      <span class="pm-paso"><b>03</b>Pide tu cotización por WhatsApp, SMS, Instagram o Facebook</span><span class="pm-sep">→</span>
+      <span class="pm-paso"><b>04</b>Lo hacemos tuyo, a medida</span>
+    </div>
+    <p class="sub rv" style="margin-top:16px;margin-bottom:0">Sin compromiso: exploras, marcas lo que te gusta y te armamos un paquete a tu medida.</p>
+  </div>
+</section>
 
 <section id="disenos">
   <span id="modelos"></span>
@@ -529,19 +546,6 @@ details.cv-faq .cv-a{padding:0 20px 18px;color:var(--muted);font-size:.92rem;lin
       </div>
       <p class="cv-note">Lo revisa una persona real del equipo Polux. Nada de robots decidiendo por ti.</p>
     </div>
-  </div>
-</section>
-
-<section id="como">
-  <div class="wrap">
-    <div class="pasos-mini rv">
-      <span class="pm-t">¿Cómo funciona?</span>
-      <span class="pm-paso"><b>01</b>Explora en vivo</span><span class="pm-sep">→</span>
-      <span class="pm-paso"><b>02</b>Elige y combina</span><span class="pm-sep">→</span>
-      <span class="pm-paso"><b>03</b>Pide tu cotización por WhatsApp, SMS, Instagram o Facebook</span><span class="pm-sep">→</span>
-      <span class="pm-paso"><b>04</b>Lo hacemos tuyo, a medida</span>
-    </div>
-    <p class="sub rv" style="margin-top:20px">Sin compromiso: exploras, marcas lo que te gusta y te armamos un paquete a tu medida.</p>
   </div>
 </section>
 
