@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espejo Salón — Modelo Polux</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ESPEJO — salón de belleza
+   Concepto: glamour fluido, como seda al viento.
+   Firma: shimmer cromático continuo + ondas de seda como divisores.
+   Paleta: rosa cuarzo, dorado, lila. Tipo fashion elegante.
+   ============================================================ */
+:root{
+  --logo:"";
+  --fondo:#fff7fa; --fondo2:#fbeef4; --tarjeta:#ffffff; --borde:#f3d7e2;
+  --acento:#c9a227; --acento2:#8a6d1a;
+  --texto:#4a2c3a; --muted:#a07890;
+  --rosa:#f7c8d8; --lila:#c5a3e0;
+  --fuente-titular:'Playfair Display',Georgia,serif;
+  --fuente-cuerpo:'Cormorant Garamond',Georgia,serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo);font-size:1.12rem;line-height:1.7;overflow-x:hidden}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+/* Distintivos demo */
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--acento2);border-radius:999px;padding:5px 14px;opacity:.92}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:var(--tarjeta);border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.volver:hover{color:var(--acento2);border-color:var(--acento)}
+/* Header */
+header.site{background:var(--fondo);border-bottom:1px solid var(--borde);position:sticky;top:0;z-index:50;padding-top:44px}
+.bar{display:flex;align-items:center;gap:14px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--texto)}
+.logo-slot{width:50px;height:50px;border-radius:50%;border:2px solid var(--acento);background:var(--logo) center/contain no-repeat,var(--tarjeta);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--acento2);font-size:1.4rem;font-family:var(--fuente-titular)}
+.brand b{font-family:var(--fuente-titular);font-weight:800;font-size:1.35rem;letter-spacing:.05em}
+.brand small{display:block;font-size:.66rem;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;font-family:var(--fuente-cuerpo)}
+nav.menu{margin-left:auto;display:flex;gap:22px;font-size:1.05rem;align-items:center}
+nav.menu a{color:var(--muted);text-decoration:none}
+nav.menu a:hover{color:var(--acento2)}
+.btn{display:inline-block;background:linear-gradient(115deg,var(--acento),#e0b83c 50%,var(--acento));background-size:220% auto;color:#3d2c05;font-weight:700;text-decoration:none;padding:13px 32px;border-radius:999px;border:none;cursor:pointer;font-size:1.05rem;font-family:var(--fuente-titular);letter-spacing:.02em;transition:background-position .8s}
+.btn:hover{background-position:right center}
+.btn.ghost{background:var(--tarjeta);color:var(--acento2);border:1px solid var(--acento)}
+.btn.wa{background:#22c05e;color:#fff}
+/* Hero con shimmer */
+.hero{position:relative;padding:100px 0 0;text-align:center;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(720px 380px at 50% -80px,rgba(247,200,216,.65),transparent 70%),radial-gradient(560px 340px at 85% 30%,rgba(197,163,224,.4),transparent 70%);pointer-events:none}
+.kicker{font-size:.8rem;letter-spacing:.34em;text-transform:uppercase;color:var(--acento2);margin-bottom:20px;font-weight:600}
+.shimmer{background:linear-gradient(110deg,var(--acento) 10%,var(--rosa) 32%,#fff 50%,var(--lila) 68%,var(--acento) 90%);background-size:220% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shim 6s linear infinite}
+@keyframes shim{to{background-position:220% center}}
+.hero h1{font-family:var(--fuente-titular);font-weight:800;font-size:clamp(2.9rem,8vw,5rem);line-height:1.06;margin-bottom:18px;letter-spacing:-.01em}
+.hero h1 .it{font-style:italic;font-weight:600}
+.hero p.lead{max-width:620px;margin:0 auto 30px;color:var(--muted);font-size:1.25rem}
+.hero .ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+/* Espejo firma: óvalo dorado con reflejo */
+.espejo{position:relative;width:230px;height:300px;margin:44px auto 0}
+.espejo .marco{position:absolute;inset:0;border-radius:50%/46%;border:3px solid var(--acento);background:linear-gradient(160deg,rgba(247,200,216,.35),rgba(197,163,224,.28) 60%,rgba(255,255,255,.15));overflow:hidden;box-shadow:0 24px 60px rgba(201,162,39,.28)}
+.espejo .marco::after{content:"";position:absolute;top:-30%;left:-80%;width:60%;height:160%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.85),transparent);transform:skewX(-18deg);animation:reflejo 5.2s ease-in-out infinite}
+@keyframes reflejo{0%{left:-80%}58%,100%{left:180%}}
+.espejo svg{position:absolute;inset:0;margin:auto;width:120px;height:120px}
+/* Ondas de seda */
+.seda{display:block;width:100%;height:70px;margin-top:-2px}
+.seda path{animation:deriva 9s ease-in-out infinite alternate}
+.seda path.p2{animation-duration:12s;animation-delay:-4s}
+@keyframes deriva{from{transform:translateX(-14px)}to{transform:translateX(14px)}}
+/* Secciones */
+section.bloque{padding:56px 0}
+h2.sec{font-family:var(--fuente-titular);font-weight:800;font-size:2.2rem;margin-bottom:6px;text-align:center}
+h2.sec .it{font-style:italic;font-weight:600}
+p.sub{color:var(--muted);margin-bottom:36px;max-width:620px;text-align:center;margin-left:auto;margin-right:auto;font-size:1.18rem}
+/* Servicios */
+.carta{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.serv{background:var(--tarjeta);border:1px solid var(--borde);border-radius:8px 26px 8px 26px;padding:32px 26px;position:relative;overflow:hidden;transition:transform .6s cubic-bezier(.22,.61,.36,1),box-shadow .6s}
+.serv::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(247,200,216,.5) 46%,rgba(255,255,255,.85) 50%,rgba(197,163,224,.5) 54%,transparent 70%);background-size:260% auto;opacity:0;transition:opacity .6s;animation:shim 7s linear infinite}
+.serv:hover{transform:translateY(-7px);box-shadow:0 20px 46px rgba(201,162,39,.22)}
+.serv:hover::before{opacity:1}
+.serv .linea{width:44px;height:2px;background:var(--acento);margin-bottom:16px}
+.serv h3{font-family:var(--fuente-titular);font-size:1.3rem;margin-bottom:8px}
+.serv p{color:var(--muted);margin-bottom:14px}
+.serv .precio{font-family:var(--fuente-titular);font-weight:800;color:var(--acento2);font-size:1.1rem}
+.serv .precio small{font-family:var(--fuente-cuerpo);font-weight:500;color:var(--muted)}
+/* Galería de looks */
+.galeria{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.look{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:3/4;background:linear-gradient(165deg,var(--g1),var(--g2));display:flex;align-items:flex-end;transition:transform .6s cubic-bezier(.22,.61,.36,1)}
+.look::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);background-size:280% auto;animation:shim 8s linear infinite;pointer-events:none}
+.look:hover{transform:scale(1.03)}
+.look .et{background:linear-gradient(transparent,rgba(40,18,30,.78));color:#fff;width:100%;padding:26px 16px 14px;font-family:var(--fuente-titular);font-size:1.02rem}
+.look .et small{display:block;font-family:var(--fuente-cuerpo);font-size:.85rem;opacity:.85;letter-spacing:.08em}
+/* Testimonios */
+.testis{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.testi{background:var(--tarjeta);border:1px solid var(--borde);border-radius:8px 22px 8px 22px;padding:28px;position:relative}
+.testi .stars{color:var(--acento);margin-bottom:10px;letter-spacing:.14em}
+.testi p{font-style:italic;font-size:1.12rem}
+.testi footer{margin-top:10px;color:var(--muted);font-size:.95rem}
+/* Reserva */
+.reserva{background:linear-gradient(160deg,var(--tarjeta),var(--fondo2));border:1px solid var(--borde);border-radius:12px 34px 12px 34px;padding:46px 36px;max-width:740px;margin:0 auto;position:relative;overflow:hidden}
+.reserva::before{content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;background:linear-gradient(105deg,transparent,rgba(247,200,216,.55),transparent);transform:skewX(-18deg);animation:reflejo 6.5s ease-in-out infinite;pointer-events:none}
+.reserva h3{font-family:var(--fuente-titular);font-size:1.5rem;margin-bottom:6px;text-align:center}
+.reserva>p{text-align:center;color:var(--muted);margin-bottom:22px}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;position:relative}
+.campo label{display:block;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:600}
+.campo input,.campo select{width:100%;padding:13px;border:1px solid var(--borde);border-radius:10px;font-size:1.05rem;background:var(--fondo);color:var(--texto);font-family:inherit}
+.campo input:focus,.campo select:focus{outline:2px solid var(--acento);border-color:var(--acento)}
+#conf{display:none;background:var(--fondo);border:1px solid var(--acento);border-radius:12px;padding:20px;margin-top:18px;text-align:center;position:relative}
+#conf strong{color:var(--acento2)}
+/* Contacto */
+.info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.info .card{background:var(--tarjeta);border:1px solid var(--borde);border-radius:10px 24px 10px 24px;padding:28px;text-align:center}
+.info h3{font-family:var(--fuente-titular);margin-bottom:8px}
+.info p{color:var(--muted)}
+/* Reveal */
+.rv{opacity:0;transform:translateY(26px);transition:opacity 1s cubic-bezier(.22,.61,.36,1),transform 1s cubic-bezier(.22,.61,.36,1)}
+.rv.vis{opacity:1;transform:none}
+/* pz-ideal */
+.pz-ideal{padding:64px 20px;text-align:center;background:var(--fondo2);border-top:1px solid var(--borde)}
+.pz-ideal p.lead2{max-width:640px;margin:0 auto;color:var(--muted);font-size:1.15rem;line-height:1.7}
+.pz-ideal strong.t{color:var(--texto);font-size:1.3rem;font-family:var(--fuente-titular)}
+/* Chat demo */
+#chatBtn{position:fixed;bottom:22px;right:22px;z-index:99;width:60px;height:60px;border-radius:50%;background:var(--acento);color:#3d2c05;border:none;font-size:1.5rem;cursor:pointer;box-shadow:0 8px 24px rgba(201,162,39,.5);font-family:var(--fuente-titular)}
+#chatBtn:hover{background:var(--acento2);color:#fff}
+#chatPanel{position:fixed;bottom:96px;right:22px;z-index:99;width:330px;max-width:calc(100vw - 44px);background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.18);display:none;overflow:hidden}
+#chatPanel.open{display:block}
+#chatPanel .chead{background:var(--acento2);color:#fff;padding:14px 18px;font-weight:700;font-family:var(--fuente-titular)}
+#chatPanel .chead small{display:block;font-weight:400;font-size:.78rem;opacity:.85;font-family:var(--fuente-cuerpo)}
+#chatBody{padding:16px;height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--fondo);font-size:1rem}
+.msg{max-width:85%;padding:10px 14px;border-radius:14px;font-size:.95rem}
+.msg.in{background:var(--tarjeta);border:1px solid var(--borde);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.out{background:var(--acento);color:#3d2c05;font-weight:600;align-self:flex-end;border-bottom-right-radius:4px}
+.quick{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 8px;background:var(--fondo)}
+.quick button{border:1px solid var(--acento);background:var(--tarjeta);color:var(--acento2);border-radius:999px;padding:7px 14px;font-size:.85rem;cursor:pointer;font-weight:600}
+.quick button:hover{background:var(--acento);color:#3d2c05}
+.chead2{padding:10px 16px;background:var(--fondo);font-size:.72rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+footer.site{background:#3a2230;color:#f3d7e2;padding:36px 0;text-align:center;font-size:.95rem}
+footer.site a{color:var(--rosa)}
+footer.site .dim{opacity:.75}
+@media(max-width:900px){
+  .carta,.galeria,.testis{grid-template-columns:1fr 1fr}
+  .info{grid-template-columns:1fr}
+  .campos{grid-template-columns:1fr}
+  nav.menu a:not(.btn){display:none}
+  .hero{padding:70px 0 0}
+}
+@media(max-width:520px){.carta,.galeria,.testis{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){
+  .shimmer,.espejo .marco::after,.serv::before,.look::after,.reserva::before,.seda path{animation:none}
+  .rv{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="demo-badge">Diseño demo</div>
+<a class="volver" href="../index.html">← Portafolio</a>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#">
+      <span class="logo-slot" data-logo>E</span>
+      <span><b data-nombre>ESPEJO</b><small data-tagline>Salón de belleza</small></span>
+    </a>
+    <nav class="menu">
+      <a href="#servicios">Servicios</a>
+      <a href="#galeria">Looks</a>
+      <a href="#contacto">Contacto</a>
+      <a class="btn" href="#reserva" style="padding:9px 22px">Reservar</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker">Salón de belleza · Demo</div>
+    <h1><span class="shimmer">Donde nace</span><br><span class="it">tu mejor versión</span></h1>
+    <p class="lead">Cabello, maquillaje y uñas con acabado editorial. Sal de aquí sintiéndote en pasarela, todos los días.</p>
+    <div class="ctas">
+      <a class="btn" href="#reserva">Reservar mi cita</a>
+      <a class="btn ghost" href="#galeria">Ver los looks</a>
+    </div>
+    <div class="espejo" aria-hidden="true">
+      <div class="marco"></div>
+      <svg viewBox="0 0 120 120"><path d="M60 22 C74 22 80 34 80 46 C80 58 74 70 60 92 C46 70 40 58 40 46 C40 34 46 22 60 22 Z" fill="none" stroke="#c9a227" stroke-width="2.5"/><circle cx="60" cy="46" r="9" fill="none" stroke="#c9a227" stroke-width="2.5"/><path d="M46 66 Q60 76 74 66" stroke="#c9a227" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M52 30 q8 -6 16 0" stroke="#f7c8d8" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+  <svg class="seda" viewBox="0 0 1200 70" preserveAspectRatio="none" aria-hidden="true">
+    <path class="p2" d="M0 40 Q150 10 300 38 T600 36 T900 40 T1200 34 L1200 70 L0 70 Z" fill="#c5a3e0" opacity=".35"/>
+    <path d="M0 48 Q150 24 300 46 T600 44 T900 48 T1200 42 L1200 70 L0 70 Z" fill="#f7c8d8" opacity=".55"/>
+  </svg>
+</div>
+
+<section class="bloque" id="servicios" data-pieza="Servicios">
+  <div class="wrap">
+    <h2 class="sec rv">Servicios <span class="it">de la casa</span></h2>
+    <p class="sub rv">Precios de ejemplo para mostrar el formato.</p>
+    <div class="carta">
+      <div class="serv rv"><div class="linea"></div><h3>Cabello</h3><p>Corte, color, balayage, keratina y peinados de ocasión con diagnóstico capilar incluido.</p><div class="precio">Desde $35 <small>/ servicio</small></div></div>
+      <div class="serv rv"><div class="linea"></div><h3>Maquillaje</h3><p>Social, novias y editorial: piel luminosa y mirada protagonista con productos premium.</p><div class="precio">Desde $45 <small>/ sesión</small></div></div>
+      <div class="serv rv"><div class="linea"></div><h3>Uñas</h3><p>Manicura, pedicura, acrílicas y nail art: detalle milimétrico que completa el look.</p><div class="precio">Desde $25 <small>/ servicio</small></div></div>
+    </div>
+  </div>
+</section>
+
+<svg class="seda" viewBox="0 0 1200 70" preserveAspectRatio="none" aria-hidden="true" style="background:var(--fondo)">
+  <path class="p2" d="M0 30 Q150 52 300 32 T600 34 T900 30 T1200 36 L1200 70 L0 70 Z" fill="#c5a3e0" opacity=".3"/>
+  <path d="M0 38 Q150 56 300 40 T600 42 T900 38 T1200 44 L1200 70 L0 70 Z" fill="#fbeef4"/>
+</svg>
+
+<section class="bloque" id="galeria" data-pieza="Galería de looks" style="background:var(--fondo2);border-top:1px solid var(--borde);border-bottom:1px solid var(--borde)">
+  <div class="wrap">
+    <h2 class="sec rv">Galería <span class="it">de looks</span></h2>
+    <p class="sub rv">Ejemplos de estilo para mostrar el formato. Tus fotos reales irían aquí.</p>
+    <div class="galeria">
+      <div class="look rv" style="--g1:#f7c8d8;--g2:#e79ab8"><div class="et">Ondas doradas<small>Cabello</small></div></div>
+      <div class="look rv" style="--g1:#c5a3e0;--g2:#9a72c9"><div class="et">Recogido nupcial<small>Peinado</small></div></div>
+      <div class="look rv" style="--g1:#f9e2c9;--g2:#c9a227"><div class="et">Balayage miel<small>Color</small></div></div>
+      <div class="look rv" style="--g1:#e8c8e8;--g2:#b47fc9"><div class="et">Mirada de noche<small>Maquillaje</small></div></div>
+      <div class="look rv" style="--g1:#f7c8d8;--g2:#c9a227"><div class="et">Francesa dorada<small>Uñas</small></div></div>
+      <div class="look rv" style="--g1:#dcc8f0;--g2:#f7a8c4"><div class="et">Trenzas boho<small>Peinado</small></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque">
+  <div class="wrap">
+    <h2 class="sec rv">Lo que dicen <span class="it">ellas</span></h2>
+    <p class="sub rv">Testimonios de ejemplo para mostrar el formato.</p>
+    <div class="testis">
+      <div class="testi rv"><div class="stars">★★★★★</div><p>"El balayage me quedó exactamente como la foto que llevé. Nunca me habían entendido tan bien."</p><footer>— Paola R. · <em>testimonio de ejemplo</em></footer></div>
+      <div class="testi rv"><div class="stars">★★★★★</div><p>"Me maquillaron para mi boda y el look duró intacto hasta la madrugada. Arte puro."</p><footer>— Lucía M. · <em>testimonio de ejemplo</em></footer></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="reserva" data-pieza="Reserva de cita" style="padding-top:0">
+  <div class="wrap">
+    <div class="reserva rv">
+      <h3>Reserva tu momento</h3>
+      <p>Formulario de demostración: en tu página real, esto reserva y confirma por mensaje.</p>
+      <div class="campos">
+        <div class="campo"><label>Nombre</label><input type="text" id="rnom" placeholder="Tu nombre"></div>
+        <div class="campo"><label>Teléfono</label><input type="tel" id="rtel" placeholder="(555) 000-0000"></div>
+        <div class="campo"><label>Servicio</label><select id="rser"><option>Cabello</option><option>Maquillaje</option><option>Uñas</option><option>Paquete completo</option></select></div>
+        <div class="campo"><label>Fecha preferida</label><input type="date" id="rfec"></div>
+      </div>
+      <div style="text-align:center;position:relative"><button class="btn" id="rbtn">Reservar</button></div>
+      <div id="conf"><strong>✓ Reserva registrada (demo).</strong><br><span id="rres"></span><br><small style="color:var(--muted)">En tu página real recibirías la confirmación por WhatsApp.</small></div>
+      <p style="text-align:center;margin-top:16px;position:relative"><a class="btn wa" href="https://wa.me/16093316652">Confirmar por WhatsApp</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="contacto" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="sec rv">Visítanos</h2>
+    <p class="sub rv">Datos de ejemplo.</p>
+    <div class="info">
+      <div class="card rv"><h3>Dirección</h3><p>Calle de ejemplo 123<br>Ciudad, Estado 00000</p></div>
+      <div class="card rv"><h3>Horario</h3><p>Mar – Sáb · 10:00 AM – 7:00 PM<br>Dom · 11:00 AM – 4:00 PM</p></div>
+      <div class="card rv"><h3>Contacto</h3><p>Tel: (555) 000-0000<br><a href="https://wa.me/16093316652" style="color:var(--acento2)">WhatsApp directo</a></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="pz-ideal">
+  <p class="lead2"><strong class="t">¿Este estilo es para tu negocio?</strong><br>Ideal para salones de belleza, spas y estudios de maquillaje: shimmer y seda que se sienten premium antes de leer una palabra.</p>
+  <button id="pz-cta" style="margin-top:18px;background:var(--acento);color:#3d2c05;border:none;border-radius:999px;padding:13px 30px;font-weight:700;cursor:pointer;font-size:1rem;font-family:var(--fuente-titular)">Verlo con mis colores</button>
+  <p style="margin-top:12px;font-size:.85rem;color:var(--muted)">Si te gustaron varios diseños, los combinamos en tu página a medida.</p>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <p><strong>ESPEJO · Salón</strong> — contenido ficticio de demostración</p>
+    <p class="dim" style="margin-top:8px">Diseño demo por <a href="../index.html">Polux</a> — caso de estudio · proyecto piloto.</p>
+  </div>
+</footer>
+
+<!-- Chat demo flotante -->
+<button id="chatBtn" aria-label="Abrir chat de demostración">✦</button>
+<div id="chatPanel" role="dialog" aria-label="Chat de demostración">
+  <div class="chead">Asistente Espejo<small>Responde al instante · demo</small></div>
+  <div class="chead2">Prueba lo que un chatbot de Polux haría por tu salón</div>
+  <div id="chatBody"></div>
+  <div class="quick">
+    <button data-q="serv">Servicios</button>
+    <button data-q="looks">Looks</button>
+    <button data-q="reserva">Reservar</button>
+  </div>
+</div>
+
+<script>
+// Reveal al hacer scroll
+(function(){
+  var els=document.querySelectorAll('.rv');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('vis')});return}
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(en){if(en.isIntersecting){en.classList.add('vis');io.unobserve(en.target)}});
+  },{threshold:.12});
+  els.forEach(function(e){io.observe(e)});
+})();
+// Formulario de reserva (demo)
+document.getElementById('rbtn').addEventListener('click',function(){
+  var n=document.getElementById('rnom').value.trim()||'Cliente de ejemplo';
+  var s=document.getElementById('rser').value;
+  var f=document.getElementById('rfec').value||'fecha de ejemplo';
+  document.getElementById('rres').textContent=n+' · '+s+' · '+f;
+  document.getElementById('conf').style.display='block';
+});
+// Botón pz-ideal → abre el selector de piezas (id real v2)
+document.getElementById('pz-cta').addEventListener('click',function(){
+  var b=document.getElementById('pz-selfab');if(b)b.click();
+});
+// Chat demo
+(function(){
+  var panel=document.getElementById('chatPanel'),body=document.getElementById('chatBody');
+  document.getElementById('chatBtn').addEventListener('click',function(){
+    panel.classList.toggle('open');
+    if(panel.classList.contains('open')&&!body.children.length)bot('¡Hola! Soy el asistente de Espejo. Pregúntame por servicios, looks o reservas.');
+  });
+  function add(txt,cls){var m=document.createElement('div');m.className='msg '+cls;m.textContent=txt;body.appendChild(m);body.scrollTop=body.scrollHeight}
+  function bot(t){setTimeout(function(){add(t,'in')},450)}
+  var R={
+    serv:'Tenemos cabello (corte, color, balayage), maquillaje social y de novias, y uñas con nail art. ¿Qué te provoca hoy?',
+    looks:'En la galería verás ondas doradas, recogidos nupciales, balayage miel y más. ¿Quieres que te agende una asesoría de imagen?',
+    reserva:'Puedes reservar arriba en "Reserva tu momento" o por WhatsApp al (555) 000-0000.'
+  };
+  document.querySelectorAll('.quick button').forEach(function(b){
+    b.addEventListener('click',function(){add(b.textContent,'out');bot(R[b.dataset.q])});
+  });
+})();
+</script>
+<script src="../personalizar.js?v=3"></script>
+<script>window.POLUX_WA='16093316652';window.POLUX_CHAT={ac:'#c9a227',icon:'spark',context:'demo',design:'Espejo'};</script>
+<script src="../polux-chat.js?v=5"></script>
+<script src="../polux-piezas.js?v=5"></script>
+</body>
+</html>
