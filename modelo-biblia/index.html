@@ -43,7 +43,7 @@ nav.menu a:hover{color:var(--acento2)}
 .hero h1{font-family:var(--fuente-titular);font-size:clamp(2.1rem,5vw,3.4rem);line-height:1.2;margin-bottom:16px}
 .hero h1 em{font-style:italic;color:var(--acento2)}
 .hero p{color:var(--muted);max-width:640px;margin:0 auto 28px}
-.btn{display:inline-block;background:var(--acento);color:#171208;font-weight:700;text-decoration:none;padding:13px 30px;border-radius:10px;margin:4px}
+.btn{display:inline-block;background:var(--acento);color:var(--fondo);font-weight:700;text-decoration:none;padding:13px 30px;border-radius:10px;margin:4px}
 .btn:hover{background:var(--acento2)}
 .btn.ghost{background:transparent;color:var(--texto);border:1px solid var(--borde)}
 .btn.ghost:hover{border-color:var(--acento);color:var(--acento2)}
@@ -53,7 +53,7 @@ h2.sec{font-family:var(--fuente-titular);font-size:1.8rem;margin-bottom:6px}
 p.sub{color:var(--muted);margin-bottom:24px}
 .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
 .tab{background:var(--tarjeta);border:1px solid var(--borde);color:var(--muted);border-radius:999px;padding:9px 20px;cursor:pointer;font-size:.92rem}
-.tab.activo{background:var(--acento);border-color:var(--acento);color:#171208;font-weight:700}
+.tab.activo{background:var(--acento);border-color:var(--acento);color:var(--fondo);font-weight:700}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .card{background:var(--tarjeta);border:1px solid var(--borde);border-radius:12px;padding:24px;cursor:pointer;transition:border-color .18s,transform .18s}
 .card:hover{border-color:var(--acento);transform:translateY(-3px)}
@@ -69,7 +69,7 @@ p.sub{color:var(--muted);margin-bottom:24px}
 .player .titulo{font-family:var(--fuente-titular);font-size:1.1rem;margin-bottom:4px}
 .player .sub{font-size:.82rem;color:var(--muted);margin-bottom:16px}
 .controls{display:flex;align-items:center;gap:14px}
-.play{width:52px;height:52px;border-radius:50%;background:var(--acento);border:none;color:#171208;font-size:1.2rem;cursor:pointer;flex-shrink:0}
+.play{width:52px;height:52px;border-radius:50%;background:var(--acento);border:none;color:var(--fondo);font-size:1.2rem;cursor:pointer;flex-shrink:0}
 .barra{flex:1;height:6px;background:var(--borde);border-radius:99px;overflow:hidden}
 .barra i{display:block;height:100%;width:0;background:var(--acento2);border-radius:99px}
 .tiempo{font-size:.8rem;color:var(--muted);min-width:88px;text-align:right}
@@ -220,6 +220,11 @@ footer.site a{color:var(--acento2)}
   </div>
 </section>
 
+<section class="pz-ideal" style="padding:60px 20px;text-align:center;border-top:1px solid var(--borde)">
+  <p style="max-width:640px;margin:0 auto;color:var(--muted);font-size:1.02rem;line-height:1.7"><strong style="color:var(--texto);font-size:1.15rem">¿Este estilo es para tu negocio?</strong><br>Ideal para negocios con mucho que mostrar: academias, clínicas, consultorios y restaurantes con carta extensa.</p>
+  <button onclick="var b=document.getElementById('pz-fab');b&&b.click()" style="margin-top:18px;background:var(--acento);color:var(--fondo);border:none;border-radius:999px;padding:13px 30px;font-weight:700;cursor:pointer;font-size:.95rem">Verlo con mis colores 🎨</button>
+  <p style="margin-top:12px;font-size:.82rem;color:var(--muted)">Si te gustaron varios, los combinamos en tu página a medida.</p>
+</section>
 <footer class="site" id="contacto">
   <div class="wrap">
     <p><strong style="font-family:var(--fuente-titular);color:var(--texto)">Negocio Demo</strong> · Centro de conocimiento · (555) 000-0000</p>
@@ -248,13 +253,17 @@ playBtn.textContent='⏸';timer=setInterval(()=>{seg++;if(seg>=180){seg=0}prog.s
   const ctx=cv.getContext('2d'),DPR=Math.min(2,devicePixelRatio||1);
   let W,H;function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
   size();addEventListener('resize',size);
+  const V=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const hexRGB=h=>{h=(h||'#888888').replace('#','');if(h.length===3)h=h.split('').map(x=>x+x).join('');return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]};
+  let AC=[201,162,39];function refrescar(){AC=hexRGB(V('--acento'));}
+  refrescar();addEventListener('polux-palette',refrescar);
   const P=[];for(let i=0;i<70;i++)P.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.8+.6,v:.12+Math.random()*.4,o:Math.random()*6.28});
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;let t=0;
   (function tick(){
     ctx.clearRect(0,0,W,H);t+=.016;
     P.forEach(p=>{p.y-=p.v;if(p.y<-4){p.y=H+4;p.x=Math.random()*W}
       ctx.beginPath();ctx.arc(p.x,p.y,p.r*(1+t*.002),0,7);
-      ctx.fillStyle='rgba(201,162,39,'+(0.25+0.3*Math.sin(t*2+p.o)).toFixed(3)+')';ctx.fill()});
+      ctx.fillStyle=`rgba(${AC[0]},${AC[1]},${AC[2]},${(0.25+0.3*Math.sin(t*2+p.o)).toFixed(3)})`;ctx.fill()});
     if(!reduced)requestAnimationFrame(tick);
   })();
 })();
@@ -265,6 +274,11 @@ playBtn.textContent='⏸';timer=setInterval(()=>{seg++;if(seg>=180){seg=0}prog.s
   const ctx=cv.getContext('2d'),DPR=Math.min(2,devicePixelRatio||1);
   let W,H;function size(){W=cv.clientWidth;H=cv.clientHeight||240;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
   size();addEventListener('resize',size);
+  const V=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const hexRGB=h=>{h=(h||'#888888').replace('#','');if(h.length===3)h=h.split('').map(x=>x+x).join('');return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]};
+  let AC=[201,162,39],AC2=[232,199,102],MU=[184,169,138];
+  function refrescar(){AC=hexRGB(V('--acento'));AC2=hexRGB(V('--acento2'));MU=hexRGB(V('--muted'));}
+  refrescar();addEventListener('polux-palette',refrescar);
   const N=[['Servicios',.12,.52],['Guías',.30,.24],['Recursos',.50,.58],['Audio',.68,.26],['Opiniones',.84,.52],['Contacto',.50,.86]]
     .map(n=>({t:n[0],x:n[1],y:n[2],o:Math.random()*6.28}));
   const E=[[0,1],[0,2],[1,2],[2,3],[2,4],[1,5],[4,5],[3,4]];
@@ -275,18 +289,18 @@ playBtn.textContent='⏸';timer=setInterval(()=>{seg++;if(seg>=180){seg=0}prog.s
     const px=i=>N[i].x*W, py=i=>N[i].y*H+Math.sin(t*1.2+N[i].o)*6;
     E.forEach((e,k)=>{
       const x1=px(e[0]),y1=py(e[0]),x2=px(e[1]),y2=py(e[1]);
-      ctx.strokeStyle='rgba(201,162,39,.30)';ctx.lineWidth=1.2;
+      ctx.strokeStyle=`rgba(${AC[0]},${AC[1]},${AC[2]},.30)`;ctx.lineWidth=1.2;
       ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
       if(!reduced){pu[k]=(pu[k]+.007)%1;
         ctx.beginPath();ctx.arc(x1+(x2-x1)*pu[k],y1+(y2-y1)*pu[k],3,0,7);
-        ctx.fillStyle='#e8c766';ctx.fill()}
+        ctx.fillStyle=`rgb(${AC2[0]},${AC2[1]},${AC2[2]})`;ctx.fill()}
     });
     N.forEach((n,i)=>{
       const x=px(i),y=py(i);
       ctx.beginPath();ctx.arc(x,y,12+3*Math.sin(t*2+n.o),0,7);
-      ctx.strokeStyle='rgba(201,162,39,.35)';ctx.lineWidth=1.5;ctx.stroke();
-      ctx.beginPath();ctx.arc(x,y,6.5,0,7);ctx.fillStyle='#c9a227';ctx.fill();
-      ctx.fillStyle='#b8a98a';ctx.font='11px system-ui,sans-serif';ctx.textAlign='center';
+      ctx.strokeStyle=`rgba(${AC[0]},${AC[1]},${AC[2]},.35)`;ctx.lineWidth=1.5;ctx.stroke();
+      ctx.beginPath();ctx.arc(x,y,6.5,0,7);ctx.fillStyle=`rgb(${AC[0]},${AC[1]},${AC[2]})`;ctx.fill();
+      ctx.fillStyle=`rgb(${MU[0]},${MU[1]},${MU[2]})`;ctx.font='11px system-ui,sans-serif';ctx.textAlign='center';
       ctx.fillText(n.t,x,y+32);
     });
     if(!reduced)requestAnimationFrame(frame);
