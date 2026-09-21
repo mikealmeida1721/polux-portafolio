@@ -520,7 +520,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
       b.innerHTML='<span class="n-art">'+l.svg+'</span><span class="n-pick">'+(sel[l.id]?'✓':'✦')+'</span>';
       strip.appendChild(b);
     });
-    return{row:row,strip:strip,dir:row.getAttribute('data-dir')==='1'?1:-1,off:-(ri*7*84),paused:false,step:0,downX:0,downY:0};
+    return{row:row,strip:strip,dir:row.getAttribute('data-dir')==='1'?1:-1,off:-(ri*7*84),paused:false,step:0,downX:0,downY:0,drag:false,moved:0,startOff:0,resumeT:0};
   });
   function paint(id){
     var on=!!sel[id];
@@ -555,13 +555,43 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
       tiles[i].style.zIndex=s===1?'':'2';
     }
   }
+  /* Bucle infinito: mantiene off en (-step,0] en AMBAS direcciones (deriva y arrastre) */
+  function applyOff(st){
+    if(!st.step&&st.strip.firstElementChild)st.step=st.strip.firstElementChild.getBoundingClientRect().width+12;
+    var step=st.step||84,g=0;
+    while(st.off<=-step&&g++<1000){st.strip.appendChild(st.strip.firstElementChild);st.off+=step}
+    g=0;
+    while(st.off>0&&g++<1000){st.strip.insertBefore(st.strip.lastElementChild,st.strip.firstElementChild);st.off-=step}
+    st.strip.style.transform='translate3d('+st.off.toFixed(1)+'px,0,0)';
+  }
   states.forEach(function(st){
-    st.row.addEventListener('pointerdown',function(e){st.paused=true;st.downX=e.clientX;st.downY=e.clientY;dock(st,e.clientX)},{passive:true});
-    ['pointerup','pointercancel','pointerleave'].forEach(function(ev){st.row.addEventListener(ev,function(){st.paused=false;clearDock(st)})});
-    st.row.addEventListener('pointermove',function(e){if(e.pointerType==='mouse'||st.paused)dock(st,e.clientX)},{passive:true});
+    function endDrag(cancelled){
+      if(!st.drag)return;
+      st.drag=false;clearDock(st);clearTimeout(st.resumeT);
+      if(cancelled)st.paused=false; /* el navegador tomó el gesto (scroll vertical): reanudar ya */
+      else st.resumeT=setTimeout(function(){st.paused=false},5000); /* tras soltar, la deriva vuelve en 5s */
+    }
+    st.row.addEventListener('pointerdown',function(e){
+      clearTimeout(st.resumeT);
+      st.paused=true;st.drag=true;st.moved=0;
+      st.downX=e.clientX;st.downY=e.clientY;st.startOff=st.off;
+      try{st.row.setPointerCapture(e.pointerId)}catch(err){}
+      dock(st,e.clientX);
+    },{passive:true});
+    st.row.addEventListener('pointermove',function(e){
+      if(e.pointerType==='mouse'&&!st.drag){dock(st,e.clientX);return} /* hover: solo dock */
+      if(!st.drag)return;
+      var dx=e.clientX-st.downX;
+      st.moved=Math.max(st.moved,Math.hypot(dx,e.clientY-st.downY));
+      if(st.moved>10){st.off=st.startOff+dx;applyOff(st)} /* arrastre real: la fila sigue al dedo */
+      dock(st,e.clientX);
+    },{passive:true});
+    st.row.addEventListener('pointerup',function(){endDrag(false)});
+    st.row.addEventListener('pointercancel',function(){endDrag(true)});
+    st.row.addEventListener('pointerleave',function(){if(st.drag)endDrag(true)});
     st.strip.addEventListener('click',function(e){
       var t=e.target&&e.target.closest?e.target.closest('.n-tile'):null;if(!t)return;
-      if(Math.hypot(e.clientX-st.downX,e.clientY-st.downY)>10)return;
+      if(Math.hypot(e.clientX-st.downX,e.clientY-st.downY)>10)return; /* fue arrastre, no tap */
       toggle(t.getAttribute('data-logo'));
     });
   });
@@ -573,12 +603,8 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     if(visible&&!document.hidden&&!reduced){
       states.forEach(function(st){
         if(st.paused)return;
-        if(!st.step&&st.strip.firstElementChild)st.step=st.strip.firstElementChild.getBoundingClientRect().width+12;
-        var step=st.step||84;
         st.off+=st.dir*SPEED*dt;
-        if(st.dir<0&&st.off<=-step){st.strip.appendChild(st.strip.firstElementChild);st.off+=step}
-        else if(st.dir>0&&st.off>=0){st.strip.insertBefore(st.strip.lastElementChild,st.strip.firstElementChild);st.off-=step}
-        st.strip.style.transform='translate3d('+st.off.toFixed(1)+'px,0,0)';
+        applyOff(st);
       });
     }
     requestAnimationFrame(frame);
