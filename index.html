@@ -43,8 +43,11 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
 .demo{display:block;text-decoration:none;background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;overflow:hidden;
   transition:transform .2s,border-color .2s,box-shadow .2s}
 .demo:hover{transform:translateY(-6px);border-color:var(--acento);box-shadow:0 18px 50px rgba(168,85,247,.22)}
-.thumb{display:block;aspect-ratio:16/10;overflow:hidden;background:#000;position:relative}
+.thumb{display:block;aspect-ratio:16/10;overflow:hidden;background:#000;position:relative;container-type:inline-size}
 .thumb iframe{width:1280px;height:800px;border:0;pointer-events:none;transform-origin:top left;transform:scale(.27);display:block}
+@supports (scale:calc(100cqw / 1280px)){
+.thumb iframe{transform:none;scale:calc(100cqw / 1280px)}
+}
 .demo-meta{display:flex;align-items:center;justify-content:space-between;padding:18px 20px}
 .demo-meta strong{font-size:1.08rem}
 .demo-meta em{font-style:normal;color:var(--acento);font-size:.9rem;font-weight:700;white-space:nowrap}
