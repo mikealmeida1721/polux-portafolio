@@ -360,7 +360,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
      empieza a girar sola de forma fluida (sin saltos de tarjeta en tarjeta).
      Cualquier gesto —o el chatbot— la detiene y el conteo de 10s reinicia. */
   let driftOn=false, driftRaf=null, idleT=null;
-  const DRIFT_PX=1; /* ~60px/s: una vuelta completa en ~35s */
+  const DRIFT_PX=1.6; /* ~96px/s: una vuelta completa en ~23s */
   function driftStep(){
     if(!driftOn)return;
     track.scrollLeft+=DRIFT_PX;
@@ -488,6 +488,6 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
 })();
 </script>
 <script>window.POLUX_WA='16093316652';window.POLUX_CHAT={ac:'#A855F7',icon:'spark',context:'hub'};</script>
-<script src="polux-chat.js?v=4"></script>
+<script src="polux-chat.js?v=5"></script>
 </body>
 </html>
