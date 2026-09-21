@@ -1,7 +1,7 @@
 /*!
  * Polux Chat — asistente funcional del portafolio (español, sin backend).
  * Config: window.POLUX_CHAT = {ac:'#A855F7', icon:'spark', context:'hub'|'demo', design:'Ateneo', designId:'ateneo'}
- *         window.POLUX_WA = '15550001122'  (número de WhatsApp Business)
+ *         window.POLUX_WA = '16093316652'  (número de WhatsApp Business)
  * En ?embed=1 no se muestra el widget, pero sí se ocultan los chats demo viejos.
  */
 (function(){
@@ -11,7 +11,7 @@ var AC = cfg.ac || '#A855F7';
 var ICON = cfg.icon || 'spark';
 var CTX = cfg.context || 'hub';
 var DESIGN = cfg.design || '';
-var WA = window.POLUX_WA || '15550001122';
+var WA = window.POLUX_WA || '16093316652';
 var EMBED = /(?:\?|&)embed=1/.test(location.search);
 
 /* ---- CSS base (siempre: limpia chats demo viejos) ---- */
@@ -156,8 +156,10 @@ function brain(text){
       : 'Fácil: elige tu diseño favorito en el <a href="../">catálogo</a>, márcalo con ♡ y arma tu pedido. O escríbenos directo por <a href="'+waLink('Hola Polux, vengo del portafolio y quiero información.')+'" target="_blank" rel="noopener">WhatsApp</a>.';
   if(/web\b|pagina|sitio/.test(t))
     return 'La <b>página web a medida cuesta $299</b> pago único: tomamos el diseño que elijas del catálogo y la construimos con tu logo, tus colores y tu contenido.';
+  if(/paquete|descuento|todo junto|bundle|juntos|combo/.test(t))
+    return 'Arma tu paquete en el catálogo: eliges diseño, plan y servicios, y ves tu total al instante — pago único y mensual separados. Y el logo te sale en <b>$75</b> en vez de $99 cuando va con tu página. '+(CTX==='hub'&&window.PoluxOrder?'<button class="pc-chip" data-act="pedido">Armar mi pedido</button>':'<a href="../">Ir al catálogo →</a>');
   if(/logo/.test(t))
-    return 'Diseñamos tu <b>logo por $99</b> pago único. Y si ya tienes uno, lo integramos gratis a tu página.';
+    return 'Diseñamos tu <b>logo por $99</b> pago único… pero si lo pides <b>con tu página te sale en $75</b>. Y si ya tienes uno, lo integramos gratis.';
   if(/diseno|catalogo|muestra|portafolio|ver/.test(t)){
     var lista=DISENOS.map(function(d){return d.nombre}).join(', ');
     return CTX==='hub'
