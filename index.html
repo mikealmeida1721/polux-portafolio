@@ -181,6 +181,14 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
   </div>
 </section>
 
+<section id="logos">
+  <div class="wrap" style="text-align:center">
+    <h2 class="sec rv">Logotipos</h2>
+    <p class="sub rv">50 diseños únicos en 10 familias — monogramas, emblemas, vintage, tech y más. Marca con ✦ los que te gusten: <b style="color:#fff">el logo es gratis y canjeable con la compra de tu página</b>, diseñado a medida con tu nombre y tus colores (si ya tienes logo, el precio no baja — el regalo es el diseño). ¿Solo quieres el logo, sin página? <b style="color:#fff">$50</b>, personalizado y entregado en SVG + PNG.</p>
+    <a class="btn rv" href="logos.html">Explorar los 50 logotipos →</a>
+  </div>
+</section>
+
 <section id="como">
   <div class="wrap">
     <div class="pasos-mini rv">
@@ -212,6 +220,10 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
     <div class="om-sec">
       <div class="om-lab">Lo que elegiste en las demos</div>
       <div class="chips" id="omPz"></div>
+    </div>
+    <div class="om-sec">
+      <div class="om-lab">Logos que te gustaron <span>(catálogo de logotipos)</span></div>
+      <div class="chips" id="omLogos"></div>
     </div>
     <div class="om-sec">
       <div class="om-lab">¿Qué más te interesa?</div>
@@ -399,14 +411,16 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   });
   /* ===== Modal cotización personalizada (sin precios: el paquete se arma a medida) ===== */
   const omBack=document.getElementById('omBack'),omDesigns=document.getElementById('omDesigns'),
-        omServs=document.getElementById('omServs'),omPz=document.getElementById('omPz');
+        omServs=document.getElementById('omServs'),omPz=document.getElementById('omPz'),omLogos=document.getElementById('omLogos');
   const picked=new Set();
   const loadPz=()=>{try{return JSON.parse(localStorage.getItem('poluxPiezas')||'[]')}catch(e){return[]}};
   const savePz=v=>{try{localStorage.setItem('poluxPiezas',JSON.stringify(v))}catch(e){}};
+  const loadLogos=()=>{try{return JSON.parse(localStorage.getItem('poluxLogos')||'[]')}catch(e){return[]}};
+  const saveLogos=v=>{try{localStorage.setItem('poluxLogos',JSON.stringify(v))}catch(e){}};
   function renderOm(){
     omDesigns.innerHTML=DESIGNS.map(d=>`<button type="button" class="tchip${picked.has(d.id)?' on':''}" data-id="${d.id}">${d.nombre}</button>`).join('');
     omServs.innerHTML=SERVS.map(s=>`<label class="piece"><input type="checkbox" value="${s}"><span>${s}</span></label>`).join('');
-    renderPz();
+    renderPz();renderLogos();
   }
   function renderPz(){
     const pz=loadPz();
@@ -416,6 +430,14 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   }
   omPz.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
     const pz=loadPz();pz.splice(+b.dataset.i,1);savePz(pz);renderPz()});
+  function renderLogos(){
+    const lgs=loadLogos();
+    omLogos.innerHTML=lgs.length
+      ? lgs.map((l,i)=>`<span class="tchip on pz-chip">✦ ${l.nombre} <small style="opacity:.7">(${l.fam})</small><button type="button" data-i="${i}" aria-label="Quitar">✕</button></span>`).join('')
+      : '<p class="om-empty">Aún no eliges logos.<br>Explora el <a href="logos.html" style="color:#A855F7">catálogo de 50 logotipos</a> y marca con ✦ los que te gusten.</p>';
+  }
+  omLogos.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+    const lgs=loadLogos();lgs.splice(+b.dataset.i,1);saveLogos(lgs);renderLogos()});
   omDesigns.addEventListener('click',e=>{const b=e.target.closest('.tchip');if(!b)return;
     const id=b.dataset.id;picked.has(id)?picked.delete(id):picked.add(id);b.classList.toggle('on')});
   window.PoluxOrder={open(){favs.forEach(id=>picked.add(id));renderOm();omBack.classList.add('open')}};
@@ -428,11 +450,13 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     if(picked.size===0){say('Elige al menos un diseño con ♡ o en el formulario');return}
     const dis=DESIGNS.filter(d=>picked.has(d.id)).map(d=>d.nombre).join(', ');
     const pz=loadPz().map(p=>p.d+': '+p.p).join('; ');
+    const lgs=loadLogos();
     const servs=[...omServs.querySelectorAll('input:checked')].map(i=>i.value).join(', ');
     const nom=document.getElementById('omNombre').value.trim(), neg=document.getElementById('omNegocio').value.trim();
     const logo=document.querySelector('input[name=omLogo]:checked').value;
     let txt='Hola Polux, quiero una cotización personalizada ✨\n• Diseño base: '+dis;
     if(pz)txt+='\n• Lo que elegí en las demos: '+pz;
+    if(lgs.length)txt+='\n• Logos que me gustaron: '+lgs.map(l=>l.nombre+' ('+l.fam+')').join(', ');
     if(servs)txt+='\n• Me interesa: '+servs;
     txt+='\n• Logo: '+(logo==='tengo'?'ya tengo, lo envío por aquí':'quiero que Polux me diseñe uno');
     if(nom||neg)txt+='\n• Contacto: '+(nom||'—')+' — Negocio: '+(neg||'—');
