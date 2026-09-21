@@ -142,31 +142,6 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
 .pm-sep{color:var(--acento);font-weight:800}
 .btn{border:0;cursor:pointer;font-family:inherit}
 
-/* ===== Chatbot demo (Sofía) ===== */
-.sof{max-width:430px;margin:0 auto;background:var(--tarjeta);border:1px solid var(--borde);border-radius:22px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.45)}
-.sof-head{display:flex;align-items:center;gap:12px;padding:16px 18px;background:#101016;border-bottom:1px solid var(--borde)}
-.sof-avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#A855F7,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex:none}
-.sof-head b{font-size:1rem}
-.sof-head small{color:var(--muted);font-size:.78rem}
-.sof-demo{margin-left:auto;font-size:.68rem;letter-spacing:.18em;font-weight:800;color:#0A0A0C;background:#c084fc;border-radius:999px;padding:5px 12px;flex:none}
-.sof-note{padding:12px 18px 0;color:var(--muted);font-size:.82rem}
-.sof-msgs{padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-height:220px;max-height:320px;overflow-y:auto}
-.sof-msg{max-width:82%;padding:10px 14px;border-radius:16px;font-size:.9rem;line-height:1.45}
-.sof-msg.bot{background:#1e1e28;border:1px solid var(--borde);align-self:flex-start;border-bottom-left-radius:4px}
-.sof-msg.user{background:var(--acento);color:#0A0A0C;font-weight:600;align-self:flex-end;border-bottom-right-radius:4px}
-.sof-typing{align-self:flex-start;background:#1e1e28;border:1px solid var(--borde);border-radius:16px;border-bottom-left-radius:4px;padding:12px 16px;display:flex;gap:5px}
-.sof-typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:st .9s infinite}
-.sof-typing i:nth-child(2){animation-delay:.15s}
-.sof-typing i:nth-child(3){animation-delay:.3s}
-@keyframes st{0%,100%{opacity:.3}50%{opacity:1}}
-.sof-chips{display:flex;gap:8px;padding:4px 16px 10px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.sof-chips::-webkit-scrollbar{display:none}
-.sof-chip{flex:none;border:1px solid var(--acento);background:rgba(168,85,247,.1);color:#e9d5ff;border-radius:999px;padding:8px 15px;font-size:.82rem;cursor:pointer;white-space:nowrap;font-family:inherit}
-.sof-form{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--borde);background:#101016}
-.sof-form input{flex:1;background:#0d0d13;border:1px solid var(--borde);border-radius:999px;color:#fff;padding:11px 16px;font-size:.9rem;outline:none;font-family:inherit;min-width:0}
-.sof-form input:focus{border-color:var(--acento)}
-.sof-form button{width:46px;height:46px;flex:none;border-radius:50%;border:none;background:var(--acento);color:#0A0A0C;font-size:1.2rem;cursor:pointer}
-
 /* ===== Sistemas a medida ===== */
 .sis-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .sis{background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;padding:16px 14px;cursor:pointer;text-align:left;transition:border-color .15s,background .15s;color:var(--texto);font-family:inherit}
@@ -225,6 +200,7 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
 }
 @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.scroll-hint{animation:none}}
 </style>
+<link rel="stylesheet" href="chatbots-shared.css">
 </head>
 <body>
 
@@ -272,25 +248,15 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
 <section id="chatbots">
   <div class="wrap">
     <h2 class="sec rv">Chatbots</h2>
-    <p class="sub rv">Un recepcionista que nunca duerme: responde preguntas, agenda citas y te avisa lo importante.<br>Pruébalo tú mismo — esto es una demostración 👇</p>
-    <div class="sof rv" id="sofia">
-      <div class="sof-head">
-        <span class="sof-avatar">🦷</span>
-        <span><b>Sofía · Recepcionista IA</b><br><small>Clínica Dental Sonrisa</small></span>
-        <span class="sof-demo">DEMO</span>
-      </div>
-      <p class="sof-note">Demostración con respuestas programadas — así podría atender a tus clientes, con los datos de tu negocio.</p>
-      <div class="sof-msgs" id="sofMsgs" aria-live="polite"></div>
-      <div class="sof-chips" id="sofChips"></div>
-      <form class="sof-form" id="sofForm">
-        <input type="text" id="sofInput" placeholder="Escríbele a Sofía…" autocomplete="off" aria-label="Escribirle a Sofía">
-        <button type="submit" aria-label="Enviar mensaje">➤</button>
-      </form>
-    </div>
-    <p class="sub rv" style="margin-top:36px">¿Quieres ver cómo se vería en tu negocio?<br>Explora <b>100 diseños de chatbots</b> en 20 estilos — toca uno y pruébalo en vivo.</p>
-    <div style="text-align:center;margin-top:20px">
-      <a class="btn rv" href="chatbots.html">Ver galería de diseños →</a>
-    </div>
+    <p class="sub rv">Un recepcionista que nunca duerme: responde preguntas, agenda citas y te avisa lo importante.<br>Toca una burbuja y pruébala en vivo — son <b>demostraciones con respuestas programadas</b>.</p>
+  </div>
+  <div class="nube rv cb-row" id="nubeCb" aria-label="Nube de diseños de chatbot: toca una burbuja para probarla">
+    <div class="n-row" data-dir="-1"><div class="n-strip"></div></div>
+    <div class="n-row" data-dir="1"><div class="n-strip"></div></div>
+    <div class="n-row" data-dir="-1"><div class="n-strip"></div></div>
+  </div>
+  <div class="wrap" style="text-align:center">
+    <a class="btn rv" href="chatbots.html">Ver galería de diseños →</a>
   </div>
 </section>
 
@@ -823,49 +789,100 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   requestAnimationFrame(frame);
 })();
 </script>
+<script src="chatbots-motor.js"></script>
+<script src="chatbot-ui.js"></script>
 <script>
-/* Sofía — demo de chatbot (bot de muestra con respuestas programadas) */
+/* Nube viva de chatbots: 3 filas con scroll nativo + deriva automática, direcciones alternadas (→,←,→) */
 (function(){
-  var box=document.getElementById('sofMsgs');if(!box)return;
-  var form=document.getElementById('sofForm'),input=document.getElementById('sofInput'),chips=document.getElementById('sofChips');
-  function norm(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
-  var RULES=[
-    {k:['hola','buenas','buenos dias','buenas tardes','buenas noches','que tal','hey','saludos'],r:'¡Hola! Soy Sofía, la recepcionista virtual de Clínica Dental Sonrisa ✨ Puedo darte horarios, agendar tu cita o pasarte con una persona del equipo. ¿En qué te ayudo?'},
-    {k:['cita','agendar','reservar','turno','apartar','quiero ir'],r:'¡Claro que sí! Atendemos de lunes a viernes de 9:00 a 18:00. ¿Qué día te viene bien? 📅'},
-    {k:['horario','hora','abren','cierran','abierto','atienden'],r:'Nuestro horario es de lunes a viernes de 9:00 a 18:00 y sábados de 9:00 a 13:00 🕘'},
-    {k:['precio','costo','cuanto','cuesta','tarifa','presupuesto'],r:'Los precios dependen del tratamiento que necesites. Te puedo agendar una valoración gratuita y ahí te dan tu presupuesto exacto. ¿Te agendo? 😊'},
-    {k:['humano','persona','asesor','alguien','encargado','doctor','doctora'],r:'¡Por supuesto! Te paso con una persona de nuestro equipo en un momento. Mientras tanto, ¿me dices tu nombre?'},
-    {k:['gracias','genial','perfecto','excelente','buenisimo'],r:'¡Con gusto! Aquí estoy cuando me necesites 😊'},
-    {k:['donde','ubicacion','direccion','llegar','encuentran'],r:'Estamos en Av. Principal 123, a dos cuadras del parque central 📍 ¿Te agendo tu visita?'},
-    {k:['adios','chao','nos vemos','bye'],r:'¡Que tengas un lindo día! Sonríe mucho 😁'}
-  ];
-  var FALLBACK='Puedo ayudarte con horarios, agendar tu cita o pasarte con una persona del equipo. ¿Qué prefieres?';
-  function replyFor(t){var n=' '+norm(t)+' ';
-    for(var i=0;i<RULES.length;i++){var ks=RULES[i].k;
-      for(var j=0;j<ks.length;j++){if(n.indexOf(ks[j])>=0)return RULES[i].r}}
-    return FALLBACK}
-  function bubble(who,text){var d=document.createElement('div');d.className='sof-msg '+who;d.textContent=text;box.appendChild(d);box.scrollTop=box.scrollHeight}
-  function typing(){var d=document.createElement('div');d.className='sof-typing';d.innerHTML='<i></i><i></i><i></i>';box.appendChild(d);box.scrollTop=box.scrollHeight;return d}
-  var busy=false;
-  function send(text){
-    text=(text||'').trim();if(!text||busy)return;
-    busy=true;bubble('user',text);input.value='';
-    var t=typing();
-    setTimeout(function(){t.remove();bubble('bot',replyFor(text));busy=false},700+Math.random()*500);
+  var nube=document.getElementById('nubeCb');
+  if(!nube||!window.CHATBOT_THEMES||!window.CHATBOT_THEMES.length||!window.PoluxChatUI)return;
+  var UI=window.PoluxChatUI;
+  var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var rows=Array.prototype.slice.call(nube.querySelectorAll('.n-row'));
+  var per=Math.ceil(window.CHATBOT_THEMES.length/rows.length);
+  function makeTile(t){
+    var b=document.createElement('button');
+    b.type='button';b.className='cb-tile';b.setAttribute('data-id',t.id);
+    b.setAttribute('aria-label','Probar diseño '+t.nombre);
+    b.innerHTML=UI.cardHTML(t)+
+      '<span class="cb-name">'+UI.esc(t.nombre)+'</span>'+
+      '<span class="cb-sub">'+UI.esc(t.famLabel)+'</span>';
+    return b;
   }
-  form.addEventListener('submit',function(e){e.preventDefault();send(input.value);input.focus()});
-  ['Quiero una cita','¿Cuál es el horario?','Hablar con una persona'].forEach(function(c){
-    var b=document.createElement('button');b.type='button';b.className='sof-chip';b.textContent=c;
-    b.addEventListener('click',function(){send(c)});chips.appendChild(b)});
-  var greeted=false;
-  function greet(){if(greeted)return;greeted=true;var t=typing();
-    setTimeout(function(){t.remove();bubble('bot','¡Hola! Soy Sofía ✨, la recepcionista virtual de Clínica Dental Sonrisa. Escríbeme o toca una sugerencia 👇')},900)}
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){greet();io.disconnect()}})},{threshold:.3});
-    io.observe(document.getElementById('sofia'));
-  }else greet();
+  /* 3 copias idénticas por fila: el bucle infinito se logra envolviendo scrollLeft */
+  var states=rows.map(function(row,ri){
+    var strip=row.querySelector('.n-strip');
+    var set=window.CHATBOT_THEMES.slice(ri*per,(ri+1)*per);
+    for(var c=0;c<3;c++)set.forEach(function(t){strip.appendChild(makeTile(t))});
+    var t0=strip.firstElementChild,step=t0?t0.offsetWidth+12:170;
+    var st={row:row,strip:strip,dir:row.getAttribute('data-dir')==='1'?1:-1,
+      step:step,copyW:step*set.length,paused:false,resumeT:0,
+      downX:0,downY:0,downScroll:0};
+    row.scrollLeft=st.copyW+ri*5*step; /* arrancar en la copia central */
+    return st;
+  });
+  /* Bucle infinito: envolver scrollLeft dentro de la copia central */
+  function wrapRow(st){
+    var row=st.row,C=st.copyW,sl=row.scrollLeft,g=0;
+    while(sl<C&&g++<10)sl+=C;
+    g=0;
+    while(sl>=2*C&&g++<10)sl-=C;
+    if(sl!==row.scrollLeft)row.scrollLeft=sl;
+  }
+  var modalWasOpen=false;
+  states.forEach(function(st){
+    var row=st.row;
+    function pause(){st.paused=true;clearTimeout(st.resumeT)}
+    function resumeSoon(){ /* la deriva vuelve 5s después del último gesto (cubre el momentum de iOS) */
+      clearTimeout(st.resumeT);
+      st.resumeT=setTimeout(function(){if(!UI.isOpen())st.paused=false},5000);
+    }
+    row.addEventListener('pointerdown',function(e){
+      pause();
+      st.downX=e.clientX;st.downY=e.clientY;st.downScroll=row.scrollLeft;
+    },{passive:true});
+    row.addEventListener('wheel',function(){pause();resumeSoon()},{passive:true});
+    row.addEventListener('pointerup',function(){resumeSoon()},{passive:true});
+    row.addEventListener('pointercancel',function(){resumeSoon()},{passive:true});
+    row.addEventListener('scroll',function(){wrapRow(st)},{passive:true});
+    st.strip.addEventListener('click',function(e){
+      var t=e.target&&e.target.closest?e.target.closest('.cb-tile'):null;if(!t)return;
+      if(Math.abs(row.scrollLeft-st.downScroll)>10)return; /* hubo scroll: no fue tap */
+      if(Math.hypot(e.clientX-st.downX,e.clientY-st.downY)>10)return;
+      pause(); /* se reanuda al cerrar el modal */
+      UI.openTheme(t.getAttribute('data-id'));
+    });
+  });
+  /* Vigilante: si pasan 10s sin interacción, la deriva arranca sí o sí */
+  var lastTouch=Date.now();
+  document.addEventListener('pointerdown',function(){lastTouch=Date.now()},{passive:true,capture:true});
+  setInterval(function(){
+    if(reduced||document.hidden||UI.isOpen())return;
+    if(Date.now()-lastTouch>10000){
+      states.forEach(function(st){st.paused=false;clearTimeout(st.resumeT)});
+    }
+  },3000);
+  var visible=true,last=performance.now(),SPEED=40;
+  if('IntersectionObserver' in window){new IntersectionObserver(function(es){visible=es[0].isIntersecting},{threshold:0}).observe(nube)}
+  document.addEventListener('visibilitychange',function(){last=performance.now()});
+  function frame(now){
+    var dt=Math.min(.05,(now-last)/1000);last=now;
+    var mOpen=UI.isOpen();
+    if(modalWasOpen&&!mOpen){states.forEach(function(st){st.paused=false;clearTimeout(st.resumeT)})}
+    modalWasOpen=mOpen;
+    if(visible&&!document.hidden&&!reduced){
+      states.forEach(function(st){
+        if(st.paused||mOpen)return;
+        st.row.scrollLeft+=st.dir*SPEED*dt; /* la deriva mueve scrollLeft; el gesto del usuario lo maneja el navegador */
+        wrapRow(st);
+      });
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
 })();
 </script>
+
 <script>
 /* Sistemas a medida: selector de capacidades estilo piezas (✦) */
 (function(){
