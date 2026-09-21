@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pasarela — Boutique demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   PASARELA — boutique. Concepto: la página es un desfile que no se
+   detiene: marquees infinitos + lookbook editorial con scroll lateral.
+   --logo: pega la URL del logo del prospecto (o "" y se usa texto)
+   ============================================================ */
+:root{
+  --logo: "";
+  --fondo:#f4f1ec;
+  --fondo2:color-mix(in srgb, var(--fondo) 88%, var(--texto));
+  --tarjeta:#ffffff;
+  --borde:color-mix(in srgb, var(--texto) 14%, transparent);
+  --acento:#d6ff3f;
+  --acento2:color-mix(in srgb, var(--texto) 92%, var(--acento));
+  --texto:#111111;
+  --muted:color-mix(in srgb, var(--texto) 58%, var(--fondo));
+  --fuente-titular:'Anton', Impact, sans-serif;
+  --fuente-cuerpo:'Inter', system-ui, sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo);line-height:1.6;overflow-x:hidden}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#111;background:var(--acento);border-radius:999px;padding:5px 14px;opacity:.95}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:var(--tarjeta);border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.volver:hover{color:var(--texto);border-color:var(--texto)}
+/* Header */
+header.site{background:color-mix(in srgb, var(--fondo) 88%, transparent);backdrop-filter:blur(10px);border-bottom:2px solid var(--texto);position:sticky;top:0;z-index:50;padding-top:44px}
+.bar{display:flex;align-items:center;gap:14px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--texto)}
+.logo-slot{width:48px;height:48px;border-radius:0;border:2px solid var(--texto);background:var(--logo) center/contain no-repeat,var(--acento);display:flex;align-items:center;justify-content:center;font-weight:800;color:#111;font-size:1.4rem;font-family:var(--fuente-titular)}
+.brand b{font-family:var(--fuente-titular);font-size:1.25rem;letter-spacing:.05em}
+.brand small{display:block;font-size:.62rem;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;font-weight:600}
+nav.menu{margin-left:auto;display:flex;gap:20px;font-size:.85rem;align-items:center;font-weight:600}
+nav.menu a{color:var(--muted);text-decoration:none}
+nav.menu a:hover{color:var(--texto)}
+.btn{display:inline-block;background:var(--texto);color:var(--fondo);font-weight:800;text-decoration:none;padding:13px 28px;border:none;cursor:pointer;font-size:.92rem;font-family:var(--fuente-cuerpo);letter-spacing:.05em;text-transform:uppercase}
+.btn:hover{background:var(--acento);color:#111}
+.btn.acid{background:var(--acento);color:#111}
+.btn.acid:hover{background:var(--texto);color:var(--fondo)}
+.btn.ghost{background:transparent;color:var(--texto);border:2px solid var(--texto)}
+.btn.ghost:hover{background:var(--texto);color:var(--fondo)}
+/* Hero editorial */
+.hero{position:relative;padding:90px 0 0;overflow:hidden}
+.hero .kicker{font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;font-weight:800;margin-bottom:14px}
+.hero .kicker .tag{background:var(--acento);color:#111;padding:4px 12px;margin-right:10px}
+.hero h1{font-family:var(--fuente-titular);font-size:clamp(3.2rem,13vw,8.5rem);line-height:.92;letter-spacing:.01em;text-transform:uppercase;margin-bottom:16px}
+.hero h1 .hueco{color:transparent;-webkit-text-stroke:2.5px var(--texto)}
+.hero p.lead{max-width:560px;color:var(--muted);font-size:1rem;margin-bottom:28px}
+.hero .ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:40px}
+.num-ed{position:absolute;top:120px;right:4%;font-family:var(--fuente-titular);font-size:1.1rem;transform:rotate(90deg);transform-origin:center;letter-spacing:.2em;color:var(--muted)}
+.codigo{height:46px;margin:0 auto;max-width:1060px;background:repeating-linear-gradient(90deg,var(--texto) 0 2px,transparent 2px 5px,var(--texto) 5px 6px,transparent 6px 11px,var(--texto) 11px 14px,transparent 14px 18px)}
+/* Marquee: el desfile no se detiene */
+.marquee{overflow:hidden;background:var(--texto);color:var(--acento);border-top:2px solid var(--texto);border-bottom:2px solid var(--texto)}
+.marquee.acido{background:var(--acento);color:#111}
+.marquee .pista{display:flex;width:max-content;animation:desfile 26s linear infinite}
+.marquee span{padding:13px 26px;font-family:var(--fuente-titular);font-size:1.25rem;letter-spacing:.08em;white-space:nowrap;text-transform:uppercase}
+.marquee span i{font-style:normal;opacity:.55;margin-right:26px}
+@keyframes desfile{to{transform:translateX(-50%)}}
+/* Secciones */
+section.bloque{padding:70px 0}
+.num{font-size:.72rem;letter-spacing:.3em;font-weight:800;text-transform:uppercase;display:block;margin-bottom:10px}
+h2.sec{font-family:var(--fuente-titular);font-size:clamp(2.1rem,6vw,3.4rem);margin-bottom:8px;letter-spacing:.02em;text-transform:uppercase;line-height:1}
+p.sub{color:var(--muted);margin-bottom:32px;max-width:620px;font-size:.95rem}
+/* Lookbook: carrusel editorial horizontal */
+.look-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+.look-nav{display:flex;gap:10px;align-items:center}
+.look-nav button{width:48px;height:48px;border:2px solid var(--texto);background:var(--tarjeta);color:var(--texto);font-size:1.3rem;cursor:pointer;line-height:1}
+.look-nav button:hover{background:var(--texto);color:var(--fondo)}
+#lkCount{font-family:var(--fuente-titular);font-size:1rem;letter-spacing:.1em;margin:0 6px}
+.look-track{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:24px 20px 30px;scrollbar-width:thin}
+.look{flex:0 0 272px;scroll-snap-align:start;background:var(--tarjeta);border:2px solid var(--texto);transition:transform .2s}
+.look:hover{transform:translateY(-6px)}
+.look .foto-lk{border-bottom:2px solid var(--texto)}
+.look .foto-lk svg{display:block;width:100%;height:auto}
+.look .info-lk{padding:18px}
+.look .nlook{font-size:.68rem;letter-spacing:.28em;font-weight:800;color:var(--muted)}
+.look h3{font-family:var(--fuente-titular);font-size:1.35rem;letter-spacing:.04em;margin:6px 0 4px;text-transform:uppercase}
+.look .pr{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.look .precio{font-weight:800;font-size:1.05rem}
+.look .ver{font-size:.78rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--texto);text-decoration:underline;text-underline-offset:3px}
+/* Categorías */
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.cat{background:var(--tarjeta);border:2px solid var(--texto);padding:28px 22px;text-decoration:none;color:var(--texto);display:block;transition:transform .2s,background .2s}
+.cat:hover{transform:translateY(-5px);background:var(--acento)}
+.cat svg{width:44px;height:44px;margin-bottom:14px}
+.cat h3{font-family:var(--fuente-titular);font-size:1.25rem;letter-spacing:.05em;text-transform:uppercase}
+.cat p{font-size:.8rem;color:var(--muted);margin-top:4px}
+.cat .flecha{display:block;margin-top:12px;font-weight:800;letter-spacing:.1em;font-size:.8rem}
+/* Testimonios */
+.testis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.testi{background:var(--texto);color:var(--fondo);padding:28px;position:relative}
+.testi .stars{color:var(--acento);letter-spacing:.12em;font-size:.85rem}
+.testi p{font-size:.9rem;margin:14px 0 12px;font-style:italic}
+.testi footer{font-size:.75rem;opacity:.7}
+/* Visita */
+.visita{background:var(--texto);color:var(--fondo);padding:56px 0}
+.visita h2.sec{color:var(--fondo)}
+.visita h2.sec .acido{color:var(--acento)}
+.visita p.sub{color:color-mix(in srgb, var(--fondo) 70%, var(--texto))}
+.form-v{max-width:720px;margin:0 auto;background:var(--fondo);color:var(--texto);padding:36px 32px;border:2px solid var(--acento)}
+.form-v h3{font-family:var(--fuente-titular);font-size:1.5rem;letter-spacing:.04em;margin-bottom:18px;text-transform:uppercase}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.campo label{display:block;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;font-weight:800;color:var(--muted);margin-bottom:6px}
+.campo select,.campo input{width:100%;padding:12px;border:2px solid var(--borde);font-size:.95rem;background:var(--tarjeta);color:var(--texto);font-family:inherit;border-radius:0}
+.campo select:focus,.campo input:focus{outline:none;border-color:var(--texto)}
+#confV{display:none;border:2px solid var(--texto);background:var(--acento);color:#111;padding:18px;margin-top:18px;text-align:center;font-size:.9rem;font-weight:600}
+/* Contacto */
+.info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.info .card{background:var(--tarjeta);border:2px solid var(--texto);padding:28px;text-align:center}
+.info h3{font-family:var(--fuente-titular);letter-spacing:.05em;margin-bottom:10px;font-size:1.1rem;text-transform:uppercase}
+.info p{color:var(--muted);font-size:.86rem}
+.info a{color:var(--texto);font-weight:800}
+/* Ideal */
+.pz-ideal{padding:64px 20px;text-align:center;border-top:2px solid var(--texto)}
+.pz-ideal p{max-width:640px;margin:0 auto;color:var(--muted);font-size:.95rem;line-height:1.7}
+.pz-ideal strong{color:var(--texto);font-size:1.3rem;font-family:var(--fuente-titular);letter-spacing:.05em;display:block;margin-bottom:8px}
+/* Chat demo */
+#chatBtn{position:fixed;bottom:22px;right:22px;z-index:99;width:60px;height:60px;border-radius:50%;background:var(--texto);color:var(--acento);border:none;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center}
+#chatBtn svg{width:28px;height:28px}
+#chatPanel{position:fixed;bottom:96px;right:22px;z-index:99;width:330px;max-width:calc(100vw - 44px);background:var(--tarjeta);border:2px solid var(--texto);box-shadow:0 18px 50px rgba(0,0,0,.25);display:none;overflow:hidden}
+#chatPanel.open{display:block}
+#chatPanel .chead{background:var(--texto);color:var(--fondo);padding:14px 18px;font-weight:800;font-size:.9rem}
+#chatPanel .chead small{display:block;font-weight:400;font-size:.72rem;opacity:.75}
+#chatBody{padding:16px;height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--fondo)}
+.msg{max-width:85%;padding:10px 14px;font-size:.85rem}
+.msg.in{background:var(--tarjeta);border:1px solid var(--borde);align-self:flex-start}
+.msg.out{background:var(--texto);color:var(--fondo);align-self:flex-end;font-weight:600}
+.quick{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 14px;background:var(--fondo)}
+.quick button{border:2px solid var(--texto);background:var(--tarjeta);color:var(--texto);padding:7px 14px;font-size:.78rem;cursor:pointer;font-weight:700;font-family:inherit}
+.quick button:hover{background:var(--acento);border-color:var(--acento);color:#111}
+.chead2{padding:10px 16px;background:var(--fondo);font-size:.66rem;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+footer.site{border-top:2px solid var(--texto);padding:36px 0;text-align:center;font-size:.82rem;color:var(--muted)}
+footer.site a{color:var(--texto);font-weight:800}
+/* Reveal */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+.rv.vis{opacity:1;transform:none}
+@media(max-width:900px){
+  .cats{grid-template-columns:1fr 1fr}
+  .testis,.info{grid-template-columns:1fr}
+  .campos{grid-template-columns:1fr}
+  nav.menu a:not(.btn){display:none}
+  .look{flex-basis:240px}
+  .num-ed{display:none}
+  .hero{padding-top:70px}
+}
+@media(prefers-reduced-motion:reduce){
+  .marquee .pista{animation:none}
+  .rv{opacity:1;transform:none;transition:none}
+}
+</style>
+<noscript><style>.rv{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body>
+<div class="demo-badge">Diseño demo</div>
+<a class="volver" href="../index.html">← Portafolio</a>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#">
+      <span class="logo-slot" data-logo>P</span>
+      <span><b data-nombre>PASARELA BOUTIQUE</b><small data-tagline>Moda de ejemplo</small></span>
+    </a>
+    <nav class="menu">
+      <a href="#coleccion">Colección</a>
+      <a href="#categorias">Categorías</a>
+      <a href="#opiniones">Opiniones</a>
+      <a class="btn" href="#visita" style="padding:9px 20px">Agendar visita</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker rv"><span class="tag">NUEVO</span>Primavera – Verano 2026</div>
+    <h1 class="rv">Vístete<br>de <span class="hueco">portada</span></h1>
+    <p class="lead rv">Curaduría de moda con piezas que no ves en todas partes: sastrería, streetwear y accesorios de diseñadores independientes. Ven a probarte la temporada.</p>
+    <div class="ctas rv">
+      <a class="btn" href="#coleccion">Ver la colección</a>
+      <a class="btn ghost" href="#visita">Agendar visita</a>
+    </div>
+  </div>
+  <div class="num-ed" aria-hidden="true">EDICIÓN Nº 04</div>
+  <div class="codigo" aria-hidden="true"></div>
+</div>
+
+<div class="marquee" aria-hidden="true">
+  <div class="pista">
+    <span><i>✦</i>Nueva colección</span><span><i>✦</i>Sastrería ácida</span><span><i>✦</i>Denim japonés</span><span><i>✦</i>Vestidos de autor</span><span><i>✦</i>Accesorios únicos</span>
+    <span><i>✦</i>Nueva colección</span><span><i>✦</i>Sastrería ácida</span><span><i>✦</i>Denim japonés</span><span><i>✦</i>Vestidos de autor</span><span><i>✦</i>Accesorios únicos</span>
+  </div>
+</div>
+
+<section class="bloque" id="coleccion" data-pieza="Colección">
+  <div class="wrap">
+    <div class="look-head">
+      <div>
+        <span class="num rv">01 — Lookbook</span>
+        <h2 class="sec rv">La colección en pasarela</h2>
+        <p class="sub rv" style="margin-bottom:0">Desliza lateral: cada look es una portada. Piezas de ejemplo para mostrar el formato.</p>
+      </div>
+      <div class="look-nav rv">
+        <button id="lkPrev" aria-label="Look anterior">‹</button>
+        <span id="lkCount">01 / 05</span>
+        <button id="lkNext" aria-label="Look siguiente">›</button>
+      </div>
+    </div>
+  </div>
+  <div class="look-track" id="lkTrack">
+    <article class="look rv">
+      <div class="foto-lk"><svg viewBox="0 0 300 380" role="img" aria-label="Look 01: blazer de sastrería">
+        <rect width="300" height="380" fill="#111111"/>
+        <path d="M150 60 L105 80 L92 150 L108 148 L118 260 L182 260 L192 148 L208 150 L195 80 Z" fill="#1e1e1e" stroke="#d6ff3f" stroke-width="3"/>
+        <path d="M150 60 L132 130 L150 170 L168 130 Z" fill="#d6ff3f"/>
+        <path d="M118 260 L112 340 L188 340 L182 260" fill="#0a0a0a" stroke="#d6ff3f" stroke-width="3"/>
+        <text x="150" y="368" text-anchor="middle" fill="#d6ff3f" font-family="Anton,sans-serif" font-size="20" letter-spacing="4">LOOK 01</text>
+      </svg></div>
+      <div class="info-lk"><span class="nlook">LOOK 01</span><h3>Sastrería ácida</h3><p style="font-size:.82rem;color:var(--muted)">Blazer estructurado con solapa en contraste.</p><div class="pr"><span class="precio">$189</span><span class="ver">Ver →</span></div></div>
+    </article>
+    <article class="look rv">
+      <div class="foto-lk"><svg viewBox="0 0 300 380" role="img" aria-label="Look 02: vestido editorial">
+        <rect width="300" height="380" fill="#f4f1ec"/>
+        <path d="M150 60 C130 60 124 78 126 96 L138 150 C120 210 108 270 104 340 L196 340 C192 270 180 210 162 150 L174 96 C176 78 170 60 150 60 Z" fill="#111111"/>
+        <path d="M126 96 C140 108 160 108 174 96" fill="none" stroke="#d6ff3f" stroke-width="4"/>
+        <circle cx="150" cy="40" r="16" fill="#111111"/>
+        <text x="150" y="368" text-anchor="middle" fill="#111111" font-family="Anton,sans-serif" font-size="20" letter-spacing="4">LOOK 02</text>
+      </svg></div>
+      <div class="info-lk"><span class="nlook">LOOK 02</span><h3>Vestido editorial</h3><p style="font-size:.82rem;color:var(--muted)">Corte de autor, caída arquitectónica.</p><div class="pr"><span class="precio">$149</span><span class="ver">Ver →</span></div></div>
+    </article>
+    <article class="look rv">
+      <div class="foto-lk"><svg viewBox="0 0 300 380" role="img" aria-label="Look 03: conjunto streetwear">
+        <rect width="300" height="380" fill="#d6ff3f"/>
+        <rect x="105" y="90" width="90" height="130" rx="34" fill="#111111"/>
+        <path d="M105 130 L70 170 L92 182 L112 150 Z M195 130 L230 170 L208 182 L188 150 Z" fill="#111111"/>
+        <rect x="120" y="170" width="60" height="34" rx="8" fill="#f4f1ec"/>
+        <rect x="112" y="226" width="32" height="110" fill="#111111"/><rect x="156" y="226" width="32" height="110" fill="#111111"/>
+        <rect x="106" y="330" width="44" height="18" rx="6" fill="#111111"/><rect x="150" y="330" width="44" height="18" rx="6" fill="#111111"/>
+        <text x="150" y="368" text-anchor="middle" fill="#111111" font-family="Anton,sans-serif" font-size="20" letter-spacing="4">LOOK 03</text>
+      </svg></div>
+      <div class="info-lk"><span class="nlook">LOOK 03</span><h3>Street esencial</h3><p style="font-size:.82rem;color:var(--muted)">Hoodie oversize + cargo, uniforme de la ciudad.</p><div class="pr"><span class="precio">$99</span><span class="ver">Ver →</span></div></div>
+    </article>
+    <article class="look rv">
+      <div class="foto-lk"><svg viewBox="0 0 300 380" role="img" aria-label="Look 04: abrigo largo">
+        <rect width="300" height="380" fill="#e2dccf"/>
+        <path d="M150 55 L110 75 L100 160 L115 158 L108 340 L192 340 L185 158 L200 160 L190 75 Z" fill="#2a2a2a"/>
+        <rect x="108" y="200" width="84" height="14" fill="#d6ff3f"/>
+        <rect x="143" y="214" width="14" height="10" fill="#111111"/>
+        <path d="M150 55 L138 120 L150 150 L162 120 Z" fill="#d6ff3f"/>
+        <text x="150" y="368" text-anchor="middle" fill="#111111" font-family="Anton,sans-serif" font-size="20" letter-spacing="4">LOOK 04</text>
+      </svg></div>
+      <div class="info-lk"><span class="nlook">LOOK 04</span><h3>Abrigo largo</h3><p style="font-size:.82rem;color:var(--muted)">El statement del invierno, cinturón incluido.</p><div class="pr"><span class="precio">$229</span><span class="ver">Ver →</span></div></div>
+    </article>
+    <article class="look rv">
+      <div class="foto-lk"><svg viewBox="0 0 300 380" role="img" aria-label="Look 05: accesorios">
+        <rect width="300" height="380" fill="#111111"/>
+        <rect x="95" y="170" width="110" height="120" rx="14" fill="#d6ff3f"/>
+        <path d="M115 170 C115 120 185 120 185 170" fill="none" stroke="#d6ff3f" stroke-width="10"/>
+        <rect x="118" y="200" width="64" height="16" rx="8" fill="#111111"/>
+        <circle cx="150" cy="90" r="34" fill="none" stroke="#f4f1ec" stroke-width="8"/>
+        <path d="M116 90 L184 90" stroke="#f4f1ec" stroke-width="8"/>
+        <text x="150" y="368" text-anchor="middle" fill="#d6ff3f" font-family="Anton,sans-serif" font-size="20" letter-spacing="4">LOOK 05</text>
+      </svg></div>
+      <div class="info-lk"><span class="nlook">LOOK 05</span><h3>Accesorios</h3><p style="font-size:.82rem;color:var(--muted)">Bolsos y gafas que cierran cualquier look.</p><div class="pr"><span class="precio">desde $45</span><span class="ver">Ver →</span></div></div>
+    </article>
+  </div>
+</section>
+
+<div class="marquee acido" aria-hidden="true">
+  <div class="pista">
+    <span><i>✦</i>Aparta tu cita</span><span><i>✦</i>Asesoría de imagen gratis</span><span><i>✦</i>Aparta tu cita</span><span><i>✦</i>Asesoría de imagen gratis</span>
+    <span><i>✦</i>Aparta tu cita</span><span><i>✦</i>Asesoría de imagen gratis</span><span><i>✦</i>Aparta tu cita</span><span><i>✦</i>Asesoría de imagen gratis</span>
+  </div>
+</div>
+
+<section class="bloque" id="categorias" data-pieza="Categorías">
+  <div class="wrap">
+    <span class="num rv">02 — Categorías</span>
+    <h2 class="sec rv">Compra por universo</h2>
+    <p class="sub rv">Cuatro mundos, una misma curaduría. Datos de ejemplo.</p>
+    <div class="cats">
+      <a class="cat rv" href="#coleccion">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M24 6c-3 0-5 2-5 5l2 8c-4 6-7 14-8 23h22c-1-9-4-17-8-23l2-8c0-3-2-5-5-5z"/><path d="M19 19c3 2 7 2 10 0"/></svg>
+        <h3>Mujer</h3><p>48 piezas · vestidos, sastrería</p><span class="flecha">Explorar →</span>
+      </a>
+      <a class="cat rv" href="#coleccion">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 8l6-3 6 3 8 6-4 5-4-2v23H18V17l-4 2-4-5z"/><path d="M24 5v12"/></svg>
+        <h3>Hombre</h3><p>36 piezas · streetwear, denim</p><span class="flecha">Explorar →</span>
+      </a>
+      <a class="cat rv" href="#coleccion">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="10" y="16" width="28" height="22" rx="3"/><path d="M17 16c0-8 14-8 14 0"/><path d="M10 26h28"/></svg>
+        <h3>Accesorios</h3><p>52 piezas · bolsos, gafas, joyería</p><span class="flecha">Explorar →</span>
+      </a>
+      <a class="cat rv" href="#coleccion">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M8 32c0-6 4-8 8-12 3-3 6-8 8-8 3 0 2 6 6 8 4 3 10 4 10 12z"/><path d="M8 32h32v6H8z"/></svg>
+        <h3>Calzado</h3><p>29 piezas · sneakers, botas</p><span class="flecha">Explorar →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="opiniones" style="padding-top:0">
+  <div class="wrap">
+    <span class="num rv">03 — Opiniones</span>
+    <h2 class="sec rv">Clientas de portada</h2>
+    <p class="sub rv">Testimonios de ejemplo para mostrar el formato.</p>
+    <div class="testis">
+      <div class="testi rv"><div class="stars">★★★★★</div><p>"Entré por un vestido y salí con un closet nuevo. La asesoría de imagen es otro nivel."</p><footer>— Cliente de ejemplo</footer></div>
+      <div class="testi rv"><div class="stars">★★★★★</div><p>"Piezas que no encuentras en ningún mall. Todo lo que compro aquí me lo chulean."</p><footer>— Cliente de ejemplo</footer></div>
+      <div class="testi rv"><div class="stars">★★★★★</div><p>"Aparté mi cita por la página y al llegar ya tenían mi talla separada. Así sí."</p><footer>— Cliente de ejemplo</footer></div>
+    </div>
+  </div>
+</section>
+
+<section class="visita" id="visita" data-pieza="Visita a la tienda">
+  <div class="wrap">
+    <span class="num rv" style="color:var(--acento)">04 — Visita</span>
+    <h2 class="sec rv">Agenda tu <span class="acido">cita de estilo</span></h2>
+    <p class="sub rv">30 minutos con una asesora, probador reservado y tu talla lista al llegar.</p>
+    <div class="form-v rv">
+      <h3>¿Cuándo vienes?</h3>
+      <div class="campos">
+        <div class="campo"><label>Tu nombre</label><input type="text" id="vNombre" placeholder="Nombre y apellido"></div>
+        <div class="campo"><label>Fecha</label><input type="date" id="vFecha"></div>
+        <div class="campo"><label>¿Qué buscas?</label><select id="vInteres"><option>Vestidos</option><option>Sastrería</option><option>Streetwear</option><option>Accesorios</option><option>Look completo</option></select></div>
+        <div class="campo"><label>Teléfono / WhatsApp</label><input type="tel" id="vTel" placeholder="(555) 000-0000"></div>
+      </div>
+      <div style="text-align:center"><button class="btn acid" id="vBtn">Agendar visita</button></div>
+      <div id="confV"><strong>✓ Visita agendada (demo).</strong><br><span id="vRes"></span><br><small>En tu página real, aquí llegaría la confirmación por SMS o WhatsApp.</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="contacto">
+  <div class="wrap">
+    <span class="num rv">05 — Contacto</span>
+    <h2 class="sec rv">Encuéntranos</h2>
+    <p class="sub rv">Datos de ejemplo.</p>
+    <div class="info">
+      <div class="card rv"><h3>Tienda</h3><p>Av. de ejemplo 456<br>Trenton, NJ</p></div>
+      <div class="card rv"><h3>Horario</h3><p>Lun – Sáb · 10am – 8pm<br>Dom · 12pm – 6pm</p></div>
+      <div class="card rv"><h3>WhatsApp</h3><p>Pregunta por tallas y disponibilidad:</p><p style="margin-top:10px"><a href="https://wa.me/16093316652">(609) 331-6652</a></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="pz-ideal">
+  <p><strong>¿ESTE ESTILO ES PARA TU NEGOCIO?</strong>Ideal para boutiques, tiendas de ropa y accesorios: lookbook editorial, categorías claras y citas de estilo que llenan tu tienda.</p>
+  <button id="pzIdealBtn" class="btn" style="margin-top:18px">Verlo con mis colores</button>
+  <p style="margin-top:12px;font-size:.8rem;color:var(--muted)">Si te gustaron varios, los combinamos en tu página a medida.</p>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <p><strong>PASARELA BOUTIQUE</strong> · Moda de ejemplo · Contenido ficticio de demostración</p>
+    <p style="margin-top:8px">Diseño demo por <a href="../index.html">Polux</a> — caso de estudio · proyecto piloto.</p>
+  </div>
+</footer>
+
+<!-- Chat demo flotante -->
+<button id="chatBtn" aria-label="Abrir chat de demostración">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"/></svg>
+</button>
+<div id="chatPanel" role="dialog" aria-label="Chat de demostración">
+  <div class="chead">Asistente Demo<small>Responde al instante · demo</small></div>
+  <div class="chead2">Prueba lo que un chatbot de Polux haría por tu negocio</div>
+  <div id="chatBody"></div>
+  <div class="quick">
+    <button data-q="horario">Horario</button>
+    <button data-q="coleccion">Colección</button>
+    <button data-q="visita">Agendar visita</button>
+  </div>
+</div>
+
+<script>
+/* Reveal al scroll */
+(function(){
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els=document.querySelectorAll('.rv');
+  if(reduce||!('IntersectionObserver' in window)){
+    els.forEach(function(e){e.classList.add('vis')});
+    return;
+  }
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target)}
+    });
+  },{threshold:.18});
+  els.forEach(function(e){io.observe(e)});
+})();
+/* Carrusel lookbook: flechas + contador */
+(function(){
+  var track=document.getElementById('lkTrack');
+  var count=document.getElementById('lkCount');
+  var total=track.querySelectorAll('.look').length;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function step(dir){
+    var card=track.querySelector('.look');
+    var w=card?card.getBoundingClientRect().width+18:290;
+    track.scrollBy({left:dir*w,behavior:reduce?'auto':'smooth'});
+  }
+  document.getElementById('lkPrev').addEventListener('click',function(){step(-1)});
+  document.getElementById('lkNext').addEventListener('click',function(){step(1)});
+  var tick=false;
+  track.addEventListener('scroll',function(){
+    if(tick)return;tick=true;
+    requestAnimationFrame(function(){
+      var card=track.querySelector('.look');
+      var w=card?card.getBoundingClientRect().width+18:290;
+      var i=Math.min(total-1,Math.max(0,Math.round(track.scrollLeft/w)));
+      count.textContent=('0'+(i+1)).slice(-2)+' / '+('0'+total).slice(-2);
+      tick=false;
+    });
+  });
+})();
+/* Visita demo */
+document.getElementById('vBtn').addEventListener('click',function(){
+  var n=document.getElementById('vNombre').value||'sin nombre';
+  var f=document.getElementById('vFecha').value||'fecha de ejemplo';
+  var q=document.getElementById('vInteres').value;
+  document.getElementById('vRes').textContent=n+' · '+f+' · '+q;
+  document.getElementById('confV').style.display='block';
+});
+/* Botón "Verlo con mis colores": dispara el selector real de piezas */
+document.getElementById('pzIdealBtn').addEventListener('click',function(){
+  var b=document.getElementById('pz-selfab');if(b)b.click();
+});
+/* Chat demo */
+(function(){
+  var panel=document.getElementById('chatPanel'),body=document.getElementById('chatBody');
+  document.getElementById('chatBtn').addEventListener('click',function(){
+    panel.classList.toggle('open');
+    if(panel.classList.contains('open')&&!body.children.length)bot('¡Hola! Soy el asistente demo de Pasarela. Pregúntame por horario, la colección o agenda tu visita.');
+  });
+  function add(txt,cls){var m=document.createElement('div');m.className='msg '+cls;m.textContent=txt;body.appendChild(m);body.scrollTop=body.scrollHeight}
+  function bot(t){setTimeout(function(){add(t,'in')},450)}
+  var R={
+    horario:'Abrimos lun–sáb de 10am a 8pm y domingos de 12pm a 6pm. Te esperamos.',
+    coleccion:'La colección Primavera–Verano 2026 ya está en tienda: desliza el lookbook de arriba, son 5 looks de portada.',
+    visita:'Puedes agendar tu cita de estilo en la sección "Visita": 30 minutos con asesora y probador reservado.'
+  };
+  document.querySelectorAll('.quick button').forEach(function(b){
+    b.addEventListener('click',function(){add(b.textContent,'out');bot(R[b.dataset.q])});
+  });
+})();
+</script>
+<script src="../personalizar.js?v=3"></script>
+<script>window.POLUX_WA='16093316652';window.POLUX_CHAT={ac:'#111111',icon:'spark',context:'demo',design:'Pasarela'};</script>
+<script src="../polux-chat.js?v=5"></script>
+<script src="../polux-piezas.js?v=5"></script>
+</body>
+</html>
