@@ -140,8 +140,9 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
 
 /* ===== Nube de logotipos (estilos) ===== */
 .nube{overflow:hidden;padding:22px 0 8px}
-.n-row{overflow:hidden;padding:7px 0;touch-action:pan-y}
-.n-strip{display:flex;gap:12px;width:max-content;will-change:transform;padding:8px 2px}
+.n-row{overflow-x:auto;overflow-y:hidden;padding:7px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.n-row::-webkit-scrollbar{display:none}
+.n-strip{display:flex;gap:12px;width:max-content;padding:8px 2px}
 .n-tile{width:72px;height:72px;border-radius:20px;flex:0 0 auto;position:relative;cursor:pointer;
   border:0;padding:0;background:#15151d;overflow:hidden;
   box-shadow:0 8px 20px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.09);
@@ -518,7 +519,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
 </script>
 <script src="logos-motor.js"></script>
 <script>
-/* Nube viva de logotipos: 3 filas a la deriva continua + efecto dock + selección */
+/* Nube viva de logotipos: 3 filas con scroll nativo + deriva automática + efecto dock + vista previa */
 (function(){
   var nube=document.getElementById('nube');
   if(!nube||typeof window.LOGOS==='undefined'||!window.LOGOS.length)return;
@@ -527,19 +528,28 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return[]}}
   function save(v){try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}}
   var sel={};load().forEach(function(l){sel[l.id]=1});
+  var modalOpen=false;
   var rows=Array.prototype.slice.call(nube.querySelectorAll('.n-row'));
   var per=Math.ceil(window.LOGOS.length/rows.length);
+  function makeTile(l){
+    var b=document.createElement('button');
+    b.type='button';b.className='n-tile'+(sel[l.id]?' sel':'');b.setAttribute('data-logo',l.id);
+    b.setAttribute('aria-label','Ver logo '+l.nombre);
+    b.setAttribute('aria-pressed',sel[l.id]?'true':'false');
+    b.innerHTML='<span class="n-art">'+l.svg+'</span><span class="n-pick">'+(sel[l.id]?'✓':'✦')+'</span>';
+    return b;
+  }
+  /* 3 copias idénticas por fila: el bucle infinito se logra envolviendo scrollLeft (pura aritmética, sin tocar el DOM) */
   var states=rows.map(function(row,ri){
     var strip=row.querySelector('.n-strip');
-    window.LOGOS.slice(ri*per,(ri+1)*per).forEach(function(l){
-      var b=document.createElement('button');
-      b.type='button';b.className='n-tile'+(sel[l.id]?' sel':'');b.setAttribute('data-logo',l.id);
-      b.setAttribute('aria-label','Ver logo '+l.nombre);
-      b.setAttribute('aria-pressed',sel[l.id]?'true':'false');
-      b.innerHTML='<span class="n-art">'+l.svg+'</span><span class="n-pick">'+(sel[l.id]?'✓':'✦')+'</span>';
-      strip.appendChild(b);
-    });
-    return{row:row,strip:strip,dir:row.getAttribute('data-dir')==='1'?1:-1,off:-(ri*7*84),paused:false,step:0,downX:0,downY:0,drag:false,moved:0,startOff:0,resumeT:0};
+    var set=window.LOGOS.slice(ri*per,(ri+1)*per);
+    for(var c=0;c<3;c++)set.forEach(function(l){strip.appendChild(makeTile(l))});
+    var t0=strip.firstElementChild,step=t0?t0.offsetWidth+12:84; /* offsetWidth: ignora el scale del dock */
+    var st={row:row,strip:strip,dir:row.getAttribute('data-dir')==='1'?1:-1,
+      step:step,copyW:step*set.length,paused:false,resumeT:0,
+      downX:0,downY:0,downScroll:0,dockX:0,dockRaf:0,docked:null};
+    row.scrollLeft=st.copyW+ri*7*step; /* arrancar en la copia central, con variedad por fila */
+    return st;
   });
   function paint(id){
     var on=!!sel[id];
@@ -565,14 +575,14 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     var l=findLogo(id);if(!l)return;
     lpId=id;lpArt.innerHTML=l.svg;lpName.textContent=l.nombre;
     lpFam.textContent=(l.famLabel||'')+(l.nicho?' · '+l.nicho:'');
-    paintFavBtn();lpBack.classList.add('open');
+    paintFavBtn();lpBack.classList.add('open');modalOpen=true;
     states.forEach(function(st){st.paused=true;clearTimeout(st.resumeT)}); /* congelar la deriva */
     document.body.style.overflow='hidden';
   }
   function closePreview(){
     if(!lpBack.classList.contains('open'))return;
-    lpBack.classList.remove('open');lpId=null;
-    states.forEach(function(st){st.paused=false}); /* reanudar la deriva */
+    lpBack.classList.remove('open');lpId=null;modalOpen=false;
+    states.forEach(function(st){st.paused=false;clearTimeout(st.resumeT)}); /* reanudar la deriva */
     document.body.style.overflow='';
   }
   lpFav.addEventListener('click',function(){if(lpId){toggle(lpId);paintFavBtn()}});
@@ -590,57 +600,64 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     save(arr);paint(id);
   }
   function clearDock(st){
-    Array.prototype.forEach.call(st.strip.children,function(t){t.style.transform='';t.style.zIndex=''});
+    if(!st.docked)return;
+    for(var i=0;i<st.docked.length;i++){st.docked[i].style.transform='';st.docked[i].style.zIndex=''}
+    st.docked=null;
   }
-  function dock(st,clientX){
-    if(reduced)return;
+  function dockNow(st){
+    st.dockRaf=0;
+    if(reduced){clearDock(st);return}
     var tiles=st.strip.children,best=null,bi=-1,bd=1e9,i,b,c,d;
-    for(i=0;i<tiles.length;i++){b=tiles[i].getBoundingClientRect();c=b.left+b.width/2;d=Math.abs(c-clientX);if(d<bd){bd=d;best=tiles[i];bi=i}}
+    for(i=0;i<tiles.length;i++){b=tiles[i].getBoundingClientRect();c=b.left+b.width/2;d=Math.abs(c-st.dockX);if(d<bd){bd=d;best=tiles[i];bi=i}}
     if(!best||bd>120){clearDock(st);return}
+    var on=[];
     for(i=0;i<tiles.length;i++){
       var s=1;
       if(i===bi)s=1.6;else if(Math.abs(i-bi)===1)s=1.2;
       tiles[i].style.transform=s===1?'':'scale('+s+')';
       tiles[i].style.zIndex=s===1?'':'2';
+      if(s!==1)on.push(tiles[i]);
     }
+    st.docked=on.length?on:null;
   }
-  /* Bucle infinito: mantiene off en (-step,0] en AMBAS direcciones (deriva y arrastre) */
-  function applyOff(st){
-    if(!st.step&&st.strip.firstElementChild)st.step=st.strip.firstElementChild.getBoundingClientRect().width+12;
-    var step=st.step||84,g=0;
-    while(st.off<=-step&&g++<1000){st.strip.appendChild(st.strip.firstElementChild);st.off+=step}
+  function scheduleDock(st,x){ /* rAF-throttled: el hilo principal queda libre durante el scroll */
+    st.dockX=x;
+    if(!st.dockRaf)st.dockRaf=requestAnimationFrame(function(){dockNow(st)});
+  }
+  /* Bucle infinito: envolver scrollLeft dentro de la copia central (las 3 copias son idénticas: sin salto visible) */
+  function wrapRow(st){
+    var row=st.row,C=st.copyW,sl=row.scrollLeft,g=0;
+    while(sl<C&&g++<10)sl+=C;
     g=0;
-    while(st.off>0&&g++<1000){st.strip.insertBefore(st.strip.lastElementChild,st.strip.firstElementChild);st.off-=step}
-    st.strip.style.transform='translate3d('+st.off.toFixed(1)+'px,0,0)';
+    while(sl>=2*C&&g++<10)sl-=C;
+    if(sl!==row.scrollLeft)row.scrollLeft=sl;
   }
   states.forEach(function(st){
-    function endDrag(cancelled){
-      if(!st.drag)return;
-      st.drag=false;clearDock(st);clearTimeout(st.resumeT);
-      if(cancelled)st.paused=false; /* el navegador tomó el gesto (scroll vertical): reanudar ya */
-      else st.resumeT=setTimeout(function(){st.paused=false},5000); /* tras soltar, la deriva vuelve en 5s */
-    }
-    st.row.addEventListener('pointerdown',function(e){
+    var row=st.row;
+    function pause(){st.paused=true;clearTimeout(st.resumeT)}
+    function resumeSoon(){ /* la deriva vuelve 5s después del último gesto (cubre el momentum de iOS) */
       clearTimeout(st.resumeT);
-      st.paused=true;st.drag=true;st.moved=0;
-      st.downX=e.clientX;st.downY=e.clientY;st.startOff=st.off;
-      try{st.row.setPointerCapture(e.pointerId)}catch(err){}
-      dock(st,e.clientX);
+      st.resumeT=setTimeout(function(){if(!modalOpen)st.paused=false},5000);
+    }
+    row.addEventListener('pointerdown',function(e){
+      pause();
+      st.downX=e.clientX;st.downY=e.clientY;st.downScroll=row.scrollLeft;
+      scheduleDock(st,e.clientX);
     },{passive:true});
-    st.row.addEventListener('pointermove',function(e){
-      if(e.pointerType==='mouse'&&!st.drag){dock(st,e.clientX);return} /* hover: solo dock */
-      if(!st.drag)return;
-      var dx=e.clientX-st.downX;
-      st.moved=Math.max(st.moved,Math.hypot(dx,e.clientY-st.downY));
-      if(st.moved>10){st.off=st.startOff+dx*0.55;applyOff(st)} /* arrastre amortiguado: la fila avanza 0.55x del dedo */
-      dock(st,e.clientX);
+    row.addEventListener('pointermove',function(e){
+      if(e.pointerType==='mouse')scheduleDock(st,e.clientX); /* hover: solo dock */
     },{passive:true});
-    st.row.addEventListener('pointerup',function(){endDrag(false)});
-    st.row.addEventListener('pointercancel',function(){endDrag(true)});
-    st.row.addEventListener('pointerleave',function(){if(st.drag)endDrag(true)});
+    row.addEventListener('pointerleave',function(e){
+      if(e.pointerType==='mouse')clearDock(st);
+    },{passive:true});
+    row.addEventListener('wheel',function(){pause();resumeSoon()},{passive:true});
+    row.addEventListener('pointerup',function(){clearDock(st);resumeSoon()},{passive:true});
+    row.addEventListener('pointercancel',function(){clearDock(st);resumeSoon()},{passive:true});
+    row.addEventListener('scroll',function(){clearDock(st);wrapRow(st)},{passive:true});
     st.strip.addEventListener('click',function(e){
       var t=e.target&&e.target.closest?e.target.closest('.n-tile'):null;if(!t)return;
-      if(Math.hypot(e.clientX-st.downX,e.clientY-st.downY)>10)return; /* fue arrastre, no tap */
+      if(Math.abs(row.scrollLeft-st.downScroll)>10)return; /* hubo scroll: no fue tap */
+      if(Math.hypot(e.clientX-st.downX,e.clientY-st.downY)>10)return;
       openPreview(t.getAttribute('data-logo'));
     });
   });
@@ -652,8 +669,8 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     if(visible&&!document.hidden&&!reduced){
       states.forEach(function(st){
         if(st.paused)return;
-        st.off+=st.dir*SPEED*dt;
-        applyOff(st);
+        st.row.scrollLeft+=st.dir*SPEED*dt; /* la deriva mueve scrollLeft; el gesto del usuario lo maneja el navegador */
+        wrapRow(st);
       });
     }
     requestAnimationFrame(frame);
