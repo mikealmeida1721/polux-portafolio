@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pétalo Florería — Diseño demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   PÉTALO · Florería — concepto: "entrar a un invernadero en flor"
+   Firma: flores procedurales que FLORECEN al entrar cada sección
+   (scale+rotate desde el centro) + pétalos cayendo con física suave.
+   Motion: respiración lenta, apertura elegante, nada brusco.
+   ============================================================ */
+:root{
+  --logo: "";
+  --fondo:#fdf8f0; --fondo2:#f7ecdc; --tarjeta:#ffffff; --borde:#ecd9c4;
+  --acento:#b26e7c; --acento2:#7c9070;
+  --texto:#463c34; --muted:#8d7f70;
+  --fuente-titular:'Fraunces',Georgia,serif;
+  --fuente-cuerpo:'Cormorant Garamond',Georgia,serif;
+  --flor: cubic-bezier(.34,1.35,.64,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo);font-size:1.12rem;line-height:1.65}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--acento);border-radius:999px;padding:5px 14px;opacity:.92;font-family:system-ui,sans-serif}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:var(--tarjeta);border:1px solid var(--borde);border-radius:999px;padding:5px 14px;font-family:system-ui,sans-serif}
+.volver:hover{color:var(--acento);border-color:var(--acento)}
+/* Header */
+header.site{background:var(--tarjeta);border-bottom:1px solid var(--borde);position:sticky;top:0;z-index:50;padding-top:44px}
+.bar{display:flex;align-items:center;gap:14px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--texto)}
+.logo-slot{width:48px;height:48px;border-radius:50%;border:2px solid var(--acento);background:var(--logo) center/contain no-repeat,var(--tarjeta);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--acento);font-size:1.4rem;font-family:var(--fuente-titular)}
+.brand b{font-family:var(--fuente-titular);font-size:1.2rem;letter-spacing:.05em;font-weight:600}
+.brand small{display:block;font-size:.68rem;letter-spacing:.26em;color:var(--muted);text-transform:uppercase;font-family:var(--fuente-cuerpo);font-weight:600}
+nav.menu{margin-left:auto;display:flex;gap:22px;font-size:1.02rem;align-items:center;font-weight:600}
+nav.menu a{color:var(--muted);text-decoration:none}
+nav.menu a:hover{color:var(--acento)}
+.btn{display:inline-block;background:var(--acento);color:#fff;font-weight:700;text-decoration:none;padding:13px 30px;border-radius:999px;border:none;cursor:pointer;font-size:1.02rem;font-family:var(--fuente-cuerpo);letter-spacing:.03em;transition:transform .35s var(--flor),background .25s}
+.btn:hover{background:var(--acento2);transform:scale(1.04)}
+.btn.ghost{background:var(--tarjeta);color:var(--acento);border:2px solid var(--acento)}
+.btn.ghost:hover{background:var(--acento);color:#fff}
+/* Hero */
+.hero{position:relative;padding:96px 0 90px;text-align:center;overflow:hidden}
+#petalos{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.hero .wrap{position:relative;z-index:1}
+.hero .kicker{font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;color:var(--acento2);margin-bottom:18px;font-weight:600}
+.hero h1{font-family:var(--fuente-titular);font-size:clamp(2.8rem,7.5vw,4.8rem);font-weight:600;line-height:1.08;margin-bottom:16px}
+.hero h1 em{font-style:italic;color:var(--acento);font-weight:500}
+.hero p.lead{max-width:600px;margin:0 auto 30px;color:var(--muted);font-size:1.22rem}
+.hero .ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+/* Flor procedural que florece */
+.flor-slot{display:flex;justify-content:center;margin-bottom:6px}
+.flor{width:66px;height:66px}
+.flor .petalo{fill:#e8b4b8;transform-origin:50px 50px;transform:rotate(var(--r)) scale(0);opacity:0;transition:transform .9s var(--flor),opacity .6s ease;transition-delay:var(--d,0s)}
+.flor .petalo:nth-of-type(even){fill:#f2cdd2}
+.flor .centro{fill:#e0a94f;transform-origin:50px 50px;transform:scale(0);transition:transform .7s var(--flor) .6s}
+.flor.bloom .petalo{transform:rotate(var(--r)) scale(1);opacity:1}
+.flor.bloom .centro{transform:scale(1)}
+/* Reveals: apertura suave como pétalos */
+.rev{opacity:0;transform:translateY(30px)}
+.rev.in{opacity:1;transform:none;transition:transform .9s var(--flor),opacity .7s ease;transition-delay:var(--rd,0s)}
+/* Secciones */
+section.bloque{padding:70px 0;position:relative}
+h2.sec{font-family:var(--fuente-titular);font-size:clamp(2rem,5vw,2.8rem);font-weight:600;margin-bottom:8px;text-align:center}
+p.sub{color:var(--muted);margin-bottom:36px;max-width:620px;text-align:center;margin-left:auto;margin-right:auto;font-size:1.15rem;font-style:italic}
+/* Catálogo / ocasiones */
+.ocas{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.oca{background:var(--tarjeta);border:1px solid var(--borde);border-radius:20px;padding:34px 26px;text-align:center;transition:transform .4s var(--flor),box-shadow .3s;position:relative;overflow:hidden}
+.oca:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(178,110,124,.14)}
+.oca .flor-slot .flor{width:54px;height:54px}
+.oca h3{font-family:var(--fuente-titular);font-size:1.4rem;font-weight:600;margin:6px 0 8px}
+.oca p{color:var(--muted);font-size:1.02rem;margin-bottom:14px}
+.oca .desde{font-weight:700;color:var(--acento);font-size:1.1rem;letter-spacing:.04em}
+.oca.destacada{border:2px solid var(--acento)}
+.oca .cinta{position:absolute;top:14px;right:-34px;transform:rotate(38deg);background:var(--acento);color:#fff;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;padding:4px 40px;font-family:system-ui,sans-serif}
+/* Taller */
+.taller{background:var(--fondo2);border-top:1px solid var(--borde);border-bottom:1px solid var(--borde)}
+.pasos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:900px;margin:0 auto}
+.paso{text-align:center;padding:10px}
+.paso .num{width:52px;height:52px;border-radius:50%;border:2px solid var(--acento2);color:var(--acento2);display:flex;align-items:center;justify-content:center;font-family:var(--fuente-titular);font-size:1.3rem;font-weight:600;margin:0 auto 14px}
+.paso h3{font-family:var(--fuente-titular);font-size:1.2rem;font-weight:600;margin-bottom:6px}
+.paso p{color:var(--muted);font-size:1.02rem}
+.taller-nota{text-align:center;margin-top:30px;color:var(--muted);font-style:italic;font-size:1.08rem}
+/* Testimonios */
+.testis{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.testi{background:var(--tarjeta);border:1px solid var(--borde);border-radius:18px;padding:30px;position:relative}
+.testi::before{content:"“";position:absolute;top:6px;left:20px;font-family:var(--fuente-titular);font-size:3.4rem;color:var(--acento);opacity:.35;line-height:1}
+.testi .stars{color:#e0a94f;margin-bottom:10px;letter-spacing:.12em}
+.testi p{font-style:italic;font-size:1.1rem}
+.testi footer{margin-top:12px;font-size:.95rem;color:var(--muted)}
+.testi .due{font-weight:700;color:var(--texto);font-style:normal}
+/* Pedido */
+.pedido{background:linear-gradient(160deg,var(--acento),var(--acento2));border-radius:24px;padding:48px 40px;max-width:760px;margin:0 auto;color:#fff}
+.pedido h3{font-family:var(--fuente-titular);font-size:1.7rem;font-weight:600;margin-bottom:6px;text-align:center}
+.pedido .sub2{text-align:center;opacity:.9;margin-bottom:24px;font-style:italic;font-size:1.1rem}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.campo label{display:block;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;opacity:.92;font-weight:700;font-family:system-ui,sans-serif}
+.campo select,.campo input{width:100%;padding:13px;border:none;border-radius:12px;font-size:1.05rem;background:var(--tarjeta);color:var(--texto);font-family:var(--fuente-cuerpo);font-weight:600}
+.campo.full{grid-column:1/-1}
+.pedido .btn{background:#fff;color:var(--acento)}
+.pedido .btn:hover{background:var(--fondo);color:var(--acento2)}
+#conf{display:none;background:var(--tarjeta);color:var(--texto);border-radius:12px;padding:18px;margin-top:18px;text-align:center}
+#conf strong{color:var(--acento)}
+/* Contacto */
+.info{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.info .card{background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;padding:30px}
+.info h3{font-family:var(--fuente-titular);font-weight:600;margin-bottom:10px;font-size:1.3rem}
+.info p{color:var(--muted)}
+.info .wabtn{margin-top:16px;display:inline-block}
+/* Chat demo */
+#chatBtn{position:fixed;bottom:22px;right:22px;z-index:99;width:60px;height:60px;border-radius:50%;background:var(--acento);color:#fff;border:none;font-size:1.5rem;cursor:pointer;box-shadow:0 8px 24px rgba(178,110,124,.45)}
+#chatBtn:hover{background:var(--acento2)}
+#chatPanel{position:fixed;bottom:96px;right:22px;z-index:99;width:330px;max-width:calc(100vw - 44px);background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.22);display:none;overflow:hidden;font-family:system-ui,sans-serif}
+#chatPanel.open{display:block}
+#chatPanel .chead{background:var(--acento);color:#fff;padding:14px 18px;font-weight:700}
+#chatPanel .chead small{display:block;font-weight:400;font-size:.75rem;opacity:.85}
+#chatBody{padding:16px;height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--fondo)}
+.msg{max-width:85%;padding:10px 14px;border-radius:14px;font-size:.9rem}
+.msg.in{background:var(--tarjeta);border:1px solid var(--borde);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.out{background:var(--acento);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.quick{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 8px;background:var(--fondo)}
+.quick button{border:1px solid var(--acento);background:var(--tarjeta);color:var(--acento);border-radius:999px;padding:7px 14px;font-size:.82rem;cursor:pointer;font-weight:700}
+.quick button:hover{background:var(--acento);color:#fff}
+.chead2{padding:10px 16px;background:var(--fondo);font-size:.72rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+footer.site{background:var(--acento2);color:#fff;padding:38px 0;text-align:center;font-size:.95rem}
+footer.site a{color:#fff;font-weight:700}
+@media(max-width:900px){
+  .ocas,.pasos{grid-template-columns:1fr}
+  .testis,.info{grid-template-columns:1fr}
+  .campos{grid-template-columns:1fr}
+  nav.menu a:not(.btn){display:none}
+  .hero{padding:70px 0 64px}
+  body{font-size:1.06rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .rev{opacity:1;transform:none}
+  .flor .petalo{transform:rotate(var(--r)) scale(1);opacity:1;transition:none}
+  .flor .centro{transform:scale(1);transition:none}
+  .btn{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="demo-badge">Diseño demo</div>
+<a class="volver" href="../index.html">← Portafolio</a>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#">
+      <span class="logo-slot" data-logo>P</span>
+      <span><b data-nombre>PÉTALO FLORERÍA</b><small data-tagline>Flores con intención</small></span>
+    </a>
+    <nav class="menu">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#taller">Taller</a>
+      <a href="#contacto">Contacto</a>
+      <a class="btn" href="#pedido" style="padding:9px 20px">Hacer pedido</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <canvas id="petalos" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="flor-slot rev in" data-flor></div>
+    <div class="kicker">Florería · Taller floral</div>
+    <h1>Flores que dicen<br>lo que <em>las palabras no alcanzan</em></h1>
+    <p class="lead">Ramos de autor, bodas y eventos. Diseñamos cada arreglo en nuestro taller y lo entregamos el mismo día.</p>
+    <div class="ctas">
+      <a class="btn" href="#pedido">Hacer pedido</a>
+      <a class="btn ghost" href="#catalogo">Ver ocasiones</a>
+    </div>
+  </div>
+</div>
+
+<section class="bloque" id="catalogo" data-pieza="Catálogo de ocasiones">
+  <div class="wrap">
+    <div class="flor-slot rev" data-flor></div>
+    <h2 class="sec rev" style="--rd:.06s">Ocasiones</h2>
+    <p class="sub rev" style="--rd:.12s">Tres formas de regalar, un mismo cuidado.</p>
+    <div class="ocas">
+      <div class="oca rev" style="--rd:.05s">
+        <div class="flor-slot" data-flor></div>
+        <h3>Ramos</h3>
+        <p>El detalle de todos los días: cumpleaños, aniversarios o "porque sí".</p>
+        <div class="desde">desde $29</div>
+      </div>
+      <div class="oca destacada rev" style="--rd:.15s">
+        <span class="cinta">Favorito</span>
+        <div class="flor-slot" data-flor></div>
+        <h3>Bodas</h3>
+        <p>Ramo de novia, boutonnières, centros de mesa y decoración completa.</p>
+        <div class="desde">cotización a medida</div>
+      </div>
+      <div class="oca rev" style="--rd:.25s">
+        <div class="flor-slot" data-flor></div>
+        <h3>Eventos</h3>
+        <p>Corporativos, XV años y celebraciones: volumen sin perder el detalle.</p>
+        <div class="desde">desde $199</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque taller" id="taller" data-pieza="Taller floral">
+  <div class="wrap">
+    <div class="flor-slot rev" data-flor></div>
+    <h2 class="sec rev" style="--rd:.06s">Nuestro taller</h2>
+    <p class="sub rev" style="--rd:.12s">Nada sale de una bodega: cada arreglo nace frente a ti.</p>
+    <div class="pasos">
+      <div class="paso rev" style="--rd:.05s">
+        <div class="num">1</div>
+        <h3>Eliges</h3>
+        <p>Cuéntanos la ocasión y el mensaje. Te proponemos flores de temporada.</p>
+      </div>
+      <div class="paso rev" style="--rd:.15s">
+        <div class="num">2</div>
+        <h3>Diseñamos</h3>
+        <p>Nuestras floristas arman tu arreglo a mano, pétalo por pétalo.</p>
+      </div>
+      <div class="paso rev" style="--rd:.25s">
+        <div class="num">3</div>
+        <h3>Entregamos</h3>
+        <p>El mismo día en la zona, con tarjeta escrita a mano incluida.</p>
+      </div>
+    </div>
+    <p class="taller-nota rev" style="--rd:.2s">Visítanos: el taller está abierto al público de 10 AM a 6 PM.</p>
+  </div>
+</section>
+
+<section class="bloque" data-pieza="Testimonios" style="padding-top:70px">
+  <div class="wrap">
+    <div class="flor-slot rev" data-flor></div>
+    <h2 class="sec rev" style="--rd:.06s">Lo que floreció</h2>
+    <p class="sub rev" style="--rd:.12s">Testimonios de ejemplo para mostrar el formato.</p>
+    <div class="testis">
+      <div class="testi rev" style="--rd:.05s">
+        <div class="stars">★★★★★</div>
+        <p>El ramo de novia superó lo que imaginé. Lloré cuando lo vi, y eso que soy la mamá.</p>
+        <footer><span class="due">— Carmen L.</span> · Boda, junio</footer>
+      </div>
+      <div class="testi rev" style="--rd:.15s">
+        <div class="stars">★★★★★</div>
+        <p>Pedí a las 10 AM y a las 2 PM ya estaba en la oficina de mi esposa. La tarjeta escrita a mano es un detalle hermoso.</p>
+        <footer><span class="due">— Roberto D.</span> · Aniversario</footer>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="pedido" data-pieza="Pedidos en línea" style="padding-top:0">
+  <div class="wrap">
+    <div class="pedido rev">
+      <div class="flor-slot" data-flor></div>
+      <h3>Haz tu pedido</h3>
+      <p class="sub2">Lo preparamos hoy mismo en el taller.</p>
+      <div class="campos">
+        <div class="campo"><label>Tu nombre</label><input type="text" id="pnom" placeholder="Ej. Laura Gómez"></div>
+        <div class="campo"><label>Fecha de entrega</label><input type="date" id="pdia"></div>
+        <div class="campo"><label>Tipo de arreglo</label><select id="ptipo"><option>Ramo</option><option>Boda</option><option>Evento</option><option>Suscripción semanal</option></select></div>
+        <div class="campo"><label>Ocasión</label><select id="poca"><option>Cumpleaños</option><option>Aniversario</option><option>Agradecimiento</option><option>Condolencias</option><option>Otra</option></select></div>
+        <div class="campo full"><label>Mensaje para la tarjeta</label><input type="text" id="pmsg" placeholder="Ej. Gracias por estos 10 años"></div>
+      </div>
+      <div style="text-align:center"><button class="btn" id="pbtn">Confirmar pedido</button></div>
+      <div id="conf"><strong>✓ Pedido registrado (demo).</strong><br><span id="pres"></span><br><small style="color:var(--muted)">En tu página real, aquí llegaría la confirmación por SMS o WhatsApp.</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="contacto" data-pieza="Contacto" style="padding-top:0">
+  <div class="wrap">
+    <div class="flor-slot rev" data-flor></div>
+    <h2 class="sec rev" style="--rd:.06s">Visítanos</h2>
+    <p class="sub rev" style="--rd:.12s">Datos de ejemplo.</p>
+    <div class="info">
+      <div class="card rev" style="--rd:.05s"><h3>📍 Taller</h3><p>Avenida de ejemplo 789<br>Ciudad, Estado 00000</p></div>
+      <div class="card rev" style="--rd:.15s"><h3>🕐 Horario</h3><p>Lun – Sáb · 10:00 AM – 6:00 PM<br>Tel: (555) 987-6543</p>
+        <a class="btn wabtn" href="https://wa.me/16093316652?text=Hola%20P%C3%A9talo%2C%20quiero%20hacer%20un%20pedido." target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pz-ideal" style="padding:60px 20px;text-align:center;border-top:1px solid var(--borde)">
+  <p style="max-width:640px;margin:0 auto;color:var(--muted);font-size:1.08rem;line-height:1.7"><strong style="color:var(--texto);font-size:1.2rem;font-family:var(--fuente-titular)">¿Este estilo es para tu negocio?</strong><br>Ideal para florerías, regalos y eventos: flores que florecen al navegar, catálogo por ocasiones y pedidos en línea.</p>
+  <button onclick="var b=document.getElementById('pz-selfab');b&&b.click()" style="margin-top:18px;background:var(--acento);color:#fff;border:none;border-radius:999px;padding:13px 30px;font-weight:700;cursor:pointer;font-size:1rem;font-family:var(--fuente-cuerpo)">Verlo con mis colores 🎨</button>
+  <p style="margin-top:12px;font-size:.85rem;color:var(--muted)">Si te gustaron varios, los combinamos en tu página a medida.</p>
+</section>
+<footer class="site">
+  <div class="wrap">
+    <p><strong>PÉTALO FLORERÍA</strong> · Taller de ejemplo · Contenido ficticio de demostración</p>
+    <p style="margin-top:8px;opacity:.9">Diseño demo por <a href="../index.html">Polux</a> — caso de estudio · proyecto piloto. Modelo base personalizable.</p>
+  </div>
+</footer>
+
+<!-- Chat demo flotante -->
+<button id="chatBtn" aria-label="Abrir chat de demostración">💬</button>
+<div id="chatPanel" role="dialog" aria-label="Chat de demostración">
+  <div class="chead">Asistente Demo<small>Responde al instante · demo</small></div>
+  <div class="chead2">Prueba lo que un chatbot de Polux haría por tu florería</div>
+  <div id="chatBody"></div>
+  <div class="quick">
+    <button data-q="ramos">Ramos</button>
+    <button data-q="bodas">Bodas</button>
+    <button data-q="pedido">Hacer pedido</button>
+  </div>
+</div>
+
+<script>
+// Flores procedurales: se inyectan y FLORECEN al entrar cada sección
+(function(){
+  function florSVG(){
+    var p='';
+    for(var i=0;i<6;i++){
+      p+='<ellipse class="petalo" style="--r:'+(i*60)+'deg;--d:'+(0.05+i*0.08).toFixed(2)+'s" cx="50" cy="27" rx="13" ry="23"/>';
+    }
+    return '<svg class="flor" viewBox="0 0 100 100" aria-hidden="true">'+p+'<circle class="centro" cx="50" cy="50" r="10"/></svg>';
+  }
+  var slots=document.querySelectorAll('[data-flor]');
+  slots.forEach(function(el){el.innerHTML=florSVG()});
+  var flores=document.querySelectorAll('.flor');
+  function florecer(el){el.classList.add('bloom')}
+  if(!('IntersectionObserver' in window)){flores.forEach(florecer);return;}
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){florecer(e.target);io.unobserve(e.target)}});
+  },{threshold:0.35});
+  flores.forEach(function(f){io.observe(f)});
+})();
+// Reveals suaves
+(function(){
+  var els=document.querySelectorAll('.rev');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+  },{threshold:0.12});
+  els.forEach(function(e){io.observe(e)});
+})();
+// Pétalos cayendo con física suave (canvas 2D ligero)
+(function(){
+  var cv=document.getElementById('petalos');
+  if(!cv||!cv.getContext)return;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce)return;
+  var ctx=cv.getContext('2d');
+  var W=0,H=0,parts=[],run=false,raf=0;
+  var COLORES=['232,180,184','240,205,210','156,175,136','217,167,172'];
+  function size(){
+    var DPR=Math.min(window.devicePixelRatio||1,1.5);
+    var r=cv.getBoundingClientRect();
+    W=r.width;H=r.height;
+    cv.width=Math.max(1,W*DPR);cv.height=Math.max(1,H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  function nuevo(arriba){
+    return {
+      x:Math.random()*W,
+      y:arriba?-20-Math.random()*40:Math.random()*H,
+      s:5+Math.random()*8,
+      v:0.5+Math.random()*0.9,
+      a:Math.random()*Math.PI*2,
+      va:(Math.random()-0.5)*0.03,
+      ph:Math.random()*Math.PI*2,
+      sw:0.6+Math.random()*1.2,
+      c:COLORES[(Math.random()*COLORES.length)|0],
+      o:0.5+Math.random()*0.35
+    };
+  }
+  function init(){
+    parts=[];
+    var n=W<600?12:26;
+    for(var i=0;i<n;i++)parts.push(nuevo(false));
+  }
+  function paso(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<parts.length;i++){
+      var p=parts[i];
+      p.y+=p.v;p.ph+=0.02;p.x+=Math.sin(p.ph)*p.sw*0.4;p.a+=p.va;
+      if(p.y>H+24){parts[i]=nuevo(true);continue}
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);
+      ctx.fillStyle='rgba('+p.c+','+p.o.toFixed(2)+')';
+      ctx.beginPath();ctx.ellipse(0,0,p.s,p.s*0.62,0,0,Math.PI*2);ctx.fill();
+      ctx.restore();
+    }
+    if(run)raf=requestAnimationFrame(paso);
+  }
+  function start(){if(run)return;run=true;size();init();paso()}
+  function stop(){run=false;if(raf)cancelAnimationFrame(raf);raf=0}
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      es.forEach(function(e){e.isIntersecting?start():stop()});
+    },{threshold:0}).observe(cv);
+  }else{start()}
+  var rzT=null;
+  window.addEventListener('resize',function(){
+    clearTimeout(rzT);
+    rzT=setTimeout(function(){if(run){size();init()}},200);
+  });
+})();
+// Pedido demo
+document.getElementById('pbtn').addEventListener('click',function(){
+  var n=document.getElementById('pnom').value.trim()||'Cliente de ejemplo';
+  var t=document.getElementById('ptipo').value;
+  var o=document.getElementById('poca').value;
+  var d=document.getElementById('pdia').value||'fecha de ejemplo';
+  var m=document.getElementById('pmsg').value.trim();
+  document.getElementById('pres').textContent=n+' · '+t+' · '+o+' · entrega '+d+(m?' · "'+m+'"':'');
+  document.getElementById('conf').style.display='block';
+});
+// Chat demo
+(function(){
+  var panel=document.getElementById('chatPanel'),body=document.getElementById('chatBody');
+  document.getElementById('chatBtn').addEventListener('click',function(){
+    panel.classList.toggle('open');
+    if(panel.classList.contains('open')&&!body.children.length)bot('¡Hola! Soy el asistente demo de la florería. Pregúntame por ramos, bodas o cómo hacer un pedido.');
+  });
+  function add(txt,cls){var m=document.createElement('div');m.className='msg '+cls;m.textContent=txt;body.appendChild(m);body.scrollTop=body.scrollHeight}
+  function bot(t){setTimeout(function(){add(t,'in')},450)}
+  var R={
+    ramos:'Nuestros ramos van desde $29 y los armamos el mismo día en el taller. 💐',
+    bodas:'Hacemos ramo de novia, centros de mesa y decoración completa. Agenda una visita al taller. 💍',
+    pedido:'Usa el formulario "Haz tu pedido" o escríbenos por WhatsApp y lo preparamos hoy. 🌸'
+  };
+  document.querySelectorAll('.quick button').forEach(function(b){
+    b.addEventListener('click',function(){add(b.textContent,'out');bot(R[b.dataset.q])});
+  });
+})();
+</script>
+<script src="../personalizar.js?v=3"></script>
+<script>window.POLUX_WA='16093316652';window.POLUX_CHAT={ac:'#b26e7c',icon:'lotus',context:'demo',design:'Pétalo'};</script>
+<script src="../polux-chat.js?v=5"></script>
+<script src="../polux-piezas.js?v=5"></script>
+</body>
+</html>
