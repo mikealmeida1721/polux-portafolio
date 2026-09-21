@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navaja &amp; Tinta — Barbería demo</title>
+<script>document.documentElement.className+=' js'</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   NAVAJA — diseño demo de barbería (Polux)
+   Concepto: "el corte". Hairlines de navaja que cortan la
+   pantalla; reveals con wipe diagonal en ritmo staccato
+   (rápido, seco). Paleta: humo + cobre + crema.
+   ============================================================ */
+:root{
+  --logo: "";
+  --fondo:#14100c; --fondo2:#1c1510; --tarjeta:#211a12; --borde:#3c2e1e;
+  --acento:#b87333; --acento2:#7d4c1e;
+  --texto:#f5ead8; --muted:#b3a184;
+  --fuente-titular:"Zilla Slab",Georgia,"Times New Roman",serif;
+  --fuente-cuerpo:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:clip}
+body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo);font-size:1rem;line-height:1.65}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+/* Distintivos demo */
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--texto);background:var(--acento2);border-radius:999px;padding:5px 14px;opacity:.94}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:var(--tarjeta);border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.volver:hover{color:var(--acento);border-color:var(--acento)}
+/* Header */
+header.site{background:color-mix(in srgb,var(--fondo) 88%, transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--borde);position:sticky;top:0;z-index:50;padding-top:44px}
+.bar{display:flex;align-items:center;gap:14px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--texto)}
+.logo-slot{width:48px;height:48px;border-radius:50%;border:2px solid var(--acento);background:var(--logo) center/contain no-repeat,var(--tarjeta);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--acento);font-size:1.25rem;font-family:var(--fuente-titular)}
+.brand b{font-family:var(--fuente-titular);font-size:1.2rem;letter-spacing:.03em}
+.brand small{display:block;font-size:.64rem;letter-spacing:.26em;color:var(--muted);text-transform:uppercase}
+nav.menu{margin-left:auto;display:flex;gap:22px;font-size:.93rem;align-items:center}
+nav.menu a{color:var(--muted);text-decoration:none}
+nav.menu a:hover{color:var(--acento)}
+.btn{display:inline-block;background:var(--acento);color:var(--fondo);font-weight:700;text-decoration:none;padding:13px 28px;border-radius:6px;border:none;cursor:pointer;font-size:1rem;font-family:inherit;transition:transform .16s cubic-bezier(.85,0,.15,1),background .16s}
+.btn:hover{background:var(--texto);transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--texto);border:2px solid var(--acento)}
+.btn.ghost:hover{border-color:var(--texto);background:transparent}
+/* ============ HERO ============ */
+.hero{position:relative;overflow:hidden;padding:104px 0 88px;
+  background:
+    radial-gradient(880px 420px at 82% -90px,color-mix(in srgb,var(--acento) 17%, transparent),transparent 70%),
+    repeating-linear-gradient(115deg,transparent 0 44px,color-mix(in srgb,var(--acento) 5%, transparent) 44px 45px),
+    var(--fondo)}
+/* hairline permanente: el "corte" que cruza el hero */
+.heroslash{position:absolute;top:-12%;bottom:-12%;left:40%;width:1px;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--acento) 75%, transparent) 28%,color-mix(in srgb,var(--acento) 75%, transparent) 72%,transparent);
+  transform:rotate(17deg)}
+/* la navaja que abre la página de un tajo */
+.razor{position:absolute;top:5%;left:105%;width:min(360px,64vw);z-index:2;pointer-events:none;
+  transform:rotate(-14deg);animation:corte 1.05s .15s cubic-bezier(.72,0,.28,1) backwards}
+@keyframes corte{from{left:-52%}to{left:105%}}
+.rz-blade{fill:var(--texto)}
+.rz-edge{stroke:var(--acento);stroke-width:2;fill:none}
+.rz-spine{stroke:var(--acento2);stroke-width:3;fill:none}
+.rz-pin{fill:var(--acento)}
+.rz-pin-in{fill:var(--fondo)}
+.rz-handle{fill:var(--acento2);stroke:var(--acento);stroke-width:1.5}
+.rz-handle-line{stroke:var(--acento);stroke-width:1.5;opacity:.7}
+.hero-inner{position:relative;z-index:3;text-align:center;animation:wipein .26s cubic-bezier(.85,0,.15,1) 1s backwards}
+@keyframes wipein{from{clip-path:polygon(-14% 0,-14% 0,-18% 100%,-18% 100%);opacity:0}
+  to{clip-path:polygon(-14% 0,114% 0,110% 100%,-18% 100%);opacity:1}}
+.kicker{font-size:.76rem;letter-spacing:.3em;text-transform:uppercase;color:var(--acento);margin-bottom:18px;font-weight:600}
+.hero h1{font-family:var(--fuente-titular);font-weight:700;font-size:clamp(3rem,13vw,8rem);line-height:.96;letter-spacing:-.01em;margin-bottom:20px}
+.hero h1 em{font-style:italic;color:var(--acento)}
+.hero p.lead{max-width:600px;margin:0 auto 30px;color:var(--muted);font-size:1.06rem}
+.hero .ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
+.stats{display:flex;gap:34px;justify-content:center;flex-wrap:wrap}
+.stat{text-align:center}
+.stat b{display:block;font-family:var(--fuente-titular);font-size:1.7rem;color:var(--texto)}
+.stat span{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+/* divisor: hairline diagonal que "corta" entre secciones */
+section.bloque{position:relative;padding:72px 0}
+section.bloque::before{content:"";position:absolute;top:0;left:-4vw;right:-4vw;border-top:1px solid color-mix(in srgb,var(--acento) 45%, transparent);transform:rotate(-2deg);pointer-events:none}
+/* títulos con "muesca" de navaja */
+h2.sec{font-family:var(--fuente-titular);font-weight:700;font-size:clamp(1.9rem,5.5vw,2.9rem);margin-bottom:8px;text-align:center;display:flex;align-items:center;justify-content:center;gap:16px}
+h2.sec::before{content:"";width:36px;height:4px;background:var(--acento);transform:rotate(-8deg) skewX(-14deg);flex:none}
+p.sub{color:var(--muted);margin-bottom:36px;max-width:620px;text-align:center;margin-left:auto;margin-right:auto}
+/* ============ SERVICIOS ============ */
+.servs{display:grid;grid-template-columns:1fr;gap:18px}
+.svc{position:relative;overflow:hidden;background:var(--tarjeta);border:1px solid var(--borde);border-radius:10px;padding:30px 26px;transition:transform .2s cubic-bezier(.85,0,.15,1),border-color .2s}
+.svc::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--acento),transparent)}
+.svc::after{content:"";position:absolute;top:-20%;bottom:-20%;left:-40%;width:36%;background:linear-gradient(105deg,transparent,color-mix(in srgb,var(--texto) 9%, transparent),transparent);transform:skewX(-18deg);transition:left .3s cubic-bezier(.85,0,.15,1);pointer-events:none}
+.svc:hover{transform:translateY(-5px);border-color:var(--acento)}
+.svc:hover::after{left:130%}
+.svc .ico{width:52px;height:52px;border:1.5px solid var(--acento);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px;color:var(--acento)}
+.svc .ico svg{width:28px;height:28px}
+.svc h3{font-family:var(--fuente-titular);font-size:1.35rem;margin-bottom:8px}
+.svc p{color:var(--muted);font-size:.94rem;margin-bottom:14px}
+.svc .meta{display:flex;justify-content:space-between;align-items:center}
+.svc .precio{font-family:var(--fuente-titular);font-weight:700;font-size:1.5rem;color:var(--acento)}
+.svc .dur{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+/* ============ GALERÍA ============ */
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.estilo{position:relative;overflow:hidden;border:1px solid var(--borde);border-radius:10px;background:var(--tarjeta);transition:transform .2s cubic-bezier(.85,0,.15,1),border-color .2s}
+.estilo:hover{transform:translateY(-5px);border-color:var(--acento)}
+.estilo .foto{position:relative;height:150px;overflow:hidden;
+  background:linear-gradient(135deg,var(--fondo2) 20%,color-mix(in srgb,var(--acento) 22%, var(--fondo2)) 55%,var(--fondo2) 90%)}
+.estilo .foto::after{content:"";position:absolute;top:-30%;bottom:-30%;left:56%;width:1px;background:color-mix(in srgb,var(--acento) 80%, transparent);transform:rotate(17deg)}
+.estilo .num{position:absolute;left:12px;bottom:2px;font-family:var(--fuente-titular);font-weight:700;font-size:4.6rem;line-height:1;color:transparent;-webkit-text-stroke:1.5px color-mix(in srgb,var(--acento) 65%, transparent)}
+.estilo .cuerpo{padding:18px}
+.estilo h3{font-family:var(--fuente-titular);font-size:1.12rem;margin-bottom:4px}
+.estilo p{font-size:.85rem;color:var(--muted)}
+.nota{margin-top:22px;text-align:center;font-size:.85rem;color:var(--muted)}
+/* ============ TESTIMONIOS ============ */
+.testis{display:grid;grid-template-columns:1fr;gap:16px}
+.testi{background:var(--tarjeta);border:1px solid var(--borde);border-radius:10px;padding:26px;position:relative}
+.testi::before{content:"";position:absolute;top:0;bottom:0;left:0;width:3px;background:var(--acento);transform:skewY(-8deg);transform-origin:top}
+.testi .stars{color:var(--acento);margin-bottom:8px;letter-spacing:.14em}
+.testi p{font-style:italic;font-family:var(--fuente-titular);font-size:1.08rem}
+.testi footer{margin-top:12px;font-size:.85rem;color:var(--muted)}
+/* ============ RESERVA ============ */
+.reserva{background:var(--fondo2);border:1px solid var(--borde);border-radius:14px;padding:38px 30px;max-width:740px;margin:0 auto;position:relative;overflow:hidden}
+.reserva::before{content:"";position:absolute;top:-30%;bottom:-30%;right:12%;width:1px;background:color-mix(in srgb,var(--acento) 50%, transparent);transform:rotate(17deg);pointer-events:none}
+.reserva h3{font-family:var(--fuente-titular);font-size:1.45rem;margin-bottom:20px;text-align:center}
+.campos{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:20px}
+.campo label{display:block;font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.campo select,.campo input{width:100%;padding:13px;border:1px solid var(--borde);border-radius:8px;font-size:1rem;background:var(--tarjeta);color:var(--texto);font-family:inherit}
+.campo select:focus,.campo input:focus{outline:2px solid var(--acento);outline-offset:1px}
+#nvConf{display:none;background:var(--tarjeta);border:1px solid var(--acento);border-radius:10px;padding:20px;margin-top:20px;text-align:center}
+#nvConf strong{color:var(--acento)}
+#nvWa{display:inline-block;margin-top:12px;background:#1f9d55;color:#fff;font-weight:700;text-decoration:none;padding:11px 24px;border-radius:999px;font-size:.94rem}
+/* ============ CONTACTO ============ */
+.info{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:28px}
+.info .card{background:var(--tarjeta);border:1px solid var(--borde);border-radius:10px;padding:28px}
+.info h3{font-family:var(--fuente-titular);margin-bottom:10px;font-size:1.2rem}
+.info h3 svg{width:22px;height:22px;vertical-align:-4px;margin-right:8px;color:var(--acento)}
+.info p{color:var(--muted)}
+.cta-wa{text-align:center}
+.cta-wa .btn{background:#1f9d55;color:#fff}
+.cta-wa .btn:hover{background:#178344}
+/* ============ PZ-IDEAL ============ */
+.pz-ideal{padding:64px 20px;text-align:center;border-top:1px solid var(--borde);position:relative}
+.pz-ideal::before{content:"";position:absolute;top:-1px;left:-4vw;right:-4vw;border-top:1px solid color-mix(in srgb,var(--acento) 45%, transparent);transform:rotate(-2deg)}
+.pz-ideal p.lead2{max-width:640px;margin:0 auto;color:var(--muted);font-size:1.02rem;line-height:1.7}
+.pz-ideal strong.t{color:var(--texto);font-size:1.2rem;font-family:var(--fuente-titular)}
+.pz-ideal .btn{margin-top:20px}
+/* ============ FOOTER ============ */
+footer.site{background:var(--fondo2);border-top:1px solid var(--borde);color:var(--muted);padding:38px 0;text-align:center;font-size:.9rem}
+footer.site a{color:var(--acento)}
+footer.site strong{color:var(--texto);font-family:var(--fuente-titular);letter-spacing:.04em}
+/* ============ CHAT DEMO ============ */
+#chatBtn{position:fixed;bottom:22px;right:22px;z-index:99;width:60px;height:60px;border-radius:50%;background:var(--acento);color:var(--fondo);border:none;cursor:pointer;box-shadow:0 8px 24px color-mix(in srgb,var(--acento) 45%, transparent);display:flex;align-items:center;justify-content:center}
+#chatBtn:hover{background:var(--texto)}
+#chatBtn svg{width:26px;height:26px}
+#chatPanel{position:fixed;bottom:96px;right:22px;z-index:99;width:330px;max-width:calc(100vw - 44px);background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.45);display:none;overflow:hidden}
+#chatPanel.open{display:block}
+#chatPanel .chead{background:var(--acento2);color:var(--texto);padding:14px 18px;font-weight:700}
+#chatPanel .chead small{display:block;font-weight:400;font-size:.75rem;opacity:.85}
+.chead2{padding:10px 16px;background:var(--fondo2);font-size:.7rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+#chatBody{padding:16px;height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--fondo)}
+.msg{max-width:86%;padding:10px 14px;border-radius:12px;font-size:.9rem}
+.msg.in{background:var(--tarjeta);border:1px solid var(--borde);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.out{background:var(--acento);color:var(--fondo);align-self:flex-end;border-bottom-right-radius:4px;font-weight:600}
+.quick{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 14px;background:var(--fondo)}
+.quick button{border:1px solid var(--acento);background:var(--tarjeta);color:var(--acento);border-radius:999px;padding:7px 14px;font-size:.82rem;cursor:pointer;font-family:inherit}
+.quick button:hover{background:var(--acento);color:var(--fondo)}
+/* ============ REVEALS (staccato: wipe diagonal, rápido y seco) ============ */
+.js .rv{opacity:0;clip-path:polygon(-6% 0,-6% 0,-10% 100%,-10% 100%);
+  transition:clip-path .24s cubic-bezier(.85,0,.15,1),opacity .12s linear;transition-delay:var(--d,0s)}
+.js .rv.on{opacity:1;clip-path:polygon(-6% 0,106% 0,102% 100%,-10% 100%)}
+/* ============ RESPONSIVE ============ */
+@media(min-width:901px){
+  .servs{grid-template-columns:repeat(3,1fr)}
+  .gal{grid-template-columns:repeat(3,1fr)}
+  .testis{grid-template-columns:repeat(3,1fr)}
+  .info{grid-template-columns:1fr 1fr}
+  .campos{grid-template-columns:1fr 1fr}
+  section.bloque{padding:88px 0}
+}
+@media(max-width:900px){
+  nav.menu a:not(.btn){display:none}
+  .hero{padding:88px 0 72px}
+  .gal{grid-template-columns:1fr 1fr}
+}
+@media(max-width:520px){.gal{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .razor{display:none}
+}
+</style>
+</head>
+<body>
+<div class="demo-badge">Diseño demo</div>
+<a class="volver" href="../index.html">← Portafolio</a>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#inicio">
+      <span class="logo-slot" data-logo>N</span>
+      <span><b data-nombre>NAVAJA &amp; TINTA</b><small data-tagline>Barbería</small></span>
+    </a>
+    <nav class="menu">
+      <a href="#servicios">Servicios</a>
+      <a href="#galeria">Estilos</a>
+      <a href="#opiniones">Opiniones</a>
+      <a href="#contacto">Contacto</a>
+      <a class="btn" href="#reserva" style="padding:9px 20px">Reservar silla</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="inicio">
+  <div class="heroslash" aria-hidden="true"></div>
+  <div class="razor" aria-hidden="true">
+    <svg class="razor-svg" viewBox="0 0 300 120" width="100%">
+      <path class="rz-blade" d="M14 52 L196 42 L206 42 Q214 42 214 51 L214 67 Q214 76 206 76 L196 76 L14 66 Q6 65 6 59 Q6 53 14 52 Z"/>
+      <rect class="rz-blade" x="212" y="51" width="34" height="16" rx="4"/>
+      <path class="rz-spine" d="M14 52 L196 42"/>
+      <path class="rz-edge" d="M14 66 L206 76"/>
+      <circle class="rz-pin" cx="228" cy="59" r="10"/>
+      <circle class="rz-pin-in" cx="228" cy="59" r="3.5"/>
+      <rect class="rz-handle" x="244" y="47" width="50" height="24" rx="11"/>
+      <path class="rz-handle-line" d="M252 59 L286 59"/>
+    </svg>
+  </div>
+  <div class="wrap hero-inner">
+    <div class="kicker">Navaja &amp; Tinta · Barbería</div>
+    <h1>El corte<br>es <em>carácter</em></h1>
+    <p class="lead">Corte, barba y ritual de navaja con barberos que entienden de estilo. Sin espera: aparta tu silla en un minuto.</p>
+    <div class="ctas">
+      <a class="btn" href="#reserva">Reservar silla</a>
+      <a class="btn ghost" href="#servicios">Ver servicios</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>+2.400</b><span>cortes al año</span></div>
+      <div class="stat"><b>4.9 ★</b><span>calificación</span></div>
+      <div class="stat"><b>15 min</b><span>para reservar</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="servicios" data-pieza="Servicios de barbería">
+  <div class="wrap">
+    <h2 class="sec rv">Servicios</h2>
+    <p class="sub rv" style="--d:.07s">Tres formas de salir como nuevo. Precios de ejemplo.</p>
+    <div class="servs">
+      <div class="svc rv" style="--d:.1s">
+        <div class="ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="3.2"/><circle cx="9" cy="23" r="3.2"/><path d="M11.5 11.5 L26 26 M11.5 20.5 L26 6"/></svg></div>
+        <h3>Corte clásico</h3>
+        <p>Degradado, tijera o máquina a tu medida. Acabado con navaja en los contornos para un filo limpio.</p>
+        <div class="meta"><span class="precio">$28</span><span class="dur">45 min</span></div>
+      </div>
+      <div class="svc rv" style="--d:.17s">
+        <div class="ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 25 L19 9 L23 13 L9 27 Z"/><circle cx="24" cy="23" r="3.4"/><path d="M24 19.6 V26.4 M20.6 23 H27.4"/></svg></div>
+        <h3>Arreglo de barba</h3>
+        <p>Perfilado a navaja, toalla caliente y aceites esenciales. La barba también merece ritual.</p>
+        <div class="meta"><span class="precio">$20</span><span class="dur">30 min</span></div>
+      </div>
+      <div class="svc rv" style="--d:.24s">
+        <div class="ico"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="12" width="20" height="12" rx="2.5"/><path d="M6 17 H26"/><path d="M12 4 q2.4 2.4 0 4.8 M19 4 q2.4 2.4 0 4.8"/></svg></div>
+        <h3>Ritual completo</h3>
+        <p>Corte + barba + facial con toalla caliente. La experiencia insignia de la casa, sin prisa.</p>
+        <div class="meta"><span class="precio">$45</span><span class="dur">75 min</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="galeria" data-pieza="Galería de estilos">
+  <div class="wrap">
+    <h2 class="sec rv">Estilos de la casa</h2>
+    <p class="sub rv" style="--d:.07s">Los cortes que más piden en la silla.</p>
+    <div class="gal">
+      <div class="estilo rv" style="--d:.05s"><div class="foto"><span class="num">01</span></div><div class="cuerpo"><h3>Fade clásico</h3><p>Degradado limpio, cero sorpresas.</p></div></div>
+      <div class="estilo rv" style="--d:.12s"><div class="foto"><span class="num">02</span></div><div class="cuerpo"><h3>Pompadour</h3><p>Volumen arriba, actitud siempre.</p></div></div>
+      <div class="estilo rv" style="--d:.19s"><div class="foto"><span class="num">03</span></div><div class="cuerpo"><h3>Texturizado</h3><p>Movimiento natural, fácil de peinar.</p></div></div>
+      <div class="estilo rv" style="--d:.26s"><div class="foto"><span class="num">04</span></div><div class="cuerpo"><h3>Barba perfilada</h3><p>Líneas marcadas a navaja.</p></div></div>
+      <div class="estilo rv" style="--d:.33s"><div class="foto"><span class="num">05</span></div><div class="cuerpo"><h3>Al ras</h3><p>Minimalista y contundente.</p></div></div>
+      <div class="estilo rv" style="--d:.40s"><div class="foto"><span class="num">06</span></div><div class="cuerpo"><h3>Ritual caballero</h3><p>El paquete completo de la casa.</p></div></div>
+    </div>
+    <p class="nota rv">Aquí irían fotos reales de tus trabajos — cada estilo con su foto vende solo.</p>
+  </div>
+</section>
+
+<section class="bloque" id="opiniones">
+  <div class="wrap">
+    <h2 class="sec rv">Lo que dicen</h2>
+    <p class="sub rv" style="--d:.07s">Opiniones de ejemplo para mostrar el formato.</p>
+    <div class="testis">
+      <div class="testi rv" style="--d:.1s"><div class="stars">★★★★★</div><p>"El mejor fade que me han hecho. Reservé en un minuto y a la hora exacta ya estaba en la silla."</p><footer>— Marcos R. · <span>Cliente de ejemplo</span></footer></div>
+      <div class="testi rv" style="--d:.17s"><div class="stars">★★★★★</div><p>"El ritual completo vale cada centavo: toalla caliente, navaja, cero prisa. Salí renovado."</p><footer>— Javier L. · <span>Cliente de ejemplo</span></footer></div>
+      <div class="testi rv" style="--d:.24s"><div class="stars">★★★★★</div><p>"Mi barba por fin tiene forma. Se nota que dominan la navaja de verdad."</p><footer>— Diego P. · <span>Cliente de ejemplo</span></footer></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="reserva" data-pieza="Reserva de silla">
+  <div class="wrap">
+    <h2 class="sec rv">Reserva tu silla</h2>
+    <p class="sub rv" style="--d:.07s">Elige barbero, servicio y horario. Confirmación inmediata (demo).</p>
+    <div class="reserva rv" style="--d:.12s">
+      <h3>¿Cuándo vienes?</h3>
+      <div class="campos">
+        <div class="campo"><label>Barbero</label><select id="nvBarbero"><option>Primer disponible</option><option>Andrés — cortes</option><option>Luis — barba</option><option>Marco — ritual</option></select></div>
+        <div class="campo"><label>Servicio</label><select id="nvServ"><option>Corte clásico — $28</option><option>Arreglo de barba — $20</option><option>Ritual completo — $45</option></select></div>
+        <div class="campo"><label>Día</label><input type="date" id="nvDia"></div>
+        <div class="campo"><label>Hora</label><select id="nvHora"><option>9:00 AM</option><option>10:30 AM</option><option>12:00 PM</option><option>2:00 PM</option><option>3:30 PM</option><option>5:00 PM</option><option>6:30 PM</option></select></div>
+      </div>
+      <div style="text-align:center"><button class="btn" id="nvBtn">Apartar mi silla</button></div>
+      <div id="nvConf"><strong>Silla apartada (demo).</strong><br><span id="nvRes"></span><br><a id="nvWa" href="https://wa.me/16093316652" target="_blank" rel="noopener">Confirmar por WhatsApp</a><br><small style="color:var(--muted)">En tu página real, la confirmación llegaría al instante por mensaje.</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="contacto">
+  <div class="wrap">
+    <h2 class="sec rv">Visítanos</h2>
+    <p class="sub rv" style="--d:.07s">Datos de ejemplo.</p>
+    <div class="info">
+      <div class="card rv" style="--d:.1s"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>Dirección</h3><p>Calle de ejemplo 123<br>Ciudad, Estado 00000</p></div>
+      <div class="card rv" style="--d:.17s"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>Horario</h3><p>Lun – Sáb · 9:00 AM – 8:00 PM<br>Domingo cerrado · Tel: (555) 000-0000</p></div>
+    </div>
+    <div class="cta-wa rv"><a class="btn" href="https://wa.me/16093316652?text=Hola%20Navaja%20%26%20Tinta%2C%20quiero%20informaci%C3%B3n." target="_blank" rel="noopener">Escríbenos por WhatsApp</a></div>
+  </div>
+</section>
+
+<section class="pz-ideal">
+  <p class="lead2"><strong class="t">¿Este estilo es para tu negocio?</strong><br>Ideal para barberías y salones: reserva de silla en línea, galería de estilos y confirmación por WhatsApp.</p>
+  <button class="btn" onclick="var b=document.getElementById('pz-selfab');if(b)b.click()">Verlo con mis colores</button>
+  <p style="margin-top:14px;font-size:.82rem;color:var(--muted)">Si te gustaron varios estilos, los combinamos en tu página a medida.</p>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <p><strong>NAVAJA &amp; TINTA</strong> · Barbería demo · Contenido ficticio de demostración</p>
+    <p style="margin-top:8px">Diseño demo por <a href="../index.html">Polux</a> — caso de estudio · proyecto piloto.</p>
+  </div>
+</footer>
+
+<!-- Chat demo flotante -->
+<button id="chatBtn" aria-label="Abrir chat de demostración">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5z"/><path d="M9 11h.01M13 11h.01M17 11h.01"/></svg>
+</button>
+<div id="chatPanel" role="dialog" aria-label="Chat de demostración">
+  <div class="chead">Asistente demo<small>Responde al instante · demo</small></div>
+  <div class="chead2">Prueba lo que un chatbot de Polux haría por tu barbería</div>
+  <div id="chatBody"></div>
+  <div class="quick">
+    <button data-q="precios">Precios</button>
+    <button data-q="reservar">Reservar</button>
+    <button data-q="horario">Horario</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* Reveals: wipe diagonal staccato */
+  var els=document.querySelectorAll('.rv');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('on');io.unobserve(en.target);}});
+    },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+    els.forEach(function(e){io.observe(e);});
+  }else{
+    els.forEach(function(e){e.classList.add('on');});
+  }
+})();
+(function(){
+  /* Reserva de silla (demo) */
+  var btn=document.getElementById('nvBtn');
+  if(!btn)return;
+  btn.addEventListener('click',function(){
+    var b=document.getElementById('nvBarbero').value,
+        s=document.getElementById('nvServ').value,
+        d=document.getElementById('nvDia').value||'fecha por definir',
+        h=document.getElementById('nvHora').value;
+    document.getElementById('nvRes').textContent=s+' · '+d+' · '+h+' · con '+b;
+    var msg='Hola Navaja & Tinta, quiero apartar mi silla: '+s+', '+d+' a las '+h+' con '+b+'.';
+    document.getElementById('nvWa').href='https://wa.me/16093316652?text='+encodeURIComponent(msg);
+    document.getElementById('nvConf').style.display='block';
+  });
+})();
+(function(){
+  /* Chat demo */
+  var panel=document.getElementById('chatPanel'),body=document.getElementById('chatBody');
+  function add(t,c){var m=document.createElement('div');m.className='msg '+c;m.textContent=t;body.appendChild(m);body.scrollTop=body.scrollHeight;}
+  function bot(t){setTimeout(function(){add(t,'in');},450);}
+  document.getElementById('chatBtn').addEventListener('click',function(){
+    panel.classList.toggle('open');
+    if(panel.classList.contains('open')&&!body.children.length){
+      bot('¡Hola! Soy el asistente demo de Navaja & Tinta. Pregúntame por precios, horarios o reservas.');
+    }
+  });
+  var R={
+    precios:'Corte $28 · Barba $20 · Ritual completo $45. Precios demo.',
+    reservar:'Aparta tu silla en la sección "Reserva tu silla" o escríbenos por WhatsApp. Te toma un minuto.',
+    horario:'Lunes a sábado, 9:00 AM a 8:00 PM. Domingos cerramos.'
+  };
+  document.querySelectorAll('#chatPanel .quick button').forEach(function(b){
+    b.addEventListener('click',function(){add(b.textContent,'out');bot(R[b.dataset.q]);});
+  });
+})();
+</script>
+<script src="../personalizar.js?v=3"></script>
+<script>window.POLUX_WA='16093316652';window.POLUX_CHAT={ac:'#b87333',icon:'bolt',context:'demo',design:'Navaja'};</script>
+<script src="../polux-chat.js?v=5"></script>
+<script src="../polux-piezas.js?v=5"></script>
+</body>
+</html>
