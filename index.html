@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portafolio visual — Polux</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root{
   --fondo:#0A0A0C; --fondo2:#101016; --tarjeta:#15151d; --borde:#262633;
@@ -38,21 +41,45 @@ section{padding:72px 0}
 h2.sec{font-size:clamp(1.6rem,3.4vw,2.3rem);margin-bottom:10px;text-align:center;font-weight:800}
 p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;margin-left:auto;margin-right:auto}
 
-/* ===== Miniaturas vivas ===== */
+/* ===== Catálogo vivo ===== */
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.demo{display:block;text-decoration:none;background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;overflow:hidden;
-  transition:transform .2s,border-color .2s,box-shadow .2s}
-.demo:hover{transform:translateY(-6px);border-color:var(--acento);box-shadow:0 18px 50px rgba(168,85,247,.22)}
-.thumb{display:block;aspect-ratio:16/10;overflow:hidden;background:#000;position:relative;container-type:inline-size}
-.thumb iframe{width:1280px;height:800px;border:0;pointer-events:none;transform-origin:top left;transform:scale(.27);display:block}
+.demo{position:relative;display:block;aspect-ratio:16/10;border-radius:18px;overflow:hidden;cursor:pointer;background:#000;
+  border:1px solid color-mix(in srgb,var(--ac) 38%,#14141c);
+  transition:transform .22s,box-shadow .22s,border-color .22s}
+.demo:hover,.demo:focus-visible{transform:translateY(-6px);border-color:var(--ac);
+  box-shadow:0 18px 55px color-mix(in srgb,var(--ac) 32%,transparent);outline:none}
+.rv.vis.demo:hover{transform:translateY(-6px)}
+.demo .thumb{position:absolute;inset:0;container-type:inline-size}
+.demo .thumb iframe{width:1280px;height:800px;border:0;pointer-events:none;transform-origin:top left;transform:scale(.27);display:block}
 @supports (scale:calc(100cqw / 1280px)){
-.thumb iframe{transform:none;scale:calc(100cqw / 1280px)}
+.demo .thumb iframe{transform:none;scale:calc(100cqw / 1280px)}
 }
-.demo-meta{display:flex;align-items:center;justify-content:space-between;padding:18px 20px}
-.demo-meta strong{font-size:1.08rem}
-.demo-meta em{font-style:normal;color:var(--acento);font-size:.9rem;font-weight:700;white-space:nowrap}
-.demo:hover .demo-meta em{transform:translateX(4px)}
-.demo-meta em{transition:transform .2s}
+.scrim{position:absolute;inset:auto 0 0 0;height:64%;pointer-events:none;
+  background:linear-gradient(to top,color-mix(in srgb,var(--ac) 30%,rgba(0,0,0,.94)) 6%,transparent)}
+.meta{position:absolute;left:0;right:0;bottom:0;padding:20px 20px 16px;display:flex;align-items:flex-end;justify-content:space-between;gap:10px;pointer-events:none}
+.meta .txt{display:flex;flex-direction:column;gap:3px}
+.meta .kick{font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;color:color-mix(in srgb,var(--ac) 78%,#fff)}
+.meta .name{font-family:var(--cf);font-size:1.75rem;line-height:1.1;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.65)}
+.meta .open{font-size:.8rem;font-weight:800;color:#0A0A0C;background:var(--ac);border-radius:999px;padding:9px 17px;white-space:nowrap;transition:transform .2s;box-shadow:0 4px 18px rgba(0,0,0,.4)}
+.demo:hover .open{transform:translateX(4px)}
+.fav{position:absolute;top:12px;right:12px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);
+  background:rgba(8,8,12,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  color:#fff;font-size:1.3rem;line-height:1;cursor:pointer;z-index:3;
+  display:flex;align-items:center;justify-content:center;transition:transform .15s,background .15s,border-color .15s}
+.fav:hover{transform:scale(1.12)}
+.fav.on{background:var(--ac);border-color:var(--ac);color:#0A0A0C}
+.swipe-hint{display:none;text-align:center;color:var(--muted);font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;margin-top:10px}
+/* Bandeja de selección + aviso */
+.tray{position:fixed;left:50%;transform:translate(-50%,140px);bottom:18px;z-index:50;display:flex;align-items:center;gap:12px;
+  background:rgba(16,16,24,.94);border:1px solid var(--acento);border-radius:999px;padding:10px 10px 10px 20px;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  box-shadow:0 12px 40px rgba(168,85,247,.35);transition:transform .32s cubic-bezier(.2,.9,.3,1.2);font-size:.92rem;max-width:calc(100vw - 32px)}
+.tray.show{transform:translate(-50%,0)}
+.tray .n{font-weight:800;color:var(--acento)}
+.tray button{background:var(--acento);color:#0A0A0C;border:0;border-radius:999px;font-weight:800;padding:11px 22px;cursor:pointer;font-size:.92rem;white-space:nowrap}
+.toast{position:fixed;left:50%;transform:translate(-50%,16px);bottom:88px;z-index:60;background:#1d1d28;border:1px solid var(--borde);
+  color:var(--texto);padding:12px 22px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;font-size:.9rem;max-width:calc(100vw - 40px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* ===== Cómo funciona ===== */
 .pasos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
@@ -87,7 +114,13 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
 .rv.vis{opacity:1;transform:none}
 
 @media(max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}.pasos,.planes{grid-template-columns:1fr;max-width:520px;margin-left:auto;margin-right:auto}.planes{margin-bottom:22px}}
-@media(max-width:620px){.grid{grid-template-columns:1fr}.hero{min-height:86vh}}
+@media(max-width:620px){
+  .grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:16px;margin:0 -20px;padding:6px 20px 16px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .grid::-webkit-scrollbar{display:none}
+  .demo{flex:0 0 86%;scroll-snap-align:center;scroll-snap-stop:always}
+  .swipe-hint{display:block}
+  .hero{min-height:86vh}
+}
 @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.scroll-hint{animation:none}}
 </style>
 </head>
@@ -108,33 +141,46 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
 <section id="disenos">
   <div class="wrap">
     <h2 class="sec rv">Seis diseños vivos</h2>
-    <p class="sub rv">Sin descripciones que te encasillen: entra al que te llame la atención y míralo en acción. Dentro de cada uno te decimos para qué negocios funciona mejor.</p>
+    <p class="sub rv">Sin descripciones que te encasillen: entra al que te llame la atención y míralo en acción. Marca con ♡ los que te hablen y envíanos tu selección.</p>
     <div class="grid">
-      <a class="demo rv" href="modelo-biblia/index.html">
-        <span class="thumb"><iframe src="modelo-biblia/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Centro de conocimiento" tabindex="-1"></iframe></span>
-        <span class="demo-meta"><strong>Centro de conocimiento</strong><em>Abrir →</em></span>
-      </a>
-      <a class="demo rv" href="modelo-artista/index.html">
-        <span class="thumb"><iframe src="modelo-artista/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Marca que impone" tabindex="-1"></iframe></span>
-        <span class="demo-meta"><strong>Marca que impone</strong><em>Abrir →</em></span>
-      </a>
-      <a class="demo rv" href="modelo-lavanderia/index.html">
-        <span class="thumb"><iframe src="modelo-lavanderia/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Servicio local" tabindex="-1"></iframe></span>
-        <span class="demo-meta"><strong>Servicio local</strong><em>Abrir →</em></span>
-      </a>
-      <a class="demo rv" href="modelo-ssee/index.html">
-        <span class="thumb"><iframe src="modelo-ssee/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Registro interactivo" tabindex="-1"></iframe></span>
-        <span class="demo-meta"><strong>Registro interactivo</strong><em>Abrir →</em></span>
-      </a>
-      <a class="demo rv" href="modelo-restaurante/index.html">
-        <span class="thumb"><iframe src="modelo-restaurante/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Sabor que vende" tabindex="-1"></iframe></span>
-        <span class="demo-meta"><strong>Sabor que vende</strong><em>Abrir →</em></span>
-      </a>
-      <a class="demo rv" href="modelo-spa/index.html">
-        <span class="thumb"><iframe src="modelo-spa/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Calma que se siente" tabindex="-1"></iframe></span>
-        <span class="demo-meta"><strong>Calma que se siente</strong><em>Abrir →</em></span>
-      </a>
+      <article class="demo rv" data-id="ateneo" data-nombre="Ateneo" data-href="modelo-biblia/index.html" style="--ac:#d9a441;--cf:'Cinzel',serif" tabindex="0" role="link" aria-label="Abrir diseño Ateneo">
+        <span class="thumb"><iframe src="modelo-biblia/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Ateneo" tabindex="-1"></iframe></span>
+        <span class="scrim"></span>
+        <button class="fav" aria-label="Guardar Ateneo en mi selección" aria-pressed="false">♡</button>
+        <span class="meta"><span class="txt"><span class="kick">Diseño 01</span><span class="name">Ateneo</span></span><span class="open">Abrir →</span></span>
+      </article>
+      <article class="demo rv" data-id="pulso" data-nombre="Pulso" data-href="modelo-artista/index.html" style="--ac:#b366ff;--cf:'Share Tech Mono',monospace" tabindex="0" role="link" aria-label="Abrir diseño Pulso">
+        <span class="thumb"><iframe src="modelo-artista/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Pulso" tabindex="-1"></iframe></span>
+        <span class="scrim"></span>
+        <button class="fav" aria-label="Guardar Pulso en mi selección" aria-pressed="false">♡</button>
+        <span class="meta"><span class="txt"><span class="kick">Diseño 02</span><span class="name">Pulso</span></span><span class="open">Abrir →</span></span>
+      </article>
+      <article class="demo rv" data-id="burbuja" data-nombre="Burbuja" data-href="modelo-lavanderia/index.html" style="--ac:#7cc7ff;--cf:system-ui,sans-serif" tabindex="0" role="link" aria-label="Abrir diseño Burbuja">
+        <span class="thumb"><iframe src="modelo-lavanderia/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Burbuja" tabindex="-1"></iframe></span>
+        <span class="scrim"></span>
+        <button class="fav" aria-label="Guardar Burbuja en mi selección" aria-pressed="false">♡</button>
+        <span class="meta"><span class="txt"><span class="kick">Diseño 03</span><span class="name">Burbuja</span></span><span class="open">Abrir →</span></span>
+      </article>
+      <article class="demo rv" data-id="orbita" data-nombre="Órbita" data-href="modelo-ssee/index.html" style="--ac:#fbbf24;--cf:'Cinzel',serif" tabindex="0" role="link" aria-label="Abrir diseño Órbita">
+        <span class="thumb"><iframe src="modelo-ssee/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Órbita" tabindex="-1"></iframe></span>
+        <span class="scrim"></span>
+        <button class="fav" aria-label="Guardar Órbita en mi selección" aria-pressed="false">♡</button>
+        <span class="meta"><span class="txt"><span class="kick">Diseño 04</span><span class="name">Órbita</span></span><span class="open">Abrir →</span></span>
+      </article>
+      <article class="demo rv" data-id="brasa" data-nombre="Brasa" data-href="modelo-restaurante/index.html" style="--ac:#ff9a3d;--cf:'Cormorant Garamond',serif" tabindex="0" role="link" aria-label="Abrir diseño Brasa">
+        <span class="thumb"><iframe src="modelo-restaurante/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Brasa" tabindex="-1"></iframe></span>
+        <span class="scrim"></span>
+        <button class="fav" aria-label="Guardar Brasa en mi selección" aria-pressed="false">♡</button>
+        <span class="meta"><span class="txt"><span class="kick">Diseño 05</span><span class="name">Brasa</span></span><span class="open">Abrir →</span></span>
+      </article>
+      <article class="demo rv" data-id="armonia" data-nombre="Armonía" data-href="modelo-spa/index.html" style="--ac:#f0a6b8;--cf:'Cormorant Garamond',serif" tabindex="0" role="link" aria-label="Abrir diseño Armonía">
+        <span class="thumb"><iframe src="modelo-spa/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Armonía" tabindex="-1"></iframe></span>
+        <span class="scrim"></span>
+        <button class="fav" aria-label="Guardar Armonía en mi selección" aria-pressed="false">♡</button>
+        <span class="meta"><span class="txt"><span class="kick">Diseño 06</span><span class="name">Armonía</span></span><span class="open">Abrir →</span></span>
+      </article>
     </div>
+    <div class="swipe-hint rv">Desliza para explorar →</div>
   </div>
 </section>
 
@@ -171,6 +217,12 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
   </div>
 </div>
 
+<div class="tray" id="tray" role="status" aria-live="polite">
+  <span>♡ <span class="n" id="trayN">0</span> en tu selección</span>
+  <button id="traySend" type="button">Enviar mi selección</button>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
 <footer>
   <div class="wrap">
     <span><img src="assets/polux_logo.jpg" alt="">© 2026 Polux</span>
@@ -194,6 +246,40 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
       ctx.fillStyle='rgba(168,85,247,'+(0.18+0.28*Math.sin(t*2+p.o)).toFixed(3)+')';ctx.fill()});
     if(!reduced)requestAnimationFrame(tick);
   })();
+})();
+/* Catálogo: abrir tarjeta, favoritos y bandeja de selección */
+(function(){
+  const cards=[...document.querySelectorAll('.demo')];
+  const KEY='poluxFavs';let favs=[];
+  try{favs=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){favs=[]}
+  const tray=document.getElementById('tray'),trayN=document.getElementById('trayN'),toast=document.getElementById('toast');
+  let toastT;
+  function say(m){toast.textContent=m;toast.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>toast.classList.remove('show'),2600)}
+  function paint(){
+    cards.forEach(c=>{
+      const on=favs.includes(c.dataset.id),b=c.querySelector('.fav');
+      b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));b.textContent=on?'♥':'♡';
+    });
+    trayN.textContent=favs.length;tray.classList.toggle('show',favs.length>0);
+  }
+  cards.forEach(c=>{
+    c.addEventListener('click',e=>{if(e.target.closest('.fav'))return;location.href=c.dataset.href});
+    c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();location.href=c.dataset.href}});
+    c.querySelector('.fav').addEventListener('click',e=>{
+      e.stopPropagation();
+      const id=c.dataset.id,i=favs.indexOf(id);
+      if(i>=0){favs.splice(i,1)}else{favs.push(id);say('«'+c.dataset.nombre+'» guardado en tu selección')}
+      try{localStorage.setItem(KEY,JSON.stringify(favs))}catch(e2){}
+      paint();
+    });
+  });
+  document.getElementById('traySend').addEventListener('click',async()=>{
+    const nombres=cards.filter(c=>favs.includes(c.dataset.id)).map(c=>c.dataset.nombre).join(', ');
+    const txt='Hola Polux, me gustaron estos diseños de su portafolio: '+nombres+'. Quiero una propuesta a medida para mi negocio.';
+    try{await navigator.clipboard.writeText(txt);say('Copiado ✓ — pégalo en nuestro WhatsApp o chat')}
+    catch(e){say(txt)}
+  });
+  paint();
 })();
 /* Reveal al hacer scroll */
 (function(){
