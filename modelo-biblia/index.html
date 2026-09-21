@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Negocio Demo — Centro de Conocimiento (Modelo base)</title>
+<style>
+/* ============================================================
+   PERSONALIZACIÓN RÁPIDA — cambia logo y colores aquí (2 min)
+   --logo: pega la URL del logo del prospecto (o deja "" y se usa texto)
+   ============================================================ */
+:root{
+  --logo: "";
+  --fondo:#100d08; --fondo2:#171208; --tarjeta:#1d1710; --borde:#3a2f1d;
+  --acento:#c9a227; --acento2:#e8c766;
+  --texto:#f2ead9; --muted:#b8a98a;
+  --fuente-titular: Georgia, "Times New Roman", serif;
+  --fuente-cuerpo: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo);line-height:1.65}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+/* Distintivo demo */
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acento);border:1px solid var(--acento);border-radius:999px;padding:5px 14px;background:rgba(16,13,8,.82)}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:rgba(16,13,8,.82);border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.volver:hover{color:var(--acento);border-color:var(--acento)}
+/* Header */
+header.site{border-bottom:1px solid var(--borde);background:linear-gradient(180deg,var(--fondo2),var(--fondo));padding-top:52px}
+.bar{display:flex;align-items:center;gap:16px;padding:18px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--texto)}
+.logo-slot{width:46px;height:46px;border-radius:10px;border:1px solid var(--acento);background:var(--logo) center/contain no-repeat, var(--fondo2);display:flex;align-items:center;justify-content:center;font-family:var(--fuente-titular);font-weight:700;color:var(--acento);font-size:1.2rem}
+.brand b{font-family:var(--fuente-titular);font-size:1.15rem;letter-spacing:.04em}
+.brand small{display:block;font-family:var(--fuente-cuerpo);font-size:.68rem;letter-spacing:.22em;color:var(--muted);text-transform:uppercase}
+nav.menu{margin-left:auto;display:flex;gap:20px;font-size:.92rem}
+nav.menu a{color:var(--muted);text-decoration:none}
+nav.menu a:hover{color:var(--acento2)}
+.searchbox{margin:6px 0 22px;display:flex;gap:10px}
+.searchbox input{flex:1;background:var(--tarjeta);border:1px solid var(--borde);border-radius:10px;color:var(--texto);padding:12px 16px;font-size:1rem}
+.searchbox input:focus{outline:none;border-color:var(--acento)}
+/* Hero */
+.hero{padding:64px 0 48px;text-align:center}
+.hero .kicker{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:var(--acento);margin-bottom:16px}
+.hero h1{font-family:var(--fuente-titular);font-size:clamp(2.1rem,5vw,3.4rem);line-height:1.2;margin-bottom:16px}
+.hero h1 em{font-style:italic;color:var(--acento2)}
+.hero p{color:var(--muted);max-width:640px;margin:0 auto 28px}
+.btn{display:inline-block;background:var(--acento);color:#171208;font-weight:700;text-decoration:none;padding:13px 30px;border-radius:10px;margin:4px}
+.btn:hover{background:var(--acento2)}
+.btn.ghost{background:transparent;color:var(--texto);border:1px solid var(--borde)}
+.btn.ghost:hover{border-color:var(--acento);color:var(--acento2)}
+/* Tabs + cards */
+section{padding:52px 0}
+h2.sec{font-family:var(--fuente-titular);font-size:1.8rem;margin-bottom:6px}
+p.sub{color:var(--muted);margin-bottom:24px}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.tab{background:var(--tarjeta);border:1px solid var(--borde);color:var(--muted);border-radius:999px;padding:9px 20px;cursor:pointer;font-size:.92rem}
+.tab.activo{background:var(--acento);border-color:var(--acento);color:#171208;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:var(--tarjeta);border:1px solid var(--borde);border-radius:12px;padding:24px;cursor:pointer;transition:border-color .18s,transform .18s}
+.card:hover{border-color:var(--acento);transform:translateY(-3px)}
+.card .cat{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acento)}
+.card h3{font-family:var(--fuente-titular);font-size:1.2rem;margin:8px 0}
+.card p{color:var(--muted);font-size:.92rem}
+.card .rel{margin-top:12px;font-size:.8rem;color:var(--acento2);display:none}
+.card.destacada{border-color:var(--acento);box-shadow:0 0 0 1px var(--acento)}
+.card.destacada .rel{display:block}
+/* Sala de lectura */
+.sala{background:var(--fondo2);border:1px solid var(--borde);border-radius:16px;padding:34px;display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}
+.player{background:var(--tarjeta);border:1px solid var(--borde);border-radius:12px;padding:24px}
+.player .titulo{font-family:var(--fuente-titular);font-size:1.1rem;margin-bottom:4px}
+.player .sub{font-size:.82rem;color:var(--muted);margin-bottom:16px}
+.controls{display:flex;align-items:center;gap:14px}
+.play{width:52px;height:52px;border-radius:50%;background:var(--acento);border:none;color:#171208;font-size:1.2rem;cursor:pointer;flex-shrink:0}
+.barra{flex:1;height:6px;background:var(--borde);border-radius:99px;overflow:hidden}
+.barra i{display:block;height:100%;width:0;background:var(--acento2);border-radius:99px}
+.tiempo{font-size:.8rem;color:var(--muted);min-width:88px;text-align:right}
+/* Testimonios */
+.testis{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.testi{background:var(--tarjeta);border:1px solid var(--borde);border-radius:12px;padding:24px;font-style:italic}
+.testi footer{margin-top:12px;font-style:normal;font-size:.85rem;color:var(--muted)}
+.testi .eje{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--acento);font-style:normal}
+/* FAQ */
+.faq{border-top:1px solid var(--borde)}
+.faq details{border-bottom:1px solid var(--borde);padding:16px 4px}
+.faq summary{cursor:pointer;font-weight:600;font-family:var(--fuente-titular);font-size:1.05rem}
+.faq summary::marker{color:var(--acento)}
+.faq p{color:var(--muted);margin-top:8px;font-size:.95rem}
+footer.site{border-top:1px solid var(--borde);padding:30px 0;color:var(--muted);font-size:.88rem;text-align:center}
+footer.site a{color:var(--acento2)}
+/* ===== Animaciones procedurales (canvas, sin video) ===== */
+#polvo{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#grafo{width:100%;height:240px;display:block}
+.leyenda{text-align:center;color:var(--muted);font-size:.85rem;margin-top:10px}
+#recorrido{height:320vh;padding:0;position:relative;background:#0a0805}
+#recorrido .pin{position:sticky;top:0;height:100vh;overflow:hidden}
+#templo{position:absolute;inset:0;width:100%;height:100%}
+.etapas{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.etapa{position:absolute;text-align:center;max-width:540px;padding:0 24px;opacity:0;transform:translateY(26px);transition:opacity .5s,transform .5s}
+.etapa.ver{opacity:1;transform:none}
+.etapa h3{font-family:var(--fuente-titular);font-size:clamp(1.9rem,4.5vw,3rem);color:var(--acento2);margin-bottom:10px}
+.etapa p{color:var(--texto);font-size:1.12rem}
+.prog{position:absolute;left:50%;transform:translateX(-50%);bottom:28px;width:min(420px,70vw);height:4px;background:rgba(255,255,255,.14);border-radius:99px}
+.prog i{display:block;height:100%;width:0;background:var(--acento);border-radius:99px}
+@media(max-width:860px){.grid{grid-template-columns:1fr 1fr}.sala{grid-template-columns:1fr}.testis{grid-template-columns:1fr}nav.menu{display:none}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="demo-badge">Diseño demo</div>
+<a class="volver" href="../index.html">← Portafolio</a>
+
+<header class="site">
+  <div class="wrap">
+    <div class="bar">
+      <a class="brand" href="#">
+        <span class="logo-slot" data-logo>N</span>
+        <span><b data-nombre>Negocio Demo</b><small data-tagline>Centro de conocimiento</small></span>
+      </a>
+      <nav class="menu">
+        <a href="#catalogo">Catálogo</a><a href="#recorrido">Recorrido</a><a href="#sala">Sala de lectura</a><a href="#faq">Preguntas</a><a href="#contacto">Contacto</a>
+      </nav>
+    </div>
+    <div class="searchbox">
+      <input id="buscador" type="search" placeholder="Busca en todo el contenido: servicios, guías, recursos…">
+    </div>
+  </div>
+</header>
+
+<section class="hero" style="position:relative;overflow:hidden">
+  <canvas id="polvo" aria-hidden="true"></canvas>
+  <div class="wrap" style="position:relative">
+    <div class="kicker">El puente entre todo lo que ofreces</div>
+    <h1>Todo tu conocimiento, <em>conectado</em> y fácil de explorar.</h1>
+    <p>Modelo base para negocios con mucho contenido organizado: academias, clínicas, restaurantes con carta extensa. Buscador, categorías y conexiones entre temas.</p>
+    <a class="btn" href="#catalogo">Explorar el catálogo</a>
+    <a class="btn ghost" href="#sala">Sala de lectura</a>
+  </div>
+</section>
+
+<section id="mapa" style="padding-top:8px">
+  <div class="wrap">
+    <canvas id="grafo" aria-label="Mapa de conexiones del contenido"></canvas>
+    <p class="leyenda">Cada punto es un tema de tu negocio; las líneas son las conexiones que el visitante descubre. Animación procedural en vivo, sin video.</p>
+  </div>
+</section>
+
+<section id="catalogo">
+  <div class="wrap">
+    <h2 class="sec">Catálogo</h2>
+    <p class="sub">Filtra por categoría o usa el buscador. Toca una tarjeta para ver sus conexiones.</p>
+    <div class="tabs" id="tabs">
+      <button class="tab activo" data-cat="todo">Todo</button>
+      <button class="tab" data-cat="servicios">Servicios</button>
+      <button class="tab" data-cat="guias">Guías</button>
+      <button class="tab" data-cat="recursos">Recursos</button>
+    </div>
+    <div class="grid" id="grid">
+      <div class="card" data-cat="servicios" data-rel="2,5"><div class="cat">Servicios</div><h3>Servicio destacado uno</h3><p>Descripción breve del servicio principal del negocio demo.</p><div class="rel">↔ Conectado con: Guía de inicio, Recurso descargable</div></div>
+      <div class="card" data-cat="guias" data-rel="0,3"><div class="cat">Guías</div><h3>Guía de inicio</h3><p>Paso a paso para nuevos clientes: qué esperar y cómo empezar.</p><div class="rel">↔ Conectado con: Servicio destacado uno, Preguntas frecuentes</div></div>
+      <div class="card" data-cat="recursos" data-rel="0,4"><div class="cat">Recursos</div><h3>Recurso descargable</h3><p>Material de apoyo que el cliente puede llevarse y consultar.</p><div class="rel">↔ Conectado con: Servicio destacado uno, Testimonios</div></div>
+      <div class="card" data-cat="servicios" data-rel="1,5"><div class="cat">Servicios</div><h3>Servicio destacado dos</h3><p>Segunda línea de servicio del negocio, con sus detalles.</p><div class="rel">↔ Conectado con: Guía de inicio, Recurso descargable</div></div>
+      <div class="card" data-cat="guias" data-rel="2"><div class="cat">Guías</div><h3>Preguntas frecuentes</h3><p>Las dudas más comunes, respondidas con calma y claridad.</p><div class="rel">↔ Conectado con: Recurso descargable</div></div>
+      <div class="card" data-cat="recursos" data-rel="0,3"><div class="cat">Recursos</div><h3>Testimonios</h3><p>Lo que dicen quienes ya pasaron por aquí. (Ejemplos.)</p><div class="rel">↔ Conectado con: Servicio destacado uno, Preguntas frecuentes</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="recorrido" aria-label="Recorrido cinematográfico">
+  <div class="pin">
+    <canvas id="templo"></canvas>
+    <div class="etapas">
+      <div class="etapa" data-e="0"><h3>El atrio</h3><p>Todo tu contenido, una sola entrada. El visitante sabe dónde está parado.</p></div>
+      <div class="etapa" data-e="1"><h3>Las columnas</h3><p>Cada tema sostiene al siguiente. Nada queda suelto, todo conecta.</p></div>
+      <div class="etapa" data-e="2"><h3>La luz</h3><p>Tu cliente encuentra exactamente lo que buscaba. Así se siente tu negocio con Polux.</p></div>
+    </div>
+    <div class="prog"><i></i></div>
+  </div>
+</section>
+
+<section id="sala" style="background:var(--fondo2)">
+  <div class="wrap">
+    <h2 class="sec">Sala de lectura</h2>
+    <p class="sub">Contenido destacado en formato de lectura o audio guiado.</p>
+    <div class="sala">
+      <div>
+        <h3 style="font-family:var(--fuente-titular);font-size:1.4rem;margin-bottom:10px">La pieza central de tu negocio, bien contada.</h3>
+        <p style="color:var(--muted)">Este bloque presenta tu contenido más importante con calma: una lectura destacada o un audio que el visitante puede escuchar mientras explora.</p>
+      </div>
+      <div class="player">
+        <div class="titulo">Audio destacado — presentación del negocio</div>
+        <div class="sub">Demo interactiva · 03:00</div>
+        <div class="controls">
+          <button class="play" id="playBtn" aria-label="Reproducir">▶</button>
+          <div class="barra"><i id="progreso"></i></div>
+          <div class="tiempo" id="tiempo">0:00 / 3:00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 class="sec">Lo que dicen (ejemplos)</h2>
+    <p class="sub">Testimonios de muestra — se reemplazan por los reales del cliente.</p>
+    <div class="testis">
+      <div class="testi">“Encontré todo lo que necesitaba en un solo lugar. La forma en que está organizado hace que volver sea un gusto.”<div class="eje">Ejemplo</div><footer>— Cliente ejemplo, Ciudad</footer></div>
+      <div class="testi">“Nunca había visto un sitio tan claro para este tipo de negocio. Todo conecta con todo.”<div class="eje">Ejemplo</div><footer>— Cliente ejemplo, Ciudad</footer></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="background:var(--fondo2)">
+  <div class="wrap">
+    <h2 class="sec">Preguntas frecuentes</h2>
+    <div class="faq" style="margin-top:20px">
+      <details><summary>¿Este diseño puede llevar mis colores y mi logo?</summary><p>Sí. Es un modelo base: se adapta con la identidad de tu negocio en minutos.</p></details>
+      <details><summary>¿Funciona en el teléfono?</summary><p>Sí. Todo el sitio es responsive: se ve bien en móvil, tableta y computadora.</p></details>
+      <details><summary>¿Puedo agregar más secciones?</summary><p>Claro. El catálogo crece con tu contenido: más categorías, más tarjetas, más conexiones.</p></details>
+    </div>
+  </div>
+</section>
+
+<footer class="site" id="contacto">
+  <div class="wrap">
+    <p><strong style="font-family:var(--fuente-titular);color:var(--texto)">Negocio Demo</strong> · Centro de conocimiento · (555) 000-0000</p>
+    <p style="margin-top:8px">Diseño demo por <a href="../index.html">Polux</a> — modelo base personalizable.</p>
+  </div>
+</footer>
+
+<script>
+// Buscador + tabs
+const buscador=document.getElementById('buscador'),tabs=document.getElementById('tabs'),cards=[...document.querySelectorAll('#grid .card')];
+let cat='todo';
+function filtrar(){const q=buscador.value.toLowerCase();cards.forEach(c=>{const ok=(cat==='todo'||c.dataset.cat===cat)&&c.textContent.toLowerCase().includes(q);c.style.display=ok?'':'none'})}
+buscador.addEventListener('input',filtrar);
+tabs.addEventListener('click',e=>{if(e.target.classList.contains('tab')){tabs.querySelectorAll('.tab').forEach(t=>t.classList.remove('activo'));e.target.classList.add('activo');cat=e.target.dataset.cat;filtrar()}});
+// Conexiones
+cards.forEach(c=>c.addEventListener('click',()=>{cards.forEach(x=>x.classList.remove('destacada'));c.classList.add('destacada')}));
+// Player demo
+const playBtn=document.getElementById('playBtn'),prog=document.getElementById('progreso'),tiempo=document.getElementById('tiempo');
+let seg=0,timer=null;
+playBtn.addEventListener('click',()=>{if(timer){clearInterval(timer);timer=null;playBtn.textContent='▶';return}
+playBtn.textContent='⏸';timer=setInterval(()=>{seg++;if(seg>=180){seg=0}prog.style.width=(seg/180*100)+'%';tiempo.textContent=Math.floor(seg/60)+':'+String(seg%60).padStart(2,'0')+' / 3:00'},1000)});
+
+/* ===== 1. Polvo dorado del hero (cold open, push-in suave) ===== */
+(function(){
+  const cv=document.getElementById('polvo');if(!cv||!cv.getContext)return;
+  const ctx=cv.getContext('2d'),DPR=Math.min(2,devicePixelRatio||1);
+  let W,H;function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
+  size();addEventListener('resize',size);
+  const P=[];for(let i=0;i<70;i++)P.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.8+.6,v:.12+Math.random()*.4,o:Math.random()*6.28});
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;let t=0;
+  (function tick(){
+    ctx.clearRect(0,0,W,H);t+=.016;
+    P.forEach(p=>{p.y-=p.v;if(p.y<-4){p.y=H+4;p.x=Math.random()*W}
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r*(1+t*.002),0,7);
+      ctx.fillStyle='rgba(201,162,39,'+(0.25+0.3*Math.sin(t*2+p.o)).toFixed(3)+')';ctx.fill()});
+    if(!reduced)requestAnimationFrame(tick);
+  })();
+})();
+
+/* ===== 2. Grafo de conexiones (nodos + pulsos, sin video) ===== */
+(function(){
+  const cv=document.getElementById('grafo');if(!cv||!cv.getContext)return;
+  const ctx=cv.getContext('2d'),DPR=Math.min(2,devicePixelRatio||1);
+  let W,H;function size(){W=cv.clientWidth;H=cv.clientHeight||240;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
+  size();addEventListener('resize',size);
+  const N=[['Servicios',.12,.52],['Guías',.30,.24],['Recursos',.50,.58],['Audio',.68,.26],['Opiniones',.84,.52],['Contacto',.50,.86]]
+    .map(n=>({t:n[0],x:n[1],y:n[2],o:Math.random()*6.28}));
+  const E=[[0,1],[0,2],[1,2],[2,3],[2,4],[1,5],[4,5],[3,4]];
+  const pu=E.map(()=>Math.random());
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;let t=0;
+  function frame(){
+    ctx.clearRect(0,0,W,H);t+=.016;
+    const px=i=>N[i].x*W, py=i=>N[i].y*H+Math.sin(t*1.2+N[i].o)*6;
+    E.forEach((e,k)=>{
+      const x1=px(e[0]),y1=py(e[0]),x2=px(e[1]),y2=py(e[1]);
+      ctx.strokeStyle='rgba(201,162,39,.30)';ctx.lineWidth=1.2;
+      ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+      if(!reduced){pu[k]=(pu[k]+.007)%1;
+        ctx.beginPath();ctx.arc(x1+(x2-x1)*pu[k],y1+(y2-y1)*pu[k],3,0,7);
+        ctx.fillStyle='#e8c766';ctx.fill()}
+    });
+    N.forEach((n,i)=>{
+      const x=px(i),y=py(i);
+      ctx.beginPath();ctx.arc(x,y,12+3*Math.sin(t*2+n.o),0,7);
+      ctx.strokeStyle='rgba(201,162,39,.35)';ctx.lineWidth=1.5;ctx.stroke();
+      ctx.beginPath();ctx.arc(x,y,6.5,0,7);ctx.fillStyle='#c9a227';ctx.fill();
+      ctx.fillStyle='#b8a98a';ctx.font='11px system-ui,sans-serif';ctx.textAlign='center';
+      ctx.fillText(n.t,x,y+32);
+    });
+    if(!reduced)requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ===== 3. Recorrido cinematográfico (scroll-driven, procedural) ===== */
+(function(){
+  const sec=document.getElementById('recorrido');if(!sec)return;
+  const cv=document.getElementById('templo'),ctx=cv.getContext('2d');
+  const etapas=[...sec.querySelectorAll('.etapa')],bar=sec.querySelector('.prog i');
+  const DPR=Math.min(2,devicePixelRatio||1);let W,H;
+  function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
+  size();addEventListener('resize',()=>{size();draw()});
+  const COLS=[];for(let i=0;i<16;i++)COLS.push(i*150);
+  const dust=[];for(let i=0;i<110;i++)dust.push({x:Math.random()*2-1,y:Math.random(),z:Math.random()*2400,r:Math.random()*1.6+.7});
+  let p=0;
+  function col(x,z,camZ,f,cx,hor){
+    const d=z-camZ;if(d<30||d>2600)return;
+    const s=f/d,sx=cx+x*s,w=30*s,top=hor-200*s,bot=H+40;
+    const g=ctx.createLinearGradient(sx-w/2,0,sx+w/2,0);
+    g.addColorStop(0,'#171008');g.addColorStop(.5,'#4a3517');g.addColorStop(1,'#241a0c');
+    ctx.fillStyle=g;ctx.fillRect(sx-w/2,top,w,bot-top);
+    ctx.fillStyle='rgba(201,162,39,.85)';ctx.fillRect(sx+(x<0?w/2-2:-w/2),top,2,bot-top);
+    const cw=w*.72;ctx.fillStyle='#5a4222';
+    ctx.fillRect(sx-cw/2,top-12*Math.min(s,3),cw,12*Math.min(s,3));
+  }
+  function draw(){
+    ctx.fillStyle='#0a0805';ctx.fillRect(0,0,W,H);
+    const camZ=p*2100,f=H*1.05,cx=W/2,hor=H*.44;
+    const fg=ctx.createLinearGradient(0,hor,0,H);
+    fg.addColorStop(0,'#0a0805');fg.addColorStop(1,'#2a1f10');
+    ctx.fillStyle=fg;ctx.fillRect(0,hor,W,H-hor);
+    const gl=Math.pow(p,1.6),R=60+gl*H*.55;
+    const rg=ctx.createRadialGradient(cx,hor,0,cx,hor,R);
+    rg.addColorStop(0,'rgba(232,199,102,'+(0.10+0.55*gl).toFixed(3)+')');
+    rg.addColorStop(1,'rgba(232,199,102,0)');
+    ctx.fillStyle=rg;ctx.fillRect(cx-R,hor-R,R*2,R*2);
+    [...COLS].sort((a,b)=>(b-camZ)-(a-camZ)).forEach(z=>{col(-95,z,camZ,f,cx,hor);col(95,z,camZ,f,cx,hor)});
+    dust.forEach(d=>{
+      const dd=d.z-camZ;if(dd<40||dd>2400)return;
+      const s=f/dd,x=cx+d.x*150*s,y=hor-(0.5-d.y)*320*s;
+      if(y<-20||y>H+20||x<-20||x>W+20)return;
+      ctx.beginPath();ctx.arc(x,y,Math.min(d.r*s*6,5),0,7);
+      ctx.fillStyle='rgba(232,199,102,'+Math.max(0,.5-dd/2600).toFixed(3)+')';ctx.fill();
+    });
+    const vg=ctx.createRadialGradient(cx,H/2,H*.35,cx,H/2,H*.95);
+    vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.55)');
+    ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+  }
+  function stage(){
+    const e=p<.34?0:p<.67?1:2;
+    etapas.forEach((el,i)=>el.classList.toggle('ver',i===e));
+    bar.style.width=(p*100)+'%';
+  }
+  function update(){
+    const len=sec.offsetHeight-innerHeight;
+    p=len>0?Math.min(1,Math.max(0,(scrollY-sec.offsetTop)/len)):0;
+    draw();stage();
+  }
+  let tick=false;
+  addEventListener('scroll',()=>{if(!tick){requestAnimationFrame(()=>{update();tick=false});tick=true}},{passive:true});
+  update();
+})();
+</script>
+<script src="../personalizar.js"></script>
+</body>
+</html>
