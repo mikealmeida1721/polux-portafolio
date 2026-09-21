@@ -48,7 +48,7 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
   perspective:1200px;
   padding:16px calc(50% - min(280px,40vw)) 28px;scrollbar-width:none;cursor:grab;outline:none}
 .w-track::-webkit-scrollbar{display:none}
-.w-card{flex:0 0 min(560px,80vw);scroll-snap-align:center;scroll-snap-stop:always;will-change:transform,opacity;
+.w-card{flex:0 0 min(560px,80vw);scroll-snap-align:center;will-change:transform,opacity;
   transition:box-shadow .2s,border-color .2s}
 .w-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:130;width:52px;height:52px;border-radius:50%;
   background:rgba(16,16,24,.82);border:1px solid var(--acento);color:#fff;font-size:1.7rem;line-height:1;cursor:pointer;backdrop-filter:blur(6px)}
@@ -322,7 +322,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   /* Efecto 3D interpolado: los valores se acercan poco a poco al objetivo,
      así nada "salta" de tamaño — todo llega fluido, incluso en el salto del bucle. */
   const st3d=cards.map(()=>({r:0,s:1,o:1}));
-  let rafOn=false, scrolling=false, scrollIdle=null, normT=null;
+  let rafOn=false, scrolling=false, scrollIdle=null;
   function tick(){
     const tr=track.getBoundingClientRect(), cx=tr.left+tr.width/2;
     let best=0, bd=1e12, moving=false;
@@ -354,16 +354,15 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   function startAuto(){stopAuto();if(!reduced)autoT=setInterval(()=>{if(!document.hidden)goTo(active+1)},6000)}
   function poke(){stopAuto();clearTimeout(idleT);idleT=setTimeout(startAuto,9000)}
   track.addEventListener('pointerdown',poke);track.addEventListener('wheel',poke,{passive:true});track.addEventListener('touchstart',poke,{passive:true});
-  /* bucle infinito: 3 copias, salto invisible al acercarse a un extremo */
+  /* Bucle infinito: 3 copias idénticas; el salto es inmediato y en el mismo
+     arrastre (sin soltar), porque el contenido es pixel-idéntico y no se nota. */
   track.addEventListener('scroll',()=>{
     scrolling=true; kick();
     clearTimeout(scrollIdle); scrollIdle=setTimeout(()=>{scrolling=false},350);
-    clearTimeout(normT); normT=setTimeout(()=>{
-      if(copyW>0){
-        if(track.scrollLeft<copyW*0.35)track.scrollLeft+=copyW;
-        else if(track.scrollLeft>copyW*1.65)track.scrollLeft-=copyW;
-      }
-    },140);
+    if(copyW>0){
+      if(track.scrollLeft<copyW*0.35)track.scrollLeft+=copyW;
+      else if(track.scrollLeft>copyW*1.65)track.scrollLeft-=copyW;
+    }
   },{passive:true});
   addEventListener('resize',()=>{measure();kick()});
   addEventListener('load',()=>{measure();kick()});
