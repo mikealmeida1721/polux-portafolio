@@ -56,7 +56,7 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
 .w-arrow:hover{background:var(--acento);color:#0A0A0C}
 .w-meta{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:16px;color:var(--muted);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase}
 .w-count{color:var(--texto);font-weight:800;letter-spacing:.1em}
-/* ===== Modal armar pedido ===== */
+/* ===== Modal cotización ===== */
 .om-back{position:fixed;inset:0;z-index:200;background:rgba(5,5,10,.72);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px}
 .om-back.open{display:flex}
 .om{background:#15151d;border:1px solid var(--acento);border-radius:20px;max-width:540px;width:100%;max-height:88vh;overflow-y:auto;padding:28px 26px;position:relative}
@@ -80,11 +80,6 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
 .om-send:hover{filter:brightness(1.12)}
 .om-x{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer}
 .om-note{font-size:.78rem;color:var(--muted);text-align:center;margin-top:12px}
-.om-total{background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.45);border-radius:14px;
-  padding:13px 16px;font-size:.92rem;margin:18px 0 6px;text-align:center}
-.om-total b{color:#c084fc}
-.om-ahorro{display:block;margin-top:6px;font-size:.82rem;color:#86efac}
-.om-trial{font-size:.78rem;color:#c084fc;border:1px solid rgba(168,85,247,.5);border-radius:999px;padding:2px 10px;margin-left:6px;white-space:nowrap}
 .om-empty{font-size:.85rem;color:var(--muted);line-height:1.6;margin:0}
 .pz-chip button{background:none;border:0;color:#fff;font-size:.8rem;cursor:pointer;margin-left:6px;opacity:.8}
 .pz-chip button:hover{opacity:1}
@@ -126,24 +121,13 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
   color:var(--texto);padding:12px 22px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;font-size:.9rem;max-width:calc(100vw - 40px);text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
-/* ===== Cómo funciona ===== */
-.pasos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.paso{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;padding:30px 26px}
-.paso .n{font-size:2rem;font-weight:800;color:var(--acento);margin-bottom:10px}
-.paso h3{margin-bottom:8px;font-size:1.15rem}
-.paso p{color:var(--muted);font-size:.95rem}
-
-/* ===== Precios ===== */
-.planes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:22px}
-.plan{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;padding:30px 26px;text-align:center;position:relative}
-.plan.destaca{border-color:var(--acento);box-shadow:0 0 40px rgba(168,85,247,.18)}
-.plan .nombre{font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
-.plan .precio{font-size:2.2rem;font-weight:800;margin:10px 0 4px}
-.plan .precio small{font-size:.95rem;color:var(--muted);font-weight:400}
-.plan .trial{color:var(--acento);font-size:.88rem;font-weight:700;margin-bottom:6px}
-.plan p{color:var(--muted);font-size:.9rem}
-.nota-precios{text-align:center;color:var(--muted);font-size:.92rem}
-.nota-precios a{color:var(--acento);font-weight:700}
+/* ===== Cómo funciona (franja compacta) ===== */
+.pasos-mini{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;
+  background:var(--tarjeta);border:1px solid var(--borde);border-radius:999px;padding:13px 26px}
+.pm-t{font-weight:800;font-size:1.02rem;white-space:nowrap}
+.pm-paso{font-size:.9rem;color:var(--muted);white-space:nowrap}
+.pm-paso b{color:var(--acento);margin-right:6px}
+.pm-sep{color:var(--acento);font-weight:800}
 
 /* ===== CTA final ===== */
 .cta{background:radial-gradient(700px 320px at 50% 100%,rgba(168,85,247,.16),transparent);border-top:1px solid var(--borde);text-align:center;padding:88px 20px}
@@ -158,8 +142,9 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
 .rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
 .rv.vis{opacity:1;transform:none}
 
-@media(max-width:960px){.pasos,.planes{grid-template-columns:1fr;max-width:520px;margin-left:auto;margin-right:auto}.planes{margin-bottom:22px}}
 @media(max-width:620px){
+  .pasos-mini{border-radius:18px;gap:10px 14px}
+  .pm-sep{display:none}
   .hero{min-height:86vh}
   .w-arrow{display:none}
   .w-stage{height:clamp(300px,64vw,420px)}
@@ -183,9 +168,10 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
 </header>
 
 <section id="disenos">
+  <span id="modelos"></span>
   <div class="wrap">
     <h2 class="sec rv">Diseños vivos</h2>
-    <p class="sub rv">Son 20 muestras: cada diseño se adapta a cualquier negocio. Gira la rueda, entra al que te llame la atención, marca con ♡ los que te hablen y arma tu pedido.</p>
+    <p class="sub rv">Son 20 muestras: cada diseño se adapta a cualquier negocio. Gira la rueda, entra al que te llame la atención, marca con ♡ los que te hablen y pide tu cotización.</p>
     <div class="wheel rv" id="wheel">
       <div class="w-track" id="wTrack" tabindex="0" aria-label="Rueda de diseños: desliza para girar"></div>
       <button class="w-arrow w-prev" id="wPrev" aria-label="Diseño anterior">‹</button>
@@ -197,26 +183,12 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
 
 <section id="como">
   <div class="wrap">
-    <h2 class="sec rv">¿Cómo funciona?</h2>
-    <p class="sub rv">Lo que ves son muestras. Tu página se construye a medida.</p>
-    <div class="pasos">
-      <div class="paso rv"><div class="n">01</div><h3>Explora</h3><p>Toca los diseños y míralos en vivo: animaciones, reservas, chats. Sin compromiso.</p></div>
-      <div class="paso rv"><div class="n">02</div><h3>Elige</h3><p>Quédate con el que te hable. ¿Te gustaron pedazos de varios? Los combinamos.</p></div>
-      <div class="paso rv"><div class="n">03</div><h3>Lo hacemos tuyo</h3><p>Tu logo, tus colores, tu contenido. Y la IA trabajando dentro: reservas, reseñas, mensajes.</p></div>
+    <div class="pasos-mini rv">
+      <span class="pm-t">¿Cómo funciona?</span>
+      <span class="pm-paso"><b>01</b>Explora los diseños en vivo</span><span class="pm-sep">→</span>
+      <span class="pm-paso"><b>02</b>Elige o combina pedazos</span><span class="pm-sep">→</span>
+      <span class="pm-paso"><b>03</b>Lo hacemos tuyo, a medida</span>
     </div>
-  </div>
-</section>
-
-<section id="precios">
-  <div class="wrap">
-    <h2 class="sec rv">Precios claros</h2>
-    <p class="sub rv">Sin letra pequeña: prueba gratis, sin tarjeta, sin contratos.</p>
-    <div class="planes">
-      <div class="plan rv"><div class="nombre">Starter</div><div class="precio">$349<small>/mes</small></div><div class="trial">30 días gratis</div><p>Para empezar con IA en tu negocio.</p></div>
-      <div class="plan destaca rv"><div class="nombre">Pro</div><div class="precio">$499<small>/mes</small></div><div class="trial">15 días gratis</div><p>El equilibrio para crecer.</p></div>
-      <div class="plan rv"><div class="nombre">Elite</div><div class="precio">$799<small>/mes</small></div><div class="trial">7 días gratis</div><p>Todo Polux, a fondo.</p></div>
-    </div>
-    <p class="nota-precios rv">Página web <strong>$299</strong> pago único · Logo <strong>$99</strong> pago único<br><br><a href="https://polux.online/">Ver paquetes completos en polux.online →</a></p>
   </div>
 </section>
 
@@ -229,12 +201,12 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
 </div>
 
 <div class="om-back" id="omBack">
-  <div class="om" role="dialog" aria-modal="true" aria-label="Armar mi pedido">
+  <div class="om" role="dialog" aria-modal="true" aria-label="Pedir cotización personalizada">
     <button class="om-x" id="omX" aria-label="Cerrar">✕</button>
-    <h3>Arma tu pedido</h3>
-    <p class="om-sub">Elige diseño, plan y servicios: te calculamos tu paquete y lo enviamos a nuestro WhatsApp.</p>
+    <h3>Pide tu cotización</h3>
+    <p class="om-sub">Marca lo que te gustó: te armamos un paquete a tu medida y lo enviamos a nuestro WhatsApp.</p>
     <div class="om-sec">
-      <div class="om-lab">Diseño de tu página <span>· $299 único</span></div>
+      <div class="om-lab">Diseño base</div>
       <div class="chips" id="omDesigns"></div>
     </div>
     <div class="om-sec">
@@ -242,11 +214,7 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
       <div class="chips" id="omPz"></div>
     </div>
     <div class="om-sec">
-      <div class="om-lab">Plan mensual <span>(opcional)</span></div>
-      <div id="omPlans"></div>
-    </div>
-    <div class="om-sec">
-      <div class="om-lab">Servicios mensuales <span>(opcional)</span></div>
+      <div class="om-lab">¿Qué más te interesa?</div>
       <div class="om-pieces" id="omServs"></div>
     </div>
     <div class="om-sec">
@@ -257,16 +225,15 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
     <div class="om-sec" id="omLogoSec">
       <div class="om-lab">Logo</div>
       <label class="om-radio"><input type="radio" name="omLogo" value="tengo" checked> Ya tengo logo — lo envío por WhatsApp</label>
-      <label class="om-radio"><input type="radio" name="omLogo" value="disenar"> Quiero que Polux me diseñe uno <span class="om-trial">$99 · $75 con tu página</span></label>
+      <label class="om-radio"><input type="radio" name="omLogo" value="disenar"> Quiero que Polux me diseñe uno</label>
     </div>
-    <div class="om-total" id="omTotal"></div>
-    <button class="om-send" id="omSend">Enviar pedido por WhatsApp →</button>
-    <p class="om-note">Al enviar se abre WhatsApp con tu pedido listo. Nuestra IA lo recibe y te da seguimiento.</p>
+    <button class="om-send" id="omSend">Pedir cotización por WhatsApp →</button>
+    <p class="om-note">Al enviar se abre WhatsApp con tu selección lista. Te armamos un paquete a tu medida.</p>
   </div>
 </div>
 <div class="tray" id="tray" role="status" aria-live="polite">
   <span>♡ <span class="n" id="trayN">0</span> en tu selección</span>
-  <button id="traySend" type="button">Armar mi pedido →</button>
+  <button id="traySend" type="button">Pedir cotización →</button>
 </div>
 <div class="toast" id="toast" role="status"></div>
 
@@ -319,9 +286,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     {id:'pizzeria',nombre:'Leña',href:'modelo-pizzeria/index.html',       ac:'#d63c2f', cf:"'Lilita One',sans-serif",   kick:'Diseño 19'},
     {id:'belleza',nombre:'Espejo',href:'modelo-belleza/index.html',      ac:'#c9a227', cf:"'Playfair Display',serif",  kick:'Diseño 20'}
   ];
-  const SERVS=[['Chatbot con IA','349'],['Gestión de reseñas','199'],['Contenido para redes','349'],['Mensajes SMS','249'],['Llamada perdida → SMS','79']];
-  const PLANS=[['Sin plan por ahora','0',''],['Starter','349','30 días gratis'],['Pro','499','15 días gratis'],['Elite','799','7 días gratis']];
-  const WEB_PRICE=299, LOGO_PRICE=99, LOGO_BUNDLE=75;
+  const SERVS=['Chatbot con IA','Gestión de reseñas','Contenido para redes','Mensajes SMS','Llamada perdida → SMS','Alojamiento de mi página'];
   const n=DESIGNS.length, track=document.getElementById('wTrack'), reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const cardHTML=d=>`<article class="demo w-card" data-id="${d.id}" data-nombre="${d.nombre}" data-href="${d.href}" style="--ac:${d.ac};--cf:${d.cf}" aria-label="Diseño ${d.nombre}">
       <span class="thumb"><iframe src="${d.href}?embed=1" loading="lazy" scrolling="no" title="Vista previa — ${d.nombre}" tabindex="-1"></iframe></span>
@@ -432,19 +397,16 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     const idx=DESIGNS.findIndex(d=>d.id===card.dataset.id);
     if(idx===active)location.href=card.dataset.href; else goTo(idx);
   });
-  /* ===== Modal armar pedido ===== */
+  /* ===== Modal cotización personalizada (sin precios: el paquete se arma a medida) ===== */
   const omBack=document.getElementById('omBack'),omDesigns=document.getElementById('omDesigns'),
-        omPlans=document.getElementById('omPlans'),omServs=document.getElementById('omServs'),
-        omTotal=document.getElementById('omTotal'),omPz=document.getElementById('omPz');
+        omServs=document.getElementById('omServs'),omPz=document.getElementById('omPz');
   const picked=new Set();
   const loadPz=()=>{try{return JSON.parse(localStorage.getItem('poluxPiezas')||'[]')}catch(e){return[]}};
   const savePz=v=>{try{localStorage.setItem('poluxPiezas',JSON.stringify(v))}catch(e){}};
-  const fmt=x=>'$'+x.toLocaleString('en-US');
   function renderOm(){
     omDesigns.innerHTML=DESIGNS.map(d=>`<button type="button" class="tchip${picked.has(d.id)?' on':''}" data-id="${d.id}">${d.nombre}</button>`).join('');
-    omPlans.innerHTML=PLANS.map((p,i)=>`<label class="om-radio"><input type="radio" name="omPlan" value="${p[1]}"${i===0?' checked':''}> ${p[0]}${p[1]!=='0'?' — '+fmt(+p[1])+'/mes':''}${p[2]?` <span class="om-trial">${p[2]}</span>`:''}</label>`).join('');
-    omServs.innerHTML=SERVS.map(s=>`<label class="piece"><input type="checkbox" value="${s[0]}|${s[1]}"><span>${s[0]}<small>${fmt(+s[1])}/mes</small></span></label>`).join('');
-    renderPz();calc();
+    omServs.innerHTML=SERVS.map(s=>`<label class="piece"><input type="checkbox" value="${s}"><span>${s}</span></label>`).join('');
+    renderPz();
   }
   function renderPz(){
     const pz=loadPz();
@@ -454,19 +416,8 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   }
   omPz.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
     const pz=loadPz();pz.splice(+b.dataset.i,1);savePz(pz);renderPz()});
-  function calc(){
-    const web=picked.size>0, logoDis=document.querySelector('input[name=omLogo]:checked').value==='disenar';
-    const planV=+document.querySelector('input[name=omPlan]:checked').value;
-    const servV=[...omServs.querySelectorAll('input:checked')].reduce((a,i)=>a+(+i.value.split('|')[1]),0);
-    const unico=(web?WEB_PRICE:0)+(logoDis?(web?LOGO_BUNDLE:LOGO_PRICE):0);
-    const mensual=planV+servV;
-    omTotal.innerHTML=`Tu paquete — único: <b>${fmt(unico)}</b> · mensual: <b>${fmt(mensual)}/mes</b>`+
-      (web&&logoDis?` <span class="om-ahorro">logo a ${fmt(LOGO_BUNDLE)} con tu página ✨</span>`:'');
-    return {web,logoDis,planV,servV,unico,mensual};
-  }
   omDesigns.addEventListener('click',e=>{const b=e.target.closest('.tchip');if(!b)return;
-    const id=b.dataset.id;picked.has(id)?picked.delete(id):picked.add(id);b.classList.toggle('on');calc()});
-  omBack.addEventListener('change',e=>{if(e.target.closest('#omPlans,#omServs,#omLogoSec'))calc()});
+    const id=b.dataset.id;picked.has(id)?picked.delete(id):picked.add(id);b.classList.toggle('on')});
   window.PoluxOrder={open(){favs.forEach(id=>picked.add(id));renderOm();omBack.classList.add('open')}};
   function closeOm(){omBack.classList.remove('open')}
   document.getElementById('omX').addEventListener('click',closeOm);
@@ -475,20 +426,16 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   document.getElementById('traySend').addEventListener('click',()=>window.PoluxOrder.open());
   document.getElementById('omSend').addEventListener('click',()=>{
     if(picked.size===0){say('Elige al menos un diseño con ♡ o en el formulario');return}
-    const t=calc();
     const dis=DESIGNS.filter(d=>picked.has(d.id)).map(d=>d.nombre).join(', ');
     const pz=loadPz().map(p=>p.d+': '+p.p).join('; ');
-    const planL=document.querySelector('input[name=omPlan]:checked').closest('label').textContent.trim().replace(/\s+/g,' ');
-    const servs=[...omServs.querySelectorAll('input:checked')].map(i=>{const[a,b]=i.value.split('|');return a+' '+fmt(+b)+'/mes'}).join(', ');
+    const servs=[...omServs.querySelectorAll('input:checked')].map(i=>i.value).join(', ');
     const nom=document.getElementById('omNombre').value.trim(), neg=document.getElementById('omNegocio').value.trim();
     const logo=document.querySelector('input[name=omLogo]:checked').value;
-    let txt='Hola Polux, quiero armar mi pedido ✨\n• Página web — diseño: '+dis+' ('+fmt(WEB_PRICE)+' único)';
+    let txt='Hola Polux, quiero una cotización personalizada ✨\n• Diseño base: '+dis;
     if(pz)txt+='\n• Lo que elegí en las demos: '+pz;
-    txt+='\n• Plan: '+planL;
-    if(servs)txt+='\n• Servicios: '+servs;
+    if(servs)txt+='\n• Me interesa: '+servs;
+    txt+='\n• Logo: '+(logo==='tengo'?'ya tengo, lo envío por aquí':'quiero que Polux me diseñe uno');
     if(nom||neg)txt+='\n• Contacto: '+(nom||'—')+' — Negocio: '+(neg||'—');
-    txt+='\n• Logo: '+(logo==='tengo'?'ya tengo, lo envío por aquí':'diseñado por Polux '+fmt(t.web?LOGO_BUNDLE:LOGO_PRICE)+' único');
-    txt+='\n• Total único: '+fmt(t.unico)+' · Total mensual: '+fmt(t.mensual)+'/mes';
     closeOm();
     window.open('https://wa.me/'+window.POLUX_WA+'?text='+encodeURIComponent(txt),'_blank');
   });
