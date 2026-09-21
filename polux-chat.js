@@ -143,6 +143,15 @@ function vibeChips(){return[
 function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
 function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1):s}
 function wb(re){return new RegExp('(^|[^a-z])('+re+')([^a-z]|$)')}
+/* Para el ambiente: las raíces pueden continuar con sufijos (modern+a, llamativ+a),
+   así que se busca la raíz dentro del texto en vez de exigir corte de palabra. */
+function vibeMatch(t){
+  for(var i=0;i<VIBES.length;i++){
+    var alts=VIBES[i].w.split('|');
+    for(var j=0;j<alts.length;j++){if(t.indexOf(alts[j])>=0)return VIBES[i]}
+  }
+  return null;
+}
 
 /* ---- Cerebro v2 ---- */
 var state={vibeBiz:null,chips:null};
@@ -181,11 +190,10 @@ function brain(text){
   }
   /* 2. responde a la pregunta de ambiente */
   if(state.vibeBiz){
-    for(var i=0;i<VIBES.length;i++){
-      if(wb(VIBES[i].w).test(t)){
-        var biz=state.vibeBiz;state.vibeBiz=null;
-        return recMsg({id:VIBES[i].id,porque:VIBES[i].porque},'Para tu <b>'+biz+'</b> con ese ambiente,');
-      }
+    var vm=vibeMatch(t);
+    if(vm){
+      var biz=state.vibeBiz;state.vibeBiz=null;
+      return recMsg({id:vm.id,porque:vm.porque},'Para tu <b>'+biz+'</b> con ese ambiente,');
     }
     state.chips=vibeChips();
     return 'Dime el ambiente con una palabra: ¿<b>tradicional</b>, <b>moderna</b>, <b>elegante</b> o <b>fresca</b>?';
@@ -236,7 +244,7 @@ function brain(text){
 var busy=false;
 function userSay(text){
   text=(text||'').trim();if(!text||busy)return;
-  busy=true;chips.innerHTML='';
+  busy=true;chips.innerHTML='';input.value='';
   addMsg('user',text.replace(/</g,'&lt;'));
   var tp=document.createElement('div');tp.className='pw-typing';tp.innerHTML='<i></i><i></i><i></i>';
   msgs.appendChild(tp);msgs.scrollTop=msgs.scrollHeight;
