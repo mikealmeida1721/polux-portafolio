@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Torque Taller — Diseño demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TORQUE — concepto: entrar al taller donde nada falla.
+   Paleta: negro + gris acero + amarillo seguridad.
+   Motion: rotación MECÁNICA — engranajes a distintas
+   velocidades, agujas que suben con clic sólido, reveals
+   secos y precisos, sin rebotes blandos.
+   ============================================================ */
+:root{
+  --logo: "";
+  --fondo:#111111; --fondo2:#1a1c1e; --tarjeta:#222527; --borde:#3a3f44;
+  --acento:#ffc400; --acento2:#8a9299;
+  --texto:#f2f2f2; --muted:#a9aeb3;
+  --fuente-titular: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --fuente-cuerpo: "IBM Plex Sans", system-ui, sans-serif;
+  --mecanico: cubic-bezier(.3,1.15,.35,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo);line-height:1.6;overflow-x:hidden}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+::selection{background:var(--acento);color:#111}
+/* Distintivos */
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#111;background:var(--acento);border-radius:999px;padding:5px 14px;opacity:.95;font-weight:700}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:var(--tarjeta);border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.volver:hover{color:var(--acento);border-color:var(--acento)}
+/* Header */
+header.site{background:var(--fondo);border-bottom:3px solid var(--acento);position:sticky;top:0;z-index:50;padding-top:44px}
+.bar{display:flex;align-items:center;gap:14px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--texto)}
+.logo-slot{width:48px;height:48px;border-radius:4px;border:2px solid var(--acento);background:var(--logo) center/contain no-repeat,var(--tarjeta);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--acento);font-size:1.4rem;font-family:var(--fuente-titular)}
+.brand b{font-family:var(--fuente-titular);font-size:1.5rem;letter-spacing:.1em;text-transform:uppercase}
+.brand b em{font-style:normal;color:var(--acento)}
+.brand small{display:block;font-size:.62rem;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;font-family:var(--fuente-cuerpo)}
+nav.menu{margin-left:auto;display:flex;gap:22px;font-size:.92rem;align-items:center}
+nav.menu a{color:var(--muted);text-decoration:none;text-transform:uppercase;font-size:.8rem;letter-spacing:.1em;font-weight:600}
+nav.menu a:hover{color:var(--acento)}
+/* Botones = clic sólido */
+.btn{display:inline-block;background:var(--acento);color:var(--fondo);font-weight:700;text-decoration:none;padding:14px 34px;border:none;cursor:pointer;font-size:.95rem;font-family:var(--fuente-cuerpo);letter-spacing:.14em;text-transform:uppercase;box-shadow:0 4px 0 color-mix(in srgb,var(--acento) 55%,black);transition:transform .06s,box-shadow .06s,background .15s}
+.btn:hover{background:#ffd233}
+.btn:active{transform:translateY(4px);box-shadow:0 0 0 transparent}
+.btn.ghost{background:transparent;color:var(--acento);box-shadow:inset 0 0 0 2px var(--acento)}
+.btn.ghost:hover{background:var(--acento);color:#111;box-shadow:inset 0 0 0 2px var(--acento)}
+.btn.ghost:active{transform:translateY(4px)}
+/* Franja de seguridad: firma repetida */
+.franja{height:14px;background:repeating-linear-gradient(-45deg,var(--acento) 0 22px,var(--fondo) 22px 44px)}
+/* Hero con engranajes */
+.hero{position:relative;padding:110px 0 100px;overflow:hidden;background:linear-gradient(180deg,var(--fondo2),var(--fondo))}
+.engranajes{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:.5}
+.gear{position:absolute;color:var(--borde)}
+.gear path,.gear circle{stroke:currentColor}
+.gear.amarillo{color:var(--acento);opacity:.28}
+@keyframes giro{to{transform:rotate(360deg)}}
+@keyframes giroInv{to{transform:rotate(-360deg)}}
+.g1{width:340px;top:-90px;right:-70px;animation:giro 26s linear infinite}
+.g2{width:210px;top:120px;right:190px;animation:giroInv 18s linear infinite}
+.g3{width:150px;bottom:-40px;left:-30px;animation:giro 14s linear infinite}
+.g4{width:110px;bottom:60px;left:170px;animation:giroInv 10s linear infinite}
+.hero .wrap{position:relative}
+.kicker{display:inline-block;font-size:.74rem;letter-spacing:.34em;text-transform:uppercase;color:var(--fondo);background:var(--acento);padding:7px 18px;margin-bottom:26px;font-weight:700}
+.hero h1{font-family:var(--fuente-titular);font-weight:700;font-size:clamp(3.4rem,12vw,7.6rem);line-height:.95;text-transform:uppercase;letter-spacing:.02em}
+.hero h1 .amarillo{color:var(--acento)}
+.hero p.lead{max-width:600px;margin:24px auto 34px;color:var(--muted);font-size:1.06rem}
+.hero .ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+/* Tablero: medidores de torque */
+.tablero{display:flex;gap:22px;justify-content:center;margin-top:54px;flex-wrap:wrap}
+.medidor{text-align:center}
+.medidor .valor{font-family:var(--fuente-titular);font-size:2rem;color:var(--acento);font-weight:700}
+.medidor span{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.aguja-wrap{width:120px;height:70px;margin:0 auto 6px;position:relative;overflow:hidden}
+.aguja{position:absolute;left:50%;bottom:0;width:4px;height:56px;background:var(--acento);transform-origin:50% 100%;transform:translateX(-50%) rotate(-90deg);transition:transform 1.4s var(--mecanico)}
+/* Reveals secos: sin rebote, entrada mecánica */
+.revel{opacity:0;transform:translateY(26px);transition:opacity .45s ease,transform .5s var(--mecanico)}
+.revel.on{opacity:1;transform:none}
+/* Secciones */
+section.bloque{padding:76px 0}
+h2.sec{font-family:var(--fuente-titular);font-size:clamp(2.4rem,6vw,3.6rem);text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px;text-align:center;line-height:1}
+h2.sec .amarillo{color:var(--acento)}
+p.sub{color:var(--muted);margin-bottom:40px;max-width:620px;text-align:center;margin-left:auto;margin-right:auto}
+/* Servicios */
+.servs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.serv{background:var(--tarjeta);border:1px solid var(--borde);border-top:6px solid var(--acento);padding:32px 28px;position:relative;transition:transform .12s var(--mecanico)}
+.serv:hover{transform:translateY(-5px)}
+.serv .ico{width:56px;height:56px;margin-bottom:18px;color:var(--acento)}
+.serv .ico svg{width:100%;height:100%}
+.serv h3{font-family:var(--fuente-titular);font-size:1.7rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.serv p{color:var(--muted);font-size:.93rem;margin-bottom:16px}
+.serv .desde{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.serv .desde b{color:var(--acento);font-family:var(--fuente-titular);font-size:1.3rem;letter-spacing:.04em}
+/* Proceso */
+.pasos{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;counter-reset:paso}
+.paso{background:var(--tarjeta);border:1px solid var(--borde);padding:28px 22px;position:relative;counter-increment:paso}
+.paso::before{content:"0" counter(paso);display:block;font-family:var(--fuente-titular);font-size:2.6rem;font-weight:700;color:var(--acento);line-height:1;margin-bottom:10px}
+.paso h3{font-family:var(--fuente-titular);font-size:1.25rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.paso p{color:var(--muted);font-size:.9rem}
+.paso:not(:last-child)::after{content:"›";position:absolute;right:-16px;top:50%;transform:translateY(-50%);font-size:1.8rem;color:var(--acento);z-index:2}
+/* Testimonios */
+.testis{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.testi{background:var(--tarjeta);border:1px solid var(--borde);border-left:6px solid var(--acento);padding:28px}
+.testi .stars{color:var(--acento);margin-bottom:10px;letter-spacing:.15em}
+.testi p{font-size:1rem;margin-bottom:12px}
+.testi footer{font-size:.85rem;color:var(--muted)}
+/* Cotización */
+.cotiza{background:var(--fondo2);border:1px solid var(--borde);border-top:6px solid var(--acento);padding:48px 36px;max-width:760px;margin:0 auto}
+.cotiza h3{font-family:var(--fuente-titular);font-size:2.1rem;text-transform:uppercase;text-align:center;margin-bottom:8px}
+.cotiza h3 .amarillo{color:var(--acento)}
+.cotiza>p{text-align:center;color:var(--muted);margin-bottom:26px}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.campo.full{grid-column:1/-1}
+.campo label{display:block;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.campo select,.campo input,.campo textarea{width:100%;padding:13px;border:1px solid var(--borde);font-size:1rem;background:var(--fondo);color:var(--texto);font-family:inherit;border-radius:0}
+.campo select:focus,.campo input:focus,.campo textarea:focus{outline:none;border-color:var(--acento)}
+.campo textarea{resize:vertical;min-height:80px}
+#conf{display:none;background:var(--tarjeta);border:1px solid var(--acento);padding:20px;margin-top:18px;text-align:center}
+#conf strong{color:var(--acento)}
+/* Info */
+.info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.info .card{background:var(--tarjeta);border:1px solid var(--borde);padding:28px;text-align:center}
+.info h3{font-family:var(--fuente-titular);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;color:var(--acento)}
+.info p{color:var(--muted)}
+.info a{color:var(--texto);font-weight:700}
+/* Chat demo */
+#chatBtn{position:fixed;bottom:22px;right:22px;z-index:99;width:60px;height:60px;border-radius:50%;background:var(--acento);color:var(--fondo);border:none;font-size:1.6rem;cursor:pointer;box-shadow:0 4px 0 color-mix(in srgb,var(--acento) 55%,black)}
+#chatBtn:active{transform:translateY(4px);box-shadow:none}
+#chatPanel{position:fixed;bottom:96px;right:22px;z-index:99;width:330px;max-width:calc(100vw - 44px);background:var(--tarjeta);border:1px solid var(--borde);box-shadow:0 18px 50px rgba(0,0,0,.5);display:none;overflow:hidden}
+#chatPanel.open{display:block}
+#chatPanel .chead{background:var(--acento);color:#111;padding:14px 18px;font-weight:700;font-family:var(--fuente-titular);letter-spacing:.08em;text-transform:uppercase;font-size:1.05rem}
+#chatPanel .chead small{display:block;font-weight:400;font-size:.75rem;font-family:var(--fuente-cuerpo);text-transform:none;letter-spacing:0}
+#chatBody{padding:16px;height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--fondo)}
+.msg{max-width:85%;padding:10px 14px;font-size:.9rem}
+.msg.in{background:var(--tarjeta);border:1px solid var(--borde);align-self:flex-start}
+.msg.out{background:var(--acento);color:var(--fondo);align-self:flex-end;font-weight:600}
+.quick{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 8px;background:var(--fondo)}
+.quick button{border:1px solid var(--acento);background:var(--tarjeta);color:var(--texto);padding:7px 14px;font-size:.82rem;cursor:pointer;font-weight:600}
+.quick button:active{transform:translateY(2px)}
+.chead2{padding:10px 16px;background:var(--fondo);font-size:.72rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+footer.site{background:color-mix(in srgb,var(--fondo) 55%,black);border-top:3px solid var(--acento);padding:38px 0;text-align:center;font-size:.9rem;color:var(--muted)}
+footer.site a{color:var(--acento)}
+@media(max-width:900px){
+  .servs,.testis,.info{grid-template-columns:1fr}
+  .pasos{grid-template-columns:1fr 1fr}
+  .paso:not(:last-child)::after{display:none}
+  .campos{grid-template-columns:1fr}
+  nav.menu a:not(.btn){display:none}
+  .g2{right:60px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .revel{opacity:1;transform:none}
+  .aguja{transform:translateX(-50%) rotate(var(--g,0deg))!important}
+  html{scroll-behavior:auto}
+}
+</style>
+<noscript><style>.revel{opacity:1!important;transform:none!important}.aguja{transform:translateX(-50%) rotate(0deg)!important}</style></noscript>
+</head>
+<body>
+<div class="demo-badge">Diseño demo</div>
+<a class="volver" href="../index.html">← Portafolio</a>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#">
+      <span class="logo-slot" data-logo>T</span>
+      <span><b data-nombre>TORQUE <em>TALLER</em></b><small data-tagline>Mecánica de precisión</small></span>
+    </a>
+    <nav class="menu">
+      <a href="#servicios">Servicios</a>
+      <a href="#proceso">Proceso</a>
+      <a href="#contacto">Contacto</a>
+      <a class="btn" href="#cotizar" style="padding:10px 24px">Cotizar</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="engranajes" aria-hidden="true">
+    <svg class="gear g1 amarillo" viewBox="0 0 200 200"><circle cx="100" cy="100" r="72" fill="none" stroke-width="26" stroke-dasharray="20 13.5"/><circle cx="100" cy="100" r="58" fill="currentColor" opacity=".16"/><circle cx="100" cy="100" r="24" fill="none" stroke-width="8"/></svg>
+    <svg class="gear g2" viewBox="0 0 200 200"><circle cx="100" cy="100" r="72" fill="none" stroke-width="26" stroke-dasharray="20 13.5"/><circle cx="100" cy="100" r="58" fill="currentColor" opacity=".16"/><circle cx="100" cy="100" r="24" fill="none" stroke-width="8"/></svg>
+    <svg class="gear g3" viewBox="0 0 200 200"><circle cx="100" cy="100" r="72" fill="none" stroke-width="26" stroke-dasharray="20 13.5"/><circle cx="100" cy="100" r="58" fill="currentColor" opacity=".16"/><circle cx="100" cy="100" r="24" fill="none" stroke-width="8"/></svg>
+    <svg class="gear g4 amarillo" viewBox="0 0 200 200"><circle cx="100" cy="100" r="72" fill="none" stroke-width="26" stroke-dasharray="20 13.5"/><circle cx="100" cy="100" r="58" fill="currentColor" opacity=".16"/><circle cx="100" cy="100" r="24" fill="none" stroke-width="8"/></svg>
+  </div>
+  <div class="wrap" style="text-align:center">
+    <div class="kicker">Taller mecánico · Diagnóstico electrónico</div>
+    <h1>Tu carro en <span class="amarillo">buenas manos</span></h1>
+    <p class="lead">Diagnóstico electrónico preciso, repuestos de calidad y precio claro antes de tocar una tuerca. Sin sorpresas en la factura.</p>
+    <div class="ctas">
+      <a class="btn" href="#cotizar">Pedir cotización</a>
+      <a class="btn ghost" href="#servicios">Ver servicios</a>
+    </div>
+    <div class="tablero">
+      <div class="medidor">
+        <div class="aguja-wrap"><svg viewBox="0 0 120 70" style="position:absolute;inset:0"><path d="M10 65 A50 50 0 0 1 110 65" fill="none" style="stroke:var(--borde)" stroke-width="8"/></svg><div class="aguja" data-g="98"></div></div>
+        <div class="valor"><span class="cuenta" data-n="98">98</span>%</div><span>Diagnóstico certero</span>
+      </div>
+      <div class="medidor">
+        <div class="aguja-wrap"><svg viewBox="0 0 120 70" style="position:absolute;inset:0"><path d="M10 65 A50 50 0 0 1 110 65" fill="none" style="stroke:var(--borde)" stroke-width="8"/></svg><div class="aguja" data-g="96"></div></div>
+        <div class="valor"><span class="cuenta" data-n="96">96</span>%</div><span>Entregas a tiempo</span>
+      </div>
+      <div class="medidor">
+        <div class="aguja-wrap"><svg viewBox="0 0 120 70" style="position:absolute;inset:0"><path d="M10 65 A50 50 0 0 1 110 65" fill="none" style="stroke:var(--borde)" stroke-width="8"/></svg><div class="aguja" data-g="24"></div></div>
+        <div class="valor"><span class="cuenta" data-n="24">24</span></div><span>Meses de garantía</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="franja" aria-hidden="true"></div>
+
+<section class="bloque" id="servicios" data-pieza="Servicios del taller">
+  <div class="wrap">
+    <h2 class="sec revel">Servicios de <span class="amarillo">precisión</span></h2>
+    <p class="sub revel">Tres especialidades, cero improvisación. Si no lo dejamos perfecto, no sale del taller.</p>
+    <div class="servs">
+      <div class="serv revel">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2"/><circle cx="12" cy="5.4" r="1" fill="currentColor"/><circle cx="17.7" cy="15.3" r="1" fill="currentColor"/><circle cx="6.3" cy="15.3" r="1" fill="currentColor"/></svg></div>
+        <h3>Frenos</h3>
+        <p>Pastillas, discos, líquido y ABS. Frenado firme y silencioso, medido en banco de pruebas.</p>
+        <div class="desde">Desde <b>$49</b></div>
+      </div>
+      <div class="serv revel">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="7" y="3" width="10" height="7" rx="1"/><path d="M12 10v4M9 14h6l1.5 7h-9z"/><path d="M4 7h3M17 7h3"/></svg></div>
+        <h3>Motor</h3>
+        <p>Afinación completa, distribución y reparación mayor con torque de fábrica en cada tornillo.</p>
+        <div class="desde">Desde <b>$89</b></div>
+      </div>
+      <div class="serv revel">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg></div>
+        <h3>Diagnóstico</h3>
+        <p>Escáner electrónico de última generación: encontramos la falla exacta, no adivinamos.</p>
+        <div class="desde">Desde <b>$29</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="franja" aria-hidden="true"></div>
+
+<section class="bloque" id="proceso" data-pieza="Proceso de trabajo" style="background:var(--fondo2)">
+  <div class="wrap">
+    <h2 class="sec revel">Así <span class="amarillo">trabajamos</span></h2>
+    <p class="sub revel">Un proceso mecánico: cada paso encaja con el siguiente, como un engranaje.</p>
+    <div class="pasos">
+      <div class="paso revel"><h3>Recepción</h3><p>Recibimos tu carro y escuchamos los síntomas contigo al volante.</p></div>
+      <div class="paso revel"><h3>Diagnóstico</h3><p>Escáner electrónico + inspección física. Falla exacta, sin adivinanzas.</p></div>
+      <div class="paso revel"><h3>Cotización clara</h3><p>Precio cerrado por escrito antes de tocar una tuerca. Tú apruebas.</p></div>
+      <div class="paso revel"><h3>Entrega probada</h3><p>Reparación con torque de fábrica, prueba de ruta y garantía.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque">
+  <div class="wrap">
+    <h2 class="sec revel">Clientes que <span class="amarillo">vuelven</span></h2>
+    <p class="sub revel">Testimonios de ejemplo para mostrar el formato.</p>
+    <div class="testis">
+      <div class="testi revel"><div class="stars">★★★★★</div><p>"Me dijeron el precio exacto antes de empezar y lo cumplieron al centavo. El carro quedó como nuevo."</p><footer>— Cliente de ejemplo · <span>Testimonio de ejemplo</span></footer></div>
+      <div class="testi revel"><div class="stars">★★★★★</div><p>"Tres talleres no encontraban la falla. Aquí el escáner la ubicó en 20 minutos y quedó resuelta el mismo día."</p><footer>— Cliente de ejemplo · <span>Testimonio de ejemplo</span></footer></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="cotizar" data-pieza="Cotización en línea" style="padding-top:0">
+  <div class="wrap">
+    <div class="cotiza revel">
+      <h3>Cotiza tu <span class="amarillo">reparación</span></h3>
+      <p>Cuéntanos qué le pasa a tu carro y te respondemos con precio estimado hoy mismo.</p>
+      <div class="campos">
+        <div class="campo"><label>Nombre</label><input type="text" id="cnom" placeholder="Tu nombre"></div>
+        <div class="campo"><label>Teléfono</label><input type="tel" id="ctel" placeholder="(555) 000-0000"></div>
+        <div class="campo"><label>Vehículo</label><input type="text" id="cveh" placeholder="Marca, modelo y año"></div>
+        <div class="campo"><label>Servicio</label><select id="cser"><option>Frenos</option><option>Motor</option><option>Diagnóstico electrónico</option><option>Otro</option></select></div>
+        <div class="campo full"><label>¿Qué le pasa?</label><textarea id="cdes" placeholder="Describe el síntoma: ruido, vibración, luz del tablero..."></textarea></div>
+      </div>
+      <div style="text-align:center"><button class="btn" id="cbtn">Enviar cotización</button></div>
+      <div id="conf"><strong>✓ Recibido (demo).</strong><br><span id="cres"></span><br><small style="color:var(--muted)">En tu página real, aquí llegaría la confirmación por SMS o WhatsApp.</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="contacto" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="sec revel">Pasa por el <span class="amarillo">taller</span></h2>
+    <p class="sub revel">Datos de ejemplo.</p>
+    <div class="info">
+      <div class="card revel"><h3>Dirección</h3><p>Avenida de ejemplo 789<br>Ciudad, Estado 00000</p></div>
+      <div class="card revel"><h3>Horario</h3><p>Lun – Vie · 8:00 AM – 6:00 PM<br>Sáb · 8:00 AM – 12:00 PM</p></div>
+      <div class="card revel"><h3>Escríbenos</h3><p><a href="https://wa.me/16093316652">WhatsApp directo</a><br>Tel: (555) 000-0000</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="pz-ideal" style="padding:60px 20px;text-align:center;border-top:3px solid var(--acento)">
+  <p style="max-width:640px;margin:0 auto;color:var(--muted);font-size:1.02rem;line-height:1.7"><strong style="color:var(--texto);font-size:1.15rem">¿Este estilo es para tu negocio?</strong><br>Ideal para talleres mecánicos, vulcanizadoras y servicios técnicos: servicios con precio, proceso de trabajo y cotizaciones en línea.</p>
+  <button onclick="var b=document.getElementById('pz-selfab');b&&b.click()" style="margin-top:18px;background:var(--acento);color:#111;border:none;padding:13px 30px;font-weight:700;cursor:pointer;font-size:.95rem;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 4px 0 color-mix(in srgb,var(--acento) 55%,black)">Verlo con mis colores</button>
+  <p style="margin-top:12px;font-size:.82rem;color:var(--muted)">Si te gustaron varios, los combinamos en tu página a medida.</p>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <p><strong>TORQUE TALLER</strong> · Taller mecánico de ejemplo · Contenido ficticio de demostración</p>
+    <p style="margin-top:8px">Diseño demo por <a href="../index.html">Polux</a> — caso de estudio · proyecto piloto.</p>
+  </div>
+</footer>
+
+<!-- Chat demo flotante -->
+<button id="chatBtn" aria-label="Abrir chat de demostración">💬</button>
+<div id="chatPanel" role="dialog" aria-label="Chat de demostración">
+  <div class="chead">Asistente Torque<small>Responde al instante · demo</small></div>
+  <div class="chead2">Prueba lo que un chatbot de Polux haría por tu taller</div>
+  <div id="chatBody"></div>
+  <div class="quick">
+    <button data-q="servicios">Servicios</button>
+    <button data-q="horario">Horario</button>
+    <button data-q="cotizar">Cotizar</button>
+  </div>
+</div>
+
+<script>
+// --- Medidores: agujas que suben con "clic mecánico" al entrar ---
+var io=new IntersectionObserver(function(es){
+  es.forEach(function(en){
+    if(!en.isIntersecting)return;
+    var t=en.target;
+    t.classList.add('on');
+    t.querySelectorAll('.aguja').forEach(function(a){
+      var v=+a.dataset.g, deg=-90+(v/100)*180;
+      a.style.setProperty('--g',deg+'deg');
+      requestAnimationFrame(function(){a.style.transform='translateX(-50%) rotate('+deg+'deg)'});
+    });
+    t.querySelectorAll('.cuenta').forEach(function(c){
+      if(c.dataset.done)return;c.dataset.done='1';
+      var n=+c.dataset.n,i=0;c.textContent='0';var paso=Math.max(1,Math.round(n/40));
+      var iv=setInterval(function(){i+=paso;if(i>=n){i=n;clearInterval(iv)}c.textContent=i;},30);
+    });
+    io.unobserve(t);
+  });
+},{threshold:.25});
+document.querySelectorAll('.revel,.hero').forEach(function(el){io.observe(el)});
+// --- Form demo ---
+document.getElementById('cbtn').addEventListener('click',function(){
+  var n=document.getElementById('cnom').value||'cliente de ejemplo';
+  var v=document.getElementById('cveh').value||'vehículo de ejemplo';
+  var s=document.getElementById('cser').value;
+  document.getElementById('cres').textContent=n+' · '+v+' · '+s;
+  document.getElementById('conf').style.display='block';
+});
+// --- Chat demo ---
+var panel=document.getElementById('chatPanel'),body=document.getElementById('chatBody');
+document.getElementById('chatBtn').addEventListener('click',function(){
+  panel.classList.toggle('open');
+  if(panel.classList.contains('open')&&!body.children.length)bot('¡Hola! Soy el asistente demo de Torque. Pregúntame por servicios, horario o pide tu cotización.');
+});
+function add(txt,cls){var m=document.createElement('div');m.className='msg '+cls;m.textContent=txt;body.appendChild(m);body.scrollTop=body.scrollHeight}
+function bot(t){setTimeout(function(){add(t,'in')},450)}
+var R={
+  servicios:'Frenos (desde $49), Motor (desde $89) y Diagnóstico electrónico (desde $29).',
+  horario:'Lun–Vie 8:00 AM–6:00 PM, Sáb 8:00 AM–12:00 PM.',
+  cotizar:'¡Perfecto! Llena el formulario de "Cotizar" con los datos de tu carro y te respondemos hoy mismo.'
+};
+document.querySelectorAll('.quick button').forEach(function(b){
+  b.addEventListener('click',function(){add(b.textContent,'out');bot(R[b.dataset.q])});
+});
+</script>
+<script src="../personalizar.js?v=3"></script>
+<script>window.POLUX_WA='16093316652';window.POLUX_CHAT={ac:'#ffc400',icon:'orbit',context:'demo',design:'Torque'};</script>
+<script src="../polux-chat.js?v=5"></script>
+<script src="../polux-piezas.js?v=5"></script>
+</body>
+</html>
