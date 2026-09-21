@@ -33,7 +33,7 @@ header.top h1 em{font-style:normal;color:var(--acento)}
   padding:8px 15px;font-size:.8rem;cursor:pointer;font-family:inherit;transition:all .15s}
 .fchip.on{border-color:var(--acento);background:rgba(168,85,247,.16);color:#fff;font-weight:700}
 .count{color:var(--muted);font-size:.82rem;margin:18px 0 6px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px;padding:6px 0 120px}
+.vacio{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}
 footer{border-top:1px solid var(--borde);padding:26px 0;color:var(--muted);font-size:.85rem;text-align:center}
 </style>
 </head>
@@ -61,7 +61,7 @@ footer{border-top:1px solid var(--borde);padding:26px 0;color:var(--muted);font-
 
 <div class="wrap">
   <p class="count" id="count"></p>
-  <div class="grid" id="grid"></div>
+  <div class="cb-grid" id="grid"></div>
 </div>
 
 <footer>
@@ -84,8 +84,10 @@ function render(){
   if(famSel!=='Todos'&&t.fam!==famSel)return;
   if(q){var hay=(t.nombre+' '+t.famLabel+' '+t.trLabel+' '+t.data.nicho).toLowerCase();if(hay.indexOf(q)<0)return}
   n++;
-  h+='<button class="cb-tile" data-id="'+t.id+'">'+UI.cardHTML(t)+
-     '<span class="cb-name">'+UI.esc(t.nombre)+'</span><span class="cb-sub">Recepcionista IA · '+UI.esc(t.trLabel)+'</span></button>';
+  h+='<button class="cb-bit" data-id="'+t.id+'">'+UI.bubbleHTML(t,-((n%10)*0.4).toFixed(2))+
+     '<span class="cb-bname">'+UI.esc(t.nombre)+'</span>'+
+     '<span class="cb-bfam">'+UI.esc(t.famLabel)+' · '+UI.esc(t.trLabel)+'</span>'+
+     '<span class="cb-bdemo">DEMO</span></button>';
  });
  grid.innerHTML=h||'<div class="vacio">Sin resultados para esa búsqueda.</div>';
  countEl.textContent='Mostrando '+n+' de '+THEMES.length+' diseños';
