@@ -152,6 +152,15 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
   font-size:1.5rem;color:#fff;background:rgba(10,10,12,.5);opacity:0;transition:opacity .15s;pointer-events:none}
 .n-tile.sel{box-shadow:0 8px 20px rgba(0,0,0,.5),0 0 0 2px #A855F7,inset 0 0 0 1px rgba(255,255,255,.09)}
 .n-tile.sel .n-pick{opacity:1}
+/* ===== Vista previa de logo (nube) ===== */
+.om.lp{max-width:380px;text-align:center}
+.lp-art{width:200px;height:200px;margin:8px auto 16px;border-radius:24px;overflow:hidden;box-shadow:0 14px 36px rgba(0,0,0,.55)}
+.lp-art svg{width:100%;height:100%;display:block}
+.lp-name{font-size:1.3rem;margin-bottom:2px}
+.lp-fam{color:var(--muted);font-size:.86rem;margin-bottom:20px}
+.lp-fav{display:block;width:100%;background:var(--acento);color:#0A0A0C;font-weight:800;border:none;border-radius:999px;padding:14px;font-size:1rem;cursor:pointer;margin-bottom:12px;font-family:inherit}
+.lp-fav.on{background:#2a2a35;color:#fff;box-shadow:inset 0 0 0 1px var(--acento)}
+.lp-cat{display:inline-block;color:var(--acento);font-size:.92rem;text-decoration:none}
 
 /* reveal */
 .rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
@@ -263,6 +272,16 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
     </div>
     <button class="om-send" id="omSend">Pedir cotización por WhatsApp →</button>
     <p class="om-note">Al enviar se abre WhatsApp con tu selección lista. Te armamos un paquete a tu medida.</p>
+  </div>
+</div>
+<div class="om-back" id="lpBack">
+  <div class="om lp" role="dialog" aria-modal="true" aria-label="Vista previa del logotipo">
+    <button class="om-x" id="lpX" aria-label="Cerrar">✕</button>
+    <div class="lp-art" id="lpArt"></div>
+    <h3 class="lp-name" id="lpName"></h3>
+    <p class="lp-fam" id="lpFam"></p>
+    <button class="lp-fav" id="lpFav" type="button">✦ Marcar como favorito</button>
+    <a class="lp-cat" href="logos.html">Ver en catálogo completo →</a>
   </div>
 </div>
 <div class="tray" id="tray" role="status" aria-live="polite">
@@ -515,7 +534,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     window.LOGOS.slice(ri*per,(ri+1)*per).forEach(function(l){
       var b=document.createElement('button');
       b.type='button';b.className='n-tile'+(sel[l.id]?' sel':'');b.setAttribute('data-logo',l.id);
-      b.setAttribute('aria-label','Elegir logo '+l.nombre);
+      b.setAttribute('aria-label','Ver logo '+l.nombre);
       b.setAttribute('aria-pressed',sel[l.id]?'true':'false');
       b.innerHTML='<span class="n-art">'+l.svg+'</span><span class="n-pick">'+(sel[l.id]?'✓':'✦')+'</span>';
       strip.appendChild(b);
@@ -529,9 +548,39 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
       var p=el.querySelector('.n-pick');if(p)p.textContent=on?'✓':'✦';
     });
   }
+  function findLogo(id){
+    for(var i=0;i<window.LOGOS.length;i++)if(window.LOGOS[i].id===id)return window.LOGOS[i];
+    return null;
+  }
+  /* ===== Vista previa: el tap abre el modal, ya no selecciona directo ===== */
+  var lpBack=document.getElementById('lpBack'),lpArt=document.getElementById('lpArt'),
+      lpName=document.getElementById('lpName'),lpFam=document.getElementById('lpFam'),
+      lpFav=document.getElementById('lpFav'),lpId=null;
+  function paintFavBtn(){
+    var on=!!sel[lpId];
+    lpFav.textContent=on?'✓ Favorito':'✦ Marcar como favorito';
+    lpFav.classList.toggle('on',on);
+  }
+  function openPreview(id){
+    var l=findLogo(id);if(!l)return;
+    lpId=id;lpArt.innerHTML=l.svg;lpName.textContent=l.nombre;
+    lpFam.textContent=(l.famLabel||'')+(l.nicho?' · '+l.nicho:'');
+    paintFavBtn();lpBack.classList.add('open');
+    states.forEach(function(st){st.paused=true;clearTimeout(st.resumeT)}); /* congelar la deriva */
+    document.body.style.overflow='hidden';
+  }
+  function closePreview(){
+    if(!lpBack.classList.contains('open'))return;
+    lpBack.classList.remove('open');lpId=null;
+    states.forEach(function(st){st.paused=false}); /* reanudar la deriva */
+    document.body.style.overflow='';
+  }
+  lpFav.addEventListener('click',function(){if(lpId){toggle(lpId);paintFavBtn()}});
+  document.getElementById('lpX').addEventListener('click',closePreview);
+  lpBack.addEventListener('click',function(e){if(e.target===lpBack)closePreview()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closePreview()});
   function toggle(id){
-    var l=null,i;
-    for(i=0;i<window.LOGOS.length;i++)if(window.LOGOS[i].id===id){l=window.LOGOS[i];break}
+    var l=findLogo(id);
     if(!l)return;
     if(sel[id])delete sel[id];else sel[id]=1;
     var arr=Object.keys(sel).map(function(sid){
@@ -592,7 +641,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     st.strip.addEventListener('click',function(e){
       var t=e.target&&e.target.closest?e.target.closest('.n-tile'):null;if(!t)return;
       if(Math.hypot(e.clientX-st.downX,e.clientY-st.downY)>10)return; /* fue arrastre, no tap */
-      toggle(t.getAttribute('data-logo'));
+      openPreview(t.getAttribute('data-logo'));
     });
   });
   var visible=true,last=performance.now(),SPEED=40;
