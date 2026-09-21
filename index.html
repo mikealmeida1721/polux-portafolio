@@ -184,6 +184,61 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
 .combo>small{display:block;color:var(--muted);font-size:.76rem;margin-bottom:8px;line-height:1.4}
 .combo .cb-caps{display:flex;flex-wrap:wrap;gap:6px}
 .combo .cb-caps span{font-size:.7rem;background:rgba(168,85,247,.14);border:1px solid rgba(168,85,247,.35);border-radius:999px;padding:4px 10px;color:#e9e4f7}
+/* ===== Demos animadas de sistemas (se abren al tocar un sistema ejemplo) ===== */
+.demo-back{position:fixed;inset:0;z-index:210;background:rgba(5,5,10,.82);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:16px}
+.demo-back.open{display:flex}
+.demo{background:#15151d;border:1px solid var(--acento);border-radius:22px;max-width:430px;width:100%;max-height:92vh;overflow-y:auto;padding:22px 20px;position:relative;text-align:center}
+.demo-x{position:absolute;top:10px;right:14px;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;z-index:2}
+.demo .cb-k{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acento);font-weight:700}
+.demo h3{font-size:1.35rem;margin:6px 0 4px}
+.demo-desc{color:var(--muted);font-size:.86rem;margin-bottom:14px;line-height:1.5}
+.phone{width:272px;height:470px;margin:0 auto;background:#0b0b10;border:1px solid #2c2c38;border-radius:34px;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 0 6px #101016;text-align:left}
+.phone .notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:96px;height:22px;background:#000;border-radius:12px;z-index:5}
+.ph-body{position:absolute;inset:0;padding:46px 12px 12px;overflow:hidden;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:84%;padding:9px 12px;border-radius:14px;font-size:.78rem;line-height:1.4;opacity:0;transform:translateY(8px);animation:msgIn .3s forwards}
+@keyframes msgIn{to{opacity:1;transform:none}}
+.msg.c{align-self:flex-end;background:var(--acento);color:#0A0A0C;border-bottom-right-radius:4px;font-weight:600}
+.msg.b{align-self:flex-start;background:#1e1e29;color:#f4f2fa;border-bottom-left-radius:4px}
+.ag-row{display:flex;gap:10px;align-items:center;background:#14141c;border:1px solid var(--borde);border-radius:12px;padding:10px 12px;font-size:.76rem}
+.ag-row .t{color:var(--acento);font-weight:800;flex:none}
+.ag-row.new{border-color:var(--acento);animation:agNew .6s}
+@keyframes agNew{0%{transform:scale(.94);background:rgba(168,85,247,.28)}100%{transform:scale(1)}}
+.ag-tag{margin-left:auto;font-size:.66rem;background:rgba(168,85,247,.18);border-radius:999px;padding:3px 9px;color:#e9e4f7;flex:none}
+.pn{background:#1c1c26;border:1px solid #33333f;border-radius:14px;padding:10px 12px;font-size:.74rem;display:flex;gap:10px;align-items:center;transform:translateY(-160%);animation:pnDrop .45s cubic-bezier(.2,.9,.3,1.2) forwards;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+@keyframes pnDrop{to{transform:none}}
+.pn .dot{width:34px;height:34px;border-radius:10px;background:var(--acento);flex:none;display:flex;align-items:center;justify-content:center;color:#0A0A0C;font-weight:800}
+.st-row{background:#14141c;border:1px solid var(--borde);border-radius:12px;padding:10px 12px;font-size:.76rem}
+.st-row .top{display:flex;align-items:center;gap:10px}
+.st-row .q{margin-left:auto;font-weight:800;color:var(--acento);font-size:.9rem}
+.st-row .bar{height:6px;background:#24242f;border-radius:4px;overflow:hidden;margin-top:8px}
+.st-row .bar i{display:block;height:100%;background:var(--acento);border-radius:4px;transition:width .8s}
+.inv{background:#14141c;border:1px solid var(--borde);border-radius:14px;padding:14px;font-size:.76rem;position:relative;overflow:hidden}
+.inv .ln{display:flex;justify-content:space-between;padding:5px 0;color:var(--muted)}
+.inv .ln b{color:#fff}
+.inv .tot{display:flex;justify-content:space-between;border-top:1px dashed #33333f;margin-top:8px;padding-top:10px;font-weight:800;font-size:.95rem}
+.inv .stamp{position:absolute;right:12px;top:42%;transform:rotate(-12deg) scale(2.4);border:2px solid #34d399;color:#34d399;border-radius:8px;padding:5px 12px;font-weight:800;letter-spacing:.1em;opacity:0;font-size:.8rem}
+.inv .stamp.show{animation:stampIn .35s cubic-bezier(.2,1.4,.4,1) forwards}
+@keyframes stampIn{to{opacity:1;transform:rotate(-12deg) scale(1)}}
+.big-num{font-size:2.1rem;font-weight:800;color:#fff}
+.big-lab{font-size:.72rem;color:var(--muted);margin-bottom:4px}
+.bars{display:flex;align-items:flex-end;gap:8px;height:104px;margin-top:10px}
+.bars i{flex:1;background:linear-gradient(to top,var(--acento),#7c3aed);border-radius:6px 6px 3px 3px;transform-origin:bottom;animation:barUp .7s cubic-bezier(.2,.9,.3,1.15) backwards}
+@keyframes barUp{from{transform:scaleY(0)}}
+.tm-row{display:flex;align-items:center;gap:10px;background:#14141c;border:1px solid var(--borde);border-radius:12px;padding:10px 12px;font-size:.78rem;transition:opacity .4s}
+.tm-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--acento),#7c3aed);flex:none;display:flex;align-items:center;justify-content:center;font-weight:800;color:#0A0A0C;font-size:.8rem}
+.tm-role{margin-left:auto;font-size:.66rem;background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.4);color:#a7f3d0;border-radius:999px;padding:3px 10px;flex:none}
+.pd{background:#14141c;border:1px solid var(--borde);border-radius:12px;padding:10px;display:flex;gap:10px;align-items:center;font-size:.76rem;opacity:0;transform:translateY(8px);animation:msgIn .35s forwards}
+.pd .sw{width:44px;height:44px;border-radius:10px;flex:none}
+.pd .pr{margin-left:auto;color:var(--acento);font-weight:800;flex:none}
+.demo-cap{min-height:3.4em;color:#e9e4f7;font-size:.92rem;line-height:1.55;margin:14px 4px 10px}
+.demo-dots{display:flex;gap:8px;justify-content:center;margin-bottom:14px}
+.demo-dots button{width:8px;height:8px;border-radius:50%;border:0;background:#33333f;cursor:pointer;padding:0}
+.demo-dots button.on{background:var(--acento);transform:scale(1.25)}
+.demo-cta{display:flex;flex-direction:column;gap:10px}
+.demo-cta .btn{width:100%;background:var(--acento);color:#0A0A0C;border:none;border-radius:999px;padding:14px;font-weight:800;font-size:1rem;cursor:pointer;font-family:inherit}
+.demo-cta .btn.done{background:#1d1d28;color:#fff;box-shadow:inset 0 0 0 1px var(--acento)}
+.demo-replay{background:none;border:1px solid var(--borde);color:var(--muted);border-radius:999px;padding:10px;cursor:pointer;font-family:inherit;font-size:.85rem}
+.demo-replay:hover{border-color:var(--acento);color:#fff}
 @media(max-width:620px){.sis-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* ===== CTA final ===== */
@@ -1160,31 +1215,8 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
       set:function(v){ta.value=v||'';try{localStorage.setItem(KEY,ta.value);}catch(e){}}
     };
   })();
-  /* Combos de ejemplo: un toque marca las capacidades del sistema */
-  (function(){
-    var box=document.getElementById('sisCombos');if(!box)return;
-    var COMBOS=[
-      ['Para restaurantes','Recibe reservas solo, sin llamadas',['Citas y agenda','Recordatorios automáticos','Catálogo de productos']],
-      ['Para tiendas y talleres','Stock, cobros y clientes en orden',['Control de inventario','Facturación','Base de clientes']],
-      ['Para equipos','Cada quien ve lo suyo, tú ves todo',['Roles y permisos','Reportes y métricas','Recordatorios automáticos']]
-    ];
-    var toastEl=document.getElementById('toast'),toastT=null;
-    function miniSay(m){if(!toastEl)return;toastEl.textContent=m;toastEl.classList.add('show');
-      clearTimeout(toastT);toastT=setTimeout(function(){toastEl.classList.remove('show')},2600);}
-    COMBOS.forEach(function(cb){
-      var el=document.createElement('button');
-      el.type='button';el.className='combo';
-      el.innerHTML='<span class="cb-k">Sistema ejemplo</span><b>'+cb[0]+'</b><small>'+cb[1]+'</small>'+
-        '<span class="cb-caps">'+cb[2].map(function(x){return '<span>'+x+'</span>'}).join('')+'</span>';
-      el.addEventListener('click',function(){
-        var sel=window.PoluxSis.load(),added=0;
-        cb[2].forEach(function(x){if(sel.indexOf(x)<0){sel.push(x);added++;}});
-        window.PoluxSis.save(sel);paint();
-        miniSay(added?('Combo "'+cb[0]+'" marcado ✦ — entra en tu cotización'):'Ese combo ya estaba marcado ✦');
-      });
-      box.appendChild(el);
-    });
-  })();
+  /* Los combos con demo animada se generan en el bloque "Demos de sistemas" al final */
+  window.PoluxSis.paint=paint;
   paint();
   document.getElementById('ctaSis').addEventListener('click',function(){window.PoluxOrder.open()});
   document.getElementById('ctaQuote').addEventListener('click',function(){window.PoluxOrder.open()});
@@ -1392,5 +1424,224 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
 </script>
 <script>window.POLUX_WA='16093316652';window.POLUX_CHAT={ac:'#A855F7',icon:'spark',context:'hub'};</script>
 <script src="polux-chat.js?v=6"></script>
+<div class="demo-back" id="demoBack">
+  <div class="demo" role="dialog" aria-modal="true" aria-label="Demo de sistema">
+    <button class="demo-x" id="demoX" aria-label="Cerrar">✕</button>
+    <span class="cb-k">Sistema ejemplo · demo en vivo</span>
+    <h3 id="demoTitle"></h3>
+    <p class="demo-desc" id="demoDesc"></p>
+    <div class="phone"><span class="notch"></span><div class="ph-body" id="demoPhoneBody"></div></div>
+    <p class="demo-cap" id="demoCap"></p>
+    <div class="demo-dots" id="demoDots"></div>
+    <div class="demo-cta">
+      <button class="btn" id="demoWant" type="button">Quiero este sistema ✦</button>
+      <button class="demo-replay" id="demoReplay" type="button">↻ Ver de nuevo</button>
+    </div>
+  </div>
+</div>
+<script>
+/* Demos animadas de sistemas: 20 sistemas ejemplo; al tocar uno se abre su demo en vivo */
+(function(){
+var SYSDEMOS=[
+{t:'Para restaurantes',d:'Recibe reservas solo, sin llamadas',caps:['Citas y agenda','Recordatorios automáticos','Catálogo de productos'],steps:[
+ {s:'chat',ms:5600,cap:'Son las 11pm. Un cliente escribe por WhatsApp…',d:{msgs:[['c','Hola, ¿tienen mesa para 2 mañana a las 8?'],['b','¡Hola! Sí ✅ Mesa para 2, mañana 8:00pm. ¿A nombre de quién?'],['c','Ana Martínez'],['b','Listo, Ana. Te esperamos 🍽️']]}},
+ {s:'agenda',ms:4200,cap:'…y la reserva cae sola en la agenda. Nadie la anotó.',d:{items:[['6:00pm','Carlos — 4 personas'],['8:00pm','Ana Martínez — 2 personas']],hi:1}},
+ {s:'notif',ms:4200,cap:'Al día siguiente, el sistema le recuerda por ti.',d:{title:'Recordatorio enviado',body:'SMS a Ana: tu mesa es hoy a las 8:00pm'}}]},
+{t:'Para tiendas y talleres',d:'Stock, cobros y clientes en orden',caps:['Control de inventario','Facturación','Base de clientes'],steps:[
+ {s:'stock',ms:4400,cap:'Cada venta descuenta sola del inventario.',d:{rows:[['Aceite 5W-30',12,11],['Filtro de aire',8,7],['Pastillas de freno',15,14]]}},
+ {s:'invoice',ms:4800,cap:'La factura sale sola, con el total exacto.',d:{lines:[['Cambio de aceite','45'],['Filtro de aire','18']],total:63}},
+ {s:'stats',ms:4400,cap:'Y al cerrar: tus números claros, sin Excel.',d:{label:'Ventas de hoy',pre:'$',num:1240,dec:0,suf:'',bars:[40,65,50,80,70,95]}}]},
+{t:'Para equipos',d:'Cada quien ve lo suyo, tú ves todo',caps:['Roles y permisos','Reportes y métricas','Base de clientes'],steps:[
+ {s:'team',ms:4400,cap:'Cada quien entra con su rol. Nadie ve de más.',d:{members:[['Ana','Caja'],['Luis','Técnico'],['Marta','Admin']]}},
+ {s:'stats',ms:4400,cap:'Tú ves el negocio completo en una pantalla.',d:{label:'Citas esta semana',pre:'',num:48,dec:0,suf:'',bars:[45,60,55,75,68,90]}},
+ {s:'notif',ms:4200,cap:'Y el lunes, el resumen te llega solo.',d:{title:'Reporte semanal listo',body:'48 citas · $3,240 cobrados · 0 inasistencias'}}]},
+{t:'Para barberías',d:'Agenda llena sin contestar mensajes',caps:['Citas y agenda','Recordatorios automáticos','Base de clientes'],steps:[
+ {s:'chat',ms:5600,cap:'Un cliente escribe mientras estás cortando…',d:{msgs:[['c','¿Tienes corte mañana a las 5?'],['b','¡De una! Mañana 5:00pm con Diego ✂️ ¿Tu nombre?'],['c','Jeison'],['b','Listo Jeison, nos vemos mañana 💈']]}},
+ {s:'agenda',ms:4200,cap:'…y queda agendado sin que sueltes la máquina.',d:{items:[['5:00pm','Jeison — Corte + barba'],['6:00pm','Marcos — Corte']],hi:0}},
+ {s:'notif',ms:4200,cap:'El sistema le recuerda. Cero sillas vacías.',d:{title:'Recordatorio enviado',body:'WhatsApp a Jeison: tu corte es hoy a las 5pm'}}]},
+{t:'Para clínicas dentales',d:'Cero llamadas, cero ausencias',caps:['Citas y agenda','Recordatorios automáticos','Facturación'],steps:[
+ {s:'chat',ms:5200,cap:'La paciente agenda sin llamar a recepción.',d:{msgs:[['c','Necesito una limpieza'],['b','Tengo jueves 10am o viernes 4pm 🦷'],['c','Jueves 10'],['b','Agendada ✅ Te recordamos un día antes']]}},
+ {s:'notif',ms:4200,cap:'El recordatorio automático evita el hueco.',d:{title:'Recordatorio enviado',body:'SMS: tu limpieza es mañana a las 10:00am'}},
+ {s:'invoice',ms:4400,cap:'Y el cobro queda registrado al salir.',d:{lines:[['Limpieza dental','80']],total:80}}]},
+{t:'Para talleres mecánicos',d:'Órdenes, repuestos y cobros sin papel',caps:['Citas y agenda','Control de inventario','Facturación'],steps:[
+ {s:'chat',ms:5200,cap:'El cliente reporta la falla por WhatsApp.',d:{msgs:[['c','Mi carro hace un ruido raro al frenar'],['b','Te agendo revisión mañana 9am 🔧 ¿Placa?'],['c','ABC-123'],['b','Listo ✅']]}},
+ {s:'stock',ms:4400,cap:'El repuesto usado se descuenta solo.',d:{rows:[['Pastillas de freno',15,14],['Discos de freno',6,5]]}},
+ {s:'invoice',ms:4600,cap:'La orden sale facturada, sin enredos.',d:{lines:[['Revisión de frenos','40'],['Pastillas de freno','65']],total:105}}]},
+{t:'Para tiendas tech',d:'Vende piezas y agenda reparaciones',caps:['Catálogo de productos','Control de inventario','Citas y agenda'],steps:[
+ {s:'chat',ms:5600,cap:'Preguntan por una pieza a medianoche…',d:{msgs:[['c','¿Tienen la RTX 4060?'],['b','Sí, quedan 3 en stock — $299 ¿te la aparto?'],['c','Sí. ¿Y reparan laptops?'],['b','Claro 🔧 Te agendo el jueves 2pm']]}},
+ {s:'cards',ms:4400,cap:'Tu catálogo siempre actualizado, siempre visible.',d:{items:[['RTX 4060','8GB GDDR6','linear-gradient(135deg,#A855F7,#5b21b6)','$299'],['SSD 1TB','NVMe Gen4','linear-gradient(135deg,#34d399,#0d9488)','$89'],['RAM 16GB','DDR5 5600','linear-gradient(135deg,#f472b6,#be185d)','$59']]}},
+ {s:'agenda',ms:4200,cap:'…y la reparación ya quedó en la agenda.',d:{items:[['2:00pm','Reparación laptop — María']],hi:0}}]},
+{t:'Para panaderías',d:'Pedidos sin llamadas perdidas',caps:['Catálogo de productos','Citas y agenda','Base de clientes'],steps:[
+ {s:'chat',ms:4800,cap:'El pedido entra por WhatsApp, solito.',d:{msgs:[['c','¿Me haces 2 docenas de cachitos para el sábado?'],['b','¡Con gusto! Sábado 9am, $24 🥐']]}},
+ {s:'agenda',ms:4200,cap:'Queda programado en la producción del sábado.',d:{items:[['9:00am','Pedido: 2 doc. cachitos — Lucía']],hi:0}},
+ {s:'notif',ms:4200,cap:'Y el cliente recibe su aviso cuando sale del horno.',d:{title:'Pedido listo',body:'WhatsApp a Lucía: tus cachitos ya están 🥐'}}]},
+{t:'Para veterinarias',d:'Citas y vacunas sin perseguir a nadie',caps:['Citas y agenda','Recordatorios automáticos','Base de clientes'],steps:[
+ {s:'chat',ms:4800,cap:'La dueña de Max agenda en 30 segundos.',d:{msgs:[['c','A Max le toca la vacuna'],['b','Viernes 11am disponible 💉'],['c','Perfecto'],['b','Agendado ✅']]}},
+ {s:'agenda',ms:4200,cap:'Con el historial de la mascota a la mano.',d:{items:[['11:00am','Max (perro) — Vacuna anual']],hi:0}},
+ {s:'notif',ms:4200,cap:'El refuerzo del año que viene se recuerda solo.',d:{title:'Recordatorio enviado',body:'SMS: la vacuna de Max es en 7 días'}}]},
+{t:'Para gimnasios',d:'Miembros al día, cobros automáticos',caps:['Base de clientes','Recordatorios automáticos','Reportes y métricas'],steps:[
+ {s:'notif',ms:4200,cap:'La mensualidad se cobra sin que la persigas.',d:{title:'Cobro automático',body:'WhatsApp a Pedro: tu mensualidad se renueva mañana 💪'}},
+ {s:'stats',ms:4400,cap:'Ves cuántos entrenan y cuánto entra.',d:{label:'Miembros activos',pre:'',num:132,dec:0,suf:'',bars:[50,60,66,74,82,90]}},
+ {s:'chat',ms:4800,cap:'Y las preguntas comunes se responden solas.',d:{msgs:[['c','¿A qué hora es zumba?'],['b','Lunes y miércoles 7pm 💃 ¿Te anoto?']]}}]},
+{t:'Para inmobiliarias',d:'Visitas agendadas y propiedades visibles',caps:['Base de clientes','Catálogo de productos','Citas y agenda'],steps:[
+ {s:'cards',ms:4400,cap:'Tus propiedades, siempre presentables.',d:{items:[['Casa 3 hab','Trenton, NJ','linear-gradient(135deg,#60a5fa,#1d4ed8)','$285k'],['Apto 2 hab','Hamilton','linear-gradient(135deg,#fbbf24,#b45309)','$190k']]}},
+ {s:'chat',ms:4800,cap:'El interesado agenda la visita sin intermediarios.',d:{msgs:[['c','Me interesa la casa de 3 hab'],['b','¿Visita mañana 4pm? 🏠'],['c','Sí'],['b','Confirmada ✅']]}},
+ {s:'agenda',ms:4200,cap:'…y queda en tu agenda con los datos del cliente.',d:{items:[['4:00pm','Visita casa 3 hab — Fam. Ruiz']],hi:0}}]},
+{t:'Para florerías',d:'Fechas especiales que venden solas',caps:['Catálogo de productos','Citas y agenda','Recordatorios automáticos'],steps:[
+ {s:'cards',ms:4400,cap:'Tus arreglos, listos para antojar.',d:{items:[['Ramo premium','24 rosas','linear-gradient(135deg,#f472b6,#9d174d)','$65'],['Arreglo cumple','flores mixtas','linear-gradient(135deg,#fb923c,#c2410c)','$45']]}},
+ {s:'notif',ms:4200,cap:'El sistema recuerda las fechas de tus clientes.',d:{title:'Fecha especial',body:'El aniversario de la Sra. López es en 3 días 🌹'}},
+ {s:'chat',ms:4400,cap:'Y el pedido entra sin llamadas.',d:{msgs:[['c','Necesito un ramo para el viernes'],['b','Listo, viernes 10am 🌷']]}}]},
+{t:'Para fotógrafos',d:'Sesiones agendadas y anticipos cobrados',caps:['Citas y agenda','Catálogo de productos','Facturación'],steps:[
+ {s:'chat',ms:5200,cap:'La clienta reserva la sesión por chat.',d:{msgs:[['c','¿Haces sesiones de familia?'],['b','Sí 📸 Sábado 3pm en el parque, $150 la sesión'],['c','La quiero'],['b','Apartada ✅']]}},
+ {s:'agenda',ms:4200,cap:'Queda en tu calendario de sesiones.',d:{items:[['3:00pm','Sesión familia Torres']],hi:0}},
+ {s:'invoice',ms:4400,cap:'Y el anticipo se cobra en el acto.',d:{lines:[['Sesión fotográfica (anticipo)','75']],total:75}}]},
+{t:'Para spas',d:'Agenda zen, sin estrés',caps:['Citas y agenda','Recordatorios automáticos','Base de clientes'],steps:[
+ {s:'chat',ms:4800,cap:'Reserva en dos mensajes.',d:{msgs:[['c','¿Masaje relajante mañana?'],['b','Tengo 2pm y 6pm 💆'],['c','6pm'],['b','Agendado ✨']]}},
+ {s:'notif',ms:4200,cap:'El recordatorio cuida tu agenda.',d:{title:'Recordatorio enviado',body:'SMS: tu masaje es hoy a las 6pm'}},
+ {s:'agenda',ms:4200,cap:'Y el historial del cliente queda guardado.',d:{items:[['6:00pm','Masaje relajante — Diana']],hi:0}}]},
+{t:'Para car wash',d:'Turnos fluidos, clientes avisados',caps:['Citas y agenda','Facturación','Recordatorios automáticos'],steps:[
+ {s:'chat',ms:4400,cap:'El turno se toma por WhatsApp.',d:{msgs:[['c','¿Lavado completo hoy?'],['b','Te toca a la 1pm 🚗'],['c','Voy']]}},
+ {s:'invoice',ms:4400,cap:'El ticket sale al momento.',d:{lines:[['Lavado completo','25'],['Encerado','15']],total:40}},
+ {s:'notif',ms:4200,cap:'Y el cliente sabe cuándo recoger.',d:{title:'Listo',body:'SMS a Juan: tu carro ya está lavado ✅'}}]},
+{t:'Para food trucks',d:'Pedidos rápidos y ventas claras',caps:['Catálogo de productos','Reportes y métricas','Base de clientes'],steps:[
+ {s:'cards',ms:4400,cap:'Tu menú, que se antoja solo.',d:{items:[['Taco birria','con consomé','linear-gradient(135deg,#f97316,#9a3412)','$4'],['Quesadilla','al pastor','linear-gradient(135deg,#eab308,#a16207)','$6']]}},
+ {s:'chat',ms:4400,cap:'El pedido para recoger entra sin fila.',d:{msgs:[['c','¿2 tacos para recoger?'],['b','Listos en 15 min 🌮']]}},
+ {s:'stats',ms:4400,cap:'Y al final del turno: cuánto vendiste.',d:{label:'Ventas hoy',pre:'$',num:860,dec:0,suf:'',bars:[30,55,45,80,100,70]}}]},
+{t:'Para tiendas naturistas',d:'Stock y clientes recurrentes',caps:['Control de inventario','Recordatorios automáticos','Base de clientes'],steps:[
+ {s:'stock',ms:4400,cap:'El inventario se mueve solo con cada venta.',d:{rows:[['Vitamina C',20,19],['Proteína vegana',12,11]]}},
+ {s:'notif',ms:4200,cap:'Y te avisa antes de quedarte sin nada.',d:{title:'Reposición',body:'Quedan 3 proteínas: el sistema ya pidió más 📦'}},
+ {s:'chat',ms:4400,cap:'El cliente pregunta y el sistema responde.',d:{msgs:[['c','¿Tienen proteína vegana?'],['b','Sí, 11 en stock 🌱']]}}]},
+{t:'Para academias',d:'Inscripciones y colegiaturas sin caos',caps:['Citas y agenda','Facturación','Recordatorios automáticos'],steps:[
+ {s:'chat',ms:5200,cap:'La inscripción entra por chat.',d:{msgs:[['c','Quiero inscribir a mi hijo en inglés'],['b','Grupo sábados 10am 📚 ¿Nombre?'],['c','Santiago'],['b','Inscrito ✅']]}},
+ {s:'invoice',ms:4400,cap:'La colegiatura queda facturada.',d:{lines:[['Colegiatura inglés (mes)','60']],total:60}},
+ {s:'notif',ms:4200,cap:'Y nadie falta a clase.',d:{title:'Recordatorio enviado',body:'SMS: clase de inglés mañana 10am'}}]},
+{t:'Para servicios a domicilio',d:'Del mensaje al trabajo, sin llamadas',caps:['Citas y agenda','Facturación','Base de clientes'],steps:[
+ {s:'chat',ms:5200,cap:'La emergencia entra por WhatsApp.',d:{msgs:[['c','Se tapó el fregadero 😅'],['b','Voy hoy entre 3 y 5pm 🔧 ¿Dirección?'],['c','Calle 5 #123'],['b','Confirmado ✅']]}},
+ {s:'agenda',ms:4200,cap:'Queda en tu ruta del día.',d:{items:[['3:00pm','Plomería — Calle 5 #123']],hi:0}},
+ {s:'invoice',ms:4400,cap:'Y cobras en la puerta, sin papeles.',d:{lines:[['Destape de fregadero','70']],total:70}}]},
+{t:'Para iglesias y comunidades',d:'Tu comunidad, siempre conectada',caps:['Base de clientes','Recordatorios automáticos','Reportes y métricas'],steps:[
+ {s:'notif',ms:4200,cap:'Un mensaje llega a toda la comunidad.',d:{title:'Evento',body:'WhatsApp a 240 miembros: vigilia viernes 7pm 🙏'}},
+ {s:'stats',ms:4400,cap:'Ves cómo crece la asistencia.',d:{label:'Asistencia promedio',pre:'',num:180,dec:0,suf:'',bars:[60,70,75,82,88,95]}},
+ {s:'chat',ms:4400,cap:'Y las preguntas se responden solas.',d:{msgs:[['c','¿A qué hora es el culto?'],['b','Domingos 10am ⛪ ¡Te esperamos!']]}}]}
+];
+var SCENES={};
+function qlater(fn,ms){dTimers.push(setTimeout(fn,ms));}
+function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+SCENES.chat=function(ph,d,q){
+  d.msgs.forEach(function(m,i){q(function(){
+    var b=el('div','msg '+m[0]);b.textContent=m[1];ph.appendChild(b);
+  },600+i*1000);});
+};
+SCENES.agenda=function(ph,d,q){
+  d.items.forEach(function(it,i){
+    if(i===d.hi){q(function(){
+      var r=el('div','ag-row new','<span class="t">'+it[0]+'</span><span>'+it[1]+'</span><span class="ag-tag">nueva</span>');
+      ph.appendChild(r);},900);
+    }else{ph.appendChild(el('div','ag-row','<span class="t">'+it[0]+'</span><span>'+it[1]+'</span>'));}
+  });
+};
+SCENES.notif=function(ph,d,q){
+  q(function(){ph.appendChild(el('div','pn','<span class="dot">✦</span><span><b>'+d.title+'</b><br><span style="color:var(--muted)">'+d.body+'</span></span>'));},700);
+};
+SCENES.stock=function(ph,d,q){
+  var max=Math.max.apply(null,d.rows.map(function(r){return r[1];}));
+  d.rows.forEach(function(rw){
+    var r=el('div','st-row','<div class="top"><span>'+rw[0]+'</span><span class="q">'+rw[1]+'</span></div><div class="bar"><i style="width:'+(rw[1]/max*100)+'%"></i></div>');
+    ph.appendChild(r);
+    var qn=r.querySelector('.q'),bar=r.querySelector('.bar i');
+    q(function(){var t0=performance.now(),a=rw[1],b=rw[2];
+      (function tick(t){var p=Math.min(1,(t-t0)/900);qn.textContent=Math.round(a+(b-a)*p);
+        bar.style.width=((a+(b-a)*p)/max*100)+'%';if(p<1)requestAnimationFrame(tick);})(t0);},800);
+  });
+};
+SCENES.invoice=function(ph,d,q){
+  var inv=el('div','inv',d.lines.map(function(l){return '<div class="ln"><span>'+l[0]+'</span><b>$'+l[1]+'</b></div>';}).join('')+
+    '<div class="tot"><span>Total</span><span>$<span class="tv">0</span></span></div><div class="stamp">PAGADA</div>');
+  ph.appendChild(inv);
+  var tv=inv.querySelector('.tv');
+  q(function(){var t0=performance.now();(function tick(t){var p=Math.min(1,(t-t0)/1100);
+    tv.textContent=Math.round(d.total*p);if(p<1)requestAnimationFrame(tick);})(t0);},500);
+  q(function(){inv.querySelector('.stamp').classList.add('show');},2000);
+};
+SCENES.stats=function(ph,d,q){
+  var w=el('div','', '<div class="big-lab">'+d.label+'</div><div class="big-num">'+(d.pre||'')+'<span class="nv">0</span>'+(d.suf||'')+'</div>'+
+    '<div class="bars">'+d.bars.map(function(b,i){return '<i style="height:'+b+'%;animation-delay:'+(i*0.12)+'s"></i>';}).join('')+'</div>');
+  ph.appendChild(w);
+  var nv=w.querySelector('.nv');
+  q(function(){var t0=performance.now();(function tick(t){var p=Math.min(1,(t-t0)/1300);
+    var v=d.num*p;nv.textContent=d.dec?v.toFixed(d.dec):Math.round(v);if(p<1)requestAnimationFrame(tick);})(t0);},400);
+};
+SCENES.team=function(ph,d,q){
+  d.members.forEach(function(m,i){
+    var r=el('div','tm-row','<span class="tm-av">'+m[0].charAt(0)+'</span><span>'+m[0]+'</span><span class="tm-role">'+m[1]+'</span>');
+    r.style.opacity='0';ph.appendChild(r);
+    q(function(){r.style.opacity='1';},400+i*500);
+  });
+};
+SCENES.cards=function(ph,d,q){
+  d.items.forEach(function(it,i){
+    var c=el('div','pd','<span class="sw" style="background:'+it[2]+'"></span><span><b>'+it[0]+'</b><br><span style="color:var(--muted);font-size:.7rem">'+it[1]+'</span></span><span class="pr">'+it[3]+'</span>');
+    c.style.animationDelay=(0.4+i*0.55)+'s';ph.appendChild(c);
+  });
+};
+/* --- reproductor --- */
+var dTimers=[],curDemo=-1,curStep=0,stepTO=null,wantDone=false;
+function dClear(){dTimers.forEach(clearTimeout);dTimers=[];if(stepTO){clearTimeout(stepTO);stepTO=null;}}
+function openDemo(i){
+  curDemo=i;curStep=0;wantDone=false;
+  var D=SYSDEMOS[i];
+  document.getElementById('demoTitle').textContent=D.t;
+  document.getElementById('demoDesc').textContent=D.d;
+  var wb=document.getElementById('demoWant');wb.classList.remove('done');wb.textContent='Quiero este sistema ✦';
+  var dz=document.getElementById('demoDots');dz.innerHTML='';
+  D.steps.forEach(function(_,k){var b=document.createElement('button');b.setAttribute('aria-label','Paso '+(k+1));
+    b.addEventListener('click',function(){curStep=k;playStep();});dz.appendChild(b);});
+  document.getElementById('demoBack').classList.add('open');
+  document.body.style.overflow='hidden';
+  playStep();
+}
+function playStep(){
+  dClear();
+  var D=SYSDEMOS[curDemo],st=D.steps[curStep],ph=document.getElementById('demoPhoneBody');
+  ph.innerHTML='';
+  document.getElementById('demoCap').textContent=st.cap;
+  Array.prototype.forEach.call(document.getElementById('demoDots').children,function(b,i){b.classList.toggle('on',i===curStep);});
+  SCENES[st.s](ph,st.d,qlater);
+  stepTO=setTimeout(function(){
+    if(curStep<D.steps.length-1){curStep++;playStep();}
+    else{document.getElementById('demoCap').textContent='Así trabaja tu sistema: solo, 24/7 — con personas reales detrás.';}
+  },st.ms||4200);
+}
+function closeDemo(){dClear();document.getElementById('demoBack').classList.remove('open');document.body.style.overflow='';}
+document.getElementById('demoX').addEventListener('click',closeDemo);
+document.getElementById('demoBack').addEventListener('click',function(e){if(e.target===this)closeDemo();});
+addEventListener('keydown',function(e){if(e.key==='Escape'&&document.getElementById('demoBack').classList.contains('open'))closeDemo();});
+document.getElementById('demoReplay').addEventListener('click',function(){curStep=0;playStep();});
+var toastEl=document.getElementById('toast'),toastT=null;
+function miniSay(m){if(!toastEl)return;toastEl.textContent=m;toastEl.classList.add('show');
+  clearTimeout(toastT);toastT=setTimeout(function(){toastEl.classList.remove('show')},2600);}
+document.getElementById('demoWant').addEventListener('click',function(){
+  var D=SYSDEMOS[curDemo];
+  if(!wantDone){
+    var sel=window.PoluxSis.load(),added=0;
+    D.caps.forEach(function(c){if(sel.indexOf(c)<0){sel.push(c);added++;}});
+    window.PoluxSis.save(sel);if(window.PoluxSis.paint)window.PoluxSis.paint();
+    wantDone=true;this.classList.add('done');this.textContent='✓ En tu cotización — pedirla →';
+    miniSay(added?('Sistema "'+D.t+'" marcado ✦'):'Ya estaba marcado ✦');
+  }else{closeDemo();setTimeout(function(){window.PoluxOrder.open();},160);}
+});
+/* --- tarjetas de los 20 sistemas --- */
+(function(){
+  var box=document.getElementById('sisCombos');if(!box)return;
+  SYSDEMOS.forEach(function(D,i){
+    var card=document.createElement('button');card.type='button';card.className='combo';
+    card.innerHTML='<span class="cb-k">Toca para verlo en vivo</span><b>'+D.t+'</b><small>'+D.d+'</small>'+
+      '<span class="cb-caps">'+D.caps.map(function(x){return '<span>'+x+'</span>';}).join('')+'</span>';
+    card.addEventListener('click',function(){openDemo(i);});
+    box.appendChild(card);
+  });
+})();
+})();
+</script>
 </body>
 </html>
