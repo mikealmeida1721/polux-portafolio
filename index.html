@@ -583,7 +583,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
       if(!st.drag)return;
       var dx=e.clientX-st.downX;
       st.moved=Math.max(st.moved,Math.hypot(dx,e.clientY-st.downY));
-      if(st.moved>10){st.off=st.startOff+dx;applyOff(st)} /* arrastre real: la fila sigue al dedo */
+      if(st.moved>10){st.off=st.startOff+dx*0.55;applyOff(st)} /* arrastre amortiguado: la fila avanza 0.55x del dedo */
       dock(st,e.clientX);
     },{passive:true});
     st.row.addEventListener('pointerup',function(){endDrag(false)});
