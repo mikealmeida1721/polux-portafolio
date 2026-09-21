@@ -76,16 +76,35 @@ function svg(name){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentC
 /* ---- Datos ---- */
 var DISENOS=[
  {id:'ateneo',nombre:'Ateneo'},{id:'pulso',nombre:'Pulso'},{id:'burbuja',nombre:'Burbuja'},
- {id:'orbita',nombre:'Órbita'},{id:'brasa',nombre:'Brasa'},{id:'armonia',nombre:'Armonía'}
+ {id:'orbita',nombre:'Órbita'},{id:'brasa',nombre:'Brasa'},{id:'armonia',nombre:'Armonía'},
+ {id:'barberia',nombre:'Navaja'},{id:'cafeteria',nombre:'Origen'},{id:'gym',nombre:'Forja'},
+ {id:'veterinaria',nombre:'Manada'},{id:'inmobiliaria',nombre:'Plano'},{id:'taller',nombre:'Torque'},
+ {id:'floreria',nombre:'Pétalo'},{id:'panaderia',nombre:'Fermento'},{id:'dental',nombre:'Esmalte'},
+ {id:'hotel',nombre:'Vestíbulo'},{id:'fotografo',nombre:'Obscura'},{id:'tienda',nombre:'Pasarela'},
+ {id:'pizzeria',nombre:'Leña'},{id:'belleza',nombre:'Espejo'}
 ];
 /* negocio -> diseño. Sin palabras genéricas ("diseño", "marca", "foto") que disparaban falsos positivos. */
 var NEGOCIOS=[
- {w:'spa|masaje|estetica|belleza|barberia|peluqueria|salon de belleza|unas|yoga|terapia|terapeuta|estilista|maquillaje|depilacion|bienestar|relax|estetica canina',id:'armonia',porque:'su ambiente de calma, sus reservas en línea y su sección de rituales'},
- {w:'restaurante|comida|tacos|pizza|cafeteria|cafe|panaderia|carniceria|polleria|pizzeria|hamburgues|asadero|parrilla|mariscos|ceviche|empanada|sandwich|fondita|cocina economica|food truck|taqueria|antojitos|reposteria|pasteleria|dulceria|heladeria|jugos|licuados',id:'brasa',porque:'su carta visual que abre el apetito y su repartidor animado para domicilio'},
- {w:'lavanderia|lavado|tintoreria|limpieza|planchado|autolavado|car wash|veterinaria|mascota|guarderia|jugueteria|papeleria|merceria',id:'burbuja',porque:'su estilo fresco y directo, perfecto para servicios de barrio'},
- {w:'iglesia|biblia|academia|curso|escuela|educacion|coaching|consultor|abogado|contad|inmobiliaria|clinica|dental|doctor|salud|universidad|libreria|pastor|ministerio|notaria',id:'ateneo',porque:'su forma de organizar mucho contenido para que el visitante explore'},
- {w:'artista|musica|tatuaje|influencer|gimnasio|gym|fitness|crossfit|ropa|boutique|moda|streetwear|discoteca|antro|eventos|fotografo|estudio creativo|disenador grafico',id:'pulso',porque:'su presencia visual fuerte, hecha para imponer'},
- {w:'tecnologia|software|datos|finanzas|seguro|consultoria|agencia|marketing|startup|ingenieria|logistica|transporte|taller|mecanica|ferreteria|construccion|arquitecto|bienes raices|celulares|reparacion',id:'orbita',porque:'su panel de datos en vivo con estética profesional'}
+ {w:'barberia|peluqueria|barbero|barber shop',id:'barberia',porque:'sus navajas que cortan la pantalla y su ritmo staccato, hecho para barberías'},
+ {w:'cafeteria|cafe|coffee',id:'cafeteria',porque:'su vapor que sube del hero y su carta de cafés de origen'},
+ {w:'gimnasio|gym|fitness|crossfit',id:'gym',porque:'sus impactos con screen-shake y sus medidores de fuerza'},
+ {w:'veterinaria|veterinario|mascota',id:'veterinaria',porque:'su rastro de huellas y su ambiente juguetón para mascotas'},
+ {w:'inmobiliaria|bienes raices|propiedades|inmuebles',id:'inmobiliaria',porque:'su plano que se dibuja solo y sus tarjetas de propiedades'},
+ {w:'taller|mecanica|mecanico',id:'taller',porque:'sus engranajes y medidores de torque con estética industrial'},
+ {w:'floreria|flores|floristeria|arreglos florales',id:'floreria',porque:'sus flores que florecen al scroll y sus pétalos con física suave'},
+ {w:'panaderia|panadero|pan artesanal',id:'panaderia',porque:'sus titulares que levan como la masa y su horno con vapor'},
+ {w:'dental|dentista|odontologia|clinica dental|clinica',id:'dental',porque:'su brillo clínico y su calma precisa'},
+ {w:'hotel|hospedaje|hostal',id:'hotel',porque:'sus cortinas de cine y su coreografía de gran hotel'},
+ {w:'fotografo|fotografia|estudio fotografico',id:'fotografo',porque:'sus fotos que se revelan como en el cuarto oscuro'},
+ {w:'tienda de ropa|boutique|moda|ropa|tienda',id:'tienda',porque:'su desfile continuo con marquees y lookbook editorial'},
+ {w:'pizzeria|pizza',id:'pizzeria',porque:'su fuego vivo y su queso que se estira'},
+ {w:'salon de belleza|estetica|unas|maquillaje',id:'belleza',porque:'su shimmer cromático y su glamour fluido'},
+ {w:'spa|masaje|yoga|terapia|terapeuta|estilista|depilacion|bienestar|relax|estetica canina',id:'armonia',porque:'su ambiente de calma, sus reservas en línea y su sección de rituales'},
+ {w:'restaurante|comida|tacos|carniceria|polleria|hamburgues|asadero|parrilla|mariscos|ceviche|empanada|sandwich|fondita|cocina economica|food truck|taqueria|antojitos|reposteria|pasteleria|dulceria|heladeria|jugos|licuados',id:'brasa',porque:'su carta visual que abre el apetito y su repartidor animado para domicilio'},
+ {w:'lavanderia|lavado|tintoreria|limpieza|planchado|autolavado|car wash|guarderia|jugueteria|papeleria|merceria',id:'burbuja',porque:'su estilo fresco y directo, perfecto para servicios de barrio'},
+ {w:'iglesia|biblia|academia|curso|escuela|educacion|coaching|consultor|abogado|contad|doctor|salud|universidad|libreria|pastor|ministerio|notaria',id:'ateneo',porque:'su forma de organizar mucho contenido para que el visitante explore'},
+ {w:'artista|musica|tatuaje|influencer|discoteca|antro|eventos|estudio creativo|disenador grafico|streetwear',id:'pulso',porque:'su presencia visual fuerte, hecha para imponer'},
+ {w:'tecnologia|software|datos|finanzas|seguro|consultoria|agencia|marketing|startup|ingenieria|logistica|transporte|ferreteria|construccion|arquitecto|celulares|reparacion',id:'orbita',porque:'su panel de datos en vivo con estética profesional'}
 ];
 var VIBES=[
  {w:'tradicional|clasico|calid|acogedor|familiar|barrio|rustico|casero',id:'brasa',porque:'ese calor de lo tradicional, con fuego y cercanía'},
