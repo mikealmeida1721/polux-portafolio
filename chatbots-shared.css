@@ -219,6 +219,11 @@
 /* repel: el rAF escribe --px/--py en el botón; este nivel solo traslada */
 .cb-repel{display:flex;flex-direction:column;align-items:center;gap:6px;
   transform:translate(var(--px,0px),var(--py,0px));will-change:transform}
+/* arrastre: nivel propio para el offset persistente --dx/--dy (no pelea con
+   la subida del botón, el balanceo ni el repel) */
+.cb-drag{display:block;transform:translate(var(--dx,0px),var(--dy,0px));will-change:transform}
+.cb-field .cb-bit{touch-action:none;cursor:grab}
+.cb-field .cb-bit.dragging{cursor:grabbing;z-index:30}
 .cb-field.paused .cb-bit,.cb-field.paused .cb-sway,
 .cb-field.paused .cb-bit .cb-bubble.art{animation-play-state:paused}
 /* versión estática (prefers-reduced-motion): retícula simple sin movimiento */
