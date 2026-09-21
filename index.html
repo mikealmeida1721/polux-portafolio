@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portafolio visual — Polux</title>
+<style>
+/* ===== PERSONALIZACIÓN RÁPIDA (hub Polux) ===== */
+:root{
+  --fondo:#0A0A0C; --fondo2:#101016; --tarjeta:#15151d; --borde:#262633;
+  --acento:#A855F7; --acento2:#7c3aed;
+  --texto:#f4f2fa; --muted:#a7a3b8;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--fondo);color:var(--texto);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header.top{position:sticky;top:0;z-index:50;background:rgba(10,10,12,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--borde)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 20px}
+.logo{font-weight:800;font-size:1.25rem;letter-spacing:.06em}
+.logo span{color:var(--acento)}
+nav.main{display:flex;gap:22px;font-size:.95rem;color:var(--muted)}
+nav.main a{text-decoration:none}
+nav.main a:hover{color:var(--texto)}
+.hero{padding:84px 0 60px;text-align:center;background:radial-gradient(700px 340px at 50% -60px,rgba(168,85,247,.22),transparent)}
+.badge{display:inline-block;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acento);border:1px solid var(--acento);border-radius:999px;padding:6px 16px;margin-bottom:22px}
+.hero h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.15;margin-bottom:18px}
+.hero h1 em{font-style:normal;color:var(--acento)}
+.hero p.lead{max-width:680px;margin:0 auto 14px;color:var(--muted);font-size:1.08rem}
+.hero p.linea{max-width:680px;margin:22px auto 0;font-size:1.05rem;border-left:3px solid var(--acento);padding-left:16px;text-align:left}
+section{padding:56px 0}
+h2.sec{font-size:1.7rem;margin-bottom:8px}
+p.sub{color:var(--muted);margin-bottom:28px;max-width:640px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.card{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;padding:26px;display:flex;flex-direction:column;gap:10px;transition:transform .18s,border-color .18s}
+.card:hover{transform:translateY(-4px);border-color:var(--acento)}
+.card .tag{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acento)}
+.card h3{font-size:1.25rem}
+.card p{color:var(--muted);font-size:.95rem;flex:1}
+.card a.btn{margin-top:8px}
+.btn{display:inline-block;background:var(--acento);color:#0A0A0C;font-weight:700;text-decoration:none;padding:12px 26px;border-radius:10px}
+.btn:hover{background:var(--acento2);color:#fff}
+.btn.ghost{background:transparent;color:var(--texto);border:1px solid var(--borde)}
+.btn.ghost:hover{border-color:var(--acento);color:var(--acento)}
+.cap{background:var(--tarjeta);border:1px solid var(--borde);border-radius:12px;padding:22px}
+.cap h3{font-size:1.05rem;margin-bottom:6px}
+.cap h3::before{content:"◆ ";color:var(--acento);font-size:.8em}
+.cap p{color:var(--muted);font-size:.9rem}
+.cta{background:var(--fondo2);border:1px solid var(--borde);border-radius:18px;padding:48px 32px;text-align:center}
+.cta h2{margin-bottom:10px}
+.cta p{color:var(--muted);margin-bottom:24px}
+footer{border-top:1px solid var(--borde);padding:28px 0;color:var(--muted);font-size:.88rem}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+@media(max-width:860px){.grid3{grid-template-columns:1fr}.grid4{grid-template-columns:1fr 1fr}nav.main{display:none}}
+@media(max-width:520px){.grid4{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="logo">POLUX<span>.</span></div>
+    <nav class="main">
+      <a href="#modelos">Modelos</a>
+      <a href="#capacidades">Capacidades</a>
+      <a href="#paquetes">Paquetes</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="badge">Portafolio visual</div>
+    <h1>Diseños que <em>venden</em> por sí solos.</h1>
+    <p class="lead">En Polux instalamos inteligencia artificial dentro de tu negocio — reservas, reseñas, contenido, páginas web — y la operamos por ti, con un humano cuidándola.</p>
+    <p class="linea">Polux instala y opera la IA dentro del negocio del cliente, con un humano cuidándola.</p>
+    <p class="lead" style="margin-top:18px">Abajo verás modelos base reales. Cada uno se adapta con <strong>tu logo y tus colores</strong> — así se vería el tuyo.</p>
+  </div>
+</section>
+
+<section id="modelos">
+  <div class="wrap">
+    <h2 class="sec">Modelos base</h2>
+    <p class="sub">Seis diseños listos para personalizar. Elige el que mejor le quede a tu negocio y te mostramos tu vista previa.</p>
+    <div class="grid3">
+      <div class="card">
+        <div class="tag">Modelo · Contenido</div>
+        <h3>Centro de conocimiento</h3>
+        <p>Para negocios con mucho que mostrar: academias, clínicas, restaurantes con carta extensa. Buscador, recorrido cinematográfico procedural y sala de lectura interactiva.</p>
+        <a class="btn ghost" href="modelo-biblia/index.html">Ver modelo →</a>
+      </div>
+      <div class="card">
+        <div class="tag">Modelo · Impacto visual</div>
+        <h3>Marca que impone</h3>
+        <p>Para negocios que quieren presencia fuerte: spas, restaurantes premium, estudios y marcas personales. Tipografía grande, secciones directas, promociones estilo lanzamiento.</p>
+        <a class="btn ghost" href="modelo-artista/index.html">Ver modelo →</a>
+      </div>
+      <div class="card">
+        <div class="tag">Modelo · Servicio local</div>
+        <h3>Servicio a domicilio</h3>
+        <p>Para negocios de servicios con reservas y pedidos: lavanderías, spas, talleres. Programación de recogidas, planes de suscripción y pedidos por SMS.</p>
+        <p style="font-size:.78rem;color:var(--acento)">Caso de estudio · Proyecto piloto</p>
+        <a class="btn ghost" href="modelo-lavanderia/index.html">Ver modelo →</a>
+      </div>
+      <div class="card">
+        <div class="tag">Modelo · Datos en vivo</div>
+        <h3>Registro interactivo</h3>
+        <p>Para negocios que quieren verse tecnológicos: tableros oscuros con métricas animadas, terminal de operaciones y registros en tiempo real.</p>
+        <a class="btn ghost" href="modelo-ssee/index.html">Ver modelo →</a>
+      </div>
+      <div class="card">
+        <div class="tag">Modelo · Restaurante</div>
+        <h3>Sabor que vende</h3>
+        <p>Para restaurantes y comida: carta visual, reservas en línea, pedidos a domicilio con repartidor animado y chat que responde al instante.</p>
+        <a class="btn ghost" href="modelo-restaurante/index.html">Ver modelo →</a>
+      </div>
+      <div class="card">
+        <div class="tag">Modelo · Spa & Bienestar</div>
+        <h3>Calma que se siente</h3>
+        <p>Para spas y centros de bienestar: pétalos flotando en el hero, ritual cinematográfico con loto que florece al hacer scroll, reservas en línea y chat demo.</p>
+        <a class="btn ghost" href="modelo-spa/index.html">Ver modelo →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="capacidades" style="background:var(--fondo2)">
+  <div class="wrap">
+    <h2 class="sec">Lo que instalamos en tu negocio</h2>
+    <p class="sub">No vendemos un chatbot genérico. Diseñamos cada pieza a la medida de tu operación.</p>
+    <div class="grid4">
+      <div class="cap"><h3>Chatbots personalizados</h3><p>Asistentes que conocen tu negocio, responden por WhatsApp y escalan a un humano cuando hace falta.</p></div>
+      <div class="cap"><h3>Páginas web personalizadas</h3><p>Diseño a tu medida, rápido y pensado para convertir visitas en clientes.</p></div>
+      <div class="cap"><h3>Automatizaciones personalizadas</h3><p>Reservas, recordatorios, seguimiento y reseñas funcionando solos, supervisados por personas.</p></div>
+      <div class="cap"><h3>Software a medida</h3><p>Sistemas internos: pedidos, suscripciones, paneles y todo lo que tu operación necesite.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="paquetes">
+  <div class="wrap">
+    <div class="cta">
+      <h2>Paquetes y precios</h2>
+      <p>Los planes y servicios individuales, con sus precios oficiales, están en nuestra página principal.</p>
+      <a class="btn" href="https://polux.online/">Ver paquetes en polux.online →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>POLUX — Tu agencia de inteligencia artificial</div>
+    <div>polux.online</div>
+  </div>
+</footer>
+</body>
+</html>
