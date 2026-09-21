@@ -74,6 +74,9 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
 .piece small{display:block;color:var(--muted);font-size:.72rem}
 .om input[type=text]{width:100%;background:#0d0d13;border:1px solid var(--borde);border-radius:12px;color:#fff;padding:12px 14px;font-size:.92rem;margin-bottom:10px;outline:none;font-family:inherit}
 .om input[type=text]:focus{border-color:var(--acento)}
+.om textarea{width:100%;background:#0d0d13;border:1px solid var(--borde);border-radius:12px;color:#fff;padding:12px 14px;font-size:.92rem;outline:none;font-family:inherit;resize:vertical;min-height:78px;line-height:1.5}
+.om textarea:focus{border-color:var(--acento)}
+.om textarea::placeholder{color:var(--muted);opacity:.8}
 .om-radio{display:flex;gap:10px;align-items:center;background:#101016;border:1px solid var(--borde);border-radius:12px;padding:11px 14px;font-size:.88rem;margin-bottom:8px;cursor:pointer}
 .om-radio input{accent-color:var(--acento)}
 .om-send{width:100%;background:var(--acento);color:#0A0A0C;border:none;border-radius:999px;padding:15px;font-size:1rem;font-weight:800;cursor:pointer;font-family:inherit}
@@ -160,6 +163,21 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
 .sis small{color:var(--muted);font-size:.76rem;line-height:1.4;display:block}
 .sis.on{border-color:var(--acento);background:rgba(168,85,247,.12)}
 .sis.on .sis-x{opacity:1}
+.sis-custom{border:1.5px dashed var(--acento);background:rgba(168,85,247,.07);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:8px;min-height:196px}
+.sis-custom:hover{background:rgba(168,85,247,.14)}
+.sis-custom .sis-plus{font-size:1.5rem;color:var(--acento);line-height:1}
+.sis-custom b{font-size:.95rem}
+.sis-custom small{color:var(--muted);font-size:.78rem;line-height:1.45;display:block}
+/* Combos de ejemplo: sistemas reales que se marcan de un toque */
+.sis-combos{display:flex;gap:10px;margin-top:14px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.sis-combos::-webkit-scrollbar{display:none}
+.combo{flex:1 1 0;min-width:210px;text-align:left;background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;padding:14px;cursor:pointer;color:var(--texto);font-family:inherit;transition:border-color .15s,transform .15s}
+.combo:hover{border-color:var(--acento);transform:translateY(-2px)}
+.combo .cb-k{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acento);font-weight:700;margin-bottom:6px;display:block}
+.combo b{font-size:.92rem;display:block;margin-bottom:4px}
+.combo>small{display:block;color:var(--muted);font-size:.76rem;margin-bottom:8px;line-height:1.4}
+.combo .cb-caps{display:flex;flex-wrap:wrap;gap:6px}
+.combo .cb-caps span{font-size:.7rem;background:rgba(168,85,247,.14);border:1px solid rgba(168,85,247,.35);border-radius:999px;padding:4px 10px;color:#e9e4f7}
 @media(max-width:620px){.sis-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* ===== CTA final ===== */
@@ -272,7 +290,8 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
     <h2 class="sec rv">Sistemas a medida</h2>
     <p class="sub rv">Más que una página: el sistema que opera tu negocio por dentro.<br>Marca con ✦ lo que necesitas — entra directo en tu cotización.</p>
     <div class="sis-grid rv" id="sisGrid"></div>
-    <div style="text-align:center;margin-top:30px">
+    <div class="sis-combos rv" id="sisCombos"></div>
+    <div style="text-align:center;margin-top:26px">
       <button class="btn rv" id="ctaSis" type="button">Pedir cotización con mi sistema →</button>
     </div>
   </div>
@@ -320,6 +339,10 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
     <div class="om-sec">
       <div class="om-lab">Capacidades para tu sistema</div>
       <div class="chips" id="omSis"></div>
+    </div>
+    <div class="om-sec">
+      <div class="om-lab">¿Buscas algo diferente? <span>descríbelo y lo creamos</span></div>
+      <textarea id="omCustom" rows="3" placeholder="Cuéntanos qué necesitas: qué hace tu negocio, qué te quita tiempo, qué te gustaría que pasara solo…"></textarea>
     </div>
     <div class="om-sec">
       <div class="om-lab">¿Qué más te interesa?</div>
@@ -616,17 +639,19 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   function buildQuote(){
     const pz0=loadPz(),lgs0=loadLogos(),sis0=loadSis();
     const servsOn=[...omServs.querySelectorAll('input:checked')].length>0;
-    if(picked.size===0&&!pz0.length&&!lgs0.length&&!servsOn&&!sis0.length){say('Elige algo primero: un diseño, un logo, una capacidad…');return null}
+    if(picked.size===0&&!pz0.length&&!lgs0.length&&!servsOn&&!sis0.length&&!custom){say('Elige algo primero: un diseño, un logo, una capacidad…');return null}
     const dis=DESIGNS.filter(d=>picked.has(d.id)).map(d=>d.nombre).join(', ');
     const pz=pz0.map(p=>p.d+': '+p.p).join('; ');
     const servs=[...omServs.querySelectorAll('input:checked')].map(i=>i.value).join(', ');
     const nom=document.getElementById('omNombre').value.trim(), neg=document.getElementById('omNegocio').value.trim();
+    const custom=document.getElementById('omCustom').value.trim();
     const logo=document.querySelector('input[name=omLogo]:checked').value;
     let txt='Hola Polux, quiero una cotización personalizada ✨';
     if(dis)txt+='\n• Diseño base: '+dis;
     if(pz)txt+='\n• Lo que elegí en las demos: '+pz;
     if(lgs0.length)txt+='\n• Logos que me gustaron: '+lgs0.map(l=>l.nombre+' ('+l.fam+')').join(', ');
     if(sis0.length)txt+='\n• Capacidades que necesito: '+sis0.join(', ');
+    if(custom)txt+='\n• Sistema a medida (idea propia): '+custom;
     if(servs)txt+='\n• Me interesa: '+servs;
     txt+='\n• Logo: '+(logo==='tengo'?'ya tengo, lo envío por aquí':'quiero que Polux me diseñe uno');
     if(nom||neg)txt+='\n• Contacto: '+(nom||'—')+' — Negocio: '+(neg||'—');
@@ -1093,6 +1118,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   function paint(){
     var sel=window.PoluxSis.load();
     Array.prototype.forEach.call(grid.children,function(b){
+      if(b.classList.contains('sis-custom'))return;
       var on=sel.indexOf(b.dataset.n)>=0;
       b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));
       b.querySelector('.sis-x').textContent=on?'✓':'✦';
@@ -1109,6 +1135,42 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     });
     grid.appendChild(b);
   });
+  /* Tarjeta especial: "¿Algo diferente?" — abre la cotización con el campo de texto */
+  (function(){
+    var c=document.createElement('button');
+    c.type='button';c.className='sis sis-custom';
+    c.innerHTML='<span class="sis-plus">✦</span><b>¿Algo diferente?</b><small>Descríbenos lo que necesitas y lo diseñamos a tu medida</small>';
+    c.addEventListener('click',function(){
+      window.PoluxOrder.open();
+      setTimeout(function(){var t=document.getElementById('omCustom');if(t){t.scrollIntoView({block:'center',behavior:'smooth'});t.focus({preventScroll:true});}},380);
+    });
+    grid.appendChild(c);
+  })();
+  /* Combos de ejemplo: un toque marca las capacidades del sistema */
+  (function(){
+    var box=document.getElementById('sisCombos');if(!box)return;
+    var COMBOS=[
+      ['Para restaurantes','Recibe reservas solo, sin llamadas',['Citas y agenda','Recordatorios automáticos','Catálogo de productos']],
+      ['Para tiendas y talleres','Stock, cobros y clientes en orden',['Control de inventario','Facturación','Base de clientes']],
+      ['Para equipos','Cada quien ve lo suyo, tú ves todo',['Roles y permisos','Reportes y métricas','Recordatorios automáticos']]
+    ];
+    var toastEl=document.getElementById('toast'),toastT=null;
+    function miniSay(m){if(!toastEl)return;toastEl.textContent=m;toastEl.classList.add('show');
+      clearTimeout(toastT);toastT=setTimeout(function(){toastEl.classList.remove('show')},2600);}
+    COMBOS.forEach(function(cb){
+      var el=document.createElement('button');
+      el.type='button';el.className='combo';
+      el.innerHTML='<span class="cb-k">Sistema ejemplo</span><b>'+cb[0]+'</b><small>'+cb[1]+'</small>'+
+        '<span class="cb-caps">'+cb[2].map(function(x){return '<span>'+x+'</span>'}).join('')+'</span>';
+      el.addEventListener('click',function(){
+        var sel=window.PoluxSis.load(),added=0;
+        cb[2].forEach(function(x){if(sel.indexOf(x)<0){sel.push(x);added++;}});
+        window.PoluxSis.save(sel);paint();
+        miniSay(added?('Combo "'+cb[0]+'" marcado ✦ — entra en tu cotización'):'Ese combo ya estaba marcado ✦');
+      });
+      box.appendChild(el);
+    });
+  })();
   paint();
   document.getElementById('ctaSis').addEventListener('click',function(){window.PoluxOrder.open()});
   document.getElementById('ctaQuote').addEventListener('click',function(){window.PoluxOrder.open()});
@@ -1118,7 +1180,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
 /* Sistemas a medida: mini-demos visuales animadas (canvas vanilla, 1 solo rAF global, pausado fuera de vista) */
 (function(){
   var grid=document.getElementById('sisGrid');if(!grid)return;
-  var cards=Array.prototype.slice.call(grid.querySelectorAll('.sis'));
+  var cards=Array.prototype.slice.call(grid.querySelectorAll('.sis:not(.sis-custom)'));
   if(!cards.length)return;
   var reduced=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var DPR=Math.min(1.5,window.devicePixelRatio||1);
