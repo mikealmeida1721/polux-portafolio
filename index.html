@@ -289,6 +289,64 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
 .lp-fav.on{background:#2a2a35;color:#fff;box-shadow:inset 0 0 0 1px var(--acento)}
 .lp-cat{display:inline-block;color:var(--acento);font-size:.92rem;text-decoration:none}
 
+/* ===== Conversión Polux (cv-) ===== */
+.cv-card{background:var(--tarjeta);border:1px solid var(--borde);border-radius:20px;padding:30px 28px}
+.cv-kicker{display:inline-block;font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--acento);
+  border:1px solid rgba(168,85,247,.5);border-radius:999px;padding:6px 16px;margin-bottom:18px;background:rgba(168,85,247,.08)}
+.cv-num{font-size:clamp(2.6rem,7vw,4rem);font-weight:800;line-height:1;
+  background:linear-gradient(120deg,#f0abfc,#A855F7);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cv-slider{margin:18px 0}
+.cv-slider label{display:flex;justify-content:space-between;font-size:.9rem;color:var(--muted);margin-bottom:8px}
+.cv-slider label b{color:var(--texto)}
+.cv-slider input[type=range]{width:100%;accent-color:var(--acento);height:28px;cursor:pointer}
+.cv-result{text-align:center;padding:26px 10px;border-top:1px solid var(--borde);margin-top:8px}
+.cv-result small{display:block;color:var(--muted);margin-top:10px;font-size:.85rem;max-width:520px;margin-left:auto;margin-right:auto}
+.cv-cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.btn-ghost{display:inline-block;border:1px solid var(--acento);color:var(--texto);font-weight:700;text-decoration:none;
+  padding:15px 34px;border-radius:999px;font-size:1rem;transition:all .15s;background:transparent;cursor:pointer;font-family:inherit}
+.btn-ghost:hover{background:rgba(168,85,247,.14)}
+.cv-field{margin-bottom:16px;text-align:left}
+.cv-field label{display:block;font-size:.82rem;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;font-weight:600}
+.cv-field select,.cv-field input[type=text],.cv-field textarea{width:100%;background:#0d0d13;border:1px solid var(--borde);
+  border-radius:12px;color:#fff;padding:13px 14px;font-size:.95rem;outline:none;font-family:inherit}
+.cv-field select:focus,.cv-field input[type=text]:focus,.cv-field textarea:focus{border-color:var(--acento)}
+.cv-field textarea{resize:vertical;min-height:70px;line-height:1.5}
+.cv-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 26px}
+.cv-step{background:#101016;border:1px solid var(--borde);border-radius:14px;padding:16px 14px;font-size:.88rem;color:var(--muted);line-height:1.5}
+.cv-step b{display:block;color:var(--acento);font-size:1.6rem;margin-bottom:6px}
+.cv-step strong{color:var(--texto)}
+.cv-guar{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:8px}
+.cv-g{background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;padding:20px 16px;text-align:center;font-size:.86rem;color:var(--muted);line-height:1.5}
+.cv-g .cv-ic{font-size:1.7rem;display:block;margin-bottom:10px}
+.cv-g strong{display:block;color:var(--texto);margin-bottom:6px;font-size:.94rem}
+.cv-found{margin-top:26px;border-radius:20px;padding:2px;background:linear-gradient(120deg,#A855F7,#f0abfc,#7c3aed)}
+.cv-found-in{background:#101016;border-radius:18px;padding:28px 26px;text-align:center}
+.cv-found-in h3{font-size:1.35rem;margin-bottom:8px}
+.cv-found-in p{color:var(--muted);font-size:.94rem;max-width:600px;margin:0 auto 18px}
+.cv-found-in .cv-n{color:var(--acento);font-weight:800}
+details.cv-faq{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;margin-bottom:10px;overflow:hidden}
+details.cv-faq summary{cursor:pointer;padding:17px 20px;font-weight:700;font-size:.96rem;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+details.cv-faq summary::-webkit-details-marker{display:none}
+details.cv-faq summary::after{content:'+';color:var(--acento);font-size:1.4rem;font-weight:800;flex:none}
+details.cv-faq[open] summary::after{content:'–'}
+details.cv-faq .cv-a{padding:0 20px 18px;color:var(--muted);font-size:.92rem;line-height:1.65}
+.cv-try{max-width:560px;margin:26px auto 0;background:#0d0d13;border:1px solid var(--borde);border-radius:18px;padding:22px 20px;text-align:left}
+.cv-try-row{display:flex;gap:10px;margin-bottom:14px}
+.cv-try-row select{flex:1;background:#15151d;border:1px solid var(--borde);border-radius:12px;color:#fff;padding:12px;font-size:.9rem;font-family:inherit;outline:none}
+.cv-chat{display:flex;flex-direction:column;gap:10px;min-height:120px}
+.cv-msg{max-width:88%;padding:11px 15px;border-radius:16px;font-size:.9rem;line-height:1.5;animation:cvIn .3s ease}
+@keyframes cvIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.cv-msg.bot{background:#1c1c28;border:1px solid var(--borde);align-self:flex-start;border-bottom-left-radius:6px}
+.cv-msg.usr{background:rgba(168,85,247,.2);border:1px solid rgba(168,85,247,.5);align-self:flex-end;border-bottom-right-radius:6px}
+.cv-msg .cv-tag{display:block;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acento);margin-bottom:4px}
+.cv-note{font-size:.78rem;color:var(--muted);text-align:center;margin-top:14px}
+@media(max-width:620px){
+  .cv-card{padding:24px 18px}
+  .cv-steps{grid-template-columns:1fr}
+  .cv-guar{grid-template-columns:1fr 1fr}
+  .cv-cta-row .btn,.cv-cta-row .btn-ghost{width:100%;text-align:center}
+}
+
 /* reveal */
 .rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
 .rv.vis{opacity:1;transform:none}
@@ -355,6 +413,25 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
     <p class="sub rv">Un recepcionista que nunca duerme: responde preguntas, agenda citas y te avisa lo importante.<br>Toca una burbuja y pruébala en vivo — son <b>demostraciones con respuestas programadas</b>.</p>
   </div>
   <div class="cb-field rv" id="nubeCb" aria-label="Diseños de chatbot subiendo como burbujas: toca una para probarla"></div>
+  <div class="wrap">
+    <div class="cv-try rv">
+      <span class="cv-kicker">Pruébalo con tu negocio</span>
+      <p style="color:var(--muted);font-size:.92rem;margin-bottom:14px">Elige tu tipo de negocio y mira cómo le respondería <b style="color:var(--texto)">tu propio asistente</b> a un cliente real.</p>
+      <div class="cv-try-row">
+        <select id="cvTrySel" aria-label="Tipo de negocio">
+          <option value="rest">Restaurante</option>
+          <option value="barb">Barbería</option>
+          <option value="dent">Clínica dental</option>
+          <option value="tall">Taller mecánico</option>
+          <option value="tien">Tienda</option>
+          <option value="vet">Veterinaria</option>
+        </select>
+        <button class="btn" id="cvTryGo" type="button" style="padding:12px 26px">Probar</button>
+      </div>
+      <div class="cv-chat" id="cvTryChat" aria-live="polite"></div>
+      <p class="cv-note">Demostración con respuestas programadas — así se sentiría tu propio asistente, con tus precios y tus horarios.</p>
+    </div>
+  </div>
   <div class="wrap" style="text-align:center">
     <a class="btn rv" href="chatbots.html">Ver galería de diseños →</a>
   </div>
@@ -377,6 +454,84 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
   </div>
 </section>
 
+<section id="cvCalc">
+  <div class="wrap">
+    <div class="cv-card rv">
+      <span class="cv-kicker">Haz cuentas</span>
+      <h2 class="sec" style="text-align:left">¿Cuánto pierdes al mes por no responder?</h2>
+      <p class="sub" style="text-align:left;margin-left:0">Mueve los controles según tu negocio. El número no miente.</p>
+      <div class="cv-slider">
+        <label>Mensajes de clientes por semana <b id="cvV1">40</b></label>
+        <input type="range" id="cvR1" min="0" max="200" value="40">
+      </div>
+      <div class="cv-slider">
+        <label>De esos, ¿cuántos se quedan sin respuesta? <b id="cvV2">60%</b></label>
+        <input type="range" id="cvR2" min="0" max="100" value="60">
+      </div>
+      <div class="cv-slider">
+        <label>¿Cuánto vale en promedio un cliente? <b id="cvV3">$80</b></label>
+        <input type="range" id="cvR3" min="5" max="500" step="5" value="80">
+      </div>
+      <div class="cv-result">
+        <div class="cv-num" id="cvOut">$8,326<span style="font-size:1.1rem">/mes</span></div>
+        <small>…en clientes que preguntan, no reciben respuesta y se van con otro. Cada mes.</small>
+        <div class="cv-cta-row">
+          <button class="btn" id="cvWaCalc" type="button">Quiero dejar de perder esto →</button>
+          <button class="btn-ghost" id="cvGoQuote" type="button">Armar mi cotización</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cvDiag">
+  <div class="wrap">
+    <div class="cv-card rv">
+      <span class="cv-kicker">Sin compromiso</span>
+      <h2 class="sec" style="text-align:left">Diagnóstico gratuito: qué automatizar primero</h2>
+      <p class="sub" style="text-align:left;margin-left:0">Responde 5 preguntas. En 24 horas te decimos por dónde empezar — gratis, sin compromiso.</p>
+      <div class="cv-steps">
+        <div class="cv-step"><b>01</b><strong>Respondes</strong><br>5 preguntas sobre tu negocio. Te toma un minuto.</div>
+        <div class="cv-step"><b>02</b><strong>Recibes tu diagnóstico</strong><br>Qué automatizar primero y con qué pieza, en 24 horas.</div>
+        <div class="cv-step"><b>03</b><strong>Lo instalamos</strong><br>Y lo cuidamos contigo: humanos + IA, no solo software.</div>
+      </div>
+      <div class="cv-field">
+        <label>Tipo de negocio</label>
+        <select id="cvDTipo">
+          <option>Restaurante / comida</option><option>Barbería / salón / spa</option>
+          <option>Clínica / consultorio</option><option>Taller mecánico</option>
+          <option>Tienda / comercio</option><option>Servicios a domicilio</option><option>Otro</option>
+        </select>
+      </div>
+      <div class="cv-field">
+        <label>¿Qué te quita más tiempo hoy?</label>
+        <select id="cvDTiempo">
+          <option>Responder mensajes y preguntas</option><option>Agendar citas / reservas</option>
+          <option>Llevar inventario o pedidos</option><option>Cobrar y dar seguimiento</option><option>Otro</option>
+        </select>
+      </div>
+      <div class="cv-field">
+        <label>¿Por dónde te escriben los clientes?</label>
+        <select id="cvDCanal">
+          <option>WhatsApp</option><option>Instagram</option><option>Llamadas</option><option>Facebook</option><option>Por varios lados</option>
+        </select>
+      </div>
+      <div class="cv-field">
+        <label>¿Qué quieres lograr? <span style="font-weight:400">(opcional)</span></label>
+        <input type="text" id="cvDMeta" placeholder="Ej.: no perder reservas de fin de semana">
+      </div>
+      <div class="cv-field">
+        <label>Tu nombre y tu negocio</label>
+        <input type="text" id="cvDNombre" placeholder="Ej.: Carlos — Tacos Don Chava">
+      </div>
+      <div class="cv-cta-row" style="justify-content:flex-start">
+        <button class="btn" id="cvDSend" type="button">Recibir mi diagnóstico gratis →</button>
+      </div>
+      <p class="cv-note">Lo revisa una persona real del equipo Polux. Nada de robots decidiendo por ti.</p>
+    </div>
+  </div>
+</section>
+
 <section id="como">
   <div class="wrap">
     <div class="pasos-mini rv">
@@ -387,6 +542,42 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
       <span class="pm-paso"><b>04</b>Lo hacemos tuyo, a medida</span>
     </div>
     <p class="sub rv" style="margin-top:20px">Sin compromiso: exploras, marcas lo que te gusta y te armamos un paquete a tu medida.</p>
+  </div>
+</section>
+
+<section id="cvTrust">
+  <div class="wrap">
+    <span class="cv-kicker rv" style="display:block;text-align:center;width:fit-content;margin:0 auto 18px">Confianza</span>
+    <h2 class="sec rv">Sin letra pequeña</h2>
+    <p class="sub rv">Lo que vale no necesita esconderse.</p>
+    <div class="cv-guar rv">
+      <div class="cv-g"><span class="cv-ic">🎁</span><strong>Primer mes gratis</strong>en planes mensuales, sin tarjeta. Si no te sirve, no pagas.</div>
+      <div class="cv-g"><span class="cv-ic">👥</span><strong>Humanos + IA</strong>personas reales detrás: si algo se rompe, alguien responde.</div>
+      <div class="cv-g"><span class="cv-ic">🔧</span><strong>Ajustes incluidos</strong>lo afinamos con tu negocio hasta que funcione como debe.</div>
+      <div class="cv-g"><span class="cv-ic">🤝</span><strong>Sin compromiso</strong>exploras, pruebas y decides. Nada se instala sin tu sí.</div>
+    </div>
+    <div class="cv-found rv">
+      <div class="cv-found-in">
+        <h3>Buscamos <span class="cv-n">3 negocios fundadores</span></h3>
+        <p>Precio fundador para siempre, a cambio de medir tu caso y contarlo en video. Cuando se llenen los <span class="cv-n">3 cupos</span>, se cierra.</p>
+        <button class="btn" id="cvFound" type="button">Quiero ser fundador →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cvFaq">
+  <div class="wrap" style="max-width:760px">
+    <h2 class="sec rv">Preguntas que nos hacen</h2>
+    <p class="sub rv">Directo, sin vueltas.</p>
+    <div class="rv">
+      <details class="cv-faq"><summary>¿Cuánto tarda en estar listo?</summary><div class="cv-a">Una página o un chatbot, días. Un sistema a medida, de una a tres semanas según lo que necesites. En el diagnóstico gratuito te damos fecha exacta.</div></details>
+      <details class="cv-faq"><summary>¿Tengo que saber de tecnología?</summary><div class="cv-a">No. Tú nos cuentas cómo trabaja tu negocio y nosotros lo traducimos a sistema. Si sabes usar WhatsApp, sabes usar lo que te instalamos.</div></details>
+      <details class="cv-faq"><summary>¿Y si no me funciona?</summary><div class="cv-a">Por eso el primer mes de los planes mensuales es gratis y sin tarjeta: lo pruebas con clientes reales. Y detrás hay personas, no solo software — lo ajustamos contigo.</div></details>
+      <details class="cv-faq"><summary>¿El chatbot va a reemplazar a mi gente?</summary><div class="cv-a">No: hace el trabajo repetitivo — responder lo mismo 50 veces, agendar, avisar — para que tu gente atienda lo que sí necesita un humano. Es IA que trabaja más control de calidad humano.</div></details>
+      <details class="cv-faq"><summary>¿Qué pasa con los datos de mis clientes?</summary><div class="cv-a">Son tuyos. No los vendemos, no los compartimos, y te decimos exactamente dónde vive cada dato antes de instalar nada.</div></details>
+      <details class="cv-faq"><summary>¿Cuánto cuesta?</summary><div class="cv-a">No hay precios fijos porque no hay dos negocios iguales: te armamos un paquete a tu medida en la cotización. Lo que sí es fijo: el primer mes gratis en planes mensuales, sin tarjeta.</div></details>
+    </div>
   </div>
 </section>
 
@@ -773,6 +964,79 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   });
   renderOm();paintFavs();measure();kick();goTo(0,true);
   if(/(?:\?|&)pedido=1/.test(location.search))setTimeout(()=>window.PoluxOrder.open(),700);
+})();
+
+/* ===== Conversión Polux: calculadora, diagnóstico, fundadores, pruébalo ===== */
+(function(){
+  var r1=document.getElementById('cvR1');
+  if(r1){
+    var r2=document.getElementById('cvR2'),r3=document.getElementById('cvR3');
+    function fmt(n){return '$'+Math.round(n).toLocaleString('en-US')}
+    function upd(){
+      var m=+r1.value,p=+r2.value,t=+r3.value;
+      document.getElementById('cvV1').textContent=m;
+      document.getElementById('cvV2').textContent=p+'%';
+      document.getElementById('cvV3').textContent='$'+t;
+      var loss=m*4.33*(p/100)*t;
+      document.getElementById('cvOut').innerHTML=fmt(loss)+'<span style="font-size:1.1rem">/mes</span>';
+      return loss;
+    }
+    var last=0;
+    [r1,r2,r3].forEach(function(r){r.addEventListener('input',function(){last=upd()})});
+    last=upd();
+    document.getElementById('cvWaCalc').addEventListener('click',function(){
+      var txt='Hola Polux ✨\nHice sus cuentas y estoy perdiendo unos '+fmt(last)+' al mes en clientes que preguntan y no reciben respuesta.\nQuiero dejar de perder ese dinero. ¿Me ayudas?';
+      window.open('https://wa.me/'+window.POLUX_WA+'?text='+encodeURIComponent(txt),'_blank');
+    });
+    document.getElementById('cvGoQuote').addEventListener('click',function(){
+      if(window.PoluxOrder)window.PoluxOrder.open();
+    });
+  }
+  var ds=document.getElementById('cvDSend');
+  if(ds){
+    ds.addEventListener('click',function(){
+      function v(id){return document.getElementById(id).value}
+      var txt='Hola Polux ✨ — quiero mi DIAGNÓSTICO GRATUITO\n• Negocio: '+v('cvDTipo')+'\n• Lo que más tiempo me quita: '+v('cvDTiempo')+'\n• Me escriben por: '+v('cvDCanal');
+      var meta=v('cvDMeta').trim(),nom=v('cvDNombre').trim();
+      if(meta)txt+='\n• Quiero lograr: '+meta;
+      if(nom)txt+='\n• Soy: '+nom;
+      window.open('https://wa.me/'+window.POLUX_WA+'?text='+encodeURIComponent(txt),'_blank');
+    });
+  }
+  var fb=document.getElementById('cvFound');
+  if(fb){
+    fb.addEventListener('click',function(){
+      var txt='Hola Polux ✨ — quiero ser uno de los 3 negocios fundadores. ¿Me cuentas cómo funciona?';
+      window.open('https://wa.me/'+window.POLUX_WA+'?text='+encodeURIComponent(txt),'_blank');
+    });
+  }
+  var tg=document.getElementById('cvTryGo');
+  if(tg){
+    var data={
+      rest:{q:'¿Tienen mesa para 4 esta noche?',a:'¡Hola! Sí, tenemos mesa para 4 a las 7:30 y 9:00 pm. ¿Te reservo la de las 7:30? 🍽️'},
+      barb:{q:'¿Cuánto cuesta corte + barba?',a:'¡Hola! Corte + barba: $35, unos 45 min. Tengo espacio hoy a las 4 pm y mañana a las 11 am. ¿Te anoto? ✂️'},
+      dent:{q:'¿Atienden emergencias?',a:'¡Hola! Sí, guardamos espacios de emergencia todos los días. Cuéntame qué te duele y te busco el espacio más cercano 🦷'},
+      tall:{q:'¿Cuánto sale el cambio de aceite?',a:'¡Hola! Desde $49 según tu carro. Dime marca y año y te confirmo precio exacto y horario 🔧'},
+      tien:{q:'¿Tienen la camisa azul en M?',a:'¡Hola! Sí, nos quedan 3 en M. Te la aparto 48 horas. ¿Pasas hoy? 👕'},
+      vet:{q:'¿Vacunan los sábados?',a:'¡Hola! Sí, sábados de 9 am a 2 pm. ¿Te agendo a tu peludo? 🐾'}
+    };
+    var sel=document.getElementById('cvTrySel'),chat=document.getElementById('cvTryChat');
+    function msg(cls,tag,text){
+      var d=document.createElement('div');d.className='cv-msg '+cls;
+      var s=document.createElement('span');s.className='cv-tag';s.textContent=tag;
+      d.appendChild(s);d.appendChild(document.createTextNode(text));chat.appendChild(d);
+      return d;
+    }
+    tg.addEventListener('click',function(){
+      var d=data[sel.value];chat.innerHTML='';
+      msg('usr','Tu cliente',d.q);
+      var t=msg('bot','Tu asistente','escribiendo…');
+      setTimeout(function(){
+        t.innerHTML='';var s=document.createElement('span');s.className='cv-tag';s.textContent='Tu asistente';
+        t.appendChild(s);t.appendChild(document.createTextNode(d.a));
+      },900);
+    });
+  }
 })();
 
 /* Reveal al hacer scroll */
