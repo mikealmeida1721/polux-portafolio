@@ -45,6 +45,7 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
 /* ===== Rueda infinita de diseños (scroll nativo + efecto 3D) ===== */
 .wheel{position:relative;perspective:1400px}
 .w-track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;position:relative;
+  perspective:1200px;
   padding:16px calc(50% - min(280px,40vw)) 28px;scrollbar-width:none;cursor:grab;outline:none}
 .w-track::-webkit-scrollbar{display:none}
 .w-card{flex:0 0 min(560px,80vw);scroll-snap-align:center;scroll-snap-stop:always;will-change:transform,opacity;
@@ -318,21 +319,28 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   track.innerHTML=html;
   const cards=[...track.children], countEl=document.getElementById('wCount');
   let active=0, copyW=0;
-  /* efecto 3D según cercanía al centro (decorativo: si falla, el carrusel sigue funcionando) */
-  function paint(){
-    try{
-      const tr=track.getBoundingClientRect(), cx=tr.left+tr.width/2;
-      let best=0,bd=1e12;
-      for(let i=0;i<cards.length;i++){
-        const b=cards[i].getBoundingClientRect(), d=(b.left+b.width/2-cx)/b.width, ad=Math.min(Math.abs(d),2.2);
-        const dd=Math.abs(d); if(dd<bd){bd=dd;best=i}
-        cards[i].style.transform=`rotateY(${(-d*13).toFixed(1)}deg) scale(${(1-ad*.13).toFixed(3)})`;
-        cards[i].style.opacity=(1-ad*.28).toFixed(2);
-      }
-      const idx=((best%n)+n)%n;
-      if(idx!==active){active=idx;countEl.textContent=String(idx+1).padStart(2,'0')+' / '+String(n).padStart(2,'0')}
-    }catch(e){}
+  /* Efecto 3D interpolado: los valores se acercan poco a poco al objetivo,
+     así nada "salta" de tamaño — todo llega fluido, incluso en el salto del bucle. */
+  const st3d=cards.map(()=>({r:0,s:1,o:1}));
+  let rafOn=false, scrolling=false, scrollIdle=null, normT=null;
+  function tick(){
+    const tr=track.getBoundingClientRect(), cx=tr.left+tr.width/2;
+    let best=0, bd=1e12, moving=false;
+    for(let i=0;i<cards.length;i++){
+      const b=cards[i].getBoundingClientRect(), d=(b.left+b.width/2-cx)/Math.max(b.width,1);
+      const dd=Math.abs(d); if(dd<bd){bd=dd;best=i}
+      const c=Math.max(-2,Math.min(2,d)), ad=Math.min(Math.abs(d),2);
+      const t={r:-c*8, s:1-ad*0.06, o:1-ad*0.14}, s=st3d[i];
+      s.r+=(t.r-s.r)*0.16; s.s+=(t.s-s.s)*0.16; s.o+=(t.o-s.o)*0.16;
+      if(Math.abs(t.r-s.r)>0.02||Math.abs(t.s-s.s)>0.001)moving=true;
+      cards[i].style.transform=`rotateY(${s.r.toFixed(2)}deg) scale(${s.s.toFixed(4)})`;
+      cards[i].style.opacity=s.o.toFixed(3);
+    }
+    const idx=((best%n)+n)%n;
+    if(idx!==active){active=idx;countEl.textContent=String(idx+1).padStart(2,'0')+' / '+String(n).padStart(2,'0')}
+    if(moving||scrolling)requestAnimationFrame(tick); else rafOn=false;
   }
+  function kick(){if(!rafOn){rafOn=true;requestAnimationFrame(tick)}}
   function measure(){copyW=track.scrollWidth/3}
   function centerX(el){return el.offsetLeft-(track.clientWidth-el.offsetWidth)/2}
   function goTo(k,imm){const idx=((k%n)+n)%n;track.scrollTo({left:centerX(cards[n+idx]),behavior:imm?'auto':'smooth'});poke()}
@@ -347,18 +355,18 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   function poke(){stopAuto();clearTimeout(idleT);idleT=setTimeout(startAuto,9000)}
   track.addEventListener('pointerdown',poke);track.addEventListener('wheel',poke,{passive:true});track.addEventListener('touchstart',poke,{passive:true});
   /* bucle infinito: 3 copias, salto invisible al acercarse a un extremo */
-  let normT=null;
   track.addEventListener('scroll',()=>{
-    requestAnimationFrame(paint);
-    clearTimeout(normT);normT=setTimeout(()=>{
+    scrolling=true; kick();
+    clearTimeout(scrollIdle); scrollIdle=setTimeout(()=>{scrolling=false},350);
+    clearTimeout(normT); normT=setTimeout(()=>{
       if(copyW>0){
         if(track.scrollLeft<copyW*0.35)track.scrollLeft+=copyW;
         else if(track.scrollLeft>copyW*1.65)track.scrollLeft-=copyW;
       }
     },140);
   },{passive:true});
-  addEventListener('resize',()=>{measure();paint()});
-  addEventListener('load',()=>{measure();paint()});
+  addEventListener('resize',()=>{measure();kick()});
+  addEventListener('load',()=>{measure();kick()});
   /* clic: la activa abre, la lateral gira, el corazón guarda */
   const KEY='poluxFavs';let favs=[];
   try{favs=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){favs=[]}
@@ -441,7 +449,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     closeOm();
     window.open('https://wa.me/'+window.POLUX_WA+'?text='+encodeURIComponent(txt),'_blank');
   });
-  renderOm();paintFavs();measure();goTo(0,true);
+  renderOm();paintFavs();measure();kick();goTo(0,true);
   if(/(?:\?|&)pedido=1/.test(location.search))setTimeout(()=>window.PoluxOrder.open(),700);
 })();
 
