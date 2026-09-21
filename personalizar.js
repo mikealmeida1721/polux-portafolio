@@ -79,6 +79,33 @@ function aplicarTodo(){
 }
 aplicarTodo();
 
+/* ---------- Red de seguridad .rv: el contenido jamás queda invisible ----------
+   Cada demo revela sus secciones con IntersectionObserver; si en algún móvil
+   ese observador no se dispara, las secciones quedarían en opacity:0 para
+   siempre. Esta red revela todo .rv que esté cerca del viewport, con
+   scroll, resize, touchend y dos pasadas temporizadas. Solo añade .vis,
+   nunca lo quita: la animación original se conserva cuando el observador
+   sí funciona. Corre aquí porque este archivo lo cargan los 20 modelos. */
+(function(){
+  function red(){
+    try{
+      var h = window.innerHeight || 800;
+      var els = document.querySelectorAll('.rv:not(.vis)');
+      for(var i=0;i<els.length;i++){
+        var r = els[i].getBoundingClientRect();
+        if(r.top < h*1.25 && r.bottom > -h*0.25) els[i].classList.add('vis');
+      }
+    }catch(e){}
+  }
+  var t = null;
+  function agenda(){ clearTimeout(t); t = setTimeout(red, 250); }
+  window.addEventListener('scroll', agenda, {passive:true});
+  window.addEventListener('resize', agenda);
+  window.addEventListener('touchend', agenda, {passive:true});
+  setTimeout(red, 900);
+  setTimeout(red, 2500);
+})();
+
 if(EMBED){
   // ocultar badges y botones dentro de las miniaturas del hub
   ['.demo-badge','.volver'].forEach(function(sel){
