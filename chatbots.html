@@ -42,8 +42,9 @@ footer{border-top:1px solid var(--borde);padding:26px 0;color:var(--muted);font-
   <header class="top">
     <span class="kicker">Catálogo</span>
     <h1>Diseños de <em>chatbot</em></h1>
-    <p class="precio"><b>100 diseños</b> en <b>20 familias</b> — cada tarjeta muestra la burbuja flotante del chatbot.
-    Tócala para abrir el chat completo con ese estilo. Todos son <b>demostraciones con respuestas programadas</b> (DEMO):
+    <p class="precio"><b>100 diseños</b> en <b>20 familias</b>: las <b>20 burbujas originales</b> de nuestras demos
+    más <b>80 diseños únicos</b>, cada uno con su propio icono, color y acabado.
+    Toca una burbuja para abrir el chat completo con ese estilo. Todos son <b>demostraciones con respuestas programadas</b> (DEMO):
     el producto que se muestra aquí es el <b>diseño</b>, adaptable al negocio que lo necesite.</p>
     <a class="back" href="index.html">← Volver al portafolio</a>
   </header>
@@ -81,10 +82,10 @@ function render(){
  var h='',n=0;
  THEMES.forEach(function(t){
   if(famSel!=='Todos'&&t.fam!==famSel)return;
-  if(q){var hay=(t.nombre+' '+t.famLabel+' '+t.geo.label+' '+t.anim.label+' '+t.data.nicho).toLowerCase();if(hay.indexOf(q)<0)return}
+  if(q){var hay=(t.nombre+' '+t.famLabel+' '+t.trLabel+' '+t.data.nicho).toLowerCase();if(hay.indexOf(q)<0)return}
   n++;
   h+='<button class="cb-tile" data-id="'+t.id+'">'+UI.cardHTML(t)+
-     '<span class="cb-name">'+UI.esc(t.nombre)+'</span><span class="cb-sub">Recepcionista IA · '+UI.esc(t.anim.label)+'</span></button>';
+     '<span class="cb-name">'+UI.esc(t.nombre)+'</span><span class="cb-sub">Recepcionista IA · '+UI.esc(t.trLabel)+'</span></button>';
  });
  grid.innerHTML=h||'<div class="vacio">Sin resultados para esa búsqueda.</div>';
  countEl.textContent='Mostrando '+n+' de '+THEMES.length+' diseños';
