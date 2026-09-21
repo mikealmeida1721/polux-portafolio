@@ -128,6 +128,42 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
 .pm-paso{font-size:.9rem;color:var(--muted);white-space:nowrap}
 .pm-paso b{color:var(--acento);margin-right:6px}
 .pm-sep{color:var(--acento);font-weight:800}
+.btn{border:0;cursor:pointer;font-family:inherit}
+
+/* ===== Chatbot demo (Sofía) ===== */
+.sof{max-width:430px;margin:0 auto;background:var(--tarjeta);border:1px solid var(--borde);border-radius:22px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.sof-head{display:flex;align-items:center;gap:12px;padding:16px 18px;background:#101016;border-bottom:1px solid var(--borde)}
+.sof-avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#A855F7,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex:none}
+.sof-head b{font-size:1rem}
+.sof-head small{color:var(--muted);font-size:.78rem}
+.sof-demo{margin-left:auto;font-size:.68rem;letter-spacing:.18em;font-weight:800;color:#0A0A0C;background:#c084fc;border-radius:999px;padding:5px 12px;flex:none}
+.sof-note{padding:12px 18px 0;color:var(--muted);font-size:.82rem}
+.sof-msgs{padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-height:220px;max-height:320px;overflow-y:auto}
+.sof-msg{max-width:82%;padding:10px 14px;border-radius:16px;font-size:.9rem;line-height:1.45}
+.sof-msg.bot{background:#1e1e28;border:1px solid var(--borde);align-self:flex-start;border-bottom-left-radius:4px}
+.sof-msg.user{background:var(--acento);color:#0A0A0C;font-weight:600;align-self:flex-end;border-bottom-right-radius:4px}
+.sof-typing{align-self:flex-start;background:#1e1e28;border:1px solid var(--borde);border-radius:16px;border-bottom-left-radius:4px;padding:12px 16px;display:flex;gap:5px}
+.sof-typing i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:st .9s infinite}
+.sof-typing i:nth-child(2){animation-delay:.15s}
+.sof-typing i:nth-child(3){animation-delay:.3s}
+@keyframes st{0%,100%{opacity:.3}50%{opacity:1}}
+.sof-chips{display:flex;gap:8px;padding:4px 16px 10px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.sof-chips::-webkit-scrollbar{display:none}
+.sof-chip{flex:none;border:1px solid var(--acento);background:rgba(168,85,247,.1);color:#e9d5ff;border-radius:999px;padding:8px 15px;font-size:.82rem;cursor:pointer;white-space:nowrap;font-family:inherit}
+.sof-form{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--borde);background:#101016}
+.sof-form input{flex:1;background:#0d0d13;border:1px solid var(--borde);border-radius:999px;color:#fff;padding:11px 16px;font-size:.9rem;outline:none;font-family:inherit;min-width:0}
+.sof-form input:focus{border-color:var(--acento)}
+.sof-form button{width:46px;height:46px;flex:none;border-radius:50%;border:none;background:var(--acento);color:#0A0A0C;font-size:1.2rem;cursor:pointer}
+
+/* ===== Sistemas a medida ===== */
+.sis-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sis{background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;padding:16px 14px;cursor:pointer;text-align:left;transition:border-color .15s,background .15s;color:var(--texto);font-family:inherit}
+.sis .sis-x{font-size:1.3rem;display:block;margin-bottom:8px;opacity:.45;transition:opacity .15s}
+.sis b{font-size:.92rem;display:block;margin-bottom:4px}
+.sis small{color:var(--muted);font-size:.76rem;line-height:1.4;display:block}
+.sis.on{border-color:var(--acento);background:rgba(168,85,247,.12)}
+.sis.on .sis-x{opacity:1}
+@media(max-width:620px){.sis-grid{grid-template-columns:repeat(2,1fr)}}
 
 /* ===== CTA final ===== */
 .cta{background:radial-gradient(700px 320px at 50% 100%,rgba(168,85,247,.16),transparent);border-top:1px solid var(--borde);text-align:center;padding:88px 20px}
@@ -221,22 +257,60 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
   </div>
 </section>
 
+<section id="chatbots">
+  <div class="wrap">
+    <h2 class="sec rv">Chatbots con IA</h2>
+    <p class="sub rv">Un recepcionista que nunca duerme: responde preguntas, agenda citas y te avisa lo importante.<br>Pruébalo tú mismo — esto es una demostración 👇</p>
+    <div class="sof rv" id="sofia">
+      <div class="sof-head">
+        <span class="sof-avatar">🦷</span>
+        <span><b>Sofía · Recepcionista IA</b><br><small>Clínica Dental Sonrisa</small></span>
+        <span class="sof-demo">DEMO</span>
+      </div>
+      <p class="sof-note">Demostración con respuestas programadas — así podría atender a tus clientes, con los datos de tu negocio.</p>
+      <div class="sof-msgs" id="sofMsgs" aria-live="polite"></div>
+      <div class="sof-chips" id="sofChips"></div>
+      <form class="sof-form" id="sofForm">
+        <input type="text" id="sofInput" placeholder="Escríbele a Sofía…" autocomplete="off" aria-label="Escribirle a Sofía">
+        <button type="submit" aria-label="Enviar mensaje">➤</button>
+      </form>
+    </div>
+    <div style="text-align:center;margin-top:30px">
+      <button class="btn rv" id="ctaChatbot" type="button">Quiero un chatbot así →</button>
+    </div>
+  </div>
+</section>
+
+<section id="sistemas">
+  <div class="wrap">
+    <h2 class="sec rv">Sistemas a medida</h2>
+    <p class="sub rv">Más que una página: el sistema que opera tu negocio por dentro.<br>Marca con ✦ lo que necesitas — entra directo en tu cotización.</p>
+    <div class="sis-grid rv" id="sisGrid"></div>
+    <div style="text-align:center;margin-top:30px">
+      <button class="btn rv" id="ctaSis" type="button">Pedir cotización con mi sistema →</button>
+    </div>
+  </div>
+</section>
+
 <section id="como">
   <div class="wrap">
     <div class="pasos-mini rv">
       <span class="pm-t">¿Cómo funciona?</span>
-      <span class="pm-paso"><b>01</b>Explora los diseños en vivo</span><span class="pm-sep">→</span>
-      <span class="pm-paso"><b>02</b>Elige o combina pedazos</span><span class="pm-sep">→</span>
-      <span class="pm-paso"><b>03</b>Lo hacemos tuyo, a medida</span>
+      <span class="pm-paso"><b>01</b>Explora en vivo</span><span class="pm-sep">→</span>
+      <span class="pm-paso"><b>02</b>Elige y combina</span><span class="pm-sep">→</span>
+      <span class="pm-paso"><b>03</b>Pide tu cotización por WhatsApp</span><span class="pm-sep">→</span>
+      <span class="pm-paso"><b>04</b>Lo hacemos tuyo, a medida</span>
     </div>
+    <p class="sub rv" style="margin-top:20px">Sin compromiso: exploras, marcas lo que te gusta y te armamos un paquete a tu medida.</p>
   </div>
 </section>
 
 <div class="cta">
   <div class="wrap">
-    <h2 class="rv">¿Viste algo que te gustó?</h2>
-    <p class="rv">Si esta muestra se siente así, imagina tu negocio con la misma calidad.</p>
-    <a class="btn rv" href="https://polux.online/">Hablar con Polux →</a>
+    <h2 class="rv">¿Listo para pedir tu cotización?</h2>
+    <p class="rv">Márcanos lo que te gustó y te armamos tu paquete a medida — sin compromiso.</p>
+    <button class="btn rv" id="ctaQuote" type="button">Pide tu cotización →</button>
+    <p class="rv" style="margin-top:22px;font-size:.9rem"><a href="https://polux.online/" style="color:var(--acento)">o conoce más en polux.online →</a></p>
   </div>
 </div>
 
@@ -256,6 +330,10 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
     <div class="om-sec">
       <div class="om-lab">Logos que te gustaron <span>(catálogo de logotipos)</span></div>
       <div class="chips" id="omLogos"></div>
+    </div>
+    <div class="om-sec">
+      <div class="om-lab">Capacidades para tu sistema</div>
+      <div class="chips" id="omSis"></div>
     </div>
     <div class="om-sec">
       <div class="om-lab">¿Qué más te interesa?</div>
@@ -453,16 +531,20 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   });
   /* ===== Modal cotización personalizada (sin precios: el paquete se arma a medida) ===== */
   const omBack=document.getElementById('omBack'),omDesigns=document.getElementById('omDesigns'),
-        omServs=document.getElementById('omServs'),omPz=document.getElementById('omPz'),omLogos=document.getElementById('omLogos');
+        omServs=document.getElementById('omServs'),omPz=document.getElementById('omPz'),omLogos=document.getElementById('omLogos'),
+        omSis=document.getElementById('omSis');
   const picked=new Set();
   const loadPz=()=>{try{return JSON.parse(localStorage.getItem('poluxPiezas')||'[]')}catch(e){return[]}};
   const savePz=v=>{try{localStorage.setItem('poluxPiezas',JSON.stringify(v))}catch(e){}};
   const loadLogos=()=>{try{return JSON.parse(localStorage.getItem('poluxLogos')||'[]')}catch(e){return[]}};
   const saveLogos=v=>{try{localStorage.setItem('poluxLogos',JSON.stringify(v))}catch(e){}};
+  const loadSis=()=>{try{return JSON.parse(localStorage.getItem('poluxSistemas')||'[]')}catch(e){return[]}};
+  const saveSis=v=>{try{localStorage.setItem('poluxSistemas',JSON.stringify(v))}catch(e){}};
+  window.PoluxSis={load:loadSis,save:saveSis};
   function renderOm(){
     omDesigns.innerHTML=DESIGNS.map(d=>`<button type="button" class="tchip${picked.has(d.id)?' on':''}" data-id="${d.id}">${d.nombre}</button>`).join('');
     omServs.innerHTML=SERVS.map(s=>`<label class="piece"><input type="checkbox" value="${s}"><span>${s}</span></label>`).join('');
-    renderPz();renderLogos();
+    renderPz();renderLogos();renderSis();
   }
   function renderPz(){
     const pz=loadPz();
@@ -480,25 +562,38 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   }
   omLogos.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
     const lgs=loadLogos();lgs.splice(+b.dataset.i,1);saveLogos(lgs);renderLogos()});
+  function renderSis(){
+    const ss=loadSis();
+    omSis.innerHTML=ss.length
+      ? ss.map((s,i)=>`<span class="tchip on pz-chip">✦ ${s}<button type="button" data-i="${i}" aria-label="Quitar">✕</button></span>`).join('')
+      : '<p class="om-empty">¿Necesitas un sistema? Marca con ✦ las capacidades en la sección <b>Sistemas a medida</b>.</p>';
+  }
+  omSis.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+    const ss=loadSis();ss.splice(+b.dataset.i,1);saveSis(ss);renderSis()});
   omDesigns.addEventListener('click',e=>{const b=e.target.closest('.tchip');if(!b)return;
     const id=b.dataset.id;picked.has(id)?picked.delete(id):picked.add(id);b.classList.toggle('on')});
-  window.PoluxOrder={open(){favs.forEach(id=>picked.add(id));renderOm();omBack.classList.add('open')}};
+  window.PoluxOrder={open(pre){favs.forEach(id=>picked.add(id));renderOm();
+    if(pre&&pre.length)[...omServs.querySelectorAll('input')].forEach(i=>{i.checked=pre.indexOf(i.value)>=0});
+    omBack.classList.add('open')}};
   function closeOm(){omBack.classList.remove('open')}
   document.getElementById('omX').addEventListener('click',closeOm);
   omBack.addEventListener('click',e=>{if(e.target===omBack)closeOm()});
   addEventListener('keydown',e=>{if(e.key==='Escape')closeOm()});
   document.getElementById('traySend').addEventListener('click',()=>window.PoluxOrder.open());
   document.getElementById('omSend').addEventListener('click',()=>{
-    if(picked.size===0){say('Elige al menos un diseño con ♡ o en el formulario');return}
+    const pz0=loadPz(),lgs0=loadLogos(),sis0=loadSis();
+    const servsOn=[...omServs.querySelectorAll('input:checked')].length>0;
+    if(picked.size===0&&!pz0.length&&!lgs0.length&&!servsOn&&!sis0.length){say('Elige algo primero: un diseño, un logo, una capacidad…');return}
     const dis=DESIGNS.filter(d=>picked.has(d.id)).map(d=>d.nombre).join(', ');
-    const pz=loadPz().map(p=>p.d+': '+p.p).join('; ');
-    const lgs=loadLogos();
+    const pz=pz0.map(p=>p.d+': '+p.p).join('; ');
     const servs=[...omServs.querySelectorAll('input:checked')].map(i=>i.value).join(', ');
     const nom=document.getElementById('omNombre').value.trim(), neg=document.getElementById('omNegocio').value.trim();
     const logo=document.querySelector('input[name=omLogo]:checked').value;
-    let txt='Hola Polux, quiero una cotización personalizada ✨\n• Diseño base: '+dis;
+    let txt='Hola Polux, quiero una cotización personalizada ✨';
+    if(dis)txt+='\n• Diseño base: '+dis;
     if(pz)txt+='\n• Lo que elegí en las demos: '+pz;
-    if(lgs.length)txt+='\n• Logos que me gustaron: '+lgs.map(l=>l.nombre+' ('+l.fam+')').join(', ');
+    if(lgs0.length)txt+='\n• Logos que me gustaron: '+lgs0.map(l=>l.nombre+' ('+l.fam+')').join(', ');
+    if(sis0.length)txt+='\n• Capacidades que necesito: '+sis0.join(', ');
     if(servs)txt+='\n• Me interesa: '+servs;
     txt+='\n• Logo: '+(logo==='tengo'?'ya tengo, lo envío por aquí':'quiero que Polux me diseñe uno');
     if(nom||neg)txt+='\n• Contacto: '+(nom||'—')+' — Negocio: '+(neg||'—');
@@ -676,6 +771,88 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
+})();
+</script>
+<script>
+/* Sofía — demo de chatbot (bot de muestra con respuestas programadas) */
+(function(){
+  var box=document.getElementById('sofMsgs');if(!box)return;
+  var form=document.getElementById('sofForm'),input=document.getElementById('sofInput'),chips=document.getElementById('sofChips');
+  function norm(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+  var RULES=[
+    {k:['hola','buenas','buenos dias','buenas tardes','buenas noches','que tal','hey','saludos'],r:'¡Hola! Soy Sofía, la recepcionista virtual de Clínica Dental Sonrisa ✨ Puedo darte horarios, agendar tu cita o pasarte con una persona del equipo. ¿En qué te ayudo?'},
+    {k:['cita','agendar','reservar','turno','apartar','quiero ir'],r:'¡Claro que sí! Atendemos de lunes a viernes de 9:00 a 18:00. ¿Qué día te viene bien? 📅'},
+    {k:['horario','hora','abren','cierran','abierto','atienden'],r:'Nuestro horario es de lunes a viernes de 9:00 a 18:00 y sábados de 9:00 a 13:00 🕘'},
+    {k:['precio','costo','cuanto','cuesta','tarifa','presupuesto'],r:'Los precios dependen del tratamiento que necesites. Te puedo agendar una valoración gratuita y ahí te dan tu presupuesto exacto. ¿Te agendo? 😊'},
+    {k:['humano','persona','asesor','alguien','encargado','doctor','doctora'],r:'¡Por supuesto! Te paso con una persona de nuestro equipo en un momento. Mientras tanto, ¿me dices tu nombre?'},
+    {k:['gracias','genial','perfecto','excelente','buenisimo'],r:'¡Con gusto! Aquí estoy cuando me necesites 😊'},
+    {k:['donde','ubicacion','direccion','llegar','encuentran'],r:'Estamos en Av. Principal 123, a dos cuadras del parque central 📍 ¿Te agendo tu visita?'},
+    {k:['adios','chao','nos vemos','bye'],r:'¡Que tengas un lindo día! Sonríe mucho 😁'}
+  ];
+  var FALLBACK='Puedo ayudarte con horarios, agendar tu cita o pasarte con una persona del equipo. ¿Qué prefieres?';
+  function replyFor(t){var n=' '+norm(t)+' ';
+    for(var i=0;i<RULES.length;i++){var ks=RULES[i].k;
+      for(var j=0;j<ks.length;j++){if(n.indexOf(ks[j])>=0)return RULES[i].r}}
+    return FALLBACK}
+  function bubble(who,text){var d=document.createElement('div');d.className='sof-msg '+who;d.textContent=text;box.appendChild(d);box.scrollTop=box.scrollHeight}
+  function typing(){var d=document.createElement('div');d.className='sof-typing';d.innerHTML='<i></i><i></i><i></i>';box.appendChild(d);box.scrollTop=box.scrollHeight;return d}
+  var busy=false;
+  function send(text){
+    text=(text||'').trim();if(!text||busy)return;
+    busy=true;bubble('user',text);input.value='';
+    var t=typing();
+    setTimeout(function(){t.remove();bubble('bot',replyFor(text));busy=false},700+Math.random()*500);
+  }
+  form.addEventListener('submit',function(e){e.preventDefault();send(input.value);input.focus()});
+  ['Quiero una cita','¿Cuál es el horario?','Hablar con una persona'].forEach(function(c){
+    var b=document.createElement('button');b.type='button';b.className='sof-chip';b.textContent=c;
+    b.addEventListener('click',function(){send(c)});chips.appendChild(b)});
+  var greeted=false;
+  function greet(){if(greeted)return;greeted=true;var t=typing();
+    setTimeout(function(){t.remove();bubble('bot','¡Hola! Soy Sofía ✨, la recepcionista virtual de Clínica Dental Sonrisa. Escríbeme o toca una sugerencia 👇')},900)}
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){greet();io.disconnect()}})},{threshold:.3});
+    io.observe(document.getElementById('sofia'));
+  }else greet();
+})();
+</script>
+<script>
+/* Sistemas a medida: selector de capacidades estilo piezas (✦) */
+(function(){
+  var grid=document.getElementById('sisGrid');if(!grid||!window.PoluxSis)return;
+  var CAPS=[
+    ['Citas y agenda','Tus clientes reservan solos, 24/7'],
+    ['Control de inventario','Stock, entradas y salidas al día'],
+    ['Base de clientes','Historial y seguimiento de cada cliente'],
+    ['Facturación','Facturas y cobros sin enredos'],
+    ['Recordatorios automáticos','SMS y WhatsApp que avisan por ti'],
+    ['Catálogo de productos','Muestra tu oferta y actualízala fácil'],
+    ['Reportes y métricas','Tus ventas y citas en números claros'],
+    ['Roles y permisos','Tu equipo, cada quien con lo suyo']
+  ];
+  function paint(){
+    var sel=window.PoluxSis.load();
+    Array.prototype.forEach.call(grid.children,function(b){
+      var on=sel.indexOf(b.dataset.n)>=0;
+      b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));
+      b.querySelector('.sis-x').textContent=on?'✓':'✦';
+    });
+  }
+  CAPS.forEach(function(c){
+    var b=document.createElement('button');
+    b.type='button';b.className='sis';b.dataset.n=c[0];
+    b.innerHTML='<span class="sis-x">✦</span><b>'+c[0]+'</b><small>'+c[1]+'</small>';
+    b.addEventListener('click',function(){
+      var sel=window.PoluxSis.load(),i=sel.indexOf(c[0]);
+      if(i>=0)sel.splice(i,1);else sel.push(c[0]);
+      window.PoluxSis.save(sel);paint();
+    });
+    grid.appendChild(b);
+  });
+  paint();
+  document.getElementById('ctaSis').addEventListener('click',function(){window.PoluxOrder.open()});
+  document.getElementById('ctaChatbot').addEventListener('click',function(){window.PoluxOrder.open(['Chatbot con IA'])});
+  document.getElementById('ctaQuote').addEventListener('click',function(){window.PoluxOrder.open()});
 })();
 </script>
 <script>window.POLUX_WA='16093316652';window.POLUX_CHAT={ac:'#A855F7',icon:'spark',context:'hub'};</script>
