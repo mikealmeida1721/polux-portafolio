@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Negocio Demo — Servicio Local (Modelo base)</title>
+<style>
+/* ============================================================
+   PERSONALIZACIÓN RÁPIDA — cambia logo y colores aquí (2 min)
+   --logo: pega la URL del logo del prospecto (o deja "" y se usa texto)
+   ============================================================ */
+:root{
+  --logo: "";
+  --fondo:#f6f9fc; --fondo2:#eef4fa; --tarjeta:#ffffff; --borde:#dbe7f3;
+  --acento:#0ea5e9; --acento2:#0369a1;
+  --texto:#0f2740; --muted:#5b7288;
+  --fuente-titular: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fuente-cuerpo: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo);line-height:1.6}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+/* Distintivo demo */
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--acento2);border-radius:999px;padding:5px 14px;opacity:.92}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:#fff;border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.volver:hover{color:var(--acento2);border-color:var(--acento)}
+/* Header */
+header.site{background:#fff;border-bottom:1px solid var(--borde);position:sticky;top:0;z-index:50;padding-top:46px}
+.bar{display:flex;align-items:center;gap:14px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--texto)}
+.logo-slot{width:46px;height:46px;border-radius:12px;border:2px solid var(--acento);background:var(--logo) center/contain no-repeat,#fff;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--acento2);font-size:1.2rem}
+.brand b{font-size:1.1rem}
+.brand small{display:block;font-size:.68rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+nav.menu{margin-left:auto;display:flex;gap:20px;font-size:.93rem;align-items:center}
+nav.menu a{color:var(--muted);text-decoration:none}
+nav.menu a:hover{color:var(--acento2)}
+.btn{display:inline-block;background:var(--acento);color:#fff;font-weight:700;text-decoration:none;padding:12px 26px;border-radius:10px;border:none;cursor:pointer;font-size:1rem}
+.btn:hover{background:var(--acento2)}
+.btn.ghost{background:#fff;color:var(--acento2);border:2px solid var(--acento)}
+/* Hero + scheduler */
+.hero{padding:64px 0;background:linear-gradient(180deg,var(--fondo2),var(--fondo))}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center}
+.kicker{font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;color:var(--acento2);margin-bottom:12px;font-weight:700}
+.hero h1{font-size:clamp(2rem,4.6vw,3.1rem);line-height:1.15;margin-bottom:14px}
+.hero h1 em{font-style:normal;color:var(--acento2)}
+.hero p{color:var(--muted);margin-bottom:20px}
+.scheduler{background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;padding:26px;box-shadow:0 12px 32px rgba(3,105,161,.10)}
+.scheduler h3{font-size:1.1rem;margin-bottom:4px}
+.scheduler .hint{font-size:.85rem;color:var(--muted);margin-bottom:16px}
+.dias{display:flex;gap:8px;margin-bottom:14px}
+.dia{flex:1;border:2px solid var(--borde);background:#fff;border-radius:10px;padding:10px 4px;text-align:center;cursor:pointer;font-size:.85rem}
+.dia b{display:block;font-size:1.05rem}
+.dia.sel{border-color:var(--acento);background:#f0f9ff}
+.horas{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.hora{border:2px solid var(--borde);background:#fff;border-radius:999px;padding:8px 16px;cursor:pointer;font-size:.88rem}
+.hora.sel{border-color:var(--acento);background:var(--acento);color:#fff;font-weight:700}
+.scheduler input{width:100%;border:2px solid var(--borde);border-radius:10px;padding:12px 14px;font-size:1rem;margin-bottom:14px}
+.scheduler input:focus{outline:none;border-color:var(--acento)}
+.confirm{display:none;background:#f0fdf4;border:2px solid #22c55e;border-radius:10px;padding:14px;margin-top:14px;font-size:.93rem}
+/* Pasos */
+section{padding:56px 0}
+h2.sec{font-size:1.75rem;margin-bottom:6px}
+p.sub{color:var(--muted);margin-bottom:28px;max-width:620px}
+.pasos{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.paso{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;padding:26px;text-align:center}
+.paso .n{width:44px;height:44px;border-radius:50%;background:var(--acento);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:1.2rem}
+.paso h3{margin-bottom:6px}
+.paso p{color:var(--muted);font-size:.93rem}
+/* Planes */
+.planes{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.plan{background:var(--tarjeta);border:2px solid var(--borde);border-radius:14px;padding:28px;display:flex;flex-direction:column}
+.plan.pop{border-color:var(--acento);position:relative}
+.plan.pop::after{content:"MÁS POPULAR";position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--acento);color:#fff;font-size:.68rem;letter-spacing:.14em;padding:4px 14px;border-radius:999px;font-weight:700}
+.plan h3{font-size:1.15rem}
+.plan .precio{font-size:2rem;font-weight:800;color:var(--acento2);margin:8px 0}
+.plan .precio small{font-size:.9rem;font-weight:400;color:var(--muted)}
+.plan ul{list-style:none;margin:14px 0 22px;color:var(--muted);font-size:.93rem;flex:1}
+.plan li{padding:6px 0;border-bottom:1px dashed var(--borde)}
+.plan li::before{content:"✓ ";color:var(--acento);font-weight:700}
+/* SMS demo */
+.sms{background:var(--fondo2);border-radius:18px;padding:36px;display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
+.phone{background:#0f2740;border-radius:28px;padding:18px;max-width:300px;margin:0 auto;width:100%}
+.screen{background:#fff;border-radius:16px;padding:14px;min-height:280px;display:flex;flex-direction:column;gap:8px;font-size:.85rem}
+.msg{max-width:85%;padding:9px 13px;border-radius:14px;line-height:1.45}
+.msg.in{background:#eef4fa;align-self:flex-start}
+.msg.out{background:var(--acento);color:#fff;align-self:flex-end}
+.cmds{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.cmd{border:2px solid var(--acento);background:#fff;color:var(--acento2);border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:700;font-size:.85rem}
+.cmd:hover{background:var(--acento);color:#fff}
+/* Lista servicios */
+.lista{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;overflow:hidden}
+.lista .fila{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-bottom:1px solid var(--borde)}
+.lista .fila:last-child{border-bottom:none}
+.lista .fila b{font-size:1rem}
+.lista .fila span{color:var(--muted);font-size:.88rem;display:block}
+.lista .p{font-weight:800;color:var(--acento2);white-space:nowrap}
+/* Testimonios */
+.testis{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.testi{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;padding:24px}
+.testi .stars{color:#f59e0b;margin-bottom:8px;letter-spacing:.1em}
+.testi p{font-style:italic}
+.testi footer{margin-top:10px;font-size:.85rem;color:var(--muted)}
+.testi .eje{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acento2);font-style:normal}
+/* FAQ */
+.faq details{background:var(--tarjeta);border:1px solid var(--borde);border-radius:10px;padding:16px 20px;margin-bottom:10px}
+.faq summary{cursor:pointer;font-weight:700}
+.faq summary::marker{color:var(--acento)}
+.faq p{color:var(--muted);margin-top:8px;font-size:.94rem}
+footer.site{background:#0f2740;color:#cbd5e1;padding:36px 0;text-align:center;font-size:.9rem}
+footer.site a{color:#7dd3fc}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr}.pasos{grid-template-columns:1fr}.planes{grid-template-columns:1fr}.sms{grid-template-columns:1fr}.testis{grid-template-columns:1fr}nav.menu a:not(.btn){display:none}}
+</style>
+</head>
+<body>
+<div class="demo-badge">Diseño demo</div>
+<a class="volver" href="../index.html">← Portafolio</a>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#"><span class="logo-slot" data-logo>N</span><span><b data-nombre>Negocio Demo</b><small data-tagline>Servicio local</small></span></a>
+    <nav class="menu">
+      <a href="#como">Cómo funciona</a><a href="#planes">Planes</a><a href="#sms">Por SMS</a><a href="#faq">Preguntas</a>
+      <a class="btn" href="#pedir">Pedir recogida</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="pedir">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="kicker">Recogida y entrega a domicilio</div>
+      <h1>Tu ropa, recogida y entregada <em>sin que muevas un dedo.</em></h1>
+      <p>Modelo base para negocios de servicios locales con reservas y pedidos: lavanderías, spas, talleres. Programa en segundos, nosotros nos encargamos del resto.</p>
+      <a class="btn ghost" href="#como">Ver cómo funciona</a>
+    </div>
+    <div class="scheduler">
+      <h3>Programa tu recogida</h3>
+      <p class="hint">Demo interactiva — elige día y hora.</p>
+      <div class="dias" id="dias">
+        <div class="dia sel" data-d="Hoy"><b>Hoy</b>dom</div>
+        <div class="dia" data-d="Mañana"><b>Mañ</b>lun</div>
+        <div class="dia" data-d="Pasado"><b>+2</b>mar</div>
+      </div>
+      <div class="horas" id="horas">
+        <button class="hora">9:00 AM</button><button class="hora sel">12:00 PM</button><button class="hora">3:00 PM</button><button class="hora">6:00 PM</button>
+      </div>
+      <input type="text" id="dir" placeholder="Tu dirección (ejemplo)">
+      <button class="btn" id="confirmar" style="width:100%">Confirmar recogida</button>
+      <div class="confirm" id="confirm">✓ <b>Recogida programada (demo).</b><br><span id="resumen"></span><br>Te avisaremos por SMS cuando vayamos en camino.</div>
+    </div>
+  </div>
+</section>
+
+<section id="como">
+  <div class="wrap">
+    <h2 class="sec">Cómo funciona</h2>
+    <p class="sub">Tres pasos y listo. Así de simple lo vive tu cliente.</p>
+    <div class="pasos">
+      <div class="paso"><div class="n">1</div><h3>Programas</h3><p>Eliges día y hora en la web o por SMS. Sin llamadas, sin esperas.</p></div>
+      <div class="paso"><div class="n">2</div><h3>Recogemos</h3><p>Pasamos por tu puerta en la ventana elegida y te avisamos al llegar.</p></div>
+      <div class="paso"><div class="n">3</div><h3>Entregamos</h3><p>Recibes todo listo en 24–48 horas, con aviso por SMS.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="planes" style="background:var(--fondo2)">
+  <div class="wrap">
+    <h2 class="sec">Planes de suscripción</h2>
+    <p class="sub">Precios de ejemplo — se reemplazan por los reales del negocio.</p>
+    <div class="planes">
+      <div class="plan"><h3>Básico</h3><div class="precio">$29<small>/mes</small></div><ul><li>2 recogidas al mes</li><li>Hasta 10 prendas</li><li>Avisos por SMS</li></ul><a class="btn ghost" href="#pedir" style="text-align:center">Elegir</a></div>
+      <div class="plan pop"><h3>Plus</h3><div class="precio">$59<small>/mes</small></div><ul><li>4 recogidas al mes</li><li>Hasta 25 prendas</li><li>Avisos por SMS</li><li>Prioridad en ruta</li></ul><a class="btn" href="#pedir" style="text-align:center">Elegir</a></div>
+      <div class="plan"><h3>Premium</h3><div class="precio">$99<small>/mes</small></div><ul><li>Recogidas ilimitadas</li><li>Prendas ilimitadas</li><li>Entrega en 24h</li><li>Soporte prioritario</li></ul><a class="btn ghost" href="#pedir" style="text-align:center">Elegir</a></div>
+    </div>
+  </div>
+</section>
+
+<section id="sms">
+  <div class="wrap">
+    <h2 class="sec">Todo por SMS</h2>
+    <p class="sub">Sin app que descargar. Tus clientes gestionan todo con mensajes de texto.</p>
+    <div class="sms">
+      <div class="phone"><div class="screen" id="screen">
+        <div class="msg in">Hola 👋 Soy el asistente de <b>Negocio Demo</b>. Escribe un comando: RECOJO, SALDO o STATUS.</div>
+      </div></div>
+      <div>
+        <h3 style="margin-bottom:10px">Pruébalo: toca un comando</h3>
+        <p style="color:var(--muted);margin-bottom:16px">Demo interactiva de los comandos reales del sistema: programar recogidas, consultar saldo y ver el estado del pedido.</p>
+        <div class="cmds">
+          <button class="cmd" data-c="RECOJO">RECOJO</button>
+          <button class="cmd" data-c="SALDO">SALDO</button>
+          <button class="cmd" data-c="STATUS">STATUS</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 class="sec">Servicios y precios</h2>
+    <p class="sub">Lista de ejemplo para pedidos únicos.</p>
+    <div class="lista">
+      <div class="fila"><div><b>Lavado y doblado</b><span>Por libra · ejemplo</span></div><div class="p">$2.50/lb</div></div>
+      <div class="fila"><div><b>Planchado</b><span>Por prenda · ejemplo</span></div><div class="p">$3.00</div></div>
+      <div class="fila"><div><b>Servicio exprés 24h</b><span>Recargo · ejemplo</span></div><div class="p">+$10</div></div>
+      <div class="fila"><div><b>Recogida y entrega</b><span>En zona de cobertura · ejemplo</span></div><div class="p">Gratis</div></div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--fondo2)">
+  <div class="wrap">
+    <h2 class="sec">Lo que dicen (ejemplos)</h2>
+    <div class="testis">
+      <div class="testi"><div class="stars">★★★★★</div><p>"Programé por SMS en un minuto y al día siguiente tenía todo listo. No vuelvo a la lavandería de la esquina."</p><div class="eje">Ejemplo</div><footer>— Cliente ejemplo</footer></div>
+      <div class="testi"><div class="stars">★★★★★</div><p>"El plan mensual me sale más barato que hacerlo yo. La recogida siempre puntual."</p><div class="eje">Ejemplo</div><footer>— Cliente ejemplo</footer></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2 class="sec">Preguntas frecuentes</h2>
+    <div class="faq" style="margin-top:20px">
+      <details><summary>¿Atienden mi zona?</summary><p>Cobertura de ejemplo: centro y alrededores en un radio de 15 km. Se ajusta a la zona real del negocio.</p></details>
+      <details><summary>¿Cómo pago?</summary><p>Con tarjeta al programar o contra entrega. Los planes se cobran automáticamente cada mes.</p></details>
+      <details><summary>¿Qué pasa si no estoy cuando llegan?</summary><p>Te avisamos por SMS antes de llegar y reprogramamos sin costo una vez.</p></details>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <p><strong>Negocio Demo</strong> · Servicio local · (555) 000-0000 · Zona de cobertura ejemplo</p>
+    <p style="margin-top:8px">Diseño demo por <a href="../index.html">Polux</a> — caso de estudio · proyecto piloto. Modelo base personalizable.</p>
+  </div>
+</footer>
+
+<script>
+// Scheduler
+let dia='Hoy',hora='12:00 PM';
+document.getElementById('dias').addEventListener('click',e=>{const d=e.target.closest('.dia');if(!d)return;document.querySelectorAll('.dia').forEach(x=>x.classList.remove('sel'));d.classList.add('sel');dia=d.dataset.d});
+document.getElementById('horas').addEventListener('click',e=>{const h=e.target.closest('.hora');if(!h)return;document.querySelectorAll('.hora').forEach(x=>x.classList.remove('sel'));h.classList.add('sel');hora=h.textContent});
+document.getElementById('confirmar').addEventListener('click',()=>{const dir=document.getElementById('dir').value||'(dirección de ejemplo)';document.getElementById('resumen').textContent=dia+' · '+hora+' · '+dir;document.getElementById('confirm').style.display='block'});
+// SMS demo
+const screen=document.getElementById('screen');
+const respuestas={RECOJO:'✓ Recogida programada para mañana entre 9–11 AM. Te avisaremos al salir.',SALDO:'Tu saldo: 2 recogidas restantes este mes. Próxima facturación: día 1.',STATUS:'Tu pedido #1042 está <b>en ruta de entrega</b>. Llega hoy antes de las 6 PM.'};
+document.querySelectorAll('.cmd').forEach(b=>b.addEventListener('click',()=>{const out=document.createElement('div');out.className='msg out';out.textContent=b.dataset.c;screen.appendChild(out);setTimeout(()=>{const inn=document.createElement('div');inn.className='msg in';inn.innerHTML=respuestas[b.dataset.c];screen.appendChild(inn);screen.scrollTop=screen.scrollHeight},600);screen.scrollTop=screen.scrollHeight}));
+</script>
+<script src="../personalizar.js"></script>
+</body>
+</html>
