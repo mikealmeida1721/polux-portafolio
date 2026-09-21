@@ -459,8 +459,13 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   function tick(){
     const tr=track.getBoundingClientRect(), cx=tr.left+tr.width/2;
     let best=0, bd=1e12, moving=false;
+    /* Rendimiento (ronda 2): fase 1 solo lecturas, fase 2 solo escrituras.
+       Antes se intercalaban y cada tarjeta forzaba un layout sincrónico
+       (60 por frame); en iPad se sentía el lag. Ahora es un único layout. */
+    const rs=new Array(cards.length);
+    for(let i=0;i<cards.length;i++)rs[i]=cards[i].getBoundingClientRect();
     for(let i=0;i<cards.length;i++){
-      const b=cards[i].getBoundingClientRect(), d=(b.left+b.width/2-cx)/Math.max(b.width,1);
+      const b=rs[i], d=(b.left+b.width/2-cx)/Math.max(b.width,1);
       const dd=Math.abs(d); if(dd<bd){bd=dd;best=i}
       const c=Math.max(-2,Math.min(2,d)), ad=Math.min(Math.abs(d),2);
       const t={r:-c*8, s:1-ad*0.06, o:1-ad*0.14}, s=st3d[i];
@@ -789,13 +794,22 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   }
   states.forEach(function(st){
     var row=st.row;
-    function pause(){st.paused=true;clearTimeout(st.resumeT)}
-    function resumeSoon(){ /* la deriva vuelve 5s después del último gesto (cubre el momentum de iOS) */
+    st.touching=false;
+    function pause(){st.paused=true;clearTimeout(st.resumeT);st.resumeT=0}
+    /* Bug 2 (ronda 2): la deriva NUNCA debe escribir scrollLeft mientras el dedo
+       sigue abajo o el momentum de iOS sigue vivo. El timer anterior (5s desde
+       pointercancel, o sea desde el INICIO del gesto) dejaba que el rAF retomara
+       a mitad de un arrastre lento y peleara con el scroll nativo cada frame:
+       tiles en blanco/parpadeo y, con el estado corrompido, crash de Safari.
+       Arrastrar EN CONTRA de la deriva maximizaba el conflicto (repro de Mike).
+       Ahora la deriva vuelve solo 1.5s después del ÚLTIMO evento scroll. */
+    function settleResume(){
       clearTimeout(st.resumeT);
-      st.resumeT=setTimeout(function(){if(!modalOpen)st.paused=false},5000);
+      st.resumeT=setTimeout(function(){st.resumeT=0;if(!modalOpen&&!st.touching)st.paused=false},1500);
     }
+    function endTouch(){st.touching=false;clearDock(st);settleResume()}
     row.addEventListener('pointerdown',function(e){
-      pause();
+      pause();st.touching=true;
       st.downX=e.clientX;st.downY=e.clientY;st.downScroll=row.scrollLeft;
       scheduleDock(st,e.clientX);
     },{passive:true});
@@ -805,10 +819,12 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     row.addEventListener('pointerleave',function(e){
       if(e.pointerType==='mouse')clearDock(st);
     },{passive:true});
-    row.addEventListener('wheel',function(){pause();resumeSoon()},{passive:true});
-    row.addEventListener('pointerup',function(){clearDock(st);resumeSoon()},{passive:true});
-    row.addEventListener('pointercancel',function(){clearDock(st);resumeSoon()},{passive:true});
-    row.addEventListener('scroll',function(){clearDock(st);wrapRow(st)},{passive:true});
+    row.addEventListener('wheel',function(){pause();settleResume()},{passive:true});
+    row.addEventListener('pointerup',endTouch,{passive:true});
+    row.addEventListener('pointercancel',endTouch,{passive:true});
+    /* durante el momentum cada scroll reinicia el temporizador: la deriva solo
+       vuelve cuando el scroll se asentó de verdad (nunca a mitad del gesto) */
+    row.addEventListener('scroll',function(){clearDock(st);wrapRow(st);if(st.paused&&!st.touching)settleResume()},{passive:true});
     st.strip.addEventListener('click',function(e){
       var t=e.target&&e.target.closest?e.target.closest('.n-tile'):null;if(!t)return;
       if(Math.abs(row.scrollLeft-st.downScroll)>10)return; /* hubo scroll: no fue tap */
@@ -823,7 +839,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     var dt=Math.min(.05,(now-last)/1000);last=now;
     if(visible&&!document.hidden&&!reduced){
       states.forEach(function(st){
-        if(st.paused)return;
+        if(st.paused||st.touching)return; /* nunca pelear con el dedo ni con el momentum */
         st.row.scrollLeft+=st.dir*SPEED*dt; /* la deriva mueve scrollLeft; el gesto del usuario lo maneja el navegador */
         wrapRow(st);
       });
@@ -866,6 +882,8 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
       '<span class="cb-bname">'+UI.esc(t.nombre)+'</span>'+
       '<span class="cb-bdemo">DEMO</span></span></span></span>';
     b.addEventListener('click',function(e){
+      /* fuera del círculo visible: no fue un toque a esta burbuja */
+      if(!inCircle(b,e))return;
       /* si fue arrastre (>=10px), suprimir el click posterior */
       if(b._dragged){b._dragged=false;e.preventDefault();e.stopPropagation();return}
       UI.openTheme(t.id);
@@ -975,9 +993,18 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     var o=dragByPid[e.pointerId];
     if(o)endDrag(o,e,true);
   },true);
+  /* Bug 3 (ronda 2): aunque el objetivo táctil ya es el círculo (CSS), su caja de
+     golpeo sigue siendo cuadrada. Se verifica el radio real: un toque en las
+     esquinas (fuera del círculo visible) no inicia gesto ni abre el modal. */
+  function inCircle(b,e){
+    var c=b.querySelector('.cb-bubble');if(!c)return true;
+    var r=c.getBoundingClientRect();
+    return Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2))<=r.width/2+2;
+  }
   for(var k=0;k<bits.length;k++)(function(o){
     var b=o.el;
     b.addEventListener('pointerdown',function(e){
+      if(!inCircle(b,e))return; /* fuera del círculo: no es un toque a esta burbuja */
       var d=dragState(o);
       if(d.pid!==null){
         /* Arrastre anterior atascado (o segundo dedo en la misma burbuja):
