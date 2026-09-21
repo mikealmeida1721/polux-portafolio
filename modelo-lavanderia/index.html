@@ -22,13 +22,13 @@ body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo)
 .wrap{max-width:1060px;margin:0 auto;padding:0 20px}
 /* Distintivo demo */
 .demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--acento2);border-radius:999px;padding:5px 14px;opacity:.92}
-.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:#fff;border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:var(--tarjeta);border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
 .volver:hover{color:var(--acento2);border-color:var(--acento)}
 /* Header */
-header.site{background:#fff;border-bottom:1px solid var(--borde);position:sticky;top:0;z-index:50;padding-top:46px}
+header.site{background:var(--tarjeta);border-bottom:1px solid var(--borde);position:sticky;top:0;z-index:50;padding-top:46px}
 .bar{display:flex;align-items:center;gap:14px;padding:14px 0}
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--texto)}
-.logo-slot{width:46px;height:46px;border-radius:12px;border:2px solid var(--acento);background:var(--logo) center/contain no-repeat,#fff;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--acento2);font-size:1.2rem}
+.logo-slot{width:46px;height:46px;border-radius:12px;border:2px solid var(--acento);background:var(--logo) center/contain no-repeat,var(--tarjeta);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--acento2);font-size:1.2rem}
 .brand b{font-size:1.1rem}
 .brand small{display:block;font-size:.68rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
 nav.menu{margin-left:auto;display:flex;gap:20px;font-size:.93rem;align-items:center}
@@ -36,7 +36,7 @@ nav.menu a{color:var(--muted);text-decoration:none}
 nav.menu a:hover{color:var(--acento2)}
 .btn{display:inline-block;background:var(--acento);color:#fff;font-weight:700;text-decoration:none;padding:12px 26px;border-radius:10px;border:none;cursor:pointer;font-size:1rem}
 .btn:hover{background:var(--acento2)}
-.btn.ghost{background:#fff;color:var(--acento2);border:2px solid var(--acento)}
+.btn.ghost{background:var(--tarjeta);color:var(--acento2);border:2px solid var(--acento)}
 /* Hero + scheduler */
 .hero{padding:64px 0;background:linear-gradient(180deg,var(--fondo2),var(--fondo))}
 .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center}
@@ -48,15 +48,15 @@ nav.menu a:hover{color:var(--acento2)}
 .scheduler h3{font-size:1.1rem;margin-bottom:4px}
 .scheduler .hint{font-size:.85rem;color:var(--muted);margin-bottom:16px}
 .dias{display:flex;gap:8px;margin-bottom:14px}
-.dia{flex:1;border:2px solid var(--borde);background:#fff;border-radius:10px;padding:10px 4px;text-align:center;cursor:pointer;font-size:.85rem}
+.dia{flex:1;border:2px solid var(--borde);background:var(--tarjeta);border-radius:10px;padding:10px 4px;text-align:center;cursor:pointer;font-size:.85rem}
 .dia b{display:block;font-size:1.05rem}
-.dia.sel{border-color:var(--acento);background:#f0f9ff}
+.dia.sel{border-color:var(--acento);background:color-mix(in srgb,var(--acento) 12%,var(--tarjeta))}
 .horas{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.hora{border:2px solid var(--borde);background:#fff;border-radius:999px;padding:8px 16px;cursor:pointer;font-size:.88rem}
+.hora{border:2px solid var(--borde);background:var(--tarjeta);border-radius:999px;padding:8px 16px;cursor:pointer;font-size:.88rem}
 .hora.sel{border-color:var(--acento);background:var(--acento);color:#fff;font-weight:700}
 .scheduler input{width:100%;border:2px solid var(--borde);border-radius:10px;padding:12px 14px;font-size:1rem;margin-bottom:14px}
 .scheduler input:focus{outline:none;border-color:var(--acento)}
-.confirm{display:none;background:#f0fdf4;border:2px solid #22c55e;border-radius:10px;padding:14px;margin-top:14px;font-size:.93rem}
+.confirm{display:none;background:color-mix(in srgb,var(--acento) 8%,var(--tarjeta));border:2px solid #22c55e;border-radius:10px;padding:14px;margin-top:14px;font-size:.93rem}
 /* Pasos */
 section{padding:56px 0}
 h2.sec{font-size:1.75rem;margin-bottom:6px}
@@ -79,13 +79,13 @@ p.sub{color:var(--muted);margin-bottom:28px;max-width:620px}
 .plan li::before{content:"✓ ";color:var(--acento);font-weight:700}
 /* SMS demo */
 .sms{background:var(--fondo2);border-radius:18px;padding:36px;display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
-.phone{background:#0f2740;border-radius:28px;padding:18px;max-width:300px;margin:0 auto;width:100%}
-.screen{background:#fff;border-radius:16px;padding:14px;min-height:280px;display:flex;flex-direction:column;gap:8px;font-size:.85rem}
+.phone{background:var(--texto);border-radius:28px;padding:18px;max-width:300px;margin:0 auto;width:100%}
+.screen{background:var(--tarjeta);border-radius:16px;padding:14px;min-height:280px;display:flex;flex-direction:column;gap:8px;font-size:.85rem}
 .msg{max-width:85%;padding:9px 13px;border-radius:14px;line-height:1.45}
 .msg.in{background:#eef4fa;align-self:flex-start}
 .msg.out{background:var(--acento);color:#fff;align-self:flex-end}
 .cmds{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.cmd{border:2px solid var(--acento);background:#fff;color:var(--acento2);border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:700;font-size:.85rem}
+.cmd{border:2px solid var(--acento);background:var(--tarjeta);color:var(--acento2);border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:700;font-size:.85rem}
 .cmd:hover{background:var(--acento);color:#fff}
 /* Lista servicios */
 .lista{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;overflow:hidden}
@@ -106,7 +106,7 @@ p.sub{color:var(--muted);margin-bottom:28px;max-width:620px}
 .faq summary{cursor:pointer;font-weight:700}
 .faq summary::marker{color:var(--acento)}
 .faq p{color:var(--muted);margin-top:8px;font-size:.94rem}
-footer.site{background:#0f2740;color:#cbd5e1;padding:36px 0;text-align:center;font-size:.9rem}
+footer.site{background:var(--texto);color:var(--fondo);padding:36px 0;text-align:center;font-size:.9rem}
 footer.site a{color:#7dd3fc}
 @media(max-width:900px){.hero-grid{grid-template-columns:1fr}.pasos{grid-template-columns:1fr}.planes{grid-template-columns:1fr}.sms{grid-template-columns:1fr}.testis{grid-template-columns:1fr}nav.menu a:not(.btn){display:none}}
 </style>
@@ -230,6 +230,11 @@ footer.site a{color:#7dd3fc}
   </div>
 </section>
 
+<section class="pz-ideal" style="padding:60px 20px;text-align:center;border-top:1px solid var(--borde)">
+  <p style="max-width:640px;margin:0 auto;color:var(--muted);font-size:1.02rem;line-height:1.7"><strong style="color:var(--texto);font-size:1.15rem">¿Este estilo es para tu negocio?</strong><br>Ideal para servicios a domicilio y por suscripción: lavanderías, talleres, mantenimiento y cuidado del hogar.</p>
+  <button onclick="var b=document.getElementById('pz-fab');b&&b.click()" style="margin-top:18px;background:var(--acento);color:#fff;border:none;border-radius:999px;padding:13px 30px;font-weight:700;cursor:pointer;font-size:.95rem">Verlo con mis colores 🎨</button>
+  <p style="margin-top:12px;font-size:.82rem;color:var(--muted)">Si te gustaron varios, los combinamos en tu página a medida.</p>
+</section>
 <footer class="site">
   <div class="wrap">
     <p><strong>Negocio Demo</strong> · Servicio local · (555) 000-0000 · Zona de cobertura ejemplo</p>
