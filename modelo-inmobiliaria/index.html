@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plano Inmobiliaria — Diseño demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   PLANO — concepto: un plano arquitectónico que se dibuja solo.
+   Firma: retícula de plano + líneas SVG que se trazan al scroll.
+   Motion: precisión lenta y segura (trazos 2s, reveals sobrios).
+   ============================================================ */
+:root{
+  --logo: "";
+  --fondo:#0f3a4d; --fondo2:#0b2c3b; --tarjeta:#ffffff; --borde:#d8e2e8;
+  --acento:#c9a227; --acento2:#8f7215;
+  --texto:#ffffff; --muted:#b7c8d1;
+  --fuente-titular:'Montserrat',system-ui,sans-serif;
+  --fuente-cuerpo:'Jost',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo);line-height:1.6;font-weight:300}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+/* Retícula de plano como textura */
+.reticula{background-image:
+  linear-gradient(color-mix(in srgb,var(--texto) 7%,transparent) 1px,transparent 1px),
+  linear-gradient(90deg,color-mix(in srgb,var(--texto) 7%,transparent) 1px,transparent 1px);
+  background-size:44px 44px}
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--acento2);border-radius:999px;padding:5px 14px;opacity:.92}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:var(--tarjeta);border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.volver:hover{color:var(--acento2);border-color:var(--acento)}
+/* Header */
+header.site{background:color-mix(in srgb,var(--fondo) 88%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid color-mix(in srgb,var(--texto) 14%,transparent);position:sticky;top:0;z-index:50;padding-top:44px}
+.bar{display:flex;align-items:center;gap:14px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--texto)}
+.logo-slot{width:48px;height:48px;border:2px solid var(--acento);background:var(--logo) center/contain no-repeat,transparent;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--acento);font-size:1.2rem;font-family:var(--fuente-titular)}
+.brand b{font-family:var(--fuente-titular);font-size:1.1rem;letter-spacing:.06em}
+.brand small{display:block;font-size:.64rem;letter-spacing:.26em;color:var(--acento);text-transform:uppercase;font-weight:500}
+nav.menu{margin-left:auto;display:flex;gap:20px;font-size:.92rem;align-items:center}
+nav.menu a{color:var(--muted);text-decoration:none}
+nav.menu a:hover{color:var(--acento)}
+.btn{display:inline-block;background:var(--acento);color:#0f2a36;font-weight:700;text-decoration:none;padding:12px 28px;border-radius:2px;border:none;cursor:pointer;font-size:.98rem;font-family:var(--fuente-titular);letter-spacing:.04em;transition:transform .2s,box-shadow .2s}
+.btn:hover{background:var(--acento2);color:#fff;transform:translateY(-2px);box-shadow:0 10px 24px rgba(201,162,39,.3)}
+.btn.ghost{background:transparent;color:var(--texto);border:2px solid var(--acento)}
+.btn.ghost:hover{background:var(--acento);color:#0f2a36}
+/* Hero */
+.hero{padding:72px 0 60px;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.kicker{font-size:.74rem;letter-spacing:.3em;text-transform:uppercase;color:var(--acento);margin-bottom:16px;font-weight:500}
+.hero h1{font-family:var(--fuente-titular);font-weight:800;font-size:clamp(2.3rem,5.6vw,3.7rem);line-height:1.08;margin-bottom:16px;letter-spacing:-.01em}
+.hero h1 em{font-style:normal;color:var(--acento)}
+.hero p.lead{max-width:480px;margin-bottom:28px;color:var(--muted);font-size:1.05rem}
+.hero .ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:34px}
+.stats{display:flex;gap:30px;flex-wrap:wrap}
+.stat b{display:block;font-family:var(--fuente-titular);font-size:1.7rem;color:var(--acento)}
+.stat span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+/* Plano SVG que se dibuja */
+.plano-wrap{position:relative}
+.plano{width:100%;height:auto;display:block}
+.plano .draw{fill:none;stroke:var(--texto);stroke-width:5;stroke-linecap:square;stroke-dasharray:1;stroke-dashoffset:1}
+.plano .fino{stroke:var(--acento);stroke-width:1.6}
+.plano .nota{opacity:0;fill:var(--acento);font-size:11px;letter-spacing:.2em;font-family:var(--fuente-cuerpo);font-weight:400}
+.plano .etiqueta{opacity:0;fill:var(--texto);font-size:12px;letter-spacing:.26em;font-family:var(--fuente-cuerpo);opacity:0}
+.plano.on .draw{stroke-dashoffset:0;transition:stroke-dashoffset 1.9s cubic-bezier(.55,.06,.35,1)}
+.plano.on .nota,.plano.on .etiqueta{opacity:.95;transition:opacity .9s ease 1.7s}
+.plano-leyenda{margin-top:10px;font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);text-align:center}
+/* Reveals sobrios */
+.reveal{opacity:0;transform:translateY(22px)}
+.reveal.on{opacity:1;transform:none;transition:opacity .9s ease,transform .9s cubic-bezier(.3,.7,.3,1)}
+/* Secciones */
+section.bloque{padding:70px 0}
+h2.sec{font-family:var(--fuente-titular);font-weight:800;font-size:clamp(1.6rem,4vw,2.3rem);margin-bottom:8px;text-align:center;letter-spacing:.01em}
+h2.sec .n{color:var(--acento);font-weight:400;margin-right:10px;font-size:.7em;letter-spacing:.1em}
+p.sub{color:var(--muted);margin-bottom:36px;max-width:620px;text-align:center;margin-left:auto;margin-right:auto}
+/* Propiedades */
+.props{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.prop{background:var(--tarjeta);color:#20313a;border-radius:4px;overflow:hidden;border-top:4px solid var(--acento);transition:transform .2s,box-shadow .2s}
+.prop:hover{transform:translateY(-5px);box-shadow:0 16px 34px rgba(0,0,0,.35)}
+.prop-foto{height:170px;display:flex;align-items:center;justify-content:center;background:
+  linear-gradient(135deg,var(--fondo) 0%,var(--fondo2) 100%)}
+.prop-foto span{font-family:var(--fuente-titular);font-weight:800;font-size:3rem;color:var(--acento);opacity:.85;letter-spacing:.02em}
+.prop-cuerpo{padding:22px}
+.prop-cuerpo .tag{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--acento2);font-weight:600}
+.prop-cuerpo h3{font-family:var(--fuente-titular);font-size:1.15rem;margin:6px 0 4px;color:#152730}
+.prop-cuerpo .ubi{font-size:.88rem;color:#6b7d86;margin-bottom:12px}
+.prop-datos{display:flex;gap:16px;font-size:.85rem;color:#4a5d66;margin-bottom:14px}
+.prop-datos b{color:#152730;font-family:var(--fuente-titular)}
+.prop-precio{font-family:var(--fuente-titular);font-weight:800;font-size:1.35rem;color:var(--acento2)}
+/* Proceso */
+.pasos{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;position:relative}
+.pasos::before{content:"";position:absolute;top:34px;left:8%;right:8%;border-top:2px dashed color-mix(in srgb,var(--acento) 55%,transparent)}
+.paso{text-align:center;position:relative;padding:0 6px}
+.paso .num{width:68px;height:68px;margin:0 auto 16px;border:2px solid var(--acento);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fuente-titular);font-weight:800;font-size:1.4rem;color:var(--acento);background:var(--fondo);position:relative;z-index:1}
+.paso h3{font-family:var(--fuente-titular);font-size:1.02rem;margin-bottom:8px}
+.paso p{color:var(--muted);font-size:.9rem}
+/* Testimonios */
+.testis{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.testi{background:color-mix(in srgb,var(--texto) 6%,transparent);border:1px solid color-mix(in srgb,var(--texto) 16%,transparent);border-left:4px solid var(--acento);border-radius:4px;padding:28px}
+.testi .stars{color:var(--acento);margin-bottom:10px;letter-spacing:.12em}
+.testi p{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:1.02rem;margin-bottom:12px}
+.testi footer{font-size:.85rem;color:var(--muted)}
+.testi .eje{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acento);font-style:normal;font-family:var(--fuente-cuerpo)}
+/* Agenda */
+.agenda{background:var(--tarjeta);color:#20313a;border-radius:6px;padding:42px 34px;max-width:760px;margin:0 auto;border-top:5px solid var(--acento)}
+.agenda h3{font-family:var(--fuente-titular);font-size:1.4rem;margin-bottom:6px;color:#152730;text-align:center}
+.agenda>p{text-align:center;color:#6b7d86;margin-bottom:22px;font-size:.95rem}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.campo label{display:block;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:#6b7d86;margin-bottom:6px;font-weight:500}
+.campo select,.campo input{width:100%;padding:12px;border:1px solid var(--borde);border-radius:4px;font-size:1rem;background:#fff;color:#20313a;font-family:inherit}
+#conf{display:none;background:#f4f8f5;border:1px solid var(--acento);border-radius:6px;padding:18px;margin-top:18px;text-align:center;color:#20313a}
+#conf strong{color:var(--acento2)}
+/* Contacto */
+.info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.info .card{background:color-mix(in srgb,var(--texto) 6%,transparent);border:1px solid color-mix(in srgb,var(--texto) 16%,transparent);border-radius:4px;padding:28px;text-align:center}
+.info h3{font-family:var(--fuente-titular);font-size:1rem;letter-spacing:.1em;margin-bottom:10px;color:var(--acento)}
+.info p{color:var(--muted)}
+.info a{color:var(--texto)}
+.wa-cta{text-align:center;margin-top:30px}
+/* Chat demo */
+#chatBtn{position:fixed;bottom:22px;right:22px;z-index:99;width:60px;height:60px;border-radius:50%;background:var(--acento);color:#0f2a36;border:none;font-size:1.6rem;cursor:pointer;box-shadow:0 8px 24px rgba(201,162,39,.45)}
+#chatBtn:hover{background:var(--acento2);color:#fff}
+#chatPanel{position:fixed;bottom:96px;right:22px;z-index:99;width:330px;max-width:calc(100vw - 44px);background:var(--tarjeta);color:#20313a;border:1px solid var(--borde);border-radius:8px;box-shadow:0 18px 50px rgba(0,0,0,.35);display:none;overflow:hidden}
+#chatPanel.open{display:block}
+#chatPanel .chead{background:var(--acento2);color:#fff;padding:14px 18px;font-weight:700;font-family:var(--fuente-titular)}
+#chatPanel .chead small{display:block;font-weight:400;font-size:.75rem;opacity:.85;font-family:var(--fuente-cuerpo)}
+#chatBody{padding:16px;height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:#f2f5f6}
+.msg{max-width:85%;padding:10px 14px;border-radius:10px;font-size:.9rem}
+.msg.in{background:#fff;border:1px solid var(--borde);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.out{background:var(--acento);color:#0f2a36;font-weight:500;align-self:flex-end;border-bottom-right-radius:4px}
+.quick{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 8px;background:#f2f5f6}
+.quick button{border:1px solid var(--acento);background:#fff;color:var(--acento2);border-radius:999px;padding:7px 14px;font-size:.82rem;cursor:pointer;font-family:inherit}
+.quick button:hover{background:var(--acento);color:#0f2a36}
+.chead2{padding:10px 16px;background:#f2f5f6;font-size:.72rem;color:#6b7d86;letter-spacing:.08em;text-transform:uppercase}
+footer.site{background:var(--fondo2);border-top:1px solid color-mix(in srgb,var(--texto) 12%,transparent);padding:36px 0;text-align:center;font-size:.9rem;color:var(--muted)}
+footer.site a{color:var(--acento)}
+@media(max-width:900px){
+  .hero-grid{grid-template-columns:1fr}
+  .props{grid-template-columns:1fr}
+  .pasos{grid-template-columns:1fr 1fr;gap:28px}
+  .pasos::before{display:none}
+  .testis{grid-template-columns:1fr}
+  .info{grid-template-columns:1fr}
+  .campos{grid-template-columns:1fr}
+  nav.menu a:not(.btn){display:none}
+  .hero{padding:52px 0 44px}
+}
+@media(prefers-reduced-motion:reduce){
+  .plano .draw{stroke-dashoffset:0}
+  .plano .nota,.plano .etiqueta{opacity:.95}
+  .reveal{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="demo-badge">Diseño demo</div>
+<a class="volver" href="../index.html">← Portafolio</a>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#">
+      <span class="logo-slot" data-logo>P</span>
+      <span><b data-nombre>PLANO INMOBILIARIA</b><small data-tagline>Bienes raíces</small></span>
+    </a>
+    <nav class="menu">
+      <a href="#propiedades">Propiedades</a>
+      <a href="#proceso">Proceso</a>
+      <a href="#agenda">Agendar visita</a>
+      <a class="btn" href="#agenda" style="padding:9px 20px">Agendar</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero reticula">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="kicker">Bienes raíces · Ejemplo</div>
+      <h1>Tu próximo hogar,<br><em>trazado</em> con precisión</h1>
+      <p class="lead">Cada propiedad medida, verificada y documentada. Te acompañamos del primer plano a la firma de la escritura, sin sorpresas.</p>
+      <div class="ctas">
+        <a class="btn" href="#agenda">Agendar visita</a>
+        <a class="btn ghost" href="#propiedades">Ver propiedades</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>240+</b><span>Propiedades</span></div>
+        <div class="stat"><b>15</b><span>Años</span></div>
+        <div class="stat"><b>98%</b><span>Clientes felices</span></div>
+      </div>
+    </div>
+    <div class="plano-wrap">
+      <svg class="plano" id="planoHero" viewBox="0 0 400 300" role="img" aria-label="Plano arquitectónico de casa modelo que se dibuja">
+        <!-- cotas -->
+        <path class="draw fino" pathLength="1" d="M30,22 H370"/>
+        <path class="draw fino" pathLength="1" d="M30,17 V27 M370,17 V27"/>
+        <text class="nota" x="200" y="14" text-anchor="middle">12.0 m</text>
+        <path class="draw fino" pathLength="1" d="M14,40 V260"/>
+        <path class="draw fino" pathLength="1" d="M9,40 H19 M9,260 H19"/>
+        <text class="nota" x="6" y="155" text-anchor="middle" transform="rotate(-90 6 155)">8.6 m</text>
+        <!-- muros exteriores -->
+        <path class="draw" pathLength="1" d="M30,40 H370 V260 H30 Z"/>
+        <!-- muros interiores -->
+        <path class="draw" pathLength="1" d="M30,155 H195"/>
+        <path class="draw" pathLength="1" d="M225,155 H370"/>
+        <path class="draw" pathLength="1" d="M210,40 V110"/>
+        <path class="draw" pathLength="1" d="M210,185 V260"/>
+        <path class="draw" pathLength="1" d="M210,155 H290"/>
+        <path class="draw" pathLength="1" d="M290,155 V260"/>
+        <!-- ventanas (doble línea) -->
+        <path class="draw fino" pathLength="1" d="M70,35 H130 M70,45 H130"/>
+        <path class="draw fino" pathLength="1" d="M240,35 H300 M240,45 H300"/>
+        <path class="draw fino" pathLength="1" d="M35,190 V250 M45,190 V250"/>
+        <!-- puertas (arco de apertura) -->
+        <path class="draw fino" pathLength="1" d="M195,155 A26,26 0 0 1 221,129"/>
+        <path class="draw fino" pathLength="1" d="M210,110 A26,26 0 0 0 184,136"/>
+        <path class="draw fino" pathLength="1" d="M120,260 A24,24 0 0 1 144,236"/>
+        <!-- etiquetas de ambientes -->
+        <text class="etiqueta" x="115" y="105" text-anchor="middle">SALA</text>
+        <text class="etiqueta" x="290" y="105" text-anchor="middle">COCINA</text>
+        <text class="etiqueta" x="115" y="212" text-anchor="middle">DORMITORIO</text>
+        <text class="etiqueta" x="252" y="212" text-anchor="middle">BAÑO</text>
+        <!-- brújula -->
+        <circle class="draw fino" pathLength="1" cx="342" cy="232" r="15"/>
+        <path class="draw fino" pathLength="1" d="M342,222 V242 M335,229 L342,222 L349,229"/>
+        <text class="nota" x="342" y="218" text-anchor="middle">N</text>
+      </svg>
+      <div class="plano-leyenda">Planta tipo · Casa modelo "Atenea" · 103 m²</div>
+    </div>
+  </div>
+</div>
+
+<section class="bloque" id="propiedades" data-pieza="Propiedades destacadas">
+  <div class="wrap">
+    <h2 class="sec reveal"><span class="n">01</span>Propiedades destacadas</h2>
+    <p class="sub reveal">Selección de ejemplo para mostrar el formato. Tus propiedades irían aquí con fotos reales.</p>
+    <div class="props">
+      <article class="prop reveal">
+        <div class="prop-foto"><span>CA</span></div>
+        <div class="prop-cuerpo">
+          <span class="tag">Casa · En venta</span>
+          <h3>Casa Atenea</h3>
+          <div class="ubi">Colonia de ejemplo · Ciudad</div>
+          <div class="prop-datos"><span><b>103</b> m²</span><span><b>3</b> hab.</span><span><b>2</b> baños</span></div>
+          <div class="prop-precio">$185,000</div>
+        </div>
+      </article>
+      <article class="prop reveal">
+        <div class="prop-foto"><span>DP</span></div>
+        <div class="prop-cuerpo">
+          <span class="tag">Departamento · En venta</span>
+          <h3>Depto. Mirador 402</h3>
+          <div class="ubi">Zona centro · Ciudad</div>
+          <div class="prop-datos"><span><b>78</b> m²</span><span><b>2</b> hab.</span><span><b>2</b> baños</span></div>
+          <div class="prop-precio">$132,500</div>
+        </div>
+      </article>
+      <article class="prop reveal">
+        <div class="prop-foto"><span>LT</span></div>
+        <div class="prop-cuerpo">
+          <span class="tag">Terreno · Inversión</span>
+          <h3>Lote Loma Alta</h3>
+          <div class="ubi">Periférico norte · Ciudad</div>
+          <div class="prop-datos"><span><b>450</b> m²</span><span><b>—</b> hab.</span><span><b>—</b> baños</span></div>
+          <div class="prop-precio">$96,000</div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="bloque reticula" id="proceso" data-pieza="Proceso de compra" style="border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12);background:var(--fondo2)">
+  <div class="wrap">
+    <h2 class="sec reveal"><span class="n">02</span>Del plano a las llaves</h2>
+    <p class="sub reveal">Un proceso medido paso a paso: sabes exactamente dónde estás en cada momento.</p>
+    <div class="pasos">
+      <div class="paso reveal"><div class="num">1</div><h3>Escucha</h3><p>Definimos presupuesto, zona y lo que tu familia necesita.</p></div>
+      <div class="paso reveal"><div class="num">2</div><h3>Selección</h3><p>Visitas solo propiedades verificadas, sin vueltas perdidas.</p></div>
+      <div class="paso reveal"><div class="num">3</div><h3>Negociación</h3><p>Defendemos tu precio con datos reales del mercado.</p></div>
+      <div class="paso reveal"><div class="num">4</div><h3>Escritura</h3><p>Trámites y firma acompañados hasta entregarte las llaves.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" data-pieza="Testimonios de clientes">
+  <div class="wrap">
+    <h2 class="sec reveal"><span class="n">03</span>Lo que dicen (ejemplos)</h2>
+    <p class="sub reveal">Testimonios de ejemplo para mostrar el formato.</p>
+    <div class="testis">
+      <div class="testi reveal"><div class="stars">★★★★★</div><p>"Nos mostraron solo casas que sí cumplían lo que pedimos. En tres semanas estábamos firmando."</p><footer>— Familia de ejemplo · <span class="eje">Testimonio de ejemplo</span></footer></div>
+      <div class="testi reveal"><div class="stars">★★★★★</div><p>"Vendieron mi departamento al precio que me prometieron, sin que yo moviera un dedo."</p><footer>— Cliente de ejemplo · <span class="eje">Testimonio de ejemplo</span></footer></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="agenda" data-pieza="Agenda tu visita" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="sec reveal"><span class="n">04</span>Agenda tu visita</h2>
+    <p class="sub reveal">Elige propiedad, día y hora. Te confirmamos por mensaje.</p>
+    <div class="agenda reveal">
+      <h3>¿Cuándo la visitamos?</h3>
+      <p>Sin compromiso · respuesta el mismo día</p>
+      <div class="campos">
+        <div class="campo"><label>Nombre</label><input type="text" id="anombre" placeholder="Tu nombre"></div>
+        <div class="campo"><label>Teléfono</label><input type="tel" id="atel" placeholder="(555) 000-0000"></div>
+        <div class="campo"><label>Propiedad</label><select id="aprop"><option>Casa Atenea — $185,000</option><option>Depto. Mirador 402 — $132,500</option><option>Lote Loma Alta — $96,000</option><option>Otra / asesoría general</option></select></div>
+        <div class="campo"><label>Día</label><input type="date" id="adia"></div>
+        <div class="campo"><label>Hora</label><select id="ahora"><option>10:00 AM</option><option>12:00 PM</option><option>3:00 PM</option><option>5:00 PM</option></select></div>
+        <div class="campo"><label>&nbsp;</label><button class="btn" id="abtn" style="width:100%">Agendar visita</button></div>
+      </div>
+      <div id="conf"><strong>✓ Visita agendada (demo).</strong><br><span id="ares"></span><br><small style="color:#6b7d86">En tu página real, aquí llegaría la confirmación por SMS o WhatsApp.</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="contacto" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="sec reveal"><span class="n">05</span>Contacto</h2>
+    <p class="sub reveal">Datos de ejemplo.</p>
+    <div class="info">
+      <div class="card reveal"><h3>OFICINA</h3><p>Av. de ejemplo 456<br>Ciudad, Estado 00000</p></div>
+      <div class="card reveal"><h3>HORARIO</h3><p>Lun – Sáb · 9:00 AM – 6:00 PM<br>Tel: (555) 000-0000</p></div>
+      <div class="card reveal"><h3>CORREO</h3><p><a href="mailto:ejemplo@plano.demo">ejemplo@plano.demo</a><br>Respuesta en 24 h</p></div>
+    </div>
+    <div class="wa-cta reveal">
+      <a class="btn" href="https://wa.me/16093316652?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20una%20propiedad" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<section class="pz-ideal" style="padding:60px 20px;text-align:center;border-top:1px solid rgba(255,255,255,.12)">
+  <p style="max-width:640px;margin:0 auto;color:var(--muted);font-size:1.02rem;line-height:1.7"><strong style="color:var(--texto);font-size:1.15rem">¿Este estilo es para tu negocio?</strong><br>Ideal para inmobiliarias y agentes de bienes raíces: propiedades destacadas, proceso de compra y agenda de visitas.</p>
+  <button onclick="var b=document.getElementById('pz-selfab');b&&b.click()" style="margin-top:18px;background:var(--acento);color:#0f2a36;border:none;border-radius:2px;padding:13px 30px;font-weight:700;cursor:pointer;font-size:.95rem;font-family:var(--fuente-titular)">Verlo con mis colores</button>
+  <p style="margin-top:12px;font-size:.82rem;color:var(--muted)">Si te gustaron varios, los combinamos en tu página a medida.</p>
+</section>
+<footer class="site">
+  <div class="wrap">
+    <p><strong>PLANO INMOBILIARIA</strong> · Bienes raíces de ejemplo · Contenido ficticio de demostración</p>
+    <p style="margin-top:8px">Diseño demo por <a href="../index.html">Polux</a> — caso de estudio · proyecto piloto. Modelo base personalizable.</p>
+  </div>
+</footer>
+
+<!-- Chat demo flotante -->
+<button id="chatBtn" aria-label="Abrir chat de demostración">⌂</button>
+<div id="chatPanel" role="dialog" aria-label="Chat de demostración">
+  <div class="chead">Asistente Demo<small>Responde al instante · demo</small></div>
+  <div class="chead2">Prueba lo que un chatbot de Polux haría por tu negocio</div>
+  <div id="chatBody"></div>
+  <div class="quick">
+    <button data-q="props">Propiedades</button>
+    <button data-q="visita">Agendar visita</button>
+    <button data-q="fin">Financiamiento</button>
+  </div>
+</div>
+
+<script>
+// Trazado del plano al entrar en viewport + reveals
+(function(){
+  var plano=document.getElementById('planoHero');
+  var draws=plano.querySelectorAll('.draw');
+  draws.forEach(function(el,i){el.style.transitionDelay=(i*0.09)+'s'});
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}
+    });
+  },{threshold:.35});
+  io.observe(plano);
+  var io2=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('on');io2.unobserve(e.target)}
+    });
+  },{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(function(el){io2.observe(el)});
+})();
+// Agenda
+document.getElementById('abtn').addEventListener('click',function(){
+  var n=document.getElementById('anombre').value||'visitante de ejemplo';
+  var p=document.getElementById('aprop').value;
+  var d=document.getElementById('adia').value||'fecha de ejemplo';
+  var h=document.getElementById('ahora').value;
+  document.getElementById('ares').textContent=n+' · '+p+' · '+d+' · '+h;
+  document.getElementById('conf').style.display='block';
+});
+// Chat demo
+var panel=document.getElementById('chatPanel'),body=document.getElementById('chatBody');
+document.getElementById('chatBtn').addEventListener('click',function(){
+  panel.classList.toggle('open');
+  if(panel.classList.contains('open')&&!body.children.length)bot('¡Hola! Soy el asistente demo de Plano. Pregúntame por propiedades, visitas o financiamiento.');
+});
+function add(txt,cls){var m=document.createElement('div');m.className='msg '+cls;m.textContent=txt;body.appendChild(m);body.scrollTop=body.scrollHeight}
+function bot(t){setTimeout(function(){add(t,'in')},450)}
+var R={
+  props:'Tenemos casas, departamentos y terrenos desde $96,000. ¿Buscas para vivir o invertir?',
+  visita:'Perfecto. Agenda arriba en "Agenda tu visita" o dime qué propiedad te interesa y coordinamos.',
+  fin:'Trabajamos con varios bancos: te conseguimos pre-aprobación en 48 horas. ¿Quieres que te contacte un asesor?'
+};
+document.querySelectorAll('.quick button').forEach(function(b){
+  b.addEventListener('click',function(){add(b.textContent,'out');bot(R[b.dataset.q])});
+});
+</script>
+<script src="../personalizar.js?v=3"></script>
+<script>window.POLUX_WA='16093316652';window.POLUX_CHAT={ac:'#c9a227',icon:'orbit',context:'demo',design:'Plano'};</script>
+<script src="../polux-chat.js?v=5"></script>
+<script src="../polux-piezas.js?v=5"></script>
+</body>
+</html>
