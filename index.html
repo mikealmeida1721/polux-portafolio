@@ -240,10 +240,18 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
 .demo-replay{background:none;border:1px solid var(--borde);color:var(--muted);border-radius:999px;padding:10px;cursor:pointer;font-family:inherit;font-size:.85rem}
 .demo-replay:hover{border-color:var(--acento);color:#fff}
 @media (max-width:480px){
-  .phone{width:246px;height:410px}
-  .demo{padding:18px 14px}
-  .demo-cap{min-height:2.6em;font-size:.86rem;margin:12px 2px 8px}
-  .demo h3{font-size:1.2rem}
+  .demo-back{padding:0}
+  .demo{border:0;border-radius:0;max-width:none;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 16px calc(14px + env(safe-area-inset-bottom))}
+  .demo .cb-k{font-size:.6rem}
+  .demo h3{font-size:1.15rem;margin:0}
+  .demo-desc{font-size:.8rem;margin:0}
+  .phone{width:min(238px,62vw);height:min(372px,42dvh);margin:0 auto}
+  .demo-cap{min-height:0;font-size:.84rem;margin:0;line-height:1.45}
+  .demo-dots{margin:0}
+  .demo-cta{width:100%;max-width:340px;gap:8px}
+  .demo-cta .btn{padding:12px;font-size:.95rem}
+  .demo-replay{padding:9px;font-size:.8rem}
+  .demo-x{top:calc(10px + env(safe-area-inset-top));right:12px}
 }
 @media(max-width:620px){.sis-grid{grid-template-columns:repeat(2,1fr)}}
 
