@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Esmalte Clínica Dental — Modelo Polux</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ESMALTE — clínica dental
+   Concepto: confianza clínica que respira.
+   Firma: un brillo (sweep) que recorre superficies + gotas suaves;
+   fades precisos y calmados, cero brusquedad.
+   ============================================================ */
+:root{
+  --logo:"";
+  --fondo:#ffffff; --fondo2:#eefafb; --tarjeta:#f6fcfd; --borde:#d6eef2;
+  --acento:#40c4c4; --acento2:#0e7f8c;
+  --texto:#123c44; --muted:#5f8a91;
+  --cielo:#aee2ff;
+  --fuente-titular:'Poppins',system-ui,sans-serif;
+  --fuente-cuerpo:'Outfit',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo);line-height:1.65;overflow-x:hidden}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+/* Distintivos demo */
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--acento2);border-radius:999px;padding:5px 14px;opacity:.92}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:var(--tarjeta);border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.volver:hover{color:var(--acento2);border-color:var(--acento)}
+/* Header */
+header.site{background:var(--fondo);border-bottom:1px solid var(--borde);position:sticky;top:0;z-index:50;padding-top:44px}
+.bar{display:flex;align-items:center;gap:14px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--texto)}
+.logo-slot{width:48px;height:48px;border-radius:50%;border:2px solid var(--acento);background:var(--logo) center/contain no-repeat,var(--tarjeta);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--acento2);font-size:1.3rem;font-family:var(--fuente-titular)}
+.brand b{font-family:var(--fuente-titular);font-weight:700;font-size:1.2rem;letter-spacing:.03em}
+.brand small{display:block;font-size:.64rem;letter-spacing:.26em;color:var(--muted);text-transform:uppercase}
+nav.menu{margin-left:auto;display:flex;gap:20px;font-size:.93rem;align-items:center}
+nav.menu a{color:var(--muted);text-decoration:none;font-weight:500}
+nav.menu a:hover{color:var(--acento2)}
+.btn{display:inline-block;background:var(--acento);color:#083b3f;font-weight:700;text-decoration:none;padding:13px 30px;border-radius:999px;border:none;cursor:pointer;font-size:1rem;font-family:var(--fuente-titular);letter-spacing:.01em;position:relative;overflow:hidden}
+.btn::after{content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.75),transparent);transform:skewX(-18deg);animation:sweepbtn 4.5s ease-in-out infinite}
+.btn:hover{background:var(--acento2);color:#fff}
+.btn.wa{background:#22c05e;color:#fff}
+.btn.wa:hover{background:#1a9e4c}
+.btn.ghost{background:var(--tarjeta);color:var(--acento2);border:2px solid var(--acento)}
+.btn.ghost::after{animation:none}
+@keyframes sweepbtn{0%,55%{left:-70%}100%{left:170%}}
+/* Hero */
+.hero{position:relative;padding:92px 0 84px;text-align:center;overflow:hidden;background:linear-gradient(180deg,var(--fondo) 0%,var(--fondo2) 100%)}
+.hero .band{position:absolute;top:-30%;left:-60%;width:44%;height:160%;background:linear-gradient(105deg,transparent,rgba(174,226,255,.55),rgba(64,196,196,.28),transparent);transform:skewX(-16deg);animation:sweep 7.5s ease-in-out infinite;pointer-events:none}
+@keyframes sweep{0%{left:-60%}58%,100%{left:170%}}
+.kicker{display:inline-block;font-size:.74rem;letter-spacing:.3em;text-transform:uppercase;color:var(--acento2);font-weight:600;margin-bottom:18px;background:var(--tarjeta);border:1px solid var(--borde);border-radius:999px;padding:7px 20px}
+.hero h1{font-family:var(--fuente-titular);font-weight:800;font-size:clamp(2.6rem,7vw,4.4rem);line-height:1.12;margin-bottom:16px;letter-spacing:-.01em}
+.hero h1 em{font-style:normal;color:var(--acento2);position:relative}
+.hero p.lead{max-width:620px;margin:0 auto 30px;color:var(--muted);font-size:1.08rem}
+.hero .ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+/* Muela firma: gota que sostiene el diente */
+.mu{margin:34px auto 6px;width:190px;height:230px;position:relative;filter:drop-shadow(0 18px 34px rgba(64,196,196,.28))}
+.mu .gota{position:absolute;inset:0;background:linear-gradient(160deg,var(--cielo),var(--acento) 85%);border-radius:50% 50% 50% 50%/58% 58% 42% 42%}
+.mu svg{position:absolute;inset:0;margin:auto;width:118px;height:118px}
+.mu .brillo{position:absolute;inset:0;border-radius:inherit;overflow:hidden}
+.mu .brillo::after{content:"";position:absolute;top:-20%;left:-70%;width:48%;height:140%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.9),transparent);transform:skewX(-18deg);animation:sweepbtn 3.8s ease-in-out infinite}
+.hero .datos{display:flex;gap:34px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+.hero .datos div b{display:block;font-family:var(--fuente-titular);font-size:1.7rem;color:var(--acento2)}
+.hero .datos div span{font-size:.82rem;color:var(--muted);letter-spacing:.06em}
+/* Reveal calmado */
+.rv{opacity:0;transform:translateY(22px);transition:opacity 1.1s cubic-bezier(.22,.61,.36,1),transform 1.1s cubic-bezier(.22,.61,.36,1)}
+.rv.vis{opacity:1;transform:none}
+/* Secciones */
+section.bloque{padding:70px 0}
+h2.sec{font-family:var(--fuente-titular);font-weight:700;font-size:1.95rem;margin-bottom:6px;text-align:center}
+h2.sec .dot{color:var(--acento)}
+p.sub{color:var(--muted);margin-bottom:36px;max-width:620px;text-align:center;margin-left:auto;margin-right:auto}
+/* Tratamientos */
+.carta{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.trat{background:var(--tarjeta);border:1px solid var(--borde);border-radius:22px;padding:30px 26px;position:relative;overflow:hidden;transition:transform .5s cubic-bezier(.22,.61,.36,1),box-shadow .5s}
+.trat::after{content:"";position:absolute;top:0;left:-75%;width:50%;height:100%;background:linear-gradient(105deg,transparent,rgba(174,226,255,.5),transparent);transform:skewX(-18deg);animation:sweepcard 9s ease-in-out infinite;pointer-events:none}
+.trat:nth-child(2)::after{animation-delay:3s}
+.trat:nth-child(3)::after{animation-delay:6s}
+@keyframes sweepcard{0%,62%{left:-75%}100%{left:175%}}
+.trat:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(64,196,196,.16)}
+.trat .ico{width:64px;height:64px;border-radius:20px 20px 20px 6px;background:linear-gradient(150deg,var(--cielo),var(--acento));display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.trat .ico svg{width:34px;height:34px;stroke:#fff;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.trat h3{font-family:var(--fuente-titular);font-size:1.18rem;margin-bottom:8px}
+.trat p{color:var(--muted);font-size:.93rem;margin-bottom:14px}
+.trat .precio{font-family:var(--fuente-titular);font-weight:700;color:var(--acento2);font-size:1.05rem}
+.trat .precio small{font-family:var(--fuente-cuerpo);font-weight:500;color:var(--muted);font-size:.8rem}
+/* Separador de gotas */
+.gotas{display:flex;justify-content:center;gap:14px;padding:6px 0 0;opacity:.85}
+.gotas span{width:12px;height:12px;background:var(--acento);border-radius:50% 50% 50% 4px;transform:rotate(45deg);animation:flota 3.4s ease-in-out infinite}
+.gotas span:nth-child(2){animation-delay:.5s;background:var(--cielo)}
+.gotas span:nth-child(3){animation-delay:1s;background:var(--acento2)}
+@keyframes flota{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(-7px)}}
+/* Equipo */
+.equipo{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.doc{background:var(--tarjeta);border:1px solid var(--borde);border-radius:22px;padding:30px 24px;text-align:center;transition:transform .5s cubic-bezier(.22,.61,.36,1),box-shadow .5s}
+.doc:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(64,196,196,.16)}
+.doc .av{width:86px;height:86px;margin:0 auto 14px;border-radius:50%;background:linear-gradient(150deg,var(--cielo),var(--acento));display:flex;align-items:center;justify-content:center;font-family:var(--fuente-titular);font-weight:700;font-size:1.5rem;color:#fff;border:4px solid #fff;box-shadow:0 8px 22px rgba(64,196,196,.3)}
+.doc h3{font-family:var(--fuente-titular);font-size:1.1rem;margin-bottom:2px}
+.doc .rol{font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--acento2);margin-bottom:8px}
+.doc p{color:var(--muted);font-size:.9rem}
+/* Testimonios */
+.testis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.testi{background:var(--tarjeta);border:1px solid var(--borde);border-radius:18px;padding:26px;position:relative}
+.testi::before{content:"";position:absolute;top:22px;left:22px;width:26px;height:26px;background:var(--cielo);border-radius:50% 50% 50% 4px;transform:rotate(45deg);opacity:.8}
+.testi .stars{color:var(--acento2);margin-bottom:8px;margin-left:38px;letter-spacing:.1em}
+.testi p{font-size:.93rem}
+.testi footer{margin-top:10px;font-size:.85rem;color:var(--muted)}
+/* Cita */
+.cita{background:var(--fondo2);border:1px solid var(--borde);border-radius:24px;padding:44px 34px;max-width:740px;margin:0 auto;position:relative;overflow:hidden}
+.cita::before{content:"";position:absolute;top:-70px;right:-70px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(174,226,255,.5),transparent 70%)}
+.cita h3{font-family:var(--fuente-titular);font-size:1.4rem;margin-bottom:6px;text-align:center}
+.cita>p{text-align:center;color:var(--muted);margin-bottom:22px;font-size:.95rem}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.campo label{display:block;font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:600}
+.campo input,.campo select{width:100%;padding:13px;border:1px solid var(--borde);border-radius:12px;font-size:1rem;background:var(--fondo);color:var(--texto);font-family:inherit}
+.campo input:focus,.campo select:focus{outline:2px solid var(--acento);border-color:var(--acento)}
+#conf{display:none;background:var(--fondo);border:1px solid var(--acento);border-radius:14px;padding:20px;margin-top:18px;text-align:center}
+#conf strong{color:var(--acento2)}
+/* Contacto */
+.info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.info .card{background:var(--tarjeta);border:1px solid var(--borde);border-radius:18px;padding:28px;text-align:center}
+.info h3{font-family:var(--fuente-titular);margin-bottom:8px;font-size:1.05rem}
+.info p{color:var(--muted);font-size:.93rem}
+/* pz-ideal */
+.pz-ideal{padding:64px 20px;text-align:center;border-top:1px solid var(--borde);background:var(--fondo2)}
+.pz-ideal p.lead2{max-width:640px;margin:0 auto;color:var(--muted);font-size:1.02rem;line-height:1.7}
+.pz-ideal strong.t{color:var(--texto);font-size:1.2rem;font-family:var(--fuente-titular)}
+/* Chat demo */
+#chatBtn{position:fixed;bottom:22px;right:22px;z-index:99;width:60px;height:60px;border-radius:50%;background:var(--acento);color:#083b3f;border:none;font-size:1.5rem;cursor:pointer;box-shadow:0 8px 24px rgba(64,196,196,.45)}
+#chatBtn:hover{background:var(--acento2);color:#fff}
+#chatPanel{position:fixed;bottom:96px;right:22px;z-index:99;width:330px;max-width:calc(100vw - 44px);background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.18);display:none;overflow:hidden}
+#chatPanel.open{display:block}
+#chatPanel .chead{background:var(--acento2);color:#fff;padding:14px 18px;font-weight:700;font-family:var(--fuente-titular)}
+#chatPanel .chead small{display:block;font-weight:400;font-size:.75rem;opacity:.85;font-family:var(--fuente-cuerpo)}
+#chatBody{padding:16px;height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--fondo)}
+.msg{max-width:85%;padding:10px 14px;border-radius:14px;font-size:.9rem}
+.msg.in{background:var(--tarjeta);border:1px solid var(--borde);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.out{background:var(--acento);color:#083b3f;font-weight:500;align-self:flex-end;border-bottom-right-radius:4px}
+.quick{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 8px;background:var(--fondo)}
+.quick button{border:1px solid var(--acento);background:var(--tarjeta);color:var(--acento2);border-radius:999px;padding:7px 14px;font-size:.82rem;cursor:pointer;font-weight:600}
+.quick button:hover{background:var(--acento);color:#083b3f}
+.chead2{padding:10px 16px;background:var(--fondo);font-size:.72rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+footer.site{background:var(--acento2);color:#fff;padding:36px 0;text-align:center;font-size:.9rem}
+footer.site a{color:#fff}
+footer.site .dim{opacity:.8}
+@media(max-width:900px){
+  .carta,.equipo,.testis{grid-template-columns:1fr}
+  .info{grid-template-columns:1fr}
+  .campos{grid-template-columns:1fr}
+  nav.menu a:not(.btn){display:none}
+  .hero{padding:64px 0 60px}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero .band,.mu .brillo::after,.btn::after,.trat::after,.gotas span{animation:none}
+  .rv{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="demo-badge">Diseño demo</div>
+<a class="volver" href="../index.html">← Portafolio</a>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#">
+      <span class="logo-slot" data-logo>E</span>
+      <span><b data-nombre>ESMALTE</b><small data-tagline>Clínica dental</small></span>
+    </a>
+    <nav class="menu">
+      <a href="#tratamientos">Tratamientos</a>
+      <a href="#equipo">Equipo</a>
+      <a href="#contacto">Contacto</a>
+      <a class="btn" href="#cita" style="padding:9px 20px">Agendar cita</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="band" aria-hidden="true"></div>
+  <div class="wrap">
+    <span class="kicker">Clínica dental · Demo</span>
+    <div class="mu" aria-hidden="true">
+      <div class="gota"></div>
+      <svg viewBox="0 0 100 100"><path d="M50 12 C66 12 74 22 74 37 C74 50 70 63 68 75 C66 86 58 86 56 75 C54 66 46 66 44 75 C42 86 34 86 32 75 C30 63 26 50 26 37 C26 22 34 12 50 12 Z" fill="#ffffff" opacity=".95"/><path d="M38 30 C42 24 48 22 52 24" stroke="#40c4c4" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg>
+      <div class="brillo"></div>
+    </div>
+    <h1>Una sonrisa que <em>brilla</em><br>sin esfuerzo</h1>
+    <p class="lead">Odontología precisa, trato calmado y tecnología que cuida cada detalle. Tu primera consulta incluye diagnóstico digital sin costo.</p>
+    <div class="ctas">
+      <a class="btn" href="#cita">Agendar mi cita</a>
+      <a class="btn ghost" href="https://wa.me/16093316652">Escríbenos por WhatsApp</a>
+    </div>
+    <div class="datos">
+      <div><b>12+</b><span>años de experiencia</span></div>
+      <div><b>4,800</b><span>sonrisas atendidas</span></div>
+      <div><b>4.9 ★</b><span>calificación promedio</span></div>
+    </div>
+  </div>
+</div>
+
+<section class="bloque" id="tratamientos" data-pieza="Tratamientos">
+  <div class="wrap">
+    <h2 class="sec rv">Tratamientos<span class="dot">.</span></h2>
+    <p class="sub rv">Precios de ejemplo para mostrar el formato. Los tuyos irían aquí con tus fotos y descripciones.</p>
+    <div class="carta">
+      <div class="trat rv">
+        <div class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="4.5"/><circle cx="17.5" cy="7" r="2.6"/><circle cx="17" cy="17.5" r="2"/></svg></div>
+        <h3>Limpieza dental</h3>
+        <p>Profilaxis completa con ultrasonido y pulido: elimina sarro y manchas para un esmalte liso y sano.</p>
+        <div class="precio">Desde $59 <small>/ sesión</small></div>
+      </div>
+      <div class="trat rv">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 13 Q12 19 20 13"/><rect x="8.5" y="10.5" width="3.4" height="3.4" rx="1"/><rect x="12.8" y="10.5" width="3.4" height="3.4" rx="1"/><path d="M7 10.5 H17.5"/></svg></div>
+        <h3>Ortodoncia</h3>
+        <p>Brackets metálicos, cerámicos y alineadores invisibles. Plan de tratamiento digital con vista previa.</p>
+        <div class="precio">Desde $89 <small>/ mes</small></div>
+      </div>
+      <div class="trat rv">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M9 3 h6 v5 H9 z"/><path d="M12 8 v13"/><path d="M10 11 l4 2 M14 14 l-4 2 M10 17 l4 2"/></svg></div>
+        <h3>Implantes</h3>
+        <p>Reemplazo permanente con implantes de titanio y corona de zirconio: recupera función y estética total.</p>
+        <div class="precio">Desde $499 <small>/ pieza</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gotas" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<section class="bloque" id="equipo" data-pieza="Equipo y doctores">
+  <div class="wrap">
+    <h2 class="sec rv">Nuestro equipo<span class="dot">.</span></h2>
+    <p class="sub rv">Profesionales de ejemplo para mostrar el formato.</p>
+    <div class="equipo">
+      <div class="doc rv"><div class="av">DR</div><h3>Dra. Valeria Ríos</h3><div class="rol">Odontología estética</div><p>Especialista en diseño de sonrisa y carillas. 10 años devolviendo confianza.</p></div>
+      <div class="doc rv"><div class="av">JM</div><h3>Dr. Javier Mora</h3><div class="rol">Ortodoncia</div><p>Certificado en alineadores invisibles; más de 900 tratamientos exitosos.</p></div>
+      <div class="doc rv"><div class="av">AS</div><h3>Dra. Ana Solís</h3><div class="rol">Implantología</div><p>Cirugía guiada por computadora para implantes precisos y mínimamente invasivos.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="sec rv">Pacientes que sonríen<span class="dot">.</span></h2>
+    <p class="sub rv">Testimonios de ejemplo para mostrar el formato.</p>
+    <div class="testis">
+      <div class="testi rv"><div class="stars">★★★★★</div><p>"El trato es tan calmado que se me quitó el miedo al dentista. La limpieza quedó impecable."</p><footer>— Mariana G. · <em>testimonio de ejemplo</em></footer></div>
+      <div class="testi rv"><div class="stars">★★★★★</div><p>"Mi ortodoncia terminó antes de lo previsto y el resultado superó lo que imaginaba."</p><footer>— Diego P. · <em>testimonio de ejemplo</em></footer></div>
+      <div class="testi rv"><div class="stars">★★★★★</div><p>"Me colocaron dos implantes sin dolor. Volví a comer de todo sin pensar."</p><footer>— Carmen L. · <em>testimonio de ejemplo</em></footer></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="cita" data-pieza="Reserva de cita" style="padding-top:0">
+  <div class="wrap">
+    <div class="cita rv">
+      <h3>Agenda tu cita</h3>
+      <p>Formulario de demostración: en tu página real, esto reserva y confirma por mensaje.</p>
+      <div class="campos">
+        <div class="campo"><label>Nombre</label><input type="text" id="cnom" placeholder="Tu nombre"></div>
+        <div class="campo"><label>Teléfono</label><input type="tel" id="ctel" placeholder="(555) 000-0000"></div>
+        <div class="campo"><label>Tratamiento</label><select id="ctra"><option>Limpieza dental</option><option>Ortodoncia</option><option>Implantes</option><option>Primera consulta</option></select></div>
+        <div class="campo"><label>Fecha preferida</label><input type="date" id="cfec"></div>
+      </div>
+      <div style="text-align:center"><button class="btn" id="cbtn">Solicitar cita</button></div>
+      <div id="conf"><strong>✓ Solicitud registrada (demo).</strong><br><span id="cres"></span><br><small style="color:var(--muted)">En tu página real recibirías la confirmación por WhatsApp.</small></div>
+      <p style="text-align:center;margin-top:16px"><a class="btn wa" href="https://wa.me/16093316652">Confirmar por WhatsApp</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="contacto" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="sec rv">Visítanos<span class="dot">.</span></h2>
+    <p class="sub rv">Datos de ejemplo.</p>
+    <div class="info">
+      <div class="card rv"><h3>Dirección</h3><p>Calle de ejemplo 123<br>Ciudad, Estado 00000</p></div>
+      <div class="card rv"><h3>Horario</h3><p>Lun – Vie · 9:00 AM – 6:00 PM<br>Sáb · 9:00 AM – 1:00 PM</p></div>
+      <div class="card rv"><h3>Contacto</h3><p>Tel: (555) 000-0000<br><a href="https://wa.me/16093316652" style="color:var(--acento2)">WhatsApp directo</a></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="pz-ideal">
+  <p class="lead2"><strong class="t">¿Este estilo es para tu negocio?</strong><br>Ideal para clínicas dentales, centros de estética médica y consultorios: transmite higiene, precisión y calma antes de leer una sola palabra.</p>
+  <button id="pz-cta" style="margin-top:18px;background:var(--acento);color:#083b3f;border:none;border-radius:999px;padding:13px 30px;font-weight:700;cursor:pointer;font-size:.95rem;font-family:var(--fuente-titular)">Verlo con mis colores</button>
+  <p style="margin-top:12px;font-size:.82rem;color:var(--muted)">Si te gustaron varios diseños, los combinamos en tu página a medida.</p>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <p><strong>ESMALTE · Clínica Dental</strong> — contenido ficticio de demostración</p>
+    <p class="dim" style="margin-top:8px">Diseño demo por <a href="../index.html">Polux</a> — caso de estudio · proyecto piloto.</p>
+  </div>
+</footer>
+
+<!-- Chat demo flotante -->
+<button id="chatBtn" aria-label="Abrir chat de demostración">✦</button>
+<div id="chatPanel" role="dialog" aria-label="Chat de demostración">
+  <div class="chead">Asistente Esmalte<small>Responde al instante · demo</small></div>
+  <div class="chead2">Prueba lo que un chatbot de Polux haría por tu clínica</div>
+  <div id="chatBody"></div>
+  <div class="quick">
+    <button data-q="trat">Tratamientos</button>
+    <button data-q="cita">Agendar cita</button>
+    <button data-q="horario">Horario</button>
+  </div>
+</div>
+
+<script>
+// Reveal calmado al hacer scroll
+(function(){
+  var els=document.querySelectorAll('.rv');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('vis')});return}
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(en){if(en.isIntersecting){en.classList.add('vis');io.unobserve(en.target)}});
+  },{threshold:.12});
+  els.forEach(function(e){io.observe(e)});
+})();
+// Formulario de cita (demo)
+document.getElementById('cbtn').addEventListener('click',function(){
+  var n=document.getElementById('cnom').value.trim()||'Paciente de ejemplo';
+  var t=document.getElementById('ctra').value;
+  var f=document.getElementById('cfec').value||'fecha de ejemplo';
+  document.getElementById('cres').textContent=n+' · '+t+' · '+f;
+  document.getElementById('conf').style.display='block';
+});
+// Botón pz-ideal → abre el selector de piezas (id real v2)
+document.getElementById('pz-cta').addEventListener('click',function(){
+  var b=document.getElementById('pz-selfab');if(b)b.click();
+});
+// Chat demo
+(function(){
+  var panel=document.getElementById('chatPanel'),body=document.getElementById('chatBody');
+  document.getElementById('chatBtn').addEventListener('click',function(){
+    panel.classList.toggle('open');
+    if(panel.classList.contains('open')&&!body.children.length)bot('¡Hola! Soy el asistente de Esmalte. Pregúntame por tratamientos, citas u horario.');
+  });
+  function add(txt,cls){var m=document.createElement('div');m.className='msg '+cls;m.textContent=txt;body.appendChild(m);body.scrollTop=body.scrollHeight}
+  function bot(t){setTimeout(function(){add(t,'in')},450)}
+  var R={
+    trat:'Ofrecemos limpieza dental, ortodoncia (incluye alineadores invisibles) e implantes. ¿Cuál te interesa?',
+    cita:'Puedes agendar arriba en "Agenda tu cita" o por WhatsApp al (555) 000-0000. La primera consulta es gratis.',
+    horario:'Atendemos Lun–Vie de 9:00 AM a 6:00 PM y Sáb de 9:00 AM a 1:00 PM.'
+  };
+  document.querySelectorAll('.quick button').forEach(function(b){
+    b.addEventListener('click',function(){add(b.textContent,'out');bot(R[b.dataset.q])});
+  });
+})();
+</script>
+<script src="../personalizar.js?v=3"></script>
+<script>window.POLUX_WA='16093316652';window.POLUX_CHAT={ac:'#40c4c4',icon:'bubbles',context:'demo',design:'Esmalte'};</script>
+<script src="../polux-chat.js?v=5"></script>
+<script src="../polux-piezas.js?v=5"></script>
+</body>
+</html>
