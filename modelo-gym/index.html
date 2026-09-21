@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forja Gym — Diseño demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Archivo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   FORJA — concepto: pisar la tarima antes de una serie pesada.
+   Paleta: carbón + rojo impacto + lima ácido.
+   Motion: todo GOLPEA — reveals con rebote elástico, sacudidas
+   en CTAs, barras de fuerza que se llenan al scroll.
+   ============================================================ */
+:root{
+  --logo: "";
+  --fondo:#0d0d0f; --fondo2:#141416; --tarjeta:#17171a; --borde:#2a2a30;
+  --acento:#ff2d2d; --acento2:#c6ff3d;
+  --texto:#f5f5f3; --muted:#a3a3ab;
+  --fuente-titular: Oswald, "Arial Narrow", sans-serif;
+  --fuente-cuerpo: Archivo, system-ui, sans-serif;
+  --golpe: cubic-bezier(.18,.9,.22,1.28);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo);line-height:1.6;overflow-x:hidden}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+::selection{background:var(--acento);color:#fff}
+/* Distintivos */
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--acento);border-radius:999px;padding:5px 14px;opacity:.94;font-weight:700}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:var(--tarjeta);border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.volver:hover{color:var(--acento);border-color:var(--acento)}
+/* Header */
+header.site{background:var(--fondo);border-bottom:1px solid var(--borde);position:sticky;top:0;z-index:50;padding-top:44px}
+.bar{display:flex;align-items:center;gap:14px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--texto)}
+.logo-slot{width:48px;height:48px;border-radius:8px;border:2px solid var(--acento);background:var(--logo) center/contain no-repeat,var(--tarjeta);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--acento);font-size:1.3rem;font-family:var(--fuente-titular)}
+.brand b{font-family:var(--fuente-titular);font-size:1.25rem;letter-spacing:.06em;text-transform:uppercase}
+.brand b em{font-style:normal;color:var(--acento)}
+.brand small{display:block;font-size:.64rem;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;font-family:var(--fuente-cuerpo)}
+nav.menu{margin-left:auto;display:flex;gap:22px;font-size:.92rem;align-items:center}
+nav.menu a{color:var(--muted);text-decoration:none;text-transform:uppercase;font-size:.8rem;letter-spacing:.1em;font-weight:600}
+nav.menu a:hover{color:var(--acento2)}
+/* Botones = impacto */
+.btn{display:inline-block;background:var(--acento);color:#fff;font-weight:800;text-decoration:none;padding:14px 32px;border:none;cursor:pointer;font-size:1rem;font-family:var(--fuente-titular);letter-spacing:.12em;text-transform:uppercase;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);transition:transform .12s var(--golpe),background .15s}
+.btn:hover{background:var(--acento2);color:var(--fondo);transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--texto);box-shadow:inset 0 0 0 2px var(--acento);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%)}
+.btn.ghost:hover{box-shadow:inset 0 0 0 2px var(--acento2);color:var(--acento2);background:transparent}
+/* Sacudida de impacto al hacer clic */
+@keyframes sacudir{0%,100%{transform:translate(0,0)}20%{transform:translate(-5px,2px)}40%{transform:translate(4px,-3px)}60%{transform:translate(-3px,-2px)}80%{transform:translate(2px,2px)}}
+.btn.sacudir{animation:sacudir .28s linear}
+/* Hero */
+.hero{position:relative;padding:110px 0 90px;overflow:hidden;background:
+  radial-gradient(900px 420px at 50% -80px, rgba(255,45,45,.16), transparent),
+  linear-gradient(180deg, var(--fondo2), var(--fondo))}
+.hero::before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:repeating-linear-gradient(-45deg,var(--acento) 0 18px,transparent 18px 36px);opacity:.85}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:8px;background:repeating-linear-gradient(-45deg,var(--acento2) 0 18px,transparent 18px 36px);opacity:.55}
+.kicker{display:inline-block;font-size:.74rem;letter-spacing:.34em;text-transform:uppercase;color:var(--acento2);border:1px solid var(--acento2);padding:7px 18px;margin-bottom:26px;font-weight:600}
+/* Título que CAE con golpe */
+@keyframes caer{0%{transform:translateY(-90px) scaleY(1.25);opacity:0}55%{transform:translateY(8px) scaleY(.94);opacity:1}75%{transform:translateY(-4px) scaleY(1.03)}100%{transform:translateY(0) scaleY(1)}}
+@keyframes temblor{0%,100%{transform:translate(0,0)}25%{transform:translate(-7px,3px)}50%{transform:translate(6px,-4px)}75%{transform:translate(-4px,-3px)}}
+.hero h1{font-family:var(--fuente-titular);font-weight:700;font-size:clamp(3.4rem,13vw,8.5rem);line-height:.95;letter-spacing:.01em;text-transform:uppercase;animation:caer .7s var(--golpe) both}
+.hero h1 .rojo{color:var(--acento)}
+.hero h1 .lima{color:var(--acento2)}
+.hero.temblando{animation:temblor .3s linear}
+.hero p.lead{max-width:600px;margin:26px auto 34px;color:var(--muted);font-size:1.08rem}
+.hero .ctas{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+/* Stats con conteo */
+.stats{display:flex;gap:0;justify-content:center;margin-top:52px;flex-wrap:wrap}
+.stat{padding:10px 34px;border-left:1px solid var(--borde);text-align:center}
+.stat:first-child{border-left:none}
+.stat b{display:block;font-family:var(--fuente-titular);font-size:2.4rem;color:var(--acento2);font-weight:700}
+.stat span{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+/* Reveals con rebote */
+.revel{opacity:0;transform:translateY(34px) scale(.97);transition:opacity .5s ease,transform .6s var(--golpe)}
+.revel.on{opacity:1;transform:none}
+/* Secciones */
+section.bloque{padding:76px 0}
+h2.sec{font-family:var(--fuente-titular);font-size:clamp(2.2rem,6vw,3.4rem);text-transform:uppercase;letter-spacing:.02em;margin-bottom:8px;text-align:center;line-height:1}
+h2.sec .rojo{color:var(--acento)}
+p.sub{color:var(--muted);margin-bottom:40px;max-width:620px;text-align:center;margin-left:auto;margin-right:auto}
+.corte{height:6px;background:repeating-linear-gradient(-45deg,var(--acento) 0 16px,var(--fondo) 16px 32px);opacity:.7}
+/* Programas */
+.progs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.prog{background:var(--tarjeta);border:1px solid var(--borde);border-top:5px solid var(--acento);padding:30px 26px;position:relative;transition:transform .2s var(--golpe),border-color .2s}
+.prog:hover{transform:translateY(-6px);border-top-color:var(--acento2)}
+.prog .ico{width:52px;height:52px;margin-bottom:16px;color:var(--acento)}
+.prog .ico svg{width:100%;height:100%}
+.prog h3{font-family:var(--fuente-titular);font-size:1.6rem;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+.prog p{color:var(--muted);font-size:.93rem;margin-bottom:20px}
+.nivel{display:flex;justify-content:space-between;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.nivel b{color:var(--acento2);font-family:var(--fuente-titular);font-size:.95rem;letter-spacing:.06em}
+.barra{height:12px;background:var(--fondo2);border:1px solid var(--borde);position:relative;overflow:hidden}
+.barra .relleno{height:100%;width:0;background:linear-gradient(90deg,var(--acento),var(--acento2));transition:width 1.3s cubic-bezier(.15,.8,.2,1)}
+/* Planes */
+.planes{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
+.plan{background:var(--tarjeta);border:1px solid var(--borde);padding:36px 30px;text-align:center;position:relative;transition:transform .2s var(--golpe)}
+.plan h3{font-family:var(--fuente-titular);font-size:1.4rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.plan .precio{font-family:var(--fuente-titular);font-size:3.2rem;font-weight:700;color:var(--texto);margin:10px 0 4px}
+.plan .precio small{font-size:1rem;color:var(--muted);font-family:var(--fuente-cuerpo)}
+.plan ul{list-style:none;margin:22px 0;color:var(--muted);font-size:.93rem}
+.plan ul li{padding:8px 0;border-bottom:1px dashed var(--borde)}
+.plan ul li:last-child{border-bottom:none}
+.plan.destacado{border:2px solid var(--acento);transform:scale(1.05);background:linear-gradient(180deg,var(--tarjeta),color-mix(in srgb,var(--acento) 14%,var(--tarjeta)))}
+.plan.destacado:hover{transform:scale(1.05) translateY(-6px)}
+.plan .tag{position:absolute;top:-15px;left:50%;transform:translateX(-50%);background:var(--acento);color:#fff;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;padding:5px 18px;font-weight:800;white-space:nowrap}
+/* Testimonios */
+.testis{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.testi{background:var(--tarjeta);border:1px solid var(--borde);border-left:6px solid var(--acento2);padding:28px;position:relative}
+.testi .stars{color:var(--acento2);margin-bottom:10px;letter-spacing:.15em}
+.testi p{font-size:1.02rem;margin-bottom:12px}
+.testi p strong{color:var(--acento2);font-family:var(--fuente-titular);letter-spacing:.04em}
+.testi footer{font-size:.85rem;color:var(--muted)}
+/* Prueba gratis */
+.prueba{background:linear-gradient(135deg,color-mix(in srgb,var(--acento) 12%,var(--fondo2)),var(--fondo2));border:1px solid var(--acento);padding:48px 36px;max-width:760px;margin:0 auto;position:relative;overflow:hidden}
+.prueba::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:repeating-linear-gradient(-45deg,var(--acento) 0 16px,transparent 16px 32px)}
+.prueba h3{font-family:var(--fuente-titular);font-size:2rem;text-transform:uppercase;text-align:center;margin-bottom:8px}
+.prueba h3 .lima{color:var(--acento2)}
+.prueba>p{text-align:center;color:var(--muted);margin-bottom:26px}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.campo label{display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.campo select,.campo input{width:100%;padding:13px;border:1px solid var(--borde);border-radius:0;font-size:1rem;background:var(--fondo);color:var(--texto);font-family:inherit}
+.campo select:focus,.campo input:focus{outline:none;border-color:var(--acento)}
+#conf{display:none;background:var(--tarjeta);border:1px solid var(--acento2);padding:20px;margin-top:18px;text-align:center}
+#conf strong{color:var(--acento2)}
+/* Info */
+.info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.info .card{background:var(--tarjeta);border:1px solid var(--borde);padding:28px;text-align:center}
+.info h3{font-family:var(--fuente-titular);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;color:var(--acento2)}
+.info p{color:var(--muted)}
+.info a{color:var(--texto);font-weight:700}
+/* Chat demo */
+#chatBtn{position:fixed;bottom:22px;right:22px;z-index:99;width:60px;height:60px;border-radius:50%;background:var(--acento);color:#fff;border:none;font-size:1.6rem;cursor:pointer;box-shadow:0 8px 24px rgba(255,45,45,.45)}
+#chatBtn:hover{background:var(--acento2);color:var(--fondo)}
+#chatPanel{position:fixed;bottom:96px;right:22px;z-index:99;width:330px;max-width:calc(100vw - 44px);background:var(--tarjeta);border:1px solid var(--borde);box-shadow:0 18px 50px rgba(0,0,0,.5);display:none;overflow:hidden}
+#chatPanel.open{display:block}
+#chatPanel .chead{background:var(--acento);color:#fff;padding:14px 18px;font-weight:700;font-family:var(--fuente-titular);letter-spacing:.06em;text-transform:uppercase}
+#chatPanel .chead small{display:block;font-weight:400;font-size:.75rem;opacity:.9;font-family:var(--fuente-cuerpo);text-transform:none;letter-spacing:0}
+#chatBody{padding:16px;height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--fondo)}
+.msg{max-width:85%;padding:10px 14px;font-size:.9rem}
+.msg.in{background:var(--tarjeta);border:1px solid var(--borde);align-self:flex-start}
+.msg.out{background:var(--acento);color:#fff;align-self:flex-end}
+.quick{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 8px;background:var(--fondo)}
+.quick button{border:1px solid var(--acento);background:var(--tarjeta);color:var(--texto);padding:7px 14px;font-size:.82rem;cursor:pointer;font-weight:600}
+.quick button:hover{background:var(--acento);color:#fff}
+.chead2{padding:10px 16px;background:var(--fondo);font-size:.72rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+footer.site{background:color-mix(in srgb,var(--fondo) 55%,black);border-top:1px solid var(--borde);padding:38px 0;text-align:center;font-size:.9rem;color:var(--muted)}
+footer.site a{color:var(--acento2)}
+@media(max-width:900px){
+  .progs,.planes,.testis,.info{grid-template-columns:1fr}
+  .campos{grid-template-columns:1fr}
+  nav.menu a:not(.btn){display:none}
+  .plan.destacado{transform:none}
+  .stat{padding:10px 20px}
+  .hero{padding:80px 0 70px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .revel{opacity:1;transform:none}
+  .barra .relleno{width:var(--w,0)!important}
+  html{scroll-behavior:auto}
+}
+</style>
+<noscript><style>.revel{opacity:1!important;transform:none!important}.barra .relleno{width:100%!important}</style></noscript>
+</head>
+<body>
+<div class="demo-badge">Diseño demo</div>
+<a class="volver" href="../index.html">← Portafolio</a>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#">
+      <span class="logo-slot" data-logo>F</span>
+      <span><b data-nombre>FORJA <em>GYM</em></b><small data-tagline>Entrena de verdad</small></span>
+    </a>
+    <nav class="menu">
+      <a href="#programas">Programas</a>
+      <a href="#planes">Planes</a>
+      <a href="#contacto">Contacto</a>
+      <a class="btn" href="#prueba" style="padding:10px 24px">Prueba gratis</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero" id="hero">
+  <div class="wrap" style="text-align:center">
+    <div class="kicker">Gimnasio · Fuerza · HIIT · Boxeo</div>
+    <h1>Forja tu <span class="rojo">cuerpo</span><br>como <span class="lima">acero</span></h1>
+    <p class="lead">Sin máquinas de adorno ni rutinas copiadas. Entrenadores que te exigen, programas que progresan y resultados que se miden en kilos y en espejo.</p>
+    <div class="ctas">
+      <a class="btn" href="#prueba" data-golpe>Quiero mi prueba gratis</a>
+      <a class="btn ghost" href="#programas">Ver programas</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b><span class="cuenta" data-n="1200">1200</span> m²</b><span>De pura forja</span></div>
+      <div class="stat"><b><span class="cuenta" data-n="14">14</span></b><span>Entrenadores</span></div>
+      <div class="stat"><b><span class="cuenta" data-n="60">60</span>+</b><span>Clases por semana</span></div>
+    </div>
+  </div>
+</div>
+<div class="corte" aria-hidden="true"></div>
+
+<section class="bloque" id="programas" data-pieza="Programas de entrenamiento">
+  <div class="wrap">
+    <h2 class="sec revel">Programas que <span class="rojo">golpean</span></h2>
+    <p class="sub revel">Elige tu disciplina. Cada programa tiene niveles, progresión medible y un entrenador que no te deja flojear.</p>
+    <div class="progs">
+      <div class="prog revel">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></div>
+        <h3>Fuerza</h3>
+        <p>Sentadilla, peso muerto y press con técnica depurada. Progresión por ciclos de 8 semanas.</p>
+        <div class="nivel"><span>Intensidad</span><b>95%</b></div>
+        <div class="barra"><div class="relleno" data-w="95"></div></div>
+      </div>
+      <div class="prog revel">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13.5H11L9.5 22 19 10h-6.5z"/></svg></div>
+        <h3>HIIT</h3>
+        <p>Intervalos de 45 minutos que queman hasta 600 calorías. Ritmo alto, música más alta.</p>
+        <div class="nivel"><span>Intensidad</span><b>100%</b></div>
+        <div class="barra"><div class="relleno" data-w="100"></div></div>
+      </div>
+      <div class="prog revel">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg></div>
+        <h3>Boxeo</h3>
+        <p>Técnica de golpeo, footwork y rounds en el saco. Cardio brutal con disciplina de ring.</p>
+        <div class="nivel"><span>Intensidad</span><b>88%</b></div>
+        <div class="barra"><div class="relleno" data-w="88"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="planes" data-pieza="Planes de membresía" style="background:var(--fondo2);border-top:1px solid var(--borde);border-bottom:1px solid var(--borde)">
+  <div class="wrap">
+    <h2 class="sec revel">Elige tu <span class="rojo">peso</span></h2>
+    <p class="sub revel">Sin letras chiquitas ni permanencias tramposas. Cancela cuando quieras.</p>
+    <div class="planes">
+      <div class="plan revel">
+        <h3>Base</h3>
+        <div class="precio">$29<small>/mes</small></div>
+        <ul><li>Acceso a sala de musculación</li><li>1 clase grupal por semana</li><li>App de rutinas</li></ul>
+        <a class="btn ghost" href="#prueba" data-golpe>Empezar</a>
+      </div>
+      <div class="plan destacado revel">
+        <span class="tag">El más elegido</span>
+        <h3>Forja total</h3>
+        <div class="precio">$49<small>/mes</small></div>
+        <ul><li>Todo lo del plan Base</li><li>Clases ilimitadas</li><li>Plan de nutrición</li><li>1 sesión personal al mes</li></ul>
+        <a class="btn" href="#prueba" data-golpe>Empezar</a>
+      </div>
+      <div class="plan revel">
+        <h3>Élite</h3>
+        <div class="precio">$89<small>/mes</small></div>
+        <ul><li>Todo lo de Forja Total</li><li>4 sesiones personales al mes</li><li>Acceso 24/7</li><li>Zona de recuperación</li></ul>
+        <a class="btn ghost" href="#prueba" data-golpe>Empezar</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque">
+  <div class="wrap">
+    <h2 class="sec revel">Resultados <span class="rojo">reales</span></h2>
+    <p class="sub revel">Testimonios de ejemplo para mostrar el formato.</p>
+    <div class="testis">
+      <div class="testi revel"><div class="stars">★★★★★</div><p>"Llegué sin poder hacer una dominada. Seis meses después: <strong>−18 kg</strong> y 12 dominadas seguidas."</p><footer>— Cliente de ejemplo · <span>Testimonio de ejemplo</span></footer></div>
+      <div class="testi revel"><div class="stars">★★★★★</div><p>"El boxeo me cambió la vida. Bajé <strong>−24 kg</strong> y mi cardio está por las nubes."</p><footer>— Cliente de ejemplo · <span>Testimonio de ejemplo</span></footer></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="prueba" data-pieza="Prueba gratis" style="padding-top:0">
+  <div class="wrap">
+    <div class="prueba revel">
+      <h3>Tu primera semana <span class="lima">gratis</span></h3>
+      <p>Sin tarjeta, sin compromiso. Vienes, entrenas, decides.</p>
+      <div class="campos">
+        <div class="campo"><label>Nombre</label><input type="text" id="fnom" placeholder="Tu nombre"></div>
+        <div class="campo"><label>Teléfono</label><input type="tel" id="ftel" placeholder="(555) 000-0000"></div>
+        <div class="campo"><label>Programa</label><select id="fprog"><option>Fuerza</option><option>HIIT</option><option>Boxeo</option><option>Aún no lo sé</option></select></div>
+        <div class="campo"><label>Horario</label><select id="fhor"><option>Mañana</option><option>Mediodía</option><option>Tarde</option><option>Noche</option></select></div>
+      </div>
+      <div style="text-align:center"><button class="btn" id="fbtn" data-golpe>Reservar mi semana gratis</button></div>
+      <div id="conf"><strong>✓ Listo (demo).</strong><br><span id="fres"></span><br><small style="color:var(--muted)">En tu página real, aquí llegaría la confirmación por SMS o WhatsApp.</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="contacto" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="sec revel">Pasa por la <span class="rojo">forja</span></h2>
+    <p class="sub revel">Datos de ejemplo.</p>
+    <div class="info">
+      <div class="card revel"><h3>Dirección</h3><p>Calle de ejemplo 456<br>Ciudad, Estado 00000</p></div>
+      <div class="card revel"><h3>Horario</h3><p>Lun – Vie · 5:00 AM – 11:00 PM<br>Sáb · 7:00 AM – 8:00 PM</p></div>
+      <div class="card revel"><h3>Escríbenos</h3><p><a href="https://wa.me/16093316652">WhatsApp directo</a><br>Tel: (555) 000-0000</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="pz-ideal" style="padding:60px 20px;text-align:center;border-top:1px solid var(--borde)">
+  <p style="max-width:640px;margin:0 auto;color:var(--muted);font-size:1.02rem;line-height:1.7"><strong style="color:var(--texto);font-size:1.15rem">¿Este estilo es para tu negocio?</strong><br>Ideal para gimnasios, boxes de crossfit y estudios de entrenamiento: programas con medidores, planes de membresía y captación de pruebas gratis.</p>
+  <button onclick="var b=document.getElementById('pz-selfab');b&&b.click()" style="margin-top:18px;background:var(--acento);color:#fff;border:none;border-radius:0;padding:13px 30px;font-weight:700;cursor:pointer;font-size:.95rem;font-family:var(--fuente-titular);letter-spacing:.1em;text-transform:uppercase">Verlo con mis colores</button>
+  <p style="margin-top:12px;font-size:.82rem;color:var(--muted)">Si te gustaron varios, los combinamos en tu página a medida.</p>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <p><strong>FORJA GYM</strong> · Gimnasio de ejemplo · Contenido ficticio de demostración</p>
+    <p style="margin-top:8px">Diseño demo por <a href="../index.html">Polux</a> — caso de estudio · proyecto piloto.</p>
+  </div>
+</footer>
+
+<!-- Chat demo flotante -->
+<button id="chatBtn" aria-label="Abrir chat de demostración">💬</button>
+<div id="chatPanel" role="dialog" aria-label="Chat de demostración">
+  <div class="chead">Asistente Forja<small>Responde al instante · demo</small></div>
+  <div class="chead2">Prueba lo que un chatbot de Polux haría por tu gym</div>
+  <div id="chatBody"></div>
+  <div class="quick">
+    <button data-q="horario">Horario</button>
+    <button data-q="precios">Precios</button>
+    <button data-q="gratis">Clase gratis</button>
+  </div>
+</div>
+
+<script>
+// --- Golpe en CTAs: sacudida de impacto al hacer clic ---
+document.querySelectorAll('[data-golpe]').forEach(function(el){
+  el.addEventListener('click',function(){
+    el.classList.remove('sacudir');void el.offsetWidth;el.classList.add('sacudir');
+  });
+});
+// --- Temblor del hero cuando el título cae ---
+var hero=document.getElementById('hero');
+hero.addEventListener('animationend',function(e){
+  if(e.target.tagName==='H1'){hero.classList.add('temblando');setTimeout(function(){hero.classList.remove('temblando')},350);}
+});
+// --- Reveals + barras de fuerza + contadores al entrar al viewport ---
+var io=new IntersectionObserver(function(es){
+  es.forEach(function(en){
+    if(!en.isIntersecting)return;
+    var t=en.target;
+    t.classList.add('on');
+    t.querySelectorAll('.relleno').forEach(function(b){
+      b.style.setProperty('--w',b.dataset.w+'%');
+      b.style.width=b.dataset.w+'%';
+    });
+    t.querySelectorAll('.cuenta').forEach(function(c){
+      if(c.dataset.done)return;c.dataset.done='1';
+      var n=+c.dataset.n,i=0;c.textContent='0';
+      var paso=Math.max(1,Math.round(n/40));
+      var iv=setInterval(function(){i+=paso;if(i>=n){i=n;clearInterval(iv)}c.textContent=i;},30);
+    });
+    io.unobserve(t);
+  });
+},{threshold:.18});
+document.querySelectorAll('.revel,.hero').forEach(function(el){io.observe(el)});
+document.querySelectorAll('.prog,.prueba').forEach(function(el){io.observe(el)});
+// --- Form demo ---
+document.getElementById('fbtn').addEventListener('click',function(){
+  var n=document.getElementById('fnom').value||'entrenador(a) de ejemplo';
+  var p=document.getElementById('fprog').value;
+  document.getElementById('fres').textContent=n+' · '+p+' · Semana gratis reservada';
+  document.getElementById('conf').style.display='block';
+});
+// --- Chat demo ---
+var panel=document.getElementById('chatPanel'),body=document.getElementById('chatBody');
+document.getElementById('chatBtn').addEventListener('click',function(){
+  panel.classList.toggle('open');
+  if(panel.classList.contains('open')&&!body.children.length)bot('¡Hola! Soy el asistente demo de Forja. Pregúntame por horarios, precios o tu clase gratis.');
+});
+function add(txt,cls){var m=document.createElement('div');m.className='msg '+cls;m.textContent=txt;body.appendChild(m);body.scrollTop=body.scrollHeight}
+function bot(t){setTimeout(function(){add(t,'in')},450)}
+var R={
+  horario:'Abrimos Lun–Vie 5:00 AM–11:00 PM y Sáb 7:00 AM–8:00 PM.',
+  precios:'Desde $29/mes. El plan Forja Total ($49) es el más elegido: clases ilimitadas + nutrición.',
+  gratis:'¡De una! Llena el formulario de "Prueba gratis" y te apartamos tu semana sin costo.'
+};
+document.querySelectorAll('.quick button').forEach(function(b){
+  b.addEventListener('click',function(){add(b.textContent,'out');bot(R[b.dataset.q])});
+});
+</script>
+<script src="../personalizar.js?v=3"></script>
+<script>window.POLUX_WA='16093316652';window.POLUX_CHAT={ac:'#ff2d2d',icon:'bolt',context:'demo',design:'Forja'};</script>
+<script src="../polux-chat.js?v=5"></script>
+<script src="../polux-piezas.js?v=5"></script>
+</body>
+</html>
