@@ -356,12 +356,30 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   document.getElementById('wNext').addEventListener('click',()=>goTo(active+1));
   document.getElementById('wPrev').addEventListener('click',()=>goTo(active-1));
   track.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();goTo(active+1)}if(e.key==='ArrowLeft'){e.preventDefault();goTo(active-1)}});
-  /* auto-giro: si nadie la toca por 10s, muestra la colección sola;
-     cualquier gesto (o el chatbot) la detiene y el conteo reinicia */
-  let autoT=null,idleT=null;
-  function stopAuto(){if(autoT){clearInterval(autoT);autoT=null}}
-  function startAuto(){stopAuto();if(!reduced)autoT=setInterval(()=>{if(!document.hidden)goTo(active+1,true,true)},4500)}
-  function poke(){stopAuto();clearTimeout(idleT);idleT=setTimeout(startAuto,10000)}
+  /* Deriva continua estilo marquesina: si nadie la toca por 10s, la rueda
+     empieza a girar sola de forma fluida (sin saltos de tarjeta en tarjeta).
+     Cualquier gesto —o el chatbot— la detiene y el conteo de 10s reinicia. */
+  let driftOn=false, driftRaf=null, idleT=null;
+  const DRIFT_PX=1; /* ~60px/s: una vuelta completa en ~35s */
+  function driftStep(){
+    if(!driftOn)return;
+    track.scrollLeft+=DRIFT_PX;
+    driftRaf=requestAnimationFrame(driftStep);
+  }
+  function startDrift(){
+    if(driftOn||reduced||document.hidden)return;
+    driftOn=true;
+    track.style.scrollSnapType='none'; /* el snap pelearía con la deriva */
+    driftRaf=requestAnimationFrame(driftStep);
+  }
+  function stopDrift(){
+    driftOn=false;
+    if(driftRaf)cancelAnimationFrame(driftRaf);
+    driftRaf=null;
+    track.style.scrollSnapType='';
+  }
+  function poke(){stopDrift();clearTimeout(idleT);idleT=setTimeout(startDrift,10000)}
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)stopDrift()});
   track.addEventListener('pointerdown',poke);track.addEventListener('wheel',poke,{passive:true});track.addEventListener('touchstart',poke,{passive:true});
   /* Bucle infinito: 3 copias idénticas; el salto es inmediato y en el mismo
      arrastre (sin soltar), porque el contenido es pixel-idéntico y no se nota. */
