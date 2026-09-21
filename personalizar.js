@@ -97,8 +97,10 @@ aplicarTodo();
       }
     }catch(e){}
   }
-  var t = null;
-  function agenda(){ clearTimeout(t); t = setTimeout(red, 250); }
+  var raf = 0;
+  /* Durante el scroll (incluido el impulso en iOS) se revela en el siguiente
+     frame: el contenido aparece mientras se baja, no después de soltar. */
+  function agenda(){ if(raf) return; raf = requestAnimationFrame(function(){ raf = 0; red(); }); }
   window.addEventListener('scroll', agenda, {passive:true});
   window.addEventListener('resize', agenda);
   window.addEventListener('touchend', agenda, {passive:true});
