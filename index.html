@@ -42,7 +42,43 @@ h2.sec{font-size:clamp(1.6rem,3.4vw,2.3rem);margin-bottom:10px;text-align:center
 p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;margin-left:auto;margin-right:auto}
 
 /* ===== Catálogo vivo ===== */
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+/* ===== Rueda infinita de diseños ===== */
+.wheel{position:relative;perspective:1400px;margin:0 -8px}
+.w-stage{position:relative;height:clamp(340px,52vw,500px);transform-style:preserve-3d;touch-action:pan-y;cursor:grab;outline:none}
+.w-stage:active{cursor:grabbing}
+.w-card{position:absolute;top:50%;left:50%;width:min(560px,82vw);margin:0;
+  transition:transform .5s cubic-bezier(.2,.8,.25,1),opacity .5s,border-color .2s,box-shadow .2s}
+.w-stage.drag .w-card{transition:none}
+.w-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:130;width:52px;height:52px;border-radius:50%;
+  background:rgba(16,16,24,.82);border:1px solid var(--acento);color:#fff;font-size:1.7rem;line-height:1;cursor:pointer;backdrop-filter:blur(6px)}
+.w-prev{left:0}.w-next{right:0}
+.w-arrow:hover{background:var(--acento);color:#0A0A0C}
+.w-meta{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:16px;color:var(--muted);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase}
+.w-count{color:var(--texto);font-weight:800;letter-spacing:.1em}
+/* ===== Modal armar pedido ===== */
+.om-back{position:fixed;inset:0;z-index:200;background:rgba(5,5,10,.72);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px}
+.om-back.open{display:flex}
+.om{background:#15151d;border:1px solid var(--acento);border-radius:20px;max-width:540px;width:100%;max-height:88vh;overflow-y:auto;padding:28px 26px;position:relative}
+.om h3{font-size:1.4rem;margin-bottom:4px}
+.om-sub{color:var(--muted);font-size:.9rem;margin-bottom:20px}
+.om-sec{margin-bottom:20px}
+.om-lab{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acento);margin-bottom:10px;font-weight:700}
+.om-lab span{text-transform:none;letter-spacing:0;color:var(--muted);font-weight:400}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.tchip{border:1px solid var(--borde);background:#101016;color:var(--muted);border-radius:999px;padding:9px 16px;font-size:.85rem;cursor:pointer;transition:all .15s}
+.tchip.on{border-color:var(--acento);background:rgba(168,85,247,.16);color:#fff;font-weight:700}
+.om-pieces{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.piece{display:flex;gap:10px;align-items:flex-start;background:#101016;border:1px solid var(--borde);border-radius:12px;padding:10px 12px;font-size:.83rem;cursor:pointer;line-height:1.4}
+.piece input{margin-top:3px;accent-color:var(--acento);flex:none}
+.piece small{display:block;color:var(--muted);font-size:.72rem}
+.om input[type=text]{width:100%;background:#0d0d13;border:1px solid var(--borde);border-radius:12px;color:#fff;padding:12px 14px;font-size:.92rem;margin-bottom:10px;outline:none;font-family:inherit}
+.om input[type=text]:focus{border-color:var(--acento)}
+.om-radio{display:flex;gap:10px;align-items:center;background:#101016;border:1px solid var(--borde);border-radius:12px;padding:11px 14px;font-size:.88rem;margin-bottom:8px;cursor:pointer}
+.om-radio input{accent-color:var(--acento)}
+.om-send{width:100%;background:var(--acento);color:#0A0A0C;border:none;border-radius:999px;padding:15px;font-size:1rem;font-weight:800;cursor:pointer;font-family:inherit}
+.om-send:hover{filter:brightness(1.12)}
+.om-x{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer}
+.om-note{font-size:.78rem;color:var(--muted);text-align:center;margin-top:12px}
 .demo{position:relative;display:block;aspect-ratio:16/10;border-radius:18px;overflow:hidden;cursor:pointer;background:#000;
   border:1px solid color-mix(in srgb,var(--ac) 38%,#14141c);
   transition:transform .22s,box-shadow .22s,border-color .22s}
@@ -113,13 +149,12 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
 .rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s}
 .rv.vis{opacity:1;transform:none}
 
-@media(max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}.pasos,.planes{grid-template-columns:1fr;max-width:520px;margin-left:auto;margin-right:auto}.planes{margin-bottom:22px}}
+@media(max-width:960px){.pasos,.planes{grid-template-columns:1fr;max-width:520px;margin-left:auto;margin-right:auto}.planes{margin-bottom:22px}}
 @media(max-width:620px){
-  .grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:16px;margin:0 -20px;padding:6px 20px 16px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-  .grid::-webkit-scrollbar{display:none}
-  .demo{flex:0 0 86%;scroll-snap-align:center;scroll-snap-stop:always}
-  .swipe-hint{display:block}
   .hero{min-height:86vh}
+  .w-arrow{display:none}
+  .w-stage{height:clamp(300px,64vw,420px)}
+  .om-pieces{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.scroll-hint{animation:none}}
 </style>
@@ -140,47 +175,14 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
 
 <section id="disenos">
   <div class="wrap">
-    <h2 class="sec rv">Seis diseños vivos</h2>
-    <p class="sub rv">Sin descripciones que te encasillen: entra al que te llame la atención y míralo en acción. Marca con ♡ los que te hablen y envíanos tu selección.</p>
-    <div class="grid">
-      <article class="demo rv" data-id="ateneo" data-nombre="Ateneo" data-href="modelo-biblia/index.html" style="--ac:#d9a441;--cf:'Cinzel',serif" tabindex="0" role="link" aria-label="Abrir diseño Ateneo">
-        <span class="thumb"><iframe src="modelo-biblia/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Ateneo" tabindex="-1"></iframe></span>
-        <span class="scrim"></span>
-        <button class="fav" aria-label="Guardar Ateneo en mi selección" aria-pressed="false">♡</button>
-        <span class="meta"><span class="txt"><span class="kick">Diseño 01</span><span class="name">Ateneo</span></span><span class="open">Abrir →</span></span>
-      </article>
-      <article class="demo rv" data-id="pulso" data-nombre="Pulso" data-href="modelo-artista/index.html" style="--ac:#b366ff;--cf:'Share Tech Mono',monospace" tabindex="0" role="link" aria-label="Abrir diseño Pulso">
-        <span class="thumb"><iframe src="modelo-artista/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Pulso" tabindex="-1"></iframe></span>
-        <span class="scrim"></span>
-        <button class="fav" aria-label="Guardar Pulso en mi selección" aria-pressed="false">♡</button>
-        <span class="meta"><span class="txt"><span class="kick">Diseño 02</span><span class="name">Pulso</span></span><span class="open">Abrir →</span></span>
-      </article>
-      <article class="demo rv" data-id="burbuja" data-nombre="Burbuja" data-href="modelo-lavanderia/index.html" style="--ac:#7cc7ff;--cf:system-ui,sans-serif" tabindex="0" role="link" aria-label="Abrir diseño Burbuja">
-        <span class="thumb"><iframe src="modelo-lavanderia/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Burbuja" tabindex="-1"></iframe></span>
-        <span class="scrim"></span>
-        <button class="fav" aria-label="Guardar Burbuja en mi selección" aria-pressed="false">♡</button>
-        <span class="meta"><span class="txt"><span class="kick">Diseño 03</span><span class="name">Burbuja</span></span><span class="open">Abrir →</span></span>
-      </article>
-      <article class="demo rv" data-id="orbita" data-nombre="Órbita" data-href="modelo-ssee/index.html" style="--ac:#fbbf24;--cf:'Cinzel',serif" tabindex="0" role="link" aria-label="Abrir diseño Órbita">
-        <span class="thumb"><iframe src="modelo-ssee/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Órbita" tabindex="-1"></iframe></span>
-        <span class="scrim"></span>
-        <button class="fav" aria-label="Guardar Órbita en mi selección" aria-pressed="false">♡</button>
-        <span class="meta"><span class="txt"><span class="kick">Diseño 04</span><span class="name">Órbita</span></span><span class="open">Abrir →</span></span>
-      </article>
-      <article class="demo rv" data-id="brasa" data-nombre="Brasa" data-href="modelo-restaurante/index.html" style="--ac:#ff9a3d;--cf:'Cormorant Garamond',serif" tabindex="0" role="link" aria-label="Abrir diseño Brasa">
-        <span class="thumb"><iframe src="modelo-restaurante/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Brasa" tabindex="-1"></iframe></span>
-        <span class="scrim"></span>
-        <button class="fav" aria-label="Guardar Brasa en mi selección" aria-pressed="false">♡</button>
-        <span class="meta"><span class="txt"><span class="kick">Diseño 05</span><span class="name">Brasa</span></span><span class="open">Abrir →</span></span>
-      </article>
-      <article class="demo rv" data-id="armonia" data-nombre="Armonía" data-href="modelo-spa/index.html" style="--ac:#f0a6b8;--cf:'Cormorant Garamond',serif" tabindex="0" role="link" aria-label="Abrir diseño Armonía">
-        <span class="thumb"><iframe src="modelo-spa/index.html?embed=1" loading="lazy" scrolling="no" title="Vista previa — Armonía" tabindex="-1"></iframe></span>
-        <span class="scrim"></span>
-        <button class="fav" aria-label="Guardar Armonía en mi selección" aria-pressed="false">♡</button>
-        <span class="meta"><span class="txt"><span class="kick">Diseño 06</span><span class="name">Armonía</span></span><span class="open">Abrir →</span></span>
-      </article>
+    <h2 class="sec rv">Diseños vivos</h2>
+    <p class="sub rv">Gira la rueda y entra al que te llame la atención. Marca con ♡ los que te hablen y arma tu pedido.</p>
+    <div class="wheel rv" id="wheel">
+      <div class="w-stage" id="wStage" tabindex="0" role="listbox" aria-label="Rueda de diseños: usa las flechas del teclado o desliza para girar"></div>
+      <button class="w-arrow w-prev" id="wPrev" aria-label="Diseño anterior">‹</button>
+      <button class="w-arrow w-next" id="wNext" aria-label="Diseño siguiente">›</button>
     </div>
-    <div class="swipe-hint rv">Desliza para explorar →</div>
+    <div class="w-meta rv"><span class="w-count" id="wCount">01 / 06</span><span>·</span><span>desliza o gira la rueda</span></div>
   </div>
 </section>
 
@@ -217,9 +219,36 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
   </div>
 </div>
 
+<div class="om-back" id="omBack">
+  <div class="om" role="dialog" aria-modal="true" aria-label="Armar mi pedido">
+    <button class="om-x" id="omX" aria-label="Cerrar">✕</button>
+    <h3>Arma tu pedido</h3>
+    <p class="om-sub">Lo enviamos directo a nuestro WhatsApp y te contactamos.</p>
+    <div class="om-sec">
+      <div class="om-lab">Diseños que te gustaron</div>
+      <div class="chips" id="omDesigns"></div>
+    </div>
+    <div class="om-sec">
+      <div class="om-lab">Piezas para combinar <span>(opcional)</span></div>
+      <div class="om-pieces" id="omPieces"></div>
+    </div>
+    <div class="om-sec">
+      <div class="om-lab">Tus datos</div>
+      <input type="text" id="omNombre" placeholder="Tu nombre" autocomplete="name">
+      <input type="text" id="omNegocio" placeholder="Nombre del negocio" autocomplete="organization">
+    </div>
+    <div class="om-sec">
+      <div class="om-lab">Logo</div>
+      <label class="om-radio"><input type="radio" name="omLogo" value="tengo" checked> Ya tengo logo — lo envío por WhatsApp</label>
+      <label class="om-radio"><input type="radio" name="omLogo" value="disenar"> Quiero que Polux me diseñe uno ($99)</label>
+    </div>
+    <button class="om-send" id="omSend">Enviar pedido por WhatsApp →</button>
+    <p class="om-note">Al enviar se abre WhatsApp con tu pedido listo. Nuestra IA lo recibe y te da seguimiento.</p>
+  </div>
+</div>
 <div class="tray" id="tray" role="status" aria-live="polite">
   <span>♡ <span class="n" id="trayN">0</span> en tu selección</span>
-  <button id="traySend" type="button">Enviar mi selección</button>
+  <button id="traySend" type="button">Armar mi pedido →</button>
 </div>
 <div class="toast" id="toast" role="status"></div>
 
@@ -247,39 +276,134 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
     if(!reduced)requestAnimationFrame(tick);
   })();
 })();
-/* Catálogo: abrir tarjeta, favoritos y bandeja de selección */
+/* ===== Rueda infinita + favoritos + pedido ===== */
+window.POLUX_WA = window.POLUX_WA || '15550001122'; /* TODO: número real de WhatsApp Business */
 (function(){
-  const cards=[...document.querySelectorAll('.demo')];
+  const DESIGNS=[
+    {id:'ateneo', nombre:'Ateneo', href:'modelo-biblia/index.html',     ac:'#d9a441', cf:"'Cinzel',serif",          kick:'Diseño 01'},
+    {id:'pulso',  nombre:'Pulso',  href:'modelo-artista/index.html',   ac:'#b366ff', cf:"'Share Tech Mono',monospace", kick:'Diseño 02'},
+    {id:'burbuja',nombre:'Burbuja',href:'modelo-lavanderia/index.html',ac:'#7cc7ff', cf:"system-ui,sans-serif",     kick:'Diseño 03'},
+    {id:'orbita', nombre:'Órbita', href:'modelo-ssee/index.html',      ac:'#fbbf24', cf:"'Cinzel',serif",          kick:'Diseño 04'},
+    {id:'brasa',  nombre:'Brasa',  href:'modelo-restaurante/index.html',ac:'#ff9a3d',cf:"'Cormorant Garamond',serif", kick:'Diseño 05'},
+    {id:'armonia',nombre:'Armonía',href:'modelo-spa/index.html',       ac:'#f0a6b8', cf:"'Cormorant Garamond',serif", kick:'Diseño 06'}
+  ];
+  const PIECES=[
+    ['Repartidor animado en bicicleta','Brasa · escena viva'],
+    ['Recorrido cinematográfico con scroll','Ateneo'],
+    ['Grafo de conexiones animado','Ateneo'],
+    ['Pétalos cayendo en el hero','Armonía'],
+    ['Flor de loto que florece','Armonía'],
+    ['Franja móvil de anuncios','Pulso'],
+    ['Contadores y terminal en vivo','Órbita'],
+    ['Widget de reservas en línea','Brasa · Armonía'],
+    ['Chat con el estilo del diseño','todos los diseños'],
+    ['Burbujas y detalles de servicio local','Burbuja']
+  ];
+  const n=DESIGNS.length, stage=document.getElementById('wStage'), reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  stage.innerHTML=DESIGNS.map(d=>
+    `<article class="demo w-card" data-id="${d.id}" data-nombre="${d.nombre}" data-href="${d.href}" style="--ac:${d.ac};--cf:${d.cf}" role="option" aria-selected="false" aria-label="Diseño ${d.nombre}">
+      <span class="thumb"><iframe src="${d.href}?embed=1" loading="lazy" scrolling="no" title="Vista previa — ${d.nombre}" tabindex="-1"></iframe></span>
+      <span class="scrim"></span>
+      <button class="fav" aria-label="Guardar ${d.nombre} en mi selección" aria-pressed="false">♡</button>
+      <span class="meta"><span class="txt"><span class="kick">${d.kick}</span><span class="name">${d.nombre}</span></span><span class="open">Abrir →</span></span>
+    </article>`).join('');
+  const cards=[...stage.children];
+  let active=0;
+  const dist=i=>{let d=(((i-active)%n)+n)%n; if(d>n/2)d-=n; return d};
+  function layout(extra){
+    const cw=cards[0].offsetWidth||320, step=cw*0.62;
+    cards.forEach((c,i)=>{
+      const d=dist(i), ad=Math.abs(d);
+      if(ad>2.8){c.style.visibility='hidden';return}
+      c.style.visibility='visible';
+      const x=d*step+(extra||0), r=Math.max(-36,Math.min(36,-d*15)),
+            s=Math.max(.62,1-ad*.15), o=Math.max(0,1-ad*.34);
+      c.style.transform=`translate(-50%,-50%) translateX(${x.toFixed(1)}px) rotateY(${r.toFixed(1)}deg) scale(${s.toFixed(3)})`;
+      c.style.opacity=o.toFixed(2); c.style.zIndex=String(100-Math.round(ad*10));
+      c.setAttribute('aria-selected', d===0?'true':'false');
+    });
+    document.getElementById('wCount').textContent=String(((active%n)+n)%n+1).padStart(2,'0')+' / '+String(n).padStart(2,'0');
+  }
+  /* auto-giro */
+  let autoT=null;
+  function stopAuto(){if(autoT){clearInterval(autoT);autoT=null}}
+  function startAuto(){stopAuto(); if(!reduced) autoT=setInterval(()=>{if(!document.hidden){active++;layout()}},6000)}
+  /* giro */
+  function goTo(i){active=i;layout();startAuto()}
+  window.PoluxWheel={goTo:id=>{const i=DESIGNS.findIndex(d=>d.id===id); if(i>=0){active+=dist(i);layout();startAuto()}}, next:()=>{active++;layout();startAuto()}, prev:()=>{active--;layout();startAuto()}};
+  document.getElementById('wNext').addEventListener('click',()=>window.PoluxWheel.next());
+  document.getElementById('wPrev').addEventListener('click',()=>window.PoluxWheel.prev());
+  stage.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'){e.preventDefault();window.PoluxWheel.next()}
+    if(e.key==='ArrowLeft'){e.preventDefault();window.PoluxWheel.prev()}
+    if((e.key==='Enter'||e.key===' ')&&document.activeElement.classList.contains('w-card')){e.preventDefault();location.href=document.activeElement.dataset.href}
+  });
+  stage.addEventListener('mouseenter',stopAuto); stage.addEventListener('mouseleave',startAuto);
+  addEventListener('resize',()=>layout());
+  /* arrastre */
+  let sx=null,dx=0,moved=false;
+  stage.addEventListener('pointerdown',e=>{sx=e.clientX;dx=0;moved=false;stage.classList.add('drag');stopAuto();try{stage.setPointerCapture(e.pointerId)}catch(_){}});
+  stage.addEventListener('pointermove',e=>{if(sx===null)return;dx=e.clientX-sx;if(Math.abs(dx)>8)moved=true;layout(dx)});
+  function endDrag(){if(sx===null)return;sx=null;stage.classList.remove('drag');
+    if(Math.abs(dx)>70)active+=(dx<0?1:-1);
+    dx=0;layout();startAuto()}
+  stage.addEventListener('pointerup',endDrag); stage.addEventListener('pointercancel',endDrag);
+  /* clic: centro abre, lateral gira, corazón guarda */
   const KEY='poluxFavs';let favs=[];
   try{favs=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){favs=[]}
   const tray=document.getElementById('tray'),trayN=document.getElementById('trayN'),toast=document.getElementById('toast');
   let toastT;
   function say(m){toast.textContent=m;toast.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>toast.classList.remove('show'),2600)}
-  function paint(){
-    cards.forEach(c=>{
-      const on=favs.includes(c.dataset.id),b=c.querySelector('.fav');
-      b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));b.textContent=on?'♥':'♡';
-    });
+  function paintFavs(){
+    cards.forEach(c=>{const on=favs.includes(c.dataset.id),b=c.querySelector('.fav');
+      b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));b.textContent=on?'♥':'♡'});
     trayN.textContent=favs.length;tray.classList.toggle('show',favs.length>0);
   }
-  cards.forEach(c=>{
-    c.addEventListener('click',e=>{if(e.target.closest('.fav'))return;location.href=c.dataset.href});
-    c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();location.href=c.dataset.href}});
-    c.querySelector('.fav').addEventListener('click',e=>{
-      e.stopPropagation();
-      const id=c.dataset.id,i=favs.indexOf(id);
-      if(i>=0){favs.splice(i,1)}else{favs.push(id);say('«'+c.dataset.nombre+'» guardado en tu selección')}
-      try{localStorage.setItem(KEY,JSON.stringify(favs))}catch(e2){}
-      paint();
-    });
+  stage.addEventListener('click',e=>{
+    if(moved)return;
+    const card=e.target.closest('.w-card');if(!card)return;
+    if(e.target.closest('.fav')){
+      const id=card.dataset.id,i=favs.indexOf(id);
+      if(i>=0)favs.splice(i,1);else{favs.push(id);say('«'+card.dataset.nombre+'» en tu selección')}
+      try{localStorage.setItem(KEY,JSON.stringify(favs))}catch(_){}
+      paintFavs();return;
+    }
+    const i=cards.indexOf(card);
+    if(dist(i)===0)location.href=card.dataset.href;
+    else{active+=dist(i);layout();startAuto()}
   });
-  document.getElementById('traySend').addEventListener('click',async()=>{
-    const nombres=cards.filter(c=>favs.includes(c.dataset.id)).map(c=>c.dataset.nombre).join(', ');
-    const txt='Hola Polux, me gustaron estos diseños de su portafolio: '+nombres+'. Quiero una propuesta a medida para mi negocio.';
-    try{await navigator.clipboard.writeText(txt);say('Copiado ✓ — pégalo en nuestro WhatsApp o chat')}
-    catch(e){say(txt)}
+  /* ===== Modal armar pedido ===== */
+  const omBack=document.getElementById('omBack'),omDesigns=document.getElementById('omDesigns'),omPieces=document.getElementById('omPieces');
+  const picked=new Set();
+  function renderOm(){
+    omDesigns.innerHTML=DESIGNS.map(d=>`<button type="button" class="tchip${picked.has(d.id)?' on':''}" data-id="${d.id}">${d.nombre}</button>`).join('');
+    omPieces.innerHTML=PIECES.map((p,i)=>`<label class="piece"><input type="checkbox" value="${p[0]}"><span>${p[0]}<small>${p[1]}</small></span></label>`).join('');
+  }
+  omDesigns.addEventListener('click',e=>{const b=e.target.closest('.tchip');if(!b)return;
+    const id=b.dataset.id;picked.has(id)?picked.delete(id):picked.add(id);b.classList.toggle('on')});
+  window.PoluxOrder={open(){favs.forEach(id=>picked.add(id));renderOm();
+    omDesigns.querySelectorAll('.tchip').forEach(b=>b.classList.toggle('on',picked.has(b.dataset.id)));
+    omBack.classList.add('open')}};
+  function closeOm(){omBack.classList.remove('open')}
+  document.getElementById('omX').addEventListener('click',closeOm);
+  omBack.addEventListener('click',e=>{if(e.target===omBack)closeOm()});
+  addEventListener('keydown',e=>{if(e.key==='Escape')closeOm()});
+  document.getElementById('traySend').addEventListener('click',()=>window.PoluxOrder.open());
+  document.getElementById('omSend').addEventListener('click',()=>{
+    if(picked.size===0){say('Elige al menos un diseño con ♡ o en el formulario');return}
+    const dis=DESIGNS.filter(d=>picked.has(d.id)).map(d=>d.nombre).join(', ');
+    const pzs=[...omPieces.querySelectorAll('input:checked')].map(i=>i.value).join('; ');
+    const nom=document.getElementById('omNombre').value.trim(), neg=document.getElementById('omNegocio').value.trim();
+    const logo=document.querySelector('input[name=omLogo]:checked').value;
+    let txt='Hola Polux, quiero armar mi pedido ✨\n• Diseños: '+dis;
+    if(pzs)txt+='\n• Piezas a combinar: '+pzs;
+    if(nom||neg)txt+='\n• Contacto: '+(nom||'—')+' — Negocio: '+(neg||'—');
+    txt+='\n• Logo: '+(logo==='tengo'?'ya tengo, lo envío por aquí':'quiero que me diseñen uno ($99)');
+    closeOm();
+    addMsg_whatsapp(txt);
   });
-  paint();
+  function addMsg_whatsapp(txt){window.open('https://wa.me/'+window.POLUX_WA+'?text='+encodeURIComponent(txt),'_blank')}
+  renderOm();paintFavs();layout();startAuto();
 })();
 /* Reveal al hacer scroll */
 (function(){
@@ -289,5 +413,7 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
   els.forEach(e=>io.observe(e));
 })();
 </script>
+<script>window.POLUX_WA='15550001122';window.POLUX_CHAT={ac:'#A855F7',icon:'spark',context:'hub'};</script>
+<script src="polux-chat.js"></script>
 </body>
 </html>
