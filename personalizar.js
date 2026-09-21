@@ -87,10 +87,10 @@ if(EMBED){
 } else {
 /* ---------- Panel flotante "Personalizar" ---------- */
 var btn = document.createElement('button');
-btn.id = 'pz-fab';
-btn.textContent = '🎨 Personalizar';
+btn.id = 'pw-fab';
+btn.textContent = '🎨';
 btn.setAttribute('aria-label','Personalizar demo');
-btn.style.cssText = 'position:fixed;left:20px;bottom:20px;z-index:120;background:#111;color:#fff;border:1px solid #444;border-radius:999px;padding:10px 18px;font-size:.85rem;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.25)';
+btn.style.cssText = 'position:fixed;left:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:120;width:52px;height:52px;border-radius:50%;background:#111;color:#fff;border:1px solid #444;font-size:1.3rem;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center';
 document.body.appendChild(btn);
 
 var panel = document.createElement('div');
