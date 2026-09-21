@@ -271,7 +271,7 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
 
 <section id="chatbots">
   <div class="wrap">
-    <h2 class="sec rv">Chatbots con IA</h2>
+    <h2 class="sec rv">Chatbots</h2>
     <p class="sub rv">Un recepcionista que nunca duerme: responde preguntas, agenda citas y te avisa lo importante.<br>Pruébalo tú mismo — esto es una demostración 👇</p>
     <div class="sof rv" id="sofia">
       <div class="sof-head">
@@ -287,8 +287,9 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
         <button type="submit" aria-label="Enviar mensaje">➤</button>
       </form>
     </div>
-    <div style="text-align:center;margin-top:30px">
-      <button class="btn rv" id="ctaChatbot" type="button">Quiero un chatbot así →</button>
+    <p class="sub rv" style="margin-top:36px">¿Quieres ver cómo se vería en tu negocio?<br>Explora <b>100 diseños de chatbots</b> en 20 estilos — toca uno y pruébalo en vivo.</p>
+    <div style="text-align:center;margin-top:20px">
+      <a class="btn rv" href="chatbots.html">Ver galería de diseños →</a>
     </div>
   </div>
 </section>
@@ -437,7 +438,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     {id:'pizzeria',nombre:'Leña',href:'modelo-pizzeria/index.html',       ac:'#d63c2f', cf:"'Lilita One',sans-serif",   kick:'Diseño 19'},
     {id:'belleza',nombre:'Espejo',href:'modelo-belleza/index.html',      ac:'#c9a227', cf:"'Playfair Display',serif",  kick:'Diseño 20'}
   ];
-  const SERVS=['Chatbot con IA','Gestión de reseñas','Contenido para redes','Mensajes SMS','Llamada perdida → SMS','Alojamiento de mi página'];
+  const SERVS=['Chatbot','Gestión de reseñas','Contenido para redes','Mensajes SMS','Llamada perdida → SMS','Alojamiento de mi página'];
   const n=DESIGNS.length, track=document.getElementById('wTrack'), reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const cardHTML=d=>`<article class="demo w-card" data-id="${d.id}" data-nombre="${d.nombre}" data-href="${d.href}" style="--ac:${d.ac};--cf:${d.cf}" aria-label="Diseño ${d.nombre}">
       <span class="thumb"><iframe src="${d.href}?embed=1" loading="lazy" scrolling="no" title="Vista previa — ${d.nombre}" tabindex="-1"></iframe></span>
@@ -900,7 +901,6 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   });
   paint();
   document.getElementById('ctaSis').addEventListener('click',function(){window.PoluxOrder.open()});
-  document.getElementById('ctaChatbot').addEventListener('click',function(){window.PoluxOrder.open(['Chatbot con IA'])});
   document.getElementById('ctaQuote').addEventListener('click',function(){window.PoluxOrder.open()});
 })();
 </script>
