@@ -180,3 +180,44 @@
 .cb-row .cb-bubble{width:76px;height:76px}
 .cb-row .cb-bubble i{font-size:2rem}
 .cb-row .cb-art-name{font-size:.58rem}
+
+/* ===== v4: presentación limpia — LA BURBUJA SOLA, sin cuadros ni tarjetas ===== */
+.cb-bit{background:none;border:none;padding:0;cursor:pointer;color:inherit;font-family:inherit;
+  display:flex;flex-direction:column;align-items:center;gap:7px;-webkit-tap-highlight-color:transparent}
+.cb-bit .cb-bubble{width:var(--bs,112px);height:var(--bs,112px)}
+.cb-bit .cb-bubble.art svg{width:42%;height:42%}
+.cb-bit .cb-bubble i{font-size:calc(var(--bs,112px)*.36)}
+.cb-bname{font-weight:800;font-size:.82rem;color:var(--texto);line-height:1.25;text-align:center}
+.cb-bfam{font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center}
+.cb-bdemo{font-size:.58rem;letter-spacing:.26em;font-weight:700;color:rgba(192,132,252,.7);text-align:center}
+
+/* ===== campo ascendente del hub: burbujas que SUBEN en carriles verticales ===== */
+.cb-field{position:relative;height:68vh;min-height:480px;max-height:780px;overflow:hidden;
+  --bs:clamp(96px,26vw,128px);touch-action:pan-y}
+.cb-field::before,.cb-field::after{content:"";position:absolute;left:0;right:0;height:90px;z-index:5;pointer-events:none}
+.cb-field::before{top:0;background:linear-gradient(to bottom,#0A0A0C,transparent)}
+.cb-field::after{bottom:0;background:linear-gradient(to top,#0A0A0C,transparent)}
+.cb-lanes{position:absolute;inset:0;display:flex}
+.cb-lane{position:relative;flex:1 1 0;min-width:0;overflow:hidden}
+.cb-col{position:absolute;left:0;right:0;top:0;display:flex;flex-direction:column;align-items:center;
+  animation:cbRise var(--dur,52s) linear infinite;animation-delay:var(--del,0s);will-change:transform}
+.cb-half{display:flex;flex-direction:column;align-items:center;width:100%}
+.cb-half>.cb-bit{margin:30px 4px}
+.cb-field.paused .cb-col{animation-play-state:paused}
+@keyframes cbRise{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+/* balanceo lateral suave por burbuja (no pelea con la subida del carril) */
+.cb-sway{display:flex;flex-direction:column;align-items:center;gap:7px;
+  animation:cbSway var(--sw,7s) ease-in-out infinite alternate;animation-delay:var(--swd,0s);will-change:transform}
+.cb-field.paused .cb-sway{animation-play-state:paused}
+@keyframes cbSway{from{transform:translateX(-9px)}to{transform:translateX(9px)}}
+/* versión estática (prefers-reduced-motion): retícula simple sin movimiento */
+.cb-static{display:flex;flex-wrap:wrap;justify-content:center;gap:26px 14px;padding:30px 10px;height:auto;min-height:0}
+.cb-static::before,.cb-static::after{display:none}
+@media(prefers-reduced-motion:reduce){
+  .cb-col,.cb-sway,.cb-bit .cb-bubble.art{animation:none!important}
+}
+
+/* ===== galería: retícula fluida de burbujas sin cuadros ===== */
+.cb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:30px 12px;
+  padding:6px 0 120px;--bs:clamp(88px,22vw,112px)}
+.cb-grid .cb-bit{justify-self:center}
