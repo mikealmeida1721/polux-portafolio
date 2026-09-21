@@ -310,7 +310,7 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
       <span class="pm-t">¿Cómo funciona?</span>
       <span class="pm-paso"><b>01</b>Explora en vivo</span><span class="pm-sep">→</span>
       <span class="pm-paso"><b>02</b>Elige y combina</span><span class="pm-sep">→</span>
-      <span class="pm-paso"><b>03</b>Pide tu cotización por WhatsApp, SMS o Instagram</span><span class="pm-sep">→</span>
+      <span class="pm-paso"><b>03</b>Pide tu cotización por WhatsApp, SMS, Instagram o Facebook</span><span class="pm-sep">→</span>
       <span class="pm-paso"><b>04</b>Lo hacemos tuyo, a medida</span>
     </div>
     <p class="sub rv" style="margin-top:20px">Sin compromiso: exploras, marcas lo que te gusta y te armamos un paquete a tu medida.</p>
@@ -366,6 +366,7 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
       <button class="om-chb wa" id="omChWa" type="button"><span class="ic">💬</span><span>WhatsApp<small>Se abre con tu selección lista para enviar</small></span><span class="om-tag">recomendado</span></button>
       <button class="om-chb" id="omChSms" type="button"><span class="ic">✉️</span><span>SMS<small>Mensaje de texto normal al mismo número</small></span></button>
       <button class="om-chb" id="omChIg" type="button"><span class="ic">📸</span><span>Instagram<small>Se abre el chat de @polux.ssee</small></span></button>
+      <button class="om-chb" id="omChFb" type="button"><span class="ic"><span style="display:inline-flex;align-items:center;justify-content:center;width:1.6rem;height:1.6rem;border-radius:50%;background:#1877F2;color:#fff;font-weight:800;font-size:1.1rem;line-height:1">f</span></span><span>Facebook<small>Se abre el Messenger de Polux</small></span></button>
     </div>
     <p class="om-copyok" id="omCopyOk">Tu cotización quedó copiada — pégala en el chat ✨</p>
     <p class="om-note">Elige tu canal: te armamos tu paquete a medida, sin compromiso.</p>
@@ -639,6 +640,13 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     copyQuote(txt).then(()=>{
       document.getElementById('omCopyOk').classList.add('show');
       window.open('https://ig.me/m/polux.ssee','_blank');
+    }).catch(()=>{say('No pudimos copiarla: vuelve a intentarlo')});
+  });
+  document.getElementById('omChFb').addEventListener('click',()=>{
+    const txt=buildQuote();if(txt===null)return;
+    copyQuote(txt).then(()=>{
+      document.getElementById('omCopyOk').classList.add('show');
+      window.open('https://m.me/61575590535677','_blank');
     }).catch(()=>{say('No pudimos copiarla: vuelve a intentarlo')});
   });
   renderOm();paintFavs();measure();kick();goTo(0,true);
