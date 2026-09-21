@@ -112,7 +112,7 @@ p.sub{color:var(--muted);margin-bottom:36px;max-width:620px;text-align:center;ma
 .info h3{font-family:var(--fuente-titular);margin-bottom:8px}
 .info p{color:var(--muted)}
 /* Reveal */
-.rv{opacity:0;transform:translateY(26px);transition:opacity 1s cubic-bezier(.22,.61,.36,1),transform 1s cubic-bezier(.22,.61,.36,1)}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .55s cubic-bezier(.22,.61,.36,1),transform .55s cubic-bezier(.22,.61,.36,1)}
 .rv.vis{opacity:1;transform:none}
 /* pz-ideal */
 .pz-ideal{padding:64px 20px;text-align:center;background:var(--fondo2);border-top:1px solid var(--borde)}
@@ -296,7 +296,7 @@ footer.site .dim{opacity:.75}
   if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('vis')});return}
   var io=new IntersectionObserver(function(es){
     es.forEach(function(en){if(en.isIntersecting){en.classList.add('vis');io.unobserve(en.target)}});
-  },{threshold:.12});
+  },{threshold:.12,rootMargin:'0px 0px 120px 0px'});
   els.forEach(function(e){io.observe(e)});
 })();
 // Formulario de reserva (demo)
