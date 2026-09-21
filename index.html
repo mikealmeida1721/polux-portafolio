@@ -359,7 +359,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   /* Deriva continua estilo marquesina: si nadie la toca por 10s, la rueda
      empieza a girar sola de forma fluida (sin saltos de tarjeta en tarjeta).
      Cualquier gesto —o el chatbot— la detiene y el conteo de 10s reinicia. */
-  let driftOn=false, driftRaf=null, idleT=null;
+  let driftOn=false, driftRaf=null, idleT=null, lastTouch=0;
   const DRIFT_PX=1.6; /* ~96px/s: una vuelta completa en ~23s */
   function driftStep(){
     if(!driftOn)return;
@@ -378,14 +378,17 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     driftRaf=null;
     track.style.scrollSnapType='';
   }
-  function poke(){stopDrift();clearTimeout(idleT);idleT=setTimeout(startDrift,10000)}
+  function poke(){lastTouch=Date.now();stopDrift();clearTimeout(idleT);idleT=setTimeout(startDrift,10000)}
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stopDrift()});
+  /* Vigilante: si pasan 10s sin interacción, la deriva arranca sí o sí.
+     (Respaldo por si algún temporizador se pierde en el camino.) */
+  setInterval(()=>{if(!driftOn&&!reduced&&!document.hidden&&Date.now()-lastTouch>10000)startDrift()},3000);
   track.addEventListener('pointerdown',poke);track.addEventListener('wheel',poke,{passive:true});track.addEventListener('touchstart',poke,{passive:true});
   /* Bucle infinito: 3 copias idénticas; el salto es inmediato y en el mismo
      arrastre (sin soltar), porque el contenido es pixel-idéntico y no se nota. */
   track.addEventListener('scroll',()=>{
     scrolling=true; kick();
-    clearTimeout(scrollIdle); scrollIdle=setTimeout(()=>{scrolling=false},350);
+    clearTimeout(scrollIdle); scrollIdle=setTimeout(()=>{scrolling=false;if(!driftOn)poke()},350);
     if(copyW>0){
       if(track.scrollLeft<copyW*0.35)track.scrollLeft+=copyW;
       else if(track.scrollLeft>copyW*1.65)track.scrollLeft-=copyW;
