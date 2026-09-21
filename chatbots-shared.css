@@ -222,8 +222,13 @@
 /* arrastre: nivel propio para el offset persistente --dx/--dy (no pelea con
    la subida del botón, el balanceo ni el repel) */
 .cb-drag{display:block;transform:translate(var(--dx,0px),var(--dy,0px));will-change:transform}
-.cb-field .cb-bit{touch-action:none;cursor:grab}
+.cb-field .cb-bit{touch-action:none;cursor:grab;pointer-events:none}
+/* Bug 3 (ronda 2): el botón es una caja invisible de 120px, mucho más ancha que el
+   círculo (56-96px). Con 100 burbujas encimadas, el toque caía en la caja de OTRA
+   burbuja y se arrastraba la equivocada. El objetivo táctil es ahora el círculo. */
+.cb-field .cb-bit .cb-bubble{pointer-events:auto;cursor:grab}
 .cb-field .cb-bit.dragging{cursor:grabbing;z-index:30}
+.cb-field .cb-bit.dragging .cb-bubble{cursor:grabbing}
 .cb-field.paused .cb-bit,.cb-field.paused .cb-sway,
 .cb-field.paused .cb-bit .cb-bubble.art{animation-play-state:paused}
 /* versión estática (prefers-reduced-motion): retícula simple sin movimiento */
