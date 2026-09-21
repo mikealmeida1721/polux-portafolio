@@ -3,6 +3,10 @@
  * Config: window.POLUX_CHAT = {ac:'#A855F7', icon:'spark', context:'hub'|'demo', design:'Ateneo', designId:'ateneo'}
  *         window.POLUX_WA = '16093316652'  (número de WhatsApp Business)
  * En ?embed=1 no se muestra el widget, pero sí se ocultan los chats demo viejos.
+ *
+ * Cerebro v2: las intenciones explícitas se evalúan ANTES de recomendar;
+ * recomendar solo dispara con palabras de negocio reales (nunca con "diseño");
+ * si el negocio no se reconoce, pregunta el ambiente en vez de inventar.
  */
 (function(){
 'use strict';
@@ -74,13 +78,22 @@ var DISENOS=[
  {id:'ateneo',nombre:'Ateneo'},{id:'pulso',nombre:'Pulso'},{id:'burbuja',nombre:'Burbuja'},
  {id:'orbita',nombre:'Órbita'},{id:'brasa',nombre:'Brasa'},{id:'armonia',nombre:'Armonía'}
 ];
-var RECO=[
- {re:/spa|masaje|est[eé]tica|belleza|barber|peluquer[ií]a|sal[oó]n|u[nñ]as/i,id:'armonia',porque:'su ambiente de calma y su sistema de reservas en línea'},
- {re:/restaurante|comida|tacos|pizza|cafeter[ií]a|caf[eé]|bar\b|panader[ií]a|food/i,id:'brasa',porque:'su carta visual y su repartidor animado que vende domicilio'},
- {re:/lavander[ií]a|lavado|tintorer/i,id:'burbuja',porque:'su estilo fresco y directo de servicio local'},
- {re:/iglesia|biblia|academia|curso|escuela|educaci[oó]n|coaching|consultor/i,id:'ateneo',porque:'su forma de organizar mucho contenido para explorar'},
- {re:/artista|m[uú]sica|tatuaje|marca|foto|dise[nñ]o|influencer/i,id:'pulso',porque:'su presencia visual fuerte que impone'},
- {re:/tecnolog|software|datos|finanzas|seguro/i,id:'orbita',porque:'su panel de datos en vivo'}
+/* negocio -> diseño. Sin palabras genéricas ("diseño", "marca", "foto") que disparaban falsos positivos. */
+var NEGOCIOS=[
+ {w:'spa|masaje|estetica|belleza|barberia|peluqueria|salon de belleza|unas|yoga|terapia|terapeuta|estilista|maquillaje|depilacion|bienestar|relax|estetica canina',id:'armonia',porque:'su ambiente de calma, sus reservas en línea y su sección de rituales'},
+ {w:'restaurante|comida|tacos|pizza|cafeteria|cafe|panaderia|carniceria|polleria|pizzeria|hamburgues|asadero|parrilla|mariscos|ceviche|empanada|sandwich|fondita|cocina economica|food truck|taqueria|antojitos|reposteria|pasteleria|dulceria|heladeria|jugos|licuados',id:'brasa',porque:'su carta visual que abre el apetito y su repartidor animado para domicilio'},
+ {w:'lavanderia|lavado|tintoreria|limpieza|planchado|autolavado|car wash|veterinaria|mascota|guarderia|jugueteria|papeleria|merceria',id:'burbuja',porque:'su estilo fresco y directo, perfecto para servicios de barrio'},
+ {w:'iglesia|biblia|academia|curso|escuela|educacion|coaching|consultor|abogado|contad|inmobiliaria|clinica|dental|doctor|salud|universidad|libreria|pastor|ministerio|notaria',id:'ateneo',porque:'su forma de organizar mucho contenido para que el visitante explore'},
+ {w:'artista|musica|tatuaje|influencer|gimnasio|gym|fitness|crossfit|ropa|boutique|moda|streetwear|discoteca|antro|eventos|fotografo|estudio creativo|disenador grafico',id:'pulso',porque:'su presencia visual fuerte, hecha para imponer'},
+ {w:'tecnologia|software|datos|finanzas|seguro|consultoria|agencia|marketing|startup|ingenieria|logistica|transporte|taller|mecanica|ferreteria|construccion|arquitecto|bienes raices|celulares|reparacion',id:'orbita',porque:'su panel de datos en vivo con estética profesional'}
+];
+var VIBES=[
+ {w:'tradicional|clasico|calid|acogedor|familiar|barrio|rustico|casero',id:'brasa',porque:'ese calor de lo tradicional, con fuego y cercanía'},
+ {w:'modern|llamativ|urban|joven|atrevid|impact|vanguard',id:'pulso',porque:'una presencia que impone y no pasa desapercibida'},
+ {w:'elegante|minimalista|profesional|serio|sobrio|premium|lujo|fino',id:'orbita',porque:'una estética limpia y profesional'},
+ {w:'fresc|divertid|amigable|colorid|alegre|jugueton|cercan',id:'burbuja',porque:'un estilo fresco y cercano'},
+ {w:'relaj|natural|bienestar|zen|tranquil|armonia|calma',id:'armonia',porque:'un ambiente de calma total'},
+ {w:'educativ|contenido|informativ|intelectual|seriedad',id:'ateneo',porque:'orden para presentar mucho contenido'}
 ];
 function waLink(txt){return 'https://wa.me/'+WA+'?text='+encodeURIComponent(txt)}
 
@@ -123,27 +136,68 @@ var CHIPS_DEMO=[
  {label:'Precios',q:'¿qué precios tienen?'},{label:'Ver catálogo',q:'muéstrame los diseños'},
  {label:'WhatsApp',q:'quiero hablar por whatsapp'}
 ];
+function vibeChips(){return[
+ {label:'🔥 Tradicional',q:'tradicional y cálida'},{label:'⚡ Moderna',q:'moderna y llamativa'},
+ {label:'💎 Elegante',q:'elegante y minimalista'},{label:'🎈 Fresca',q:'fresca y divertida'}
+]}
 function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1):s}
+function wb(re){return new RegExp('(^|[^a-z])('+re+')([^a-z]|$)')}
 
-/* ---- Cerebro ---- */
+/* ---- Cerebro v2 ---- */
+var state={vibeBiz:null,chips:null};
 function nombreDiseno(id){var d=DISENOS.find(function(x){return x.id===id});return d?d.nombre:id}
-function recomendar(text){
-  var t=norm(text);
-  for(var i=0;i<RECO.length;i++){
-    if(RECO[i].re.test(t)){
-      var r=RECO[i],nm=nombreDiseno(r.id);
-      if(CTX==='hub'&&window.PoluxWheel){window.PoluxWheel.goTo(r.id)}
-      return 'Para un negocio como el tuyo, el diseño <b>'+nm+'</b> encaja muy bien por '+r.porque+'.'+
-        (CTX==='hub'?' Lo puse al frente para que lo mires girar 👆':' <a href="../">Míralo en el catálogo →</a>');
-    }
+function recomendar(t){
+  for(var i=0;i<NEGOCIOS.length;i++){
+    var m=t.match(wb(NEGOCIOS[i].w));
+    if(m)return{id:NEGOCIOS[i].id,porque:NEGOCIOS[i].porque,key:m[2]};
   }
   return null;
 }
+function recMsg(r,lead){
+  var nm=nombreDiseno(r.id);
+  if(CTX==='hub'&&window.PoluxWheel){try{window.PoluxWheel.goTo(r.id)}catch(e){}}
+  return lead+' el diseño <b>'+nm+'</b> encaja muy bien por '+r.porque+'.'+
+    (CTX==='hub'?' Lo puse al frente para que lo mires 👆':' <a href="../">Míralo en el catálogo →</a>');
+}
+function extractBiz(raw){
+  var m=(raw||'').match(/tengo (un|una|mi) ([a-záéíóúñ ]{3,40})/i)||(raw||'').match(/mi negocio es ([a-záéíóúñ ]{3,40})/i)||
+        (raw||'').match(/me dedico (?:a |a la |al )?([a-záéíóúñ ]{3,40})/i)||(raw||'').match(/soy ([a-záéíóúñ ]{3,30})/i);
+  var b=m?(m[2]||m[1]):null;
+  if(b)b=b.replace(/( y | que | para | con | sobre | porque ).*$/i,'').trim();
+  if(b&&/pregunta|duda|curiosidad|informaci|prisa/i.test(b))return null;
+  return b||null;
+}
 function brain(text){
   var t=norm(text);
-  var rec=recomendar(text);if(rec)return rec;
   if(/^(hola|buenas|hey|hello|que tal|saludos|buenos dias|buenas tardes|buenas noches)\b/.test(t))
     return '¡Hola! Soy el asistente de Polux. Te ayudo a explorar diseños, ver precios o armar tu pedido. ¿Qué negocio tienes?';
+  /* 1. VER DISEÑOS explícito — antes de recomendar, para no confundir "muéstrame los diseños" */
+  if(/disen|modelo|catalogo/.test(t)&&/muestr|ensen|ver |mira|lista|opcion|conocer|todos|enseñame/.test(t)){
+    var lista=DISENOS.map(function(d){return d.nombre}).join(', ');
+    return CTX==='hub'
+      ? 'Míralos girar: tenemos <b>6 diseños vivos</b> — '+lista+'. Toca uno para entrar, o dime qué negocio tienes y te digo cuál le va mejor.'
+      : 'Estás viendo <b>'+DESIGN+'</b>. En el <a href="../">catálogo</a> están los 6: '+lista+'.';
+  }
+  /* 2. responde a la pregunta de ambiente */
+  if(state.vibeBiz){
+    for(var i=0;i<VIBES.length;i++){
+      if(wb(VIBES[i].w).test(t)){
+        var biz=state.vibeBiz;state.vibeBiz=null;
+        return recMsg({id:VIBES[i].id,porque:VIBES[i].porque},'Para tu <b>'+biz+'</b> con ese ambiente,');
+      }
+    }
+    state.chips=vibeChips();
+    return 'Dime el ambiente con una palabra: ¿<b>tradicional</b>, <b>moderna</b>, <b>elegante</b> o <b>fresca</b>?';
+  }
+  /* 3. negocio: recomendar directo, o preguntar ambiente si no lo reconozco */
+  var biz=extractBiz(text), rec=recomendar(t);
+  if(rec)return recMsg(rec,'Para tu <b>'+(biz||rec.key)+'</b>,');
+  if(biz){
+    state.vibeBiz=biz;state.chips=vibeChips();
+    return '¡<b>'+cap(biz)+'</b>! Para recomendarte bien: ¿qué ambiente quieres que transmita tu página?';
+  }
+  /* 4. intenciones clásicas */
   if(/precio|cuanto|cuesta|costo|plan|planes|tarifa/.test(t))
     return '<b>Precios claros:</b><br>· Starter $349/mes <i>(30 días gratis)</i><br>· Pro $499/mes <i>(15 días gratis)</i><br>· Elite $799/mes <i>(7 días gratis)</i><br>· Página web $299 pago único<br>· Logo $99 pago único<br>Sin tarjeta en la prueba y sin contratos.';
   if(/prueba|gratis|trial|test/.test(t))
@@ -160,12 +214,6 @@ function brain(text){
     return 'Arma tu paquete en el catálogo: eliges diseño, plan y servicios, y ves tu total al instante — pago único y mensual separados. Y el logo te sale en <b>$75</b> en vez de $99 cuando va con tu página. '+(CTX==='hub'&&window.PoluxOrder?'<button class="pc-chip" data-act="pedido">Armar mi pedido</button>':'<a href="../">Ir al catálogo →</a>');
   if(/logo/.test(t))
     return 'Diseñamos tu <b>logo por $99</b> pago único… pero si lo pides <b>con tu página te sale en $75</b>. Y si ya tienes uno, lo integramos gratis.';
-  if(/diseno|catalogo|muestra|portafolio|ver/.test(t)){
-    var lista=DISENOS.map(function(d){return d.nombre}).join(', ');
-    return CTX==='hub'
-      ? 'Tenemos <b>6 diseños vivos</b>: '+lista+'. Gira la rueda y entra al que te llame. Dime qué negocio tienes y te recomiendo uno.'
-      : 'Estás viendo el diseño <b>'+DESIGN+'</b>. En el <a href="../">catálogo</a> hay 6 en total: '+lista+'.';
-  }
   if(/pedido|armar|comprar|orden/.test(t)){
     if(CTX==='hub'&&window.PoluxOrder){setTimeout(function(){window.PoluxOrder.open()},700);return '¡De una! Te abro el formulario del pedido…'}
     return 'Puedes armar tu pedido en el <a href="../">catálogo</a> o escribirnos por <a href="'+waLink('Hola Polux, quiero armar mi pedido.')+'" target="_blank" rel="noopener">WhatsApp</a>.';
@@ -178,6 +226,11 @@ function brain(text){
       : 'En el <a href="../">catálogo</a> puedes marcar tus favoritos con ♡ y armar tu pedido ahí.';
   if(/gracias/.test(t)) return '¡Un placer! Aquí estoy si necesitas algo más. ✨';
   if(/adios|chao|hasta luego|nos vemos|bye/.test(t)) return '¡Nos vemos! Cuando quieras armar tu pedido, aquí estoy. 👋';
+  /* 5. palabra suelta corta que no casó con nada: probablemente un negocio */
+  if(/^[a-z ]{3,25}$/.test(t)&&t.split(' ').length<=2&&!/^(si|no|ok|vale|dale|hola|disenos)$/.test(t)){
+    state.vibeBiz=t.trim();state.chips=vibeChips();
+    return '¡<b>'+cap(t.trim())+'</b>! Para recomendarte el diseño ideal: ¿qué ambiente buscas?';
+  }
   return 'Te puedo ayudar con <b>precios</b>, <b>diseños</b> o <b>armar tu pedido</b>. ¿Qué te interesa? También puedes hablar con una persona por <a href="'+waLink('Hola Polux, tengo una pregunta.')+'" target="_blank" rel="noopener">WhatsApp</a>.';
 }
 var busy=false;
@@ -190,7 +243,8 @@ function userSay(text){
   setTimeout(function(){
     tp.remove();
     addMsg('bot',brain(text));
-    setChips(CTX==='hub'?CHIPS_HUB:CHIPS_DEMO);
+    setChips(state.chips||(CTX==='hub'?CHIPS_HUB:CHIPS_DEMO));
+    state.chips=null;
     busy=false;input.focus();
   },650+Math.random()*450);
 }
