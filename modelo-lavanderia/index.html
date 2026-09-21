@@ -253,9 +253,9 @@ const screen=document.getElementById('screen');
 const respuestas={RECOJO:'✓ Recogida programada para mañana entre 9–11 AM. Te avisaremos al salir.',SALDO:'Tu saldo: 2 recogidas restantes este mes. Próxima facturación: día 1.',STATUS:'Tu pedido #1042 está <b>en ruta de entrega</b>. Llega hoy antes de las 6 PM.'};
 document.querySelectorAll('.cmd').forEach(b=>b.addEventListener('click',()=>{const out=document.createElement('div');out.className='msg out';out.textContent=b.dataset.c;screen.appendChild(out);setTimeout(()=>{const inn=document.createElement('div');inn.className='msg in';inn.innerHTML=respuestas[b.dataset.c];screen.appendChild(inn);screen.scrollTop=screen.scrollHeight},600);screen.scrollTop=screen.scrollHeight}));
 </script>
-<script src="../personalizar.js"></script>
+<script src="../personalizar.js?v=3"></script>
 <script>window.POLUX_WA='16093316652';window.POLUX_CHAT={ac:'#7cc7ff',icon:'bubbles',context:'demo',design:'Burbuja'};</script>
-<script src="../polux-chat.js"></script>
-<script src="../polux-piezas.js"></script>
+<script src="../polux-chat.js?v=3"></script>
+<script src="../polux-piezas.js?v=4"></script>
 </body>
 </html>
