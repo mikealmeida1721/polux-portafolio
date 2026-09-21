@@ -42,13 +42,13 @@ h2.sec{font-size:clamp(1.6rem,3.4vw,2.3rem);margin-bottom:10px;text-align:center
 p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;margin-left:auto;margin-right:auto}
 
 /* ===== Catálogo vivo ===== */
-/* ===== Rueda infinita de diseños ===== */
-.wheel{position:relative;perspective:1400px;margin:0 -8px}
-.w-stage{position:relative;height:clamp(340px,52vw,500px);transform-style:preserve-3d;touch-action:pan-y;cursor:grab;outline:none}
-.w-stage:active{cursor:grabbing}
-.w-card{position:absolute;top:50%;left:50%;width:min(560px,82vw);margin:0;
-  transition:transform .5s cubic-bezier(.2,.8,.25,1),opacity .5s,border-color .2s,box-shadow .2s}
-.w-stage.drag .w-card{transition:none}
+/* ===== Rueda infinita de diseños (scroll nativo + efecto 3D) ===== */
+.wheel{position:relative;perspective:1400px}
+.w-track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;position:relative;
+  padding:16px calc(50% - min(280px,40vw)) 28px;scrollbar-width:none;cursor:grab;outline:none}
+.w-track::-webkit-scrollbar{display:none}
+.w-card{flex:0 0 min(560px,80vw);scroll-snap-align:center;scroll-snap-stop:always;will-change:transform,opacity;
+  transition:box-shadow .2s,border-color .2s}
 .w-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:130;width:52px;height:52px;border-radius:50%;
   background:rgba(16,16,24,.82);border:1px solid var(--acento);color:#fff;font-size:1.7rem;line-height:1;cursor:pointer;backdrop-filter:blur(6px)}
 .w-prev{left:0}.w-next{right:0}
@@ -79,6 +79,14 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
 .om-send:hover{filter:brightness(1.12)}
 .om-x{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer}
 .om-note{font-size:.78rem;color:var(--muted);text-align:center;margin-top:12px}
+.om-total{background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.45);border-radius:14px;
+  padding:13px 16px;font-size:.92rem;margin:18px 0 6px;text-align:center}
+.om-total b{color:#c084fc}
+.om-ahorro{display:block;margin-top:6px;font-size:.82rem;color:#86efac}
+.om-trial{font-size:.78rem;color:#c084fc;border:1px solid rgba(168,85,247,.5);border-radius:999px;padding:2px 10px;margin-left:6px;white-space:nowrap}
+.om-empty{font-size:.85rem;color:var(--muted);line-height:1.6;margin:0}
+.pz-chip button{background:none;border:0;color:#fff;font-size:.8rem;cursor:pointer;margin-left:6px;opacity:.8}
+.pz-chip button:hover{opacity:1}
 .demo{position:relative;display:block;aspect-ratio:16/10;border-radius:18px;overflow:hidden;cursor:pointer;background:#000;
   border:1px solid color-mix(in srgb,var(--ac) 38%,#14141c);
   transition:transform .22s,box-shadow .22s,border-color .22s}
@@ -178,7 +186,7 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
     <h2 class="sec rv">Diseños vivos</h2>
     <p class="sub rv">Gira la rueda y entra al que te llame la atención. Marca con ♡ los que te hablen y arma tu pedido.</p>
     <div class="wheel rv" id="wheel">
-      <div class="w-stage" id="wStage" tabindex="0" role="listbox" aria-label="Rueda de diseños: usa las flechas del teclado o desliza para girar"></div>
+      <div class="w-track" id="wTrack" tabindex="0" aria-label="Rueda de diseños: desliza para girar"></div>
       <button class="w-arrow w-prev" id="wPrev" aria-label="Diseño anterior">‹</button>
       <button class="w-arrow w-next" id="wNext" aria-label="Diseño siguiente">›</button>
     </div>
@@ -223,25 +231,34 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
   <div class="om" role="dialog" aria-modal="true" aria-label="Armar mi pedido">
     <button class="om-x" id="omX" aria-label="Cerrar">✕</button>
     <h3>Arma tu pedido</h3>
-    <p class="om-sub">Lo enviamos directo a nuestro WhatsApp y te contactamos.</p>
+    <p class="om-sub">Elige diseño, plan y servicios: te calculamos tu paquete y lo enviamos a nuestro WhatsApp.</p>
     <div class="om-sec">
-      <div class="om-lab">Diseños que te gustaron</div>
+      <div class="om-lab">Diseño de tu página <span>· $299 único</span></div>
       <div class="chips" id="omDesigns"></div>
     </div>
     <div class="om-sec">
-      <div class="om-lab">Piezas para combinar <span>(opcional)</span></div>
-      <div class="om-pieces" id="omPieces"></div>
+      <div class="om-lab">Lo que elegiste en las demos</div>
+      <div class="chips" id="omPz"></div>
+    </div>
+    <div class="om-sec">
+      <div class="om-lab">Plan mensual <span>(opcional)</span></div>
+      <div id="omPlans"></div>
+    </div>
+    <div class="om-sec">
+      <div class="om-lab">Servicios mensuales <span>(opcional)</span></div>
+      <div class="om-pieces" id="omServs"></div>
     </div>
     <div class="om-sec">
       <div class="om-lab">Tus datos</div>
       <input type="text" id="omNombre" placeholder="Tu nombre" autocomplete="name">
       <input type="text" id="omNegocio" placeholder="Nombre del negocio" autocomplete="organization">
     </div>
-    <div class="om-sec">
+    <div class="om-sec" id="omLogoSec">
       <div class="om-lab">Logo</div>
       <label class="om-radio"><input type="radio" name="omLogo" value="tengo" checked> Ya tengo logo — lo envío por WhatsApp</label>
-      <label class="om-radio"><input type="radio" name="omLogo" value="disenar"> Quiero que Polux me diseñe uno ($99)</label>
+      <label class="om-radio"><input type="radio" name="omLogo" value="disenar"> Quiero que Polux me diseñe uno <span class="om-trial">$99 · $75 con tu página</span></label>
     </div>
+    <div class="om-total" id="omTotal"></div>
     <button class="om-send" id="omSend">Enviar pedido por WhatsApp →</button>
     <p class="om-note">Al enviar se abre WhatsApp con tu pedido listo. Nuestra IA lo recibe y te da seguimiento.</p>
   </div>
@@ -277,7 +294,7 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
   })();
 })();
 /* ===== Rueda infinita + favoritos + pedido ===== */
-window.POLUX_WA = window.POLUX_WA || '15550001122'; /* TODO: número real de WhatsApp Business */
+window.POLUX_WA = window.POLUX_WA || '16093316652';
 (function(){
   const DESIGNS=[
     {id:'ateneo', nombre:'Ateneo', href:'modelo-biblia/index.html',     ac:'#d9a441', cf:"'Cinzel',serif",          kick:'Diseño 01'},
@@ -287,68 +304,62 @@ window.POLUX_WA = window.POLUX_WA || '15550001122'; /* TODO: número real de Wha
     {id:'brasa',  nombre:'Brasa',  href:'modelo-restaurante/index.html',ac:'#ff9a3d',cf:"'Cormorant Garamond',serif", kick:'Diseño 05'},
     {id:'armonia',nombre:'Armonía',href:'modelo-spa/index.html',       ac:'#f0a6b8', cf:"'Cormorant Garamond',serif", kick:'Diseño 06'}
   ];
-  const PIECES=[
-    ['Repartidor animado en bicicleta','Brasa · escena viva'],
-    ['Recorrido cinematográfico con scroll','Ateneo'],
-    ['Grafo de conexiones animado','Ateneo'],
-    ['Pétalos cayendo en el hero','Armonía'],
-    ['Flor de loto que florece','Armonía'],
-    ['Franja móvil de anuncios','Pulso'],
-    ['Contadores y terminal en vivo','Órbita'],
-    ['Widget de reservas en línea','Brasa · Armonía'],
-    ['Chat con el estilo del diseño','todos los diseños'],
-    ['Burbujas y detalles de servicio local','Burbuja']
-  ];
-  const n=DESIGNS.length, stage=document.getElementById('wStage'), reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  stage.innerHTML=DESIGNS.map(d=>
-    `<article class="demo w-card" data-id="${d.id}" data-nombre="${d.nombre}" data-href="${d.href}" style="--ac:${d.ac};--cf:${d.cf}" role="option" aria-selected="false" aria-label="Diseño ${d.nombre}">
+  const SERVS=[['Chatbot con IA','349'],['Gestión de reseñas','199'],['Contenido para redes','349'],['Mensajes SMS','249'],['Llamada perdida → SMS','79']];
+  const PLANS=[['Sin plan por ahora','0',''],['Starter','349','30 días gratis'],['Pro','499','15 días gratis'],['Elite','799','7 días gratis']];
+  const WEB_PRICE=299, LOGO_PRICE=99, LOGO_BUNDLE=75;
+  const n=DESIGNS.length, track=document.getElementById('wTrack'), reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cardHTML=d=>`<article class="demo w-card" data-id="${d.id}" data-nombre="${d.nombre}" data-href="${d.href}" style="--ac:${d.ac};--cf:${d.cf}" aria-label="Diseño ${d.nombre}">
       <span class="thumb"><iframe src="${d.href}?embed=1" loading="lazy" scrolling="no" title="Vista previa — ${d.nombre}" tabindex="-1"></iframe></span>
       <span class="scrim"></span>
       <button class="fav" aria-label="Guardar ${d.nombre} en mi selección" aria-pressed="false">♡</button>
       <span class="meta"><span class="txt"><span class="kick">${d.kick}</span><span class="name">${d.nombre}</span></span><span class="open">Abrir →</span></span>
-    </article>`).join('');
-  const cards=[...stage.children];
-  let active=0;
-  const dist=i=>{let d=(((i-active)%n)+n)%n; if(d>n/2)d-=n; return d};
-  function layout(extra){
-    const cw=cards[0].offsetWidth||320, step=cw*0.62;
-    cards.forEach((c,i)=>{
-      const d=dist(i), ad=Math.abs(d);
-      if(ad>2.8){c.style.visibility='hidden';return}
-      c.style.visibility='visible';
-      const x=d*step+(extra||0), r=Math.max(-36,Math.min(36,-d*15)),
-            s=Math.max(.62,1-ad*.15), o=Math.max(0,1-ad*.34);
-      c.style.transform=`translate(-50%,-50%) translateX(${x.toFixed(1)}px) rotateY(${r.toFixed(1)}deg) scale(${s.toFixed(3)})`;
-      c.style.opacity=o.toFixed(2); c.style.zIndex=String(100-Math.round(ad*10));
-      c.setAttribute('aria-selected', d===0?'true':'false');
-    });
-    document.getElementById('wCount').textContent=String(((active%n)+n)%n+1).padStart(2,'0')+' / '+String(n).padStart(2,'0');
+    </article>`;
+  let html=''; for(let r=0;r<3;r++) html+=DESIGNS.map(cardHTML).join('');
+  track.innerHTML=html;
+  const cards=[...track.children], countEl=document.getElementById('wCount');
+  let active=0, copyW=0;
+  /* efecto 3D según cercanía al centro (decorativo: si falla, el carrusel sigue funcionando) */
+  function paint(){
+    try{
+      const tr=track.getBoundingClientRect(), cx=tr.left+tr.width/2;
+      let best=0,bd=1e12;
+      for(let i=0;i<cards.length;i++){
+        const b=cards[i].getBoundingClientRect(), d=(b.left+b.width/2-cx)/b.width, ad=Math.min(Math.abs(d),2.2);
+        const dd=Math.abs(d); if(dd<bd){bd=dd;best=i}
+        cards[i].style.transform=`rotateY(${(-d*13).toFixed(1)}deg) scale(${(1-ad*.13).toFixed(3)})`;
+        cards[i].style.opacity=(1-ad*.28).toFixed(2);
+      }
+      const idx=((best%n)+n)%n;
+      if(idx!==active){active=idx;countEl.textContent=String(idx+1).padStart(2,'0')+' / '+String(n).padStart(2,'0')}
+    }catch(e){}
   }
+  function measure(){copyW=track.scrollWidth/3}
+  function centerX(el){return el.offsetLeft-(track.clientWidth-el.offsetWidth)/2}
+  function goTo(k,imm){const idx=((k%n)+n)%n;track.scrollTo({left:centerX(cards[n+idx]),behavior:imm?'auto':'smooth'});poke()}
+  window.PoluxWheel={goTo:id=>{const i=DESIGNS.findIndex(d=>d.id===id);if(i>=0)goTo(i)},next:()=>goTo(active+1),prev:()=>goTo(active-1)};
+  document.getElementById('wNext').addEventListener('click',()=>goTo(active+1));
+  document.getElementById('wPrev').addEventListener('click',()=>goTo(active-1));
+  track.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();goTo(active+1)}if(e.key==='ArrowLeft'){e.preventDefault();goTo(active-1)}});
   /* auto-giro */
-  let autoT=null;
+  let autoT=null,idleT=null;
   function stopAuto(){if(autoT){clearInterval(autoT);autoT=null}}
-  function startAuto(){stopAuto(); if(!reduced) autoT=setInterval(()=>{if(!document.hidden){active++;layout()}},6000)}
-  /* giro */
-  function goTo(i){active=i;layout();startAuto()}
-  window.PoluxWheel={goTo:id=>{const i=DESIGNS.findIndex(d=>d.id===id); if(i>=0){active+=dist(i);layout();startAuto()}}, next:()=>{active++;layout();startAuto()}, prev:()=>{active--;layout();startAuto()}};
-  document.getElementById('wNext').addEventListener('click',()=>window.PoluxWheel.next());
-  document.getElementById('wPrev').addEventListener('click',()=>window.PoluxWheel.prev());
-  stage.addEventListener('keydown',e=>{
-    if(e.key==='ArrowRight'){e.preventDefault();window.PoluxWheel.next()}
-    if(e.key==='ArrowLeft'){e.preventDefault();window.PoluxWheel.prev()}
-    if((e.key==='Enter'||e.key===' ')&&document.activeElement.classList.contains('w-card')){e.preventDefault();location.href=document.activeElement.dataset.href}
-  });
-  stage.addEventListener('mouseenter',stopAuto); stage.addEventListener('mouseleave',startAuto);
-  addEventListener('resize',()=>layout());
-  /* arrastre */
-  let sx=null,dx=0,moved=false;
-  stage.addEventListener('pointerdown',e=>{sx=e.clientX;dx=0;moved=false;stage.classList.add('drag');stopAuto();try{stage.setPointerCapture(e.pointerId)}catch(_){}});
-  stage.addEventListener('pointermove',e=>{if(sx===null)return;dx=e.clientX-sx;if(Math.abs(dx)>8)moved=true;layout(dx)});
-  function endDrag(){if(sx===null)return;sx=null;stage.classList.remove('drag');
-    if(Math.abs(dx)>70)active+=(dx<0?1:-1);
-    dx=0;layout();startAuto()}
-  stage.addEventListener('pointerup',endDrag); stage.addEventListener('pointercancel',endDrag);
-  /* clic: centro abre, lateral gira, corazón guarda */
+  function startAuto(){stopAuto();if(!reduced)autoT=setInterval(()=>{if(!document.hidden)goTo(active+1)},6000)}
+  function poke(){stopAuto();clearTimeout(idleT);idleT=setTimeout(startAuto,9000)}
+  track.addEventListener('pointerdown',poke);track.addEventListener('wheel',poke,{passive:true});track.addEventListener('touchstart',poke,{passive:true});
+  /* bucle infinito: 3 copias, salto invisible al acercarse a un extremo */
+  let normT=null;
+  track.addEventListener('scroll',()=>{
+    requestAnimationFrame(paint);
+    clearTimeout(normT);normT=setTimeout(()=>{
+      if(copyW>0){
+        if(track.scrollLeft<copyW*0.35)track.scrollLeft+=copyW;
+        else if(track.scrollLeft>copyW*1.65)track.scrollLeft-=copyW;
+      }
+    },140);
+  },{passive:true});
+  addEventListener('resize',()=>{measure();paint()});
+  addEventListener('load',()=>{measure();paint()});
+  /* clic: la activa abre, la lateral gira, el corazón guarda */
   const KEY='poluxFavs';let favs=[];
   try{favs=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){favs=[]}
   const tray=document.getElementById('tray'),trayN=document.getElementById('trayN'),toast=document.getElementById('toast');
@@ -359,8 +370,7 @@ window.POLUX_WA = window.POLUX_WA || '15550001122'; /* TODO: número real de Wha
       b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));b.textContent=on?'♥':'♡'});
     trayN.textContent=favs.length;tray.classList.toggle('show',favs.length>0);
   }
-  stage.addEventListener('click',e=>{
-    if(moved)return;
+  track.addEventListener('click',e=>{
     const card=e.target.closest('.w-card');if(!card)return;
     if(e.target.closest('.fav')){
       const id=card.dataset.id,i=favs.indexOf(id);
@@ -368,22 +378,45 @@ window.POLUX_WA = window.POLUX_WA || '15550001122'; /* TODO: número real de Wha
       try{localStorage.setItem(KEY,JSON.stringify(favs))}catch(_){}
       paintFavs();return;
     }
-    const i=cards.indexOf(card);
-    if(dist(i)===0)location.href=card.dataset.href;
-    else{active+=dist(i);layout();startAuto()}
+    const idx=DESIGNS.findIndex(d=>d.id===card.dataset.id);
+    if(idx===active)location.href=card.dataset.href; else goTo(idx);
   });
   /* ===== Modal armar pedido ===== */
-  const omBack=document.getElementById('omBack'),omDesigns=document.getElementById('omDesigns'),omPieces=document.getElementById('omPieces');
+  const omBack=document.getElementById('omBack'),omDesigns=document.getElementById('omDesigns'),
+        omPlans=document.getElementById('omPlans'),omServs=document.getElementById('omServs'),
+        omTotal=document.getElementById('omTotal'),omPz=document.getElementById('omPz');
   const picked=new Set();
+  const loadPz=()=>{try{return JSON.parse(localStorage.getItem('poluxPiezas')||'[]')}catch(e){return[]}};
+  const savePz=v=>{try{localStorage.setItem('poluxPiezas',JSON.stringify(v))}catch(e){}};
+  const fmt=x=>'$'+x.toLocaleString('en-US');
   function renderOm(){
     omDesigns.innerHTML=DESIGNS.map(d=>`<button type="button" class="tchip${picked.has(d.id)?' on':''}" data-id="${d.id}">${d.nombre}</button>`).join('');
-    omPieces.innerHTML=PIECES.map((p,i)=>`<label class="piece"><input type="checkbox" value="${p[0]}"><span>${p[0]}<small>${p[1]}</small></span></label>`).join('');
+    omPlans.innerHTML=PLANS.map((p,i)=>`<label class="om-radio"><input type="radio" name="omPlan" value="${p[1]}"${i===0?' checked':''}> ${p[0]}${p[1]!=='0'?' — '+fmt(+p[1])+'/mes':''}${p[2]?` <span class="om-trial">${p[2]}</span>`:''}</label>`).join('');
+    omServs.innerHTML=SERVS.map(s=>`<label class="piece"><input type="checkbox" value="${s[0]}|${s[1]}"><span>${s[0]}<small>${fmt(+s[1])}/mes</small></span></label>`).join('');
+    renderPz();calc();
+  }
+  function renderPz(){
+    const pz=loadPz();
+    omPz.innerHTML=pz.length
+      ? pz.map((p,i)=>`<span class="tchip on pz-chip">${p.d}: ${p.p}<button type="button" data-i="${i}" aria-label="Quitar">✕</button></span>`).join('')
+      : '<p class="om-empty">Aún no eliges piezas.<br>Entra a un diseño, toca <b>✦ Seleccionar lo que te gusta</b> y marca lo que te hable.</p>';
+  }
+  omPz.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+    const pz=loadPz();pz.splice(+b.dataset.i,1);savePz(pz);renderPz()});
+  function calc(){
+    const web=picked.size>0, logoDis=document.querySelector('input[name=omLogo]:checked').value==='disenar';
+    const planV=+document.querySelector('input[name=omPlan]:checked').value;
+    const servV=[...omServs.querySelectorAll('input:checked')].reduce((a,i)=>a+(+i.value.split('|')[1]),0);
+    const unico=(web?WEB_PRICE:0)+(logoDis?(web?LOGO_BUNDLE:LOGO_PRICE):0);
+    const mensual=planV+servV;
+    omTotal.innerHTML=`Tu paquete — único: <b>${fmt(unico)}</b> · mensual: <b>${fmt(mensual)}/mes</b>`+
+      (web&&logoDis?` <span class="om-ahorro">logo a ${fmt(LOGO_BUNDLE)} con tu página ✨</span>`:'');
+    return {web,logoDis,planV,servV,unico,mensual};
   }
   omDesigns.addEventListener('click',e=>{const b=e.target.closest('.tchip');if(!b)return;
-    const id=b.dataset.id;picked.has(id)?picked.delete(id):picked.add(id);b.classList.toggle('on')});
-  window.PoluxOrder={open(){favs.forEach(id=>picked.add(id));renderOm();
-    omDesigns.querySelectorAll('.tchip').forEach(b=>b.classList.toggle('on',picked.has(b.dataset.id)));
-    omBack.classList.add('open')}};
+    const id=b.dataset.id;picked.has(id)?picked.delete(id):picked.add(id);b.classList.toggle('on');calc()});
+  omBack.addEventListener('change',e=>{if(e.target.closest('#omPlans,#omServs,#omLogoSec'))calc()});
+  window.PoluxOrder={open(){favs.forEach(id=>picked.add(id));renderOm();omBack.classList.add('open')}};
   function closeOm(){omBack.classList.remove('open')}
   document.getElementById('omX').addEventListener('click',closeOm);
   omBack.addEventListener('click',e=>{if(e.target===omBack)closeOm()});
@@ -391,20 +424,27 @@ window.POLUX_WA = window.POLUX_WA || '15550001122'; /* TODO: número real de Wha
   document.getElementById('traySend').addEventListener('click',()=>window.PoluxOrder.open());
   document.getElementById('omSend').addEventListener('click',()=>{
     if(picked.size===0){say('Elige al menos un diseño con ♡ o en el formulario');return}
+    const t=calc();
     const dis=DESIGNS.filter(d=>picked.has(d.id)).map(d=>d.nombre).join(', ');
-    const pzs=[...omPieces.querySelectorAll('input:checked')].map(i=>i.value).join('; ');
+    const pz=loadPz().map(p=>p.d+': '+p.p).join('; ');
+    const planL=document.querySelector('input[name=omPlan]:checked').closest('label').textContent.trim().replace(/\s+/g,' ');
+    const servs=[...omServs.querySelectorAll('input:checked')].map(i=>{const[a,b]=i.value.split('|');return a+' '+fmt(+b)+'/mes'}).join(', ');
     const nom=document.getElementById('omNombre').value.trim(), neg=document.getElementById('omNegocio').value.trim();
     const logo=document.querySelector('input[name=omLogo]:checked').value;
-    let txt='Hola Polux, quiero armar mi pedido ✨\n• Diseños: '+dis;
-    if(pzs)txt+='\n• Piezas a combinar: '+pzs;
+    let txt='Hola Polux, quiero armar mi pedido ✨\n• Página web — diseño: '+dis+' ('+fmt(WEB_PRICE)+' único)';
+    if(pz)txt+='\n• Lo que elegí en las demos: '+pz;
+    txt+='\n• Plan: '+planL;
+    if(servs)txt+='\n• Servicios: '+servs;
     if(nom||neg)txt+='\n• Contacto: '+(nom||'—')+' — Negocio: '+(neg||'—');
-    txt+='\n• Logo: '+(logo==='tengo'?'ya tengo, lo envío por aquí':'quiero que me diseñen uno ($99)');
+    txt+='\n• Logo: '+(logo==='tengo'?'ya tengo, lo envío por aquí':'diseñado por Polux '+fmt(t.web?LOGO_BUNDLE:LOGO_PRICE)+' único');
+    txt+='\n• Total único: '+fmt(t.unico)+' · Total mensual: '+fmt(t.mensual)+'/mes';
     closeOm();
-    addMsg_whatsapp(txt);
+    window.open('https://wa.me/'+window.POLUX_WA+'?text='+encodeURIComponent(txt),'_blank');
   });
-  function addMsg_whatsapp(txt){window.open('https://wa.me/'+window.POLUX_WA+'?text='+encodeURIComponent(txt),'_blank')}
-  renderOm();paintFavs();layout();startAuto();
+  renderOm();paintFavs();measure();goTo(0,true);
+  if(/(?:\?|&)pedido=1/.test(location.search))setTimeout(()=>window.PoluxOrder.open(),700);
 })();
+
 /* Reveal al hacer scroll */
 (function(){
   const els=document.querySelectorAll('.rv');
@@ -413,7 +453,7 @@ window.POLUX_WA = window.POLUX_WA || '15550001122'; /* TODO: número real de Wha
   els.forEach(e=>io.observe(e));
 })();
 </script>
-<script>window.POLUX_WA='15550001122';window.POLUX_CHAT={ac:'#A855F7',icon:'spark',context:'hub'};</script>
+<script>window.POLUX_WA='16093316652';window.POLUX_CHAT={ac:'#A855F7',icon:'spark',context:'hub'};</script>
 <script src="polux-chat.js"></script>
 </body>
 </html>
