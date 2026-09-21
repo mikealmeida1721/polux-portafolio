@@ -91,7 +91,7 @@ function render(){
  });
  grid.innerHTML=h||'<div class="vacio">Sin resultados para esa búsqueda.</div>';
  countEl.textContent='Mostrando '+n+' de '+THEMES.length+' diseños';
- grid.querySelectorAll('.cb-tile').forEach(function(b){
+ grid.querySelectorAll('.cb-bit').forEach(function(b){
   b.addEventListener('click',function(){UI.openTheme(b.dataset.id)});
  });
 }
