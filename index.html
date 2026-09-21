@@ -303,7 +303,21 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     {id:'burbuja',nombre:'Burbuja',href:'modelo-lavanderia/index.html',ac:'#7cc7ff', cf:"system-ui,sans-serif",     kick:'Diseño 03'},
     {id:'orbita', nombre:'Órbita', href:'modelo-ssee/index.html',      ac:'#fbbf24', cf:"'Cinzel',serif",          kick:'Diseño 04'},
     {id:'brasa',  nombre:'Brasa',  href:'modelo-restaurante/index.html',ac:'#ff9a3d',cf:"'Cormorant Garamond',serif", kick:'Diseño 05'},
-    {id:'armonia',nombre:'Armonía',href:'modelo-spa/index.html',       ac:'#f0a6b8', cf:"'Cormorant Garamond',serif", kick:'Diseño 06'}
+    {id:'armonia',nombre:'Armonía',href:'modelo-spa/index.html',       ac:'#f0a6b8', cf:"'Cormorant Garamond',serif", kick:'Diseño 06'},
+    {id:'barberia',nombre:'Navaja',href:'modelo-barberia/index.html',     ac:'#b87333', cf:"'Zilla Slab',serif",        kick:'Diseño 07'},
+    {id:'cafeteria',nombre:'Origen',href:'modelo-cafeteria/index.html',   ac:'#c96f3b', cf:"'Fraunces',serif",          kick:'Diseño 08'},
+    {id:'gym',nombre:'Forja',href:'modelo-gym/index.html',               ac:'#ff2d2d', cf:"'Oswald',sans-serif",       kick:'Diseño 09'},
+    {id:'veterinaria',nombre:'Manada',href:'modelo-veterinaria/index.html',ac:'#2d5a3d',cf:"'Fredoka',sans-serif",     kick:'Diseño 10'},
+    {id:'inmobiliaria',nombre:'Plano',href:'modelo-inmobiliaria/index.html',ac:'#c9a227',cf:"'Montserrat',sans-serif", kick:'Diseño 11'},
+    {id:'taller',nombre:'Torque',href:'modelo-taller/index.html',        ac:'#ffc400', cf:"'Barlow Condensed',sans-serif",kick:'Diseño 12'},
+    {id:'floreria',nombre:'Pétalo',href:'modelo-floreria/index.html',    ac:'#b26e7c', cf:"'Fraunces',serif",          kick:'Diseño 13'},
+    {id:'panaderia',nombre:'Fermento',href:'modelo-panaderia/index.html',ac:'#d9a441', cf:"'Fraunces',serif",          kick:'Diseño 14'},
+    {id:'dental',nombre:'Esmalte',href:'modelo-dental/index.html',       ac:'#40c4c4', cf:"'Poppins',sans-serif",      kick:'Diseño 15'},
+    {id:'hotel',nombre:'Vestíbulo',href:'modelo-hotel/index.html',       ac:'#d4af6a', cf:"'Playfair Display',serif",  kick:'Diseño 16'},
+    {id:'fotografo',nombre:'Obscura',href:'modelo-fotografo/index.html', ac:'#ff1a1a', cf:"'Anton',sans-serif",        kick:'Diseño 17'},
+    {id:'tienda',nombre:'Pasarela',href:'modelo-tienda/index.html',      ac:'#d6ff3f', cf:"'Anton',sans-serif",        kick:'Diseño 18'},
+    {id:'pizzeria',nombre:'Leña',href:'modelo-pizzeria/index.html',       ac:'#d63c2f', cf:"'Lilita One',sans-serif",   kick:'Diseño 19'},
+    {id:'belleza',nombre:'Espejo',href:'modelo-belleza/index.html',      ac:'#c9a227', cf:"'Playfair Display',serif",  kick:'Diseño 20'}
   ];
   const SERVS=[['Chatbot con IA','349'],['Gestión de reseñas','199'],['Contenido para redes','349'],['Mensajes SMS','249'],['Llamada perdida → SMS','79']];
   const PLANS=[['Sin plan por ahora','0',''],['Starter','349','30 días gratis'],['Pro','499','15 días gratis'],['Elite','799','7 días gratis']];
@@ -360,7 +374,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
      empieza a girar sola de forma fluida (sin saltos de tarjeta en tarjeta).
      Cualquier gesto —o el chatbot— la detiene y el conteo de 10s reinicia. */
   let driftOn=false, driftRaf=null, idleT=null, lastTouch=0;
-  const DRIFT_PX=1.6; /* ~96px/s: una vuelta completa en ~23s */
+  const DRIFT_PX=2.6; /* ~156px/s: una vuelta completa en ~41s con 20 diseños */
   function driftStep(){
     if(!driftOn)return;
     track.scrollLeft+=DRIFT_PX;
