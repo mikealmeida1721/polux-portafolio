@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fermento Panadería — Diseño demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Karla:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   FERMENTO — panadería artesanal
+   Concepto: "la masa que respira". Todo leva, se expande, calienta.
+   Firma: titulares que LEVAN al scroll (scaleY + letter-spacing),
+   vapor de horno ondulante en el hero (canvas 2D).
+   ============================================================ */
+:root{
+  --logo: "";
+  --fondo:#fff8ec; --fondo2:#f7ead0; --tarjeta:#fffdf6; --borde:#ecd9b6;
+  --acento:#d9a441; --acento2:#7c4a21;
+  --texto:#4a2e16; --muted:#9a7a4f;
+  --fuente-titular:"Fraunces",Georgia,"Times New Roman",serif;
+  --fuente-cuerpo:"Karla",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo);line-height:1.6}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--acento2);border-radius:999px;padding:5px 14px;opacity:.92}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:var(--tarjeta);border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.volver:hover{color:var(--acento2);border-color:var(--acento)}
+/* ---------- firma: titulares que levan ---------- */
+.leva{display:inline-block;transform:scaleY(.72);transform-origin:50% 100%;letter-spacing:.05em;opacity:0;transition:transform 1.1s cubic-bezier(.2,.7,.25,1.12),letter-spacing 1.1s ease,opacity .7s ease}
+.leva.levado{transform:scaleY(1);letter-spacing:0;opacity:1}
+/* ---------- header ---------- */
+header.site{background:var(--tarjeta);border-bottom:1px solid var(--borde);position:sticky;top:0;z-index:50;padding-top:44px}
+.bar{display:flex;align-items:center;gap:14px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--texto)}
+.logo-slot{width:48px;height:48px;border-radius:50%;border:2px solid var(--acento);background:var(--logo) center/contain no-repeat,var(--tarjeta);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--acento);font-size:1.3rem;font-family:var(--fuente-titular)}
+.brand b{font-family:var(--fuente-titular);font-size:1.15rem;letter-spacing:.04em}
+.brand small{display:block;font-size:.66rem;letter-spacing:.24em;color:var(--muted);text-transform:uppercase}
+nav.menu{margin-left:auto;display:flex;gap:20px;font-size:.93rem;align-items:center}
+nav.menu a{color:var(--muted);text-decoration:none}
+nav.menu a:hover{color:var(--acento)}
+.btn{display:inline-block;background:var(--acento);color:#fff;font-weight:700;text-decoration:none;padding:12px 26px;border-radius:999px;border:none;cursor:pointer;font-size:1rem}
+.btn:hover{background:var(--acento2)}
+.btn.ghost{background:var(--tarjeta);color:var(--acento2);border:2px solid var(--acento)}
+/* ---------- hero + horno ---------- */
+.hero{padding:76px 0 0;text-align:center;background:radial-gradient(760px 360px at 50% -40px,rgba(217,164,65,.22),transparent)}
+.hero .kicker{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:var(--acento2);margin-bottom:16px;font-weight:700}
+.hero h1{font-family:var(--fuente-titular);font-weight:600;font-size:clamp(2.6rem,7.5vw,4.4rem);line-height:1.08;margin-bottom:16px}
+.hero h1 em{font-style:italic;color:var(--acento2)}
+.hero p.lead{max-width:620px;margin:0 auto 28px;color:var(--muted);font-size:1.06rem}
+.hero .ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+.horno{position:relative;max-width:430px;margin:30px auto 0}
+.horno svg{display:block;width:100%;height:auto}
+#vapor{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.pie-horno{background:var(--tarjeta);border-top:1px solid var(--borde);border-bottom:1px solid var(--borde);padding:24px 0;margin-top:-4px}
+.pie-horno .wrap{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.pie-horno .tag{background:var(--acento);color:#fff;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;border-radius:999px;padding:6px 16px;white-space:nowrap;font-weight:800}
+.pie-horno p{color:var(--muted)}
+.pie-horno strong{color:var(--texto)}
+/* ---------- secciones ---------- */
+section.bloque{padding:64px 0}
+h2.sec{font-family:var(--fuente-titular);font-weight:600;font-size:clamp(1.7rem,4.5vw,2.3rem);margin-bottom:8px;text-align:center}
+p.sub{color:var(--muted);margin-bottom:34px;max-width:620px;text-align:center;margin-left:auto;margin-right:auto}
+/* productos */
+.prods{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.prod{background:var(--tarjeta);border:1px solid var(--borde);border-radius:18px;padding:28px 24px;transition:transform .25s cubic-bezier(.2,.7,.3,1.2),box-shadow .25s}
+.prod:hover{transform:translateY(-6px) scale(1.015);box-shadow:0 16px 34px rgba(124,74,33,.14)}
+.prod .medalla{width:64px;height:64px;border-radius:50%;background:var(--fondo2);border:1px solid var(--borde);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.prod .medalla svg{width:38px;height:38px;color:var(--acento2)}
+.prod h3{font-family:var(--fuente-titular);font-size:1.22rem;margin-bottom:6px}
+.prod p{color:var(--muted);font-size:.92rem;margin-bottom:12px}
+.prod .precio{font-weight:800;color:var(--acento2);font-size:1.15rem}
+.prod .rec{display:inline-block;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;background:var(--fondo2);color:var(--acento2);border-radius:999px;padding:4px 12px;margin-bottom:10px;font-weight:700}
+/* proceso */
+.pasos{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:30px}
+.paso{background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;padding:24px 18px;text-align:center;opacity:0;transform:translateY(26px) scaleY(.92);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.25,1.15)}
+.paso.visible{opacity:1;transform:none}
+.paso .num{font-family:var(--fuente-titular);font-size:2rem;color:var(--acento);font-weight:700}
+.paso h3{font-family:var(--fuente-titular);font-size:1.08rem;margin:8px 0 6px}
+.paso p{color:var(--muted);font-size:.88rem}
+.ferment{max-width:640px;margin:0 auto;background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;padding:24px}
+.ferment .etiq{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin-bottom:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.ferment .barra{height:16px;border-radius:999px;background:var(--fondo2);border:1px solid var(--borde);overflow:hidden}
+.ferment .llenado{width:4%;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--acento),var(--acento2));transition:width 2.6s cubic-bezier(.25,1.25,.4,1)}
+.ferment.lleno .llenado{width:100%}
+.ferment .nota{margin-top:12px;font-size:.9rem;color:var(--muted);text-align:center}
+/* testimonios */
+.testis{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.testi{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;padding:26px}
+.testi .stars{color:var(--acento);margin-bottom:8px;letter-spacing:.1em}
+.testi p{font-style:italic}
+.testi footer{margin-top:10px;font-size:.85rem;color:var(--muted)}
+.testi .eje{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acento2);font-style:normal;font-weight:700}
+/* pedido */
+.pedido{background:var(--fondo2);border:1px solid var(--borde);border-radius:18px;padding:40px 32px;max-width:720px;margin:0 auto}
+.pedido h3{font-family:var(--fuente-titular);font-size:1.4rem;margin-bottom:18px;text-align:center}
+.campos{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.campo label{display:block;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:700}
+.campo select,.campo input{width:100%;padding:12px;border:1px solid var(--borde);border-radius:10px;font-size:1rem;background:var(--tarjeta);color:var(--texto);font-family:inherit}
+#conf{display:none;background:var(--tarjeta);border:1px solid var(--acento);border-radius:12px;padding:18px;margin-top:18px;text-align:center}
+#conf strong{color:var(--acento2)}
+#conf .wa{display:inline-block;margin-top:12px;background:#25d366;color:#fff;font-weight:800;text-decoration:none;border-radius:999px;padding:11px 26px}
+/* contacto */
+.info{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.info .card{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;padding:28px}
+.info h3{font-family:var(--fuente-titular);margin-bottom:10px}
+.info p{color:var(--muted)}
+.info .ico-t{width:30px;height:30px;color:var(--acento);vertical-align:-6px;margin-right:8px}
+/* ideal */
+.pz-ideal{padding:60px 20px;text-align:center;border-top:1px solid var(--borde)}
+.pz-ideal p{max-width:640px;margin:0 auto;color:var(--muted);font-size:1.02rem;line-height:1.7}
+.pz-ideal strong{color:var(--texto);font-size:1.15rem;font-family:var(--fuente-titular)}
+.pz-ideal button{margin-top:18px;background:var(--acento);color:#fff;border:none;border-radius:999px;padding:13px 30px;font-weight:700;cursor:pointer;font-size:.95rem}
+.pz-ideal button:hover{background:var(--acento2)}
+.pz-ideal .mini{margin-top:12px;font-size:.82rem;color:var(--muted)}
+footer.site{background:var(--fondo2);border-top:1px solid var(--borde);color:var(--muted);padding:36px 0;text-align:center;font-size:.9rem}
+footer.site a{color:var(--acento2)}
+/* chat demo */
+#chatBtn{position:fixed;bottom:22px;right:22px;z-index:99;width:60px;height:60px;border-radius:50%;background:var(--acento);color:#fff;border:none;font-size:1.6rem;cursor:pointer;box-shadow:0 8px 24px rgba(217,164,65,.45)}
+#chatBtn:hover{background:var(--acento2)}
+#chatPanel{position:fixed;bottom:96px;right:22px;z-index:99;width:330px;max-width:calc(100vw - 44px);background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.22);display:none;overflow:hidden}
+#chatPanel.open{display:block}
+#chatPanel .chead{background:var(--acento2);color:#fff;padding:14px 18px;font-weight:700}
+#chatPanel .chead small{display:block;font-weight:400;font-size:.75rem;opacity:.85}
+#chatBody{padding:16px;height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--fondo)}
+.msg{max-width:85%;padding:10px 14px;border-radius:14px;font-size:.9rem}
+.msg.in{background:var(--tarjeta);border:1px solid var(--borde);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.out{background:var(--acento);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.quick{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 8px;background:var(--fondo)}
+.quick button{border:1px solid var(--acento);background:var(--tarjeta);color:var(--acento2);border-radius:999px;padding:7px 14px;font-size:.82rem;cursor:pointer}
+.quick button:hover{background:var(--acento);color:#fff}
+.chead2{padding:10px 16px;background:var(--fondo);font-size:.72rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+@media(max-width:900px){
+  .prods{grid-template-columns:1fr}
+  .pasos{grid-template-columns:1fr 1fr}
+  .testis,.info{grid-template-columns:1fr}
+  .campos{grid-template-columns:1fr}
+  nav.menu a:not(.btn){display:none}
+  .pedido{padding:30px 20px}
+}
+@media(prefers-reduced-motion:reduce){
+  .leva{transform:none;letter-spacing:0;opacity:1;transition:none}
+  .paso{opacity:1;transform:none;transition:none}
+  .ferment .llenado{width:100%;transition:none}
+  .prod:hover{transform:none}
+}
+</style>
+</head>
+<body>
+<div class="demo-badge">Diseño demo</div>
+<a class="volver" href="../index.html">← Portafolio</a>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#">
+      <span class="logo-slot" data-logo>F</span>
+      <span><b data-nombre>FERMENTO PANADERÍA</b><small data-tagline>Pan artesanal</small></span>
+    </a>
+    <nav class="menu">
+      <a href="#productos">Productos</a>
+      <a href="#proceso">Proceso</a>
+      <a href="#opiniones">Opiniones</a>
+      <a href="#contacto">Contacto</a>
+      <a class="btn" href="#pedido" style="padding:9px 20px">Pedir</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker">Panadería artesanal · Horno de piedra</div>
+    <h1><span class="leva">El pan que <em>leva</em></span><br><span class="leva">contigo cada mañana</span></h1>
+    <p class="lead">Masa madre de 48 horas, harina de molino y horno de piedra. Nada de prisas: aquí el tiempo es el ingrediente secreto.</p>
+    <div class="ctas">
+      <a class="btn" href="#productos">Ver productos</a>
+      <a class="btn ghost" href="#pedido">Hacer pedido</a>
+    </div>
+    <div class="horno" aria-hidden="true">
+      <canvas id="vapor"></canvas>
+      <svg viewBox="0 0 320 230">
+        <rect x="20" y="196" width="280" height="18" rx="6" fill="var(--acento2)"/>
+        <path d="M60 196 C60 110 110 60 160 60 C210 60 260 110 260 196 Z" fill="var(--tarjeta)" stroke="var(--acento2)" stroke-width="5"/>
+        <g stroke="var(--borde)" stroke-width="3">
+          <path d="M64 160 H256"/><path d="M72 130 H248"/><path d="M88 102 H232"/>
+          <path d="M120 196 V160 M160 196 V160 M200 196 V160 M140 160 V130 M180 160 V130 M220 160 V130 M150 130 V102 M190 130 V102"/>
+        </g>
+        <path d="M118 196 C118 150 138 132 160 132 C182 132 202 150 202 196 Z" fill="#2e1c0e"/>
+        <ellipse cx="160" cy="196" rx="34" ry="10" fill="var(--acento)" opacity=".85"/>
+        <ellipse cx="160" cy="192" rx="20" ry="6" fill="#ffe9b8"/>
+        <text x="160" y="48" text-anchor="middle" fill="var(--acento2)" font-size="15" font-family="Fraunces,serif" letter-spacing="4">FERMENTO</text>
+      </svg>
+    </div>
+  </div>
+</div>
+<div class="pie-horno">
+  <div class="wrap">
+    <span class="tag">Recién horneado</span>
+    <p><strong>Del horno a tu mesa:</strong> horneamos tres veces al día. Pide antes de las 10 AM y tu pan sale en la primera tanda.</p>
+  </div>
+</div>
+
+<section class="bloque" id="productos" data-pieza="Productos">
+  <div class="wrap">
+    <h2 class="sec"><span class="leva">Nuestros panes</span></h2>
+    <p class="sub">Productos de ejemplo para mostrar el formato. Los tuyos irían aquí con tus fotos y precios.</p>
+    <div class="prods">
+      <div class="prod"><span class="rec">El favorito</span><div class="medalla"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><ellipse cx="32" cy="38" rx="22" ry="14"/><path d="M21 35l7-7M31 37l7-7M41 37l7-7"/></svg></div><h3>Pan de masa madre</h3><p>Fermentación de 48 h, corteza crujiente y miga abierta. El de todos los días.</p><div class="precio">$6.50</div></div>
+      <div class="prod"><div class="medalla"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M14 44L50 20" stroke-width="9"/><path d="M24 40l4 2M31 35l4 2M38 30l4 2"/></svg></div><h3>Baguette</h3><p>Recién salida del horno de piedra, crujiente por fuera y suave por dentro.</p><div class="precio">$3.75</div></div>
+      <div class="prod"><div class="medalla"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><circle cx="32" cy="34" r="18"/><path d="M22 24l20 20M42 24L22 44"/></svg></div><h3>Pan de centeno</h3><p>Denso, aromático y lleno de fibra. Perfecto con queso o mantequilla.</p><div class="precio">$5.25</div></div>
+      <div class="prod"><div class="medalla"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><circle cx="32" cy="34" r="17"/><path d="M32 34c0-4 3-6 6-5 3 1 4 4 3 7-2 4-8 5-11 2-3-4-1-10 4-11"/></svg></div><h3>Rol de canela</h3><p>Espiral de canela y azúcar morena con glaseado de vainilla.</p><div class="precio">$4.50</div></div>
+      <div class="prod"><div class="medalla"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M14 40a18 18 0 0136 0z"/><path d="M22 40v-6M32 40V30M42 40v-6"/></svg></div><h3>Concha dulce</h3><p>El clásico pan dulce con su costra azucarada en forma de concha.</p><div class="precio">$2.75</div></div>
+      <div class="prod"><div class="medalla"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M12 38a20 14 0 0140 0z"/><path d="M18 32l3 3M26 28l3 3M34 26l3 3M42 28l3 3M50 32l3 3"/></svg></div><h3>Empanada de manzana</h3><p>Rellena de manzana con canela, horneada hasta dorar.</p><div class="precio">$3.95</div></div>
+    </div>
+  </div>
+</section>
+<section class="bloque" id="proceso" data-pieza="Proceso de fermentación" style="background:var(--fondo2);border-top:1px solid var(--borde);border-bottom:1px solid var(--borde)">
+  <div class="wrap">
+    <h2 class="sec"><span class="leva">De la harina al horno</span></h2>
+    <p class="sub">Cuatro pasos, cero atajos. Así nace cada pan de Fermento.</p>
+    <div class="pasos">
+      <div class="paso"><div class="num">01</div><h3>Amasado</h3><p>Harina, agua, sal y nuestro cultivo madre. Manos lentas, sin máquinas agresivas.</p></div>
+      <div class="paso"><div class="num">02</div><h3>Reposo</h3><p>La masa descansa 12 horas. El gluten se organiza solo, sin esfuerzo.</p></div>
+      <div class="paso"><div class="num">03</div><h3>Fermentación</h3><p>Otras 36 horas de fermentación lenta. Aquí nace el sabor profundo.</p></div>
+      <div class="paso"><div class="num">04</div><h3>Horneado</h3><p>Piedra a 240 °C, vapor los primeros minutos. Corteza que cruje.</p></div>
+    </div>
+    <div class="ferment" id="ferment">
+      <div class="etiq"><span>Fermentación de la tanda de hoy</span><span>48 h</span></div>
+      <div class="barra"><div class="llenado"></div></div>
+      <p class="nota">La barra se llena sola al llegar aquí — como la masa en el cajón.</p>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="opiniones" data-pieza="Testimonios">
+  <div class="wrap">
+    <h2 class="sec"><span class="leva">Lo que dicen (ejemplos)</span></h2>
+    <p class="sub">Testimonios de ejemplo para mostrar el formato.</p>
+    <div class="testis">
+      <div class="testi"><div class="stars">★★★★★</div><p>"La masa madre de aquí no tiene comparación. La corteza suena cuando la partes."</p><footer>— Cliente de ejemplo · <span class="eje">Testimonio de ejemplo</span></footer></div>
+      <div class="testi"><div class="stars">★★★★★</div><p>"Pido los roles de canela para la oficina cada viernes. Nunca sobra ni uno."</p><footer>— Cliente de ejemplo · <span class="eje">Testimonio de ejemplo</span></footer></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="pedido" data-pieza="Formulario de pedido" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="sec"><span class="leva">Haz tu pedido</span></h2>
+    <p class="sub">Elige y aparta tu pan. Te confirmamos por mensaje.</p>
+    <div class="pedido">
+      <h3>¿Qué sale del horno hoy?</h3>
+      <div class="campos">
+        <div class="campo"><label>Producto</label><select id="pprod"><option>Pan de masa madre</option><option>Baguette</option><option>Pan de centeno</option><option>Rol de canela</option><option>Concha dulce</option><option>Empanada de manzana</option></select></div>
+        <div class="campo"><label>Cantidad</label><select id="pcant"><option>1</option><option>2</option><option>3</option><option>4</option><option>6</option><option>12</option></select></div>
+        <div class="campo"><label>Tu nombre</label><input type="text" id="pnom" placeholder="¿A nombre de quién?"></div>
+        <div class="campo"><label>Teléfono</label><input type="tel" id="ptel" placeholder="(555) 000-0000"></div>
+      </div>
+      <div style="text-align:center"><button class="btn" id="pbtn">Enviar pedido</button></div>
+      <div id="conf"><strong>✓ Pedido registrado (demo).</strong><br><span id="pres"></span><br><small style="color:var(--muted)">En tu página real, el pedido llegaría directo a tu WhatsApp.</small><br><a class="wa" id="pwa" href="https://wa.me/16093316652" target="_blank" rel="noopener">Confirmar por WhatsApp</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="contacto" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="sec"><span class="leva">Visítanos</span></h2>
+    <p class="sub">Datos de ejemplo.</p>
+    <div class="info">
+      <div class="card"><h3><svg class="ico-t" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.5-7-11a7 7 0 0114 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Dirección</h3><p>Calle de ejemplo 123<br>Ciudad, Estado 00000</p></div>
+      <div class="card"><h3><svg class="ico-t" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Horario</h3><p>Mar – Dom · 7:00 AM – 3:00 PM<br>Lunes: horno descansando</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="pz-ideal">
+  <p><strong>¿Este estilo es para tu negocio?</strong><br>Ideal para panaderías, reposterías y cafés artesanales: catálogo cálido, proceso visible y pedidos en línea.</p>
+  <button onclick="var b=document.getElementById('pz-selfab');b&&b.click()">Verlo con mis colores 🎨</button>
+  <p class="mini">Si te gustaron varios, los combinamos en tu página a medida.</p>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <p><strong>FERMENTO PANADERÍA</strong> · Pan artesanal · Contenido ficticio de demostración</p>
+    <p style="margin-top:8px">Diseño demo por <a href="../index.html">Polux</a> — caso de estudio · proyecto piloto. Modelo base personalizable.</p>
+  </div>
+</footer>
+
+<!-- Chat demo flotante -->
+<button id="chatBtn" aria-label="Abrir chat de demostración">💬</button>
+<div id="chatPanel" role="dialog" aria-label="Chat de demostración">
+  <div class="chead">Asistente Demo<small>Responde al instante · demo</small></div>
+  <div class="chead2">Prueba lo que un chatbot de Polux haría por tu negocio</div>
+  <div id="chatBody"></div>
+  <div class="quick">
+    <button data-q="horario">Horario</button>
+    <button data-q="pedidos">Pedidos</button>
+    <button data-q="masamadre">Masa madre</button>
+  </div>
+</div>
+
+<script>
+/* Titulares que levan al entrar en pantalla */
+(function(){
+  var els=document.querySelectorAll('.leva');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('levado')});return}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('levado');io.unobserve(e.target)}})},{threshold:.35});
+  els.forEach(function(e){io.observe(e)});
+})();
+/* Pasos del proceso: entran en cascada */
+(function(){
+  var els=document.querySelectorAll('.paso');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('visible')});return}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}})},{threshold:.3});
+  els.forEach(function(e,i){e.style.transitionDelay=(i*0.12)+'s';io.observe(e)});
+})();
+/* Medidor de fermentación */
+(function(){
+  var f=document.getElementById('ferment');if(!f)return;
+  if(!('IntersectionObserver' in window)){f.classList.add('lleno');return}
+  new IntersectionObserver(function(es,io){es.forEach(function(e){if(e.isIntersecting){f.classList.add('lleno');io.disconnect()}})},{threshold:.4}).observe(f);
+})();
+/* Vapor del horno: canvas 2D procedural */
+(function(){
+  var cv=document.getElementById('vapor');if(!cv)return;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce)return; /* estado final estático: sin vapor */
+  var ctx=cv.getContext('2d'),W=0,H=0,parts=[],raf=null,run=false;
+  function size(){
+    var d=Math.min(1.5,window.devicePixelRatio||1),r=cv.parentElement.getBoundingClientRect();
+    W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);
+  }
+  function spawn(){
+    var max=window.innerWidth<=900?16:34;
+    if(parts.length>=max)return;
+    parts.push({x:W*0.5+(Math.random()-0.5)*W*0.2,y:H*0.82,r:5+Math.random()*9,
+      vy:-(0.45+Math.random()*0.85),ph:Math.random()*6.283,sp:0.5+Math.random()*0.8});
+  }
+  function tick(){
+    if(!run)return;
+    ctx.clearRect(0,0,W,H);
+    spawn();spawn();
+    var top=H*0.06,base=H*0.82;
+    parts=parts.filter(function(p){return p.y>top-20});
+    parts.forEach(function(p){
+      p.y+=p.vy;p.ph+=0.028*p.sp;
+      var t=(base-p.y)/(base-top);t=Math.max(0,Math.min(1,t));
+      var x=p.x+Math.sin(p.ph)*(8+22*t);
+      var a=Math.sin(Math.PI*t)*0.34;
+      ctx.beginPath();ctx.arc(x,p.y,p.r*(0.7+1.5*t),0,6.283);
+      ctx.fillStyle='rgba(255,252,244,'+a.toFixed(3)+')';ctx.fill();
+    });
+    raf=requestAnimationFrame(tick);
+  }
+  function start(){if(run||reduce)return;run=true;tick()}
+  function stop(){run=false;if(raf)cancelAnimationFrame(raf);raf=null;ctx.clearRect(0,0,W,H)}
+  size();window.addEventListener('resize',size);
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){es.forEach(function(e){e.isIntersecting?start():stop()})},{threshold:0.05}).observe(cv);
+  }else{start()}
+})();
+/* Pedido demo */
+document.getElementById('pbtn').addEventListener('click',function(){
+  var pr=document.getElementById('pprod').value,ct=document.getElementById('pcant').value,
+      nm=document.getElementById('pnom').value.trim()||'cliente demo';
+  document.getElementById('pres').textContent=ct+' × '+pr+' — '+nm;
+  document.getElementById('conf').style.display='block';
+  document.getElementById('pwa').href='https://wa.me/16093316652?text='+encodeURIComponent('Hola Fermento Panadería, quiero pedir '+ct+' × '+pr+' ('+nm+')');
+});
+/* Chat demo */
+(function(){
+  var panel=document.getElementById('chatPanel'),body=document.getElementById('chatBody');
+  document.getElementById('chatBtn').addEventListener('click',function(){
+    panel.classList.toggle('open');
+    if(panel.classList.contains('open')&&!body.children.length)bot('¡Hola! Soy el asistente demo de Fermento. Pregúntame por horario, pedidos o la masa madre.');
+  });
+  function add(t,c){var m=document.createElement('div');m.className='msg '+c;m.textContent=t;body.appendChild(m);body.scrollTop=body.scrollHeight}
+  function bot(t){setTimeout(function(){add(t,'in')},450)}
+  var R={
+    horario:'Horneamos de martes a domingo, de 7:00 AM a 3:00 PM. El lunes el horno descansa.',
+    pedidos:'Puedes apartar tu pan arriba en "Haz tu pedido" o escribirnos por WhatsApp.',
+    masamadre:'Nuestra masa madre fermenta 48 horas: más sabor, mejor digestión y corteza que cruje.'
+  };
+  document.querySelectorAll('.quick button').forEach(function(b){b.addEventListener('click',function(){add(b.textContent,'out');bot(R[b.dataset.q])})});
+})();
+</script>
+<script src="../personalizar.js?v=3"></script>
+<script>window.POLUX_WA='16093316652';window.POLUX_CHAT={ac:'#d9a441',icon:'spark',context:'demo',design:'Fermento',designId:'panaderia'};</script>
+<script src="../polux-chat.js?v=5"></script>
+<script src="../polux-piezas.js?v=5"></script>
+</body>
+</html>
