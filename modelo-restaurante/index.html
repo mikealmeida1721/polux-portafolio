@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurante Demo — Modelo base</title>
+<style>
+/* ============================================================
+   PERSONALIZACIÓN RÁPIDA — cambia logo y colores aquí (2 min)
+   --logo: pega la URL del logo del prospecto (o deja "" y se usa texto)
+   ============================================================ */
+:root{
+  --logo: "";
+  --fondo:#fff9f3; --fondo2:#fdeede; --tarjeta:#ffffff; --borde:#f0dcc8;
+  --acento:#c2410c; --acento2:#7c2d12;
+  --texto:#3b2417; --muted:#8a6a52;
+  --fuente-titular: Georgia, "Times New Roman", serif;
+  --fuente-cuerpo: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo);line-height:1.6}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+/* Distintivo demo */
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--acento2);border-radius:999px;padding:5px 14px;opacity:.92}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:#fff;border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.volver:hover{color:var(--acento2);border-color:var(--acento)}
+/* Header */
+header.site{background:#fffdf9;border-bottom:1px solid var(--borde);position:sticky;top:0;z-index:50;padding-top:44px}
+.bar{display:flex;align-items:center;gap:14px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--texto)}
+.logo-slot{width:48px;height:48px;border-radius:50%;border:2px solid var(--acento);background:var(--logo) center/contain no-repeat,#fff;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--acento);font-size:1.3rem;font-family:var(--fuente-titular)}
+.brand b{font-family:var(--fuente-titular);font-size:1.15rem;letter-spacing:.04em}
+.brand small{display:block;font-size:.66rem;letter-spacing:.24em;color:var(--muted);text-transform:uppercase}
+nav.menu{margin-left:auto;display:flex;gap:20px;font-size:.93rem;align-items:center}
+nav.menu a{color:var(--muted);text-decoration:none}
+nav.menu a:hover{color:var(--acento)}
+.btn{display:inline-block;background:var(--acento);color:#fff;font-weight:700;text-decoration:none;padding:12px 26px;border-radius:999px;border:none;cursor:pointer;font-size:1rem}
+.btn:hover{background:var(--acento2)}
+.btn.ghost{background:#fff;color:var(--acento2);border:2px solid var(--acento)}
+/* Hero */
+.hero{padding:80px 0 64px;text-align:center;background:radial-gradient(700px 340px at 50% -60px,rgba(194,65,12,.14),transparent)}
+.hero .kicker{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:var(--acento);margin-bottom:16px}
+.hero h1{font-family:var(--fuente-titular);font-size:clamp(2.4rem,6vw,4rem);margin-bottom:14px}
+.hero h1 em{font-style:italic;color:var(--acento)}
+.hero p.lead{max-width:620px;margin:0 auto 28px;color:var(--muted);font-size:1.06rem}
+.hero .ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.hero .plato{font-size:3.4rem;margin-bottom:10px;filter:saturate(1.2)}
+/* Escena animada: el local + repartidor */
+.escena{padding:0;background:#2b1a12}
+.escena .cielo{position:relative;height:300px;overflow:hidden;background:linear-gradient(180deg,#3a2418 0%,#7c2d12 55%,#c2410c 78%,#e8933f 100%)}
+.sol{position:absolute;top:36px;right:12%;width:74px;height:74px;border-radius:50%;background:radial-gradient(circle,#ffe9c4 0%,#f5b85e 60%,rgba(245,184,94,0) 72%)}
+.local{position:absolute;left:4%;bottom:64px;width:220px}
+.carretera{position:absolute;left:0;right:0;bottom:0;height:64px;background:#241a14}
+.carretera::before{content:"";position:absolute;top:30px;left:0;right:0;border-top:4px dashed rgba(255,249,243,.35)}
+.repartidor{position:absolute;bottom:44px;left:-260px;width:230px;animation:reparto 11s linear infinite}
+.repartidor svg{width:100%;height:auto;overflow:visible}
+@keyframes reparto{from{left:-260px}to{left:100%}}
+.bob{animation:bob .55s ease-in-out infinite alternate}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+.rueda{transform-box:fill-box;transform-origin:center;animation:girar .8s linear infinite}
+@keyframes girar{to{transform:rotate(360deg)}}
+.vel{stroke:#fffdf9;stroke-width:3;stroke-linecap:round;opacity:.5}
+.pie-escena{background:#fffdf9;border-bottom:1px solid var(--borde);padding:26px 0}
+.pie-escena .wrap{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.pie-escena .tag{background:var(--acento);color:#fff;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;border-radius:999px;padding:6px 16px;white-space:nowrap}
+.pie-escena p{color:var(--muted)}
+.pie-escena strong{color:var(--texto)}
+/* Secciones */
+section.bloque{padding:64px 0}
+h2.sec{font-family:var(--fuente-titular);font-size:1.9rem;margin-bottom:6px;text-align:center}
+p.sub{color:var(--muted);margin-bottom:32px;max-width:620px;text-align:center;margin-left:auto;margin-right:auto}
+/* Carta */
+.carta{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.platillo{background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;padding:26px;transition:transform .18s,box-shadow .18s}
+.platillo:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(194,65,12,.12)}
+.platillo .emoji{font-size:2.2rem;margin-bottom:10px}
+.platillo h3{font-family:var(--fuente-titular);font-size:1.2rem;margin-bottom:6px}
+.platillo p{color:var(--muted);font-size:.92rem;margin-bottom:12px}
+.platillo .precio{font-weight:800;color:var(--acento);font-size:1.15rem}
+.platillo .rec{display:inline-block;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;background:var(--fondo2);color:var(--acento2);border-radius:999px;padding:4px 12px;margin-bottom:10px}
+/* Reserva */
+.reserva{background:var(--fondo2);border:1px solid var(--borde);border-radius:18px;padding:40px 32px;max-width:720px;margin:0 auto}
+.reserva h3{font-family:var(--fuente-titular);font-size:1.4rem;margin-bottom:18px;text-align:center}
+.campos{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:18px}
+.campo label{display:block;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.campo select,.campo input{width:100%;padding:12px;border:1px solid var(--borde);border-radius:10px;font-size:1rem;background:#fff;color:var(--texto);font-family:inherit}
+#conf{display:none;background:#fff;border:1px solid var(--acento);border-radius:12px;padding:18px;margin-top:18px;text-align:center}
+#conf strong{color:var(--acento2)}
+/* Domicilio */
+.dom{background:linear-gradient(135deg,var(--acento2),var(--acento));color:#fff;border-radius:18px;padding:48px 36px;text-align:center}
+.dom h2{font-family:var(--fuente-titular);font-size:1.8rem;margin-bottom:10px}
+.dom p{opacity:.9;margin-bottom:24px;max-width:560px;margin-left:auto;margin-right:auto}
+.dom .btn{background:#fff;color:var(--acento2)}
+.dom .btn:hover{background:var(--fondo)}
+/* Testimonios */
+.testis{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.testi{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;padding:26px}
+.testi .stars{color:#e8933f;margin-bottom:8px;letter-spacing:.1em}
+.testi p{font-style:italic}
+.testi footer{margin-top:10px;font-size:.85rem;color:var(--muted)}
+.testi .eje{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acento);font-style:normal}
+/* Info */
+.info{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.info .card{background:var(--tarjeta);border:1px solid var(--borde);border-radius:14px;padding:28px}
+.info h3{font-family:var(--fuente-titular);margin-bottom:10px}
+.info p{color:var(--muted)}
+/* Chat demo */
+#chatBtn{position:fixed;bottom:22px;right:22px;z-index:99;width:60px;height:60px;border-radius:50%;background:var(--acento);color:#fff;border:none;font-size:1.6rem;cursor:pointer;box-shadow:0 8px 24px rgba(194,65,12,.4)}
+#chatBtn:hover{background:var(--acento2)}
+#chatPanel{position:fixed;bottom:96px;right:22px;z-index:99;width:330px;max-width:calc(100vw - 44px);background:#fff;border:1px solid var(--borde);border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.22);display:none;overflow:hidden}
+#chatPanel.open{display:block}
+#chatPanel .chead{background:var(--acento2);color:#fff;padding:14px 18px;font-weight:700}
+#chatPanel .chead small{display:block;font-weight:400;font-size:.75rem;opacity:.85}
+#chatBody{padding:16px;height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:var(--fondo)}
+.msg{max-width:85%;padding:10px 14px;border-radius:14px;font-size:.9rem}
+.msg.in{background:#fff;border:1px solid var(--borde);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.out{background:var(--acento);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.quick{display:flex;gap:8px;flex-wrap:wrap;padding:0 16px 8px;background:var(--fondo)}
+.quick button{border:1px solid var(--acento);background:#fff;color:var(--acento2);border-radius:999px;padding:7px 14px;font-size:.82rem;cursor:pointer}
+.quick button:hover{background:var(--acento);color:#fff}
+.chead2{padding:10px 16px;background:var(--fondo);font-size:.72rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+footer.site{background:#2b1a12;color:#e8d5c2;padding:36px 0;text-align:center;font-size:.9rem}
+footer.site a{color:#f5b85e}
+@media(max-width:900px){.carta{grid-template-columns:1fr}.testis,.info{grid-template-columns:1fr}.campos{grid-template-columns:1fr}nav.menu a:not(.btn){display:none}.repartidor{animation-duration:8s}}
+@media(prefers-reduced-motion:reduce){.repartidor,.rueda,.bob{animation:none}}
+</style>
+</head>
+<body>
+<div class="demo-badge">Diseño demo</div>
+<a class="volver" href="../index.html">← Portafolio</a>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#">
+      <span class="logo-slot" data-logo>R</span>
+      <span><b data-nombre>RESTAURANTE DEMO</b><small data-tagline>Cocina de ejemplo</small></span>
+    </a>
+    <nav class="menu">
+      <a href="#carta">Carta</a>
+      <a href="#reserva">Reservas</a>
+      <a href="#contacto">Contacto</a>
+      <a class="btn" href="#reserva" style="padding:9px 20px">Reservar</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="plato">🍽️</div>
+    <div class="kicker">Cocina · Ejemplo</div>
+    <h1>Sabor que se <em>queda</em><br>en la memoria</h1>
+    <p class="lead">Platos hechos con ingredientes frescos, atención cálida y un rincón que se siente como casa. Reserva tu mesa o pide a domicilio.</p>
+    <div class="ctas">
+      <a class="btn" href="#reserva">Reservar mesa</a>
+      <a class="btn ghost" href="#carta">Ver la carta</a>
+    </div>
+  </div>
+</div>
+
+<!-- Escena animada -->
+<div class="escena" aria-hidden="true">
+  <div class="cielo">
+    <div class="sol"></div>
+    <!-- Local del restaurante -->
+    <svg class="local" viewBox="0 0 220 150">
+      <rect x="10" y="50" width="200" height="100" fill="#241a14"/>
+      <rect x="10" y="50" width="200" height="14" fill="#c2410c"/>
+      <rect x="18" y="38" width="184" height="14" fill="#7c2d12"/>
+      <g fill="#e8933f"><rect x="18" y="38" width="23" height="14"/><rect x="64" y="38" width="23" height="14"/><rect x="110" y="38" width="23" height="14"/><rect x="156" y="38" width="23" height="14"/></g>
+      <rect x="30" y="80" width="52" height="44" fill="#f5b85e" opacity=".85"/>
+      <rect x="96" y="80" width="34" height="70" fill="#160f0b"/>
+      <rect x="144" y="80" width="52" height="44" fill="#f5b85e" opacity=".85"/>
+      <rect x="30" y="80" width="52" height="6" fill="#7c2d12"/><rect x="144" y="80" width="52" height="6" fill="#7c2d12"/>
+      <text x="110" y="30" text-anchor="middle" fill="#ffe9c4" font-size="13" font-family="Georgia,serif" letter-spacing="3">RESTAURANTE</text>
+    </svg>
+    <!-- Repartidor en bicicleta -->
+    <div class="repartidor">
+      <svg viewBox="0 0 240 170">
+        <g class="bob">
+          <!-- líneas de velocidad -->
+          <line class="vel" x1="8" y1="60" x2="44" y2="60"/>
+          <line class="vel" x1="2" y1="86" x2="34" y2="86"/>
+          <line class="vel" x1="10" y1="112" x2="40" y2="112"/>
+          <!-- ruedas -->
+          <g class="rueda">
+            <circle cx="62" cy="128" r="32" fill="none" stroke="#160f0b" stroke-width="6"/>
+            <g stroke="#160f0b" stroke-width="2.5">
+              <line x1="62" y1="96" x2="62" y2="160"/><line x1="30" y1="128" x2="94" y2="128"/>
+              <line x1="39" y1="105" x2="85" y2="151"/><line x1="85" y1="105" x2="39" y2="151"/>
+            </g>
+            <circle cx="62" cy="128" r="5" fill="#160f0b"/>
+          </g>
+          <g class="rueda">
+            <circle cx="178" cy="128" r="32" fill="none" stroke="#160f0b" stroke-width="6"/>
+            <g stroke="#160f0b" stroke-width="2.5">
+              <line x1="178" y1="96" x2="178" y2="160"/><line x1="146" y1="128" x2="210" y2="128"/>
+              <line x1="155" y1="105" x2="201" y2="151"/><line x1="201" y1="105" x2="155" y2="151"/>
+            </g>
+            <circle cx="178" cy="128" r="5" fill="#160f0b"/>
+          </g>
+          <!-- cuadro -->
+          <g stroke="#160f0b" stroke-width="6" stroke-linecap="round" fill="none">
+            <line x1="62" y1="128" x2="118" y2="128"/>
+            <line x1="118" y1="128" x2="178" y2="128"/>
+            <line x1="118" y1="128" x2="142" y2="88"/>
+            <line x1="142" y1="88" x2="188" y2="92"/>
+            <line x1="188" y1="92" x2="178" y2="128"/>
+            <line x1="62" y1="128" x2="104" y2="92"/>
+          </g>
+          <!-- manubrio y asiento -->
+          <line x1="188" y1="92" x2="196" y2="78" stroke="#160f0b" stroke-width="6" stroke-linecap="round"/>
+          <line x1="104" y1="92" x2="100" y2="82" stroke="#160f0b" stroke-width="6" stroke-linecap="round"/>
+          <!-- mochila de reparto -->
+          <rect x="56" y="34" width="52" height="58" rx="10" fill="#c2410c"/>
+          <rect x="56" y="60" width="52" height="8" fill="#fffdf9" opacity=".9"/>
+          <circle cx="82" cy="46" r="7" fill="#fffdf9"/>
+          <!-- cuerpo del repartidor -->
+          <g fill="#160f0b">
+            <circle cx="150" cy="52" r="13"/>
+            <path d="M138 66 Q150 60 160 70 L148 108 L128 104 Z"/>
+            <path d="M146 104 L160 128 L152 132 L138 110 Z"/>
+            <path d="M130 104 L112 122 L106 114 L124 98 Z"/>
+            <rect x="150" y="66" width="40" height="11" rx="5" transform="rotate(8 150 66)"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <div class="carretera"></div>
+  </div>
+</div>
+<div class="pie-escena">
+  <div class="wrap">
+    <span class="tag">En movimiento</span>
+    <p><strong>Tu negocio no se detiene:</strong> pedidos saliendo a domicilio, clientes avisados por mensaje y la cocina sin parar. Esto es lo que Polux instala y opera contigo.</p>
+  </div>
+</div>
+
+<section class="bloque" id="carta">
+  <div class="wrap">
+    <h2 class="sec">Nuestra carta</h2>
+    <p class="sub">Platos de ejemplo para mostrar el formato. Los tuyos irían aquí con tus fotos y precios.</p>
+    <div class="carta">
+      <div class="platillo"><span class="rec">El favorito</span><div class="emoji">🥘</div><h3>Plato de la casa</h3><p>Receta insignia con ingredientes frescos del día. Ejemplo de descripción.</p><div class="precio">$14.99</div></div>
+      <div class="platillo"><div class="emoji">🥗</div><h3>Ensalada fresca</h3><p>Verde, crujiente y ligera. Ejemplo de descripción.</p><div class="precio">$9.99</div></div>
+      <div class="platillo"><div class="emoji">🍝</div><h3>Pasta especial</h3><p>Hecha al momento con salsa de la casa. Ejemplo de descripción.</p><div class="precio">$12.99</div></div>
+      <div class="platillo"><div class="emoji">🍰</div><h3>Postre del día</h3><p>El cierre dulce perfecto. Ejemplo de descripción.</p><div class="precio">$6.99</div></div>
+      <div class="platillo"><div class="emoji">🥤</div><h3>Bebidas naturales</h3><p>Jugos y refrescos preparados en casa. Ejemplo de descripción.</p><div class="precio">$3.99</div></div>
+      <div class="platillo"><div class="emoji">☕</div><h3>Café de la casa</h3><p>Recién colado, como debe ser. Ejemplo de descripción.</p><div class="precio">$2.99</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="reserva" style="background:var(--fondo2);border-top:1px solid var(--borde);border-bottom:1px solid var(--borde)">
+  <div class="wrap">
+    <h2 class="sec">Reserva tu mesa</h2>
+    <p class="sub">Elige el día y la hora. Te confirmamos al instante por mensaje.</p>
+    <div class="reserva">
+      <h3>¿Cuándo vienes?</h3>
+      <div class="campos">
+        <div class="campo"><label>Día</label><input type="date" id="rdia"></div>
+        <div class="campo"><label>Hora</label><select id="rhora"><option>12:00 PM</option><option>1:30 PM</option><option>3:00 PM</option><option>6:00 PM</option><option>7:30 PM</option><option>9:00 PM</option></select></div>
+        <div class="campo"><label>Personas</label><select id="rper"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6+</option></select></div>
+      </div>
+      <div style="text-align:center"><button class="btn" id="rbtn">Confirmar reserva</button></div>
+      <div id="conf"><strong>✓ Reserva registrada (demo).</strong><br><span id="rres"></span><br><small style="color:var(--muted)">En tu página real, aquí llegaría la confirmación por SMS o WhatsApp.</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque">
+  <div class="wrap">
+    <div class="dom">
+      <h2>¿Prefieres en casa?</h2>
+      <p>Pedidos a domicilio con seguimiento en vivo: sabes cuándo sale tu comida y cuándo llega. Como el repartidor de arriba.</p>
+      <a class="btn" href="#contacto">Pedir a domicilio</a>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="sec">Lo que dicen (ejemplos)</h2>
+    <p class="sub">Testimonios de ejemplo para mostrar el formato.</p>
+    <div class="testis">
+      <div class="testi"><div class="stars">★★★★★</div><p>"La comida llegó caliente y rapidísimo. El seguimiento del pedido es otra cosa."</p><footer>— Cliente de ejemplo · <span class="eje">Testimonio de ejemplo</span></footer></div>
+      <div class="testi"><div class="stars">★★★★★</div><p>"Reservé por la página en un minuto y al llegar la mesa estaba lista."</p><footer>— Cliente de ejemplo · <span class="eje">Testimonio de ejemplo</span></footer></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="contacto" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="sec">Visítanos</h2>
+    <p class="sub">Datos de ejemplo.</p>
+    <div class="info">
+      <div class="card"><h3>📍 Dirección</h3><p>Calle de ejemplo 123<br>Ciudad, Estado 00000</p></div>
+      <div class="card"><h3>🕐 Horario</h3><p>Lun – Dom · 11:00 AM – 10:00 PM<br>Tel: (555) 000-0000</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <p><strong>RESTAURANTE DEMO</strong> · Cocina de ejemplo · Contenido ficticio de demostración</p>
+    <p style="margin-top:8px">Diseño demo por <a href="../index.html">Polux</a> — caso de estudio · proyecto piloto. Modelo base personalizable.</p>
+  </div>
+</footer>
+
+<!-- Chat demo flotante -->
+<button id="chatBtn" aria-label="Abrir chat de demostración">💬</button>
+<div id="chatPanel" role="dialog" aria-label="Chat de demostración">
+  <div class="chead">Asistente Demo<small>Responde al instante · demo</small></div>
+  <div class="chead2">Prueba lo que un chatbot de Polux haría por tu negocio</div>
+  <div id="chatBody"></div>
+  <div class="quick">
+    <button data-q="horario">Horario</button>
+    <button data-q="reserva">Reservar</button>
+    <button data-q="domicilio">Domicilio</button>
+  </div>
+</div>
+
+<script>
+// Reserva
+document.getElementById('rbtn').addEventListener('click',()=>{
+  const d=document.getElementById('rdia').value||'fecha de ejemplo';
+  const h=document.getElementById('rhora').value, p=document.getElementById('rper').value;
+  document.getElementById('rres').textContent=d+' · '+h+' · '+p+' persona(s)';
+  document.getElementById('conf').style.display='block';
+});
+// Chat demo
+const panel=document.getElementById('chatPanel'),body=document.getElementById('chatBody');
+document.getElementById('chatBtn').addEventListener('click',()=>{
+  panel.classList.toggle('open');
+  if(panel.classList.contains('open')&&!body.children.length)bot('¡Hola! Soy el asistente demo. Pregúntame por horario, reservas o domicilio.');
+});
+function add(txt,cls){const m=document.createElement('div');m.className='msg '+cls;m.textContent=txt;body.appendChild(m);body.scrollTop=body.scrollHeight}
+function bot(t){setTimeout(()=>add(t,'in'),450)}
+const R={
+  horario:'Abrimos todos los días de 11:00 AM a 10:00 PM. 🕐',
+  reserva:'Puedes reservar arriba en "Reserva tu mesa" o dime día y hora y la anoto. 📅',
+  domicilio:'¡Claro! Hacemos domicilio en la zona con seguimiento en vivo del repartidor. 🛵'
+};
+document.querySelectorAll('.quick button').forEach(b=>b.addEventListener('click',()=>{
+  add(b.textContent,'out');bot(R[b.dataset.q]);
+}));
+</script>
+<script src="../personalizar.js"></script>
+</body>
+</html>
