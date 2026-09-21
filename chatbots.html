@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Diseños de chatbot — Polux</title>
+<link rel="stylesheet" href="chatbots-shared.css">
 <style>
 :root{
   --fondo:#0A0A0C; --fondo2:#101016; --tarjeta:#15151d; --borde:#262633;
@@ -33,155 +34,6 @@ header.top h1 em{font-style:normal;color:var(--acento)}
 .fchip.on{border-color:var(--acento);background:rgba(168,85,247,.16);color:#fff;font-weight:700}
 .count{color:var(--muted);font-size:.82rem;margin:18px 0 6px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:16px;padding:6px 0 120px}
-.cb-tile{position:relative;background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;
-  padding:0;cursor:pointer;color:inherit;font-family:inherit;text-align:center;overflow:hidden;
-  transition:transform .18s,border-color .18s,box-shadow .18s}
-.cb-tile:hover{transform:translateY(-4px);border-color:var(--acento)}
-.cb-art{display:block;aspect-ratio:3/4;width:100%;background:#0c0c12}
-.cb-name{display:block;font-weight:800;font-size:.88rem;padding:10px 8px 0}
-.cb-sub{display:block;color:var(--muted);font-size:.7rem;letter-spacing:.06em;padding:2px 8px 12px;text-transform:uppercase}
-.vacio{grid-column:1/-1;text-align:center;color:var(--muted);padding:60px 20px}
-/* ===== tarjeta: la burbuja flotante en grande sobre el fondo de su familia ===== */
-.cb-art{position:relative;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1.04;width:100%;overflow:hidden}
-.cb-demo-pill{position:absolute;top:10px;right:10px;z-index:3;font-size:.58rem;letter-spacing:.16em;font-weight:800;
-  color:#0A0A0C;background:#c084fc;border-radius:999px;padding:4px 10px}
-.cb-art-name{position:absolute;bottom:9px;left:0;right:0;z-index:3;text-align:center;font-size:.66rem;
-  letter-spacing:.24em;font-weight:800;color:rgba(244,242,250,.88);text-transform:uppercase;text-shadow:0 2px 8px rgba(0,0,0,.65)}
-.cb-bubble{position:relative;width:92px;height:92px;flex:none;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,var(--ac),var(--ac2));box-shadow:var(--glow);color:#fff}
-.cb-bubble i{position:relative;z-index:2;font-style:normal;font-size:2.4rem;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
-/* geometrías */
-.geo-circle{border-radius:50%}
-.geo-squircle{border-radius:30%}
-.geo-hex{clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%);filter:drop-shadow(0 8px 16px rgba(0,0,0,.5))}
-.geo-diamond{clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);filter:drop-shadow(0 8px 16px rgba(0,0,0,.5))}
-.geo-speech{border-radius:26px}
-.geo-speech::before{content:"";position:absolute;left:15px;bottom:-11px;width:26px;height:26px;
-  background:var(--ac2);clip-path:polygon(0 0,100% 0,18% 100%)}
-.geo-pill{border-radius:999px;width:120px}
-.geo-blob{border-radius:58% 42% 55% 45%/48% 55% 45% 52%}
-.geo-ring{border-radius:50%}
-.geo-ring::before{content:"";position:absolute;inset:-11px;border-radius:50%;border:3px dashed var(--ac);
-  opacity:.8;animation:cbRingSpin 9s linear infinite}
-.geo-arch{border-radius:50% 50% 14px 14px/62% 62% 14px 14px;height:106px}
-.geo-gem{clip-path:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%);filter:drop-shadow(0 8px 16px rgba(0,0,0,.5))}
-/* animaciones: solo transform/opacidad (baratas en iPhone) */
-.an-pulse{animation:cbPulse 2.6s ease-in-out infinite}
-.an-float{animation:cbFloat 3.4s ease-in-out infinite}
-.an-wobble{animation:cbWobble 3s ease-in-out infinite}
-.an-bob{animation:cbBob 3.2s ease-in-out infinite}
-.an-breathe{animation:cbBreathe 3.8s ease-in-out infinite}
-.an-ripple::after{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--ac);
-  animation:cbRipple 2.2s ease-out infinite;pointer-events:none}
-.an-spinring::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:2px dashed var(--ac);
-  opacity:.85;animation:cbRingSpin 8s linear infinite;pointer-events:none}
-@keyframes cbPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-@keyframes cbFloat{0%,100%{transform:translateY(-7px)}50%{transform:translateY(7px)}}
-@keyframes cbWobble{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
-@keyframes cbBob{0%,100%{transform:translateY(-5px) rotate(-3deg)}50%{transform:translateY(5px) rotate(3deg)}}
-@keyframes cbBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-@keyframes cbRipple{0%{transform:scale(1);opacity:.75}100%{transform:scale(1.65);opacity:0}}
-@keyframes cbRingSpin{to{transform:rotate(360deg)}}
-@keyframes cbBgDrift{to{background-position:var(--dx,24px) var(--dy,0)}}
-/* ===== fondos únicos por familia (CSS puro) ===== */
-.cbg-ateneo{background-color:#12100a;background-image:repeating-radial-gradient(circle at 50% 36%,rgba(217,164,65,.17) 0 2px,transparent 2px 26px)}
-.cbg-pulso{background-color:#100c16;background-image:repeating-linear-gradient(90deg,rgba(179,102,255,.15) 0 6px,transparent 6px 18px);--dx:36px;--dy:0}
-.cbg-burbuja{background-color:#0b1118;background-image:radial-gradient(rgba(124,199,255,.24) 1.6px,transparent 1.8px);background-size:24px 24px;--dx:24px;--dy:24px}
-.cbg-orbita{background-color:#0e0c08;background-image:radial-gradient(rgba(251,191,36,.28) 1.3px,transparent 1.5px),radial-gradient(rgba(251,191,36,.16) 1px,transparent 1.2px);background-size:46px 46px,30px 30px;background-position:0 0,15px 12px}
-.cbg-brasa{background-color:#140d08;background-image:repeating-linear-gradient(45deg,rgba(255,154,61,.14) 0 10px,transparent 10px 22px);--dx:31px;--dy:0}
-.cbg-armonia{background-color:#120d10;background-image:radial-gradient(circle at 20% 25%,rgba(240,166,184,.15),transparent 44%),radial-gradient(circle at 82% 78%,rgba(240,166,184,.11),transparent 48%)}
-.cbg-barberia{background-color:#100c08;background-image:repeating-linear-gradient(45deg,rgba(224,138,60,.20) 0 12px,rgba(244,242,250,.06) 12px 24px);--dx:34px;--dy:0}
-.cbg-cafeteria{background-color:#100c08;background-image:repeating-radial-gradient(circle at 72% 28%,rgba(208,128,64,.15) 0 3px,transparent 3px 30px)}
-.cbg-gym{background-color:#100a0a;background-image:repeating-linear-gradient(45deg,rgba(255,68,68,.10) 0 2px,transparent 2px 8px),repeating-linear-gradient(-45deg,rgba(255,68,68,.10) 0 2px,transparent 2px 8px)}
-.cbg-veterinaria{background-color:#0a120c;background-image:radial-gradient(rgba(76,175,109,.24) 1.6px,transparent 1.8px);background-size:26px 26px;--dx:26px;--dy:26px}
-.cbg-inmobiliaria{background-color:#0e0d08;background-image:linear-gradient(rgba(201,162,39,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(201,162,39,.12) 1px,transparent 1px);background-size:28px 28px;--dx:28px;--dy:28px}
-.cbg-taller{background-color:#12100a;background-image:repeating-linear-gradient(-45deg,rgba(255,196,0,.15) 0 14px,rgba(0,0,0,.28) 14px 28px);--dx:40px;--dy:0}
-.cbg-floreria{background-color:#100b0d;background-image:radial-gradient(rgba(209,138,153,.20) 3px,transparent 3.4px);background-size:32px 32px;--dx:32px;--dy:32px}
-.cbg-panaderia{background-color:#100d08;background-image:repeating-linear-gradient(0deg,rgba(217,164,65,.13) 0 2px,transparent 2px 14px);--dx:0;--dy:14px}
-.cbg-dental{background-color:#0b1214;background-image:radial-gradient(circle at 78% 18%,rgba(64,196,196,.16),transparent 46%),radial-gradient(rgba(64,196,196,.22) 1.5px,transparent 1.7px);background-size:auto,24px 24px}
-.cbg-hotel{background-color:#100d08;background-image:repeating-radial-gradient(circle at 50% 0,rgba(212,175,106,.14) 0 2px,transparent 2px 24px)}
-.cbg-fotografo{background-color:#0d0a0c;background-image:radial-gradient(circle at 50% 42%,transparent 40%,rgba(0,0,0,.55) 100%),radial-gradient(rgba(255,59,59,.20) 1.2px,transparent 1.4px);background-size:auto,34px 34px}
-.cbg-tienda{background-color:#0e1008;background-image:radial-gradient(rgba(200,240,46,.20) 4.5px,transparent 5px);background-size:36px 36px;--dx:36px;--dy:36px}
-.cbg-pizzeria{background-color:#100b0a;background-image:conic-gradient(rgba(224,82,64,.13) 25%,transparent 0 50%,rgba(224,82,64,.13) 0 75%,transparent 0);background-size:38px 38px}
-.cbg-belleza{background-color:#0f0d08;background-image:repeating-linear-gradient(115deg,rgba(212,175,90,.11) 0 3px,transparent 3px 18px),radial-gradient(circle at 24% 76%,rgba(212,175,90,.13),transparent 44%)}
-/* en el chat abierto el fondo puede moverse despacio (una sola superficie) */
-.cb-msgs.mv{animation:cbBgDrift 34s linear infinite}
-/* ===== modal: chat en vivo con el tema elegido ===== */
-.cbm{position:fixed;inset:0;z-index:100;background:rgba(5,5,8,.72);backdrop-filter:blur(6px);
-  display:none;align-items:flex-end;justify-content:center}
-.cbm.open{display:flex}
-@media(min-width:640px){.cbm{align-items:center;padding:20px}}
-.cbm-box{position:relative;width:100%;max-width:440px;max-height:94vh;max-height:94dvh;background:#101016;
-  border:1px solid var(--borde);border-radius:22px 22px 0 0;overflow:hidden;display:flex;flex-direction:column}
-@media(min-width:640px){.cbm-box{border-radius:22px}}
-.cbm-x{position:absolute;top:10px;right:10px;z-index:6;width:34px;height:34px;border-radius:50%;
-  background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:1rem;cursor:pointer}
-/* El área de mensajes usa layout de bloque (NO flex-column): así ninguna burbuja
-   puede pintarse fuera del área de scroll ni montarse sobre las sugerencias. */
-.cb-live{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;background:var(--cb-bg);height:min(540px,64vh);height:min(540px,64dvh)}
-.cb-head{flex:none;display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--cb-head);border-bottom:1px solid var(--cb-bord)}
-.cb-head.ctr{flex-direction:column;gap:8px;text-align:center;padding:16px}
-.cb-av{width:44px;height:44px;flex:none;border-radius:var(--cb-av);background:linear-gradient(135deg,var(--cb-ac),var(--ac2,#7c3aed));color:#fff;
-  display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;box-shadow:var(--cb-glow)}
-.cb-av.geo-pill{width:64px}
-.cb-av.geo-arch{height:52px}
-.cb-av.geo-circle{border-radius:50%}
-.cb-av.geo-squircle{border-radius:30%}
-.cb-av.geo-pill{border-radius:999px}
-.cb-av.geo-blob{border-radius:58% 42% 55% 45%/48% 55% 45% 52%}
-.cb-av.geo-ring{border-radius:50%}
-.cb-av.geo-speech{border-radius:12px}
-.cb-av.geo-arch{border-radius:50% 50% 8px 8px/60% 60% 8px 8px}
-.cb-tt{min-width:0;flex:1}
-.cb-tt b{display:block;font-size:.95rem;color:#f4f2fa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cb-tt small{display:block;font-size:.75rem;color:#a7a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cb-head.ctr .cb-tt{flex:none}
-.cb-demo{margin-left:auto;flex:none;font-size:.65rem;letter-spacing:.18em;font-weight:800;color:#0A0A0C;background:#c084fc;border-radius:999px;padding:5px 12px}
-.cb-head.ctr .cb-demo{margin-left:0}
-.cb-note{flex:none;padding:10px 16px 0;color:#a7a3b8;font-size:.78rem}
-.cb-msgs{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:14px 16px}
-.cb-msg{max-width:84%;padding:10px 14px;border-radius:var(--cb-br);font-size:.9rem;line-height:1.45;margin:0 0 10px;overflow-wrap:break-word}
-.cb-msg.bot{margin-right:auto;background:var(--cb-bot);color:var(--cb-bottx);border:1px solid var(--cb-botbd);border-bottom-left-radius:var(--cb-tail)}
-.cb-msg.user{margin-left:auto;background:var(--cb-user);color:var(--cb-usertx);border:1px solid var(--cb-userbd);border-bottom-right-radius:var(--cb-tail);font-weight:600}
-.cb-typing{margin:0 auto 10px 0;width:max-content;max-width:84%;background:var(--cb-bot);border:1px solid var(--cb-botbd);
-  border-radius:var(--cb-br);border-bottom-left-radius:var(--cb-tail);padding:12px 16px;display:flex;gap:5px}
-.cb-typing i{width:7px;height:7px;border-radius:50%;background:#a7a3b8;animation:cbt .9s infinite}
-.cb-typing i:nth-child(2){animation-delay:.15s}.cb-typing i:nth-child(3){animation-delay:.3s}
-@keyframes cbt{0%,100%{opacity:.3}50%{opacity:1}}
-.cb-chips{flex:none;display:flex;gap:8px;padding:4px 16px 10px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.cb-chips::-webkit-scrollbar{display:none}
-.cb-chip{flex:none;border:1px solid var(--cb-ac);background:transparent;color:#f4f2fa;border-radius:999px;
-  padding:8px 15px;font-size:.8rem;cursor:pointer;white-space:nowrap;font-family:inherit}
-.cb-form{flex:none;display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--cb-bord);background:var(--cb-head)}
-.cb-form input{flex:1;min-width:0;background:var(--cb-inbg);border:1px solid var(--cb-bord);border-radius:999px;
-  color:#fff;padding:11px 16px;font-size:.9rem;outline:none;font-family:inherit}
-.cb-form input:focus{border-color:var(--cb-ac)}
-.cb-form button{width:46px;height:46px;flex:none;border-radius:50%;border:none;background:var(--cb-ac);color:#0A0A0C;font-size:1.2rem;cursor:pointer}
-/* pie del modal: CTA / niveles / canales */
-.cb-foot{flex:none;border-top:1px solid var(--borde);background:#0d0d13;padding:16px;max-height:42vh;max-height:42dvh;overflow-y:auto}
-.cb-cta{width:100%;border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:1rem;border-radius:999px;
-  padding:15px;background:var(--acento);color:#0A0A0C}
-.cb-chlab{font-weight:800;font-size:.95rem;margin-bottom:12px}
-.cb-hint{color:var(--muted);font-size:.9rem;text-align:center;padding:6px 0}
-.cb-lv{display:grid;gap:10px}
-.cb-lvb{display:block;width:100%;text-align:left;background:#15151d;border:1px solid var(--borde);border-radius:14px;
-  padding:14px 16px;cursor:pointer;color:var(--texto);font-family:inherit;transition:border-color .15s}
-.cb-lvb:hover{border-color:var(--acento)}
-.cb-lvb b{display:block;font-size:.95rem;margin-bottom:4px}
-.cb-lvb span{display:block;color:var(--muted);font-size:.82rem;line-height:1.5}
-.cb-lvb.off{opacity:.45;cursor:not-allowed}
-.cb-lvb.off:hover{border-color:var(--borde)}
-.cb-ch{display:grid;gap:10px}
-.cb-chb{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#15151d;border:1px solid var(--borde);
-  border-radius:14px;padding:13px 16px;cursor:pointer;color:var(--texto);font-family:inherit;font-size:.95rem;font-weight:700}
-.cb-chb:hover{border-color:var(--acento)}
-.cb-chb .ic{font-size:1.5rem;flex:none}
-.cb-chb small{display:block;font-weight:400;color:var(--muted);font-size:.76rem}
-.cb-chb.wa{border-color:var(--acento);background:rgba(168,85,247,.1)}
-.fb-f{display:inline-flex;align-items:center;justify-content:center;width:1.6rem;height:1.6rem;border-radius:50%;
-  background:#1877F2;color:#fff;font-weight:800;font-size:1.1rem;line-height:1}
-.cb-copyok{display:none;margin-top:12px;color:var(--acento);font-weight:700;font-size:.88rem;text-align:center}
-.cb-copyok.show{display:block}
 footer{border-top:1px solid var(--borde);padding:26px 0;color:var(--muted);font-size:.85rem;text-align:center}
 </style>
 </head>
@@ -211,74 +63,39 @@ footer{border-top:1px solid var(--borde);padding:26px 0;color:var(--muted);font-
   <div class="grid" id="grid"></div>
 </div>
 
-<!-- ============ Modal: chat en vivo ============ -->
-<div class="cbm" id="cbm" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Chat de demostración">
-  <div class="cbm-box">
-    <button class="cbm-x" id="cbmX" aria-label="Cerrar">✕</button>
-    <div class="cb-live" id="cbLive">
-      <div class="cb-head" id="cbHead">
-        <div class="cb-av" id="cbAv">✦</div>
-        <div class="cb-tt"><b id="cbBotName">—</b><small id="cbBiz">—</small></div>
-        <span class="cb-demo">DEMO</span>
-      </div>
-      <div class="cb-note">Respuestas programadas — muestra de diseño, no IA real.</div>
-      <div class="cb-msgs" id="cbMsgs"></div>
-      <div class="cb-chips" id="cbChips"></div>
-      <form class="cb-form" id="cbForm" autocomplete="off">
-        <input id="cbInput" type="text" placeholder="Escribe aquí…" maxlength="200" aria-label="Escribe tu mensaje">
-        <button type="submit" aria-label="Enviar">➤</button>
-      </form>
-    </div>
-    <div class="cb-foot" id="cbFoot"></div>
-  </div>
-</div>
-
 <footer>
   <div class="wrap">Polux · Diseños de chatbot — demostraciones con respuestas programadas.</div>
 </footer>
 
 <script src="chatbots-motor.js"></script>
+<script src="chatbot-ui.js"></script>
 <script>
 (function(){
 "use strict";
-/* ---------- utilidades ---------- */
-function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
-function applyVars(el,v){
- el.style.cssText='--cb-bg:'+v.bg+';--cb-head:'+v.head+';--cb-ac:'+v.ac+';--cb-ac2:'+v.ac2+';--cb-bot:'+v.bot+';--cb-bottx:'+v.bottx+
- ';--cb-botbd:'+v.botbd+';--cb-user:'+v.user+';--cb-usertx:'+v.usertx+';--cb-userbd:'+v.userbd+';--cb-br:'+v.br+
- ';--cb-tail:'+v.tail+';--cb-av:'+v.av+';--cb-inbg:'+v.inbg+';--cb-bord:'+v.bord+';--cb-glow:'+v.glow+';';
-}
 /* ---------- galería: cada tarjeta = la burbuja flotante en grande ---------- */
-var THEMES=window.CHATBOT_THEMES, FAMS=window.CHATBOT_FAMS;
+var THEMES=window.CHATBOT_THEMES, FAMS=window.CHATBOT_FAMS, UI=window.PoluxChatUI;
 var grid=document.getElementById('grid'), chipsBox=document.getElementById('chips'),
     busca=document.getElementById('busca'), countEl=document.getElementById('count');
 var famSel='Todos', q='';
-function cardHTML(t){
- var v=t.vars;
- return '<span class="cb-art cbg-'+t.fam+'">'+
-  '<span class="cb-bubble '+t.geo.cls+' '+t.anim.cls+'" style="--ac:'+v.ac+';--ac2:'+v.ac2+';--glow:'+v.glow+'"><i>✦</i></span>'+
-  '<span class="cb-demo-pill">DEMO</span>'+
-  '<span class="cb-art-name">Polux</span></span>';
-}
 function render(){
  var h='',n=0;
  THEMES.forEach(function(t){
   if(famSel!=='Todos'&&t.fam!==famSel)return;
   if(q){var hay=(t.nombre+' '+t.famLabel+' '+t.geo.label+' '+t.anim.label+' '+t.data.nicho).toLowerCase();if(hay.indexOf(q)<0)return}
   n++;
-  h+='<button class="cb-tile" data-id="'+t.id+'">'+cardHTML(t)+
-     '<span class="cb-name">'+esc(t.nombre)+'</span><span class="cb-sub">Recepcionista IA · '+esc(t.anim.label)+'</span></button>';
+  h+='<button class="cb-tile" data-id="'+t.id+'">'+UI.cardHTML(t)+
+     '<span class="cb-name">'+UI.esc(t.nombre)+'</span><span class="cb-sub">Recepcionista IA · '+UI.esc(t.anim.label)+'</span></button>';
  });
  grid.innerHTML=h||'<div class="vacio">Sin resultados para esa búsqueda.</div>';
  countEl.textContent='Mostrando '+n+' de '+THEMES.length+' diseños';
  grid.querySelectorAll('.cb-tile').forEach(function(b){
-  b.addEventListener('click',function(){openTheme(b.dataset.id)});
+  b.addEventListener('click',function(){UI.openTheme(b.dataset.id)});
  });
 }
 function renderChips(){
  var h='<button class="fchip on" data-f="Todos">Todos · 100</button>';
  FAMS.forEach(function(f){
-  h+='<button class="fchip" data-f="'+f.id+'">'+esc(f.label)+'</button>';
+  h+='<button class="fchip" data-f="'+f.id+'">'+UI.esc(f.label)+'</button>';
  });
  chipsBox.innerHTML=h;
  chipsBox.querySelectorAll('.fchip').forEach(function(c){
@@ -290,167 +107,6 @@ function renderChips(){
 }
 busca.addEventListener('input',function(){q=busca.value.trim().toLowerCase();render()});
 renderChips();render();
-
-/* ---------- modal + chat en vivo ---------- */
-var cbm=document.getElementById('cbm'), cbLive=document.getElementById('cbLive'),
-    cbHead=document.getElementById('cbHead'), cbAv=document.getElementById('cbAv'),
-    cbBotName=document.getElementById('cbBotName'), cbBiz=document.getElementById('cbBiz'),
-    cbMsgs=document.getElementById('cbMsgs'), cbChips=document.getElementById('cbChips'),
-    cbForm=document.getElementById('cbForm'), cbInput=document.getElementById('cbInput'),
-    cbFoot=document.getElementById('cbFoot');
-var cur=null, mode='chat', busy=false, specStep=0, specAns=[];
-var WA_NUM='16093316652', FB_MID='61575590535677';
-function scrollMsgs(){requestAnimationFrame(function(){requestAnimationFrame(function(){cbMsgs.scrollTop=cbMsgs.scrollHeight})})}
-function bubble(who,text){
- var d=document.createElement('div');d.className='cb-msg '+who;d.textContent=text;cbMsgs.appendChild(d);scrollMsgs();
-}
-function typing(){
- var d=document.createElement('div');d.className='cb-typing';d.innerHTML='<i></i><i></i><i></i>';cbMsgs.appendChild(d);scrollMsgs();return d;
-}
-function setChips(list){
- cbChips.innerHTML='';
- (list||[]).forEach(function(c){
-  var b=document.createElement('button');b.type='button';b.className='cb-chip';b.textContent=c;
-  b.addEventListener('click',function(){userSay(c)});
-  cbChips.appendChild(b);
- });
-}
-/* Niveles del producto chatbot.
-   FUTURO: el nivel "Con IA" (IA real detrás, ej. Gemini) se agrega como {id:'ia',...}
-   con su propio flujo. PROHIBIDO: poner API keys en esta página estática. */
-var LEVELS=[
- {id:'basico',nombre:'Básico',desc:'Responde con los datos de tu negocio: horarios, citas y preguntas frecuentes. Respuestas programadas, siempre disponible.'},
- {id:'personalizado',nombre:'Personalizado',desc:'Lo diseñamos a tu medida: cuéntanos qué necesitas en el chat y te armamos la cotización.'}
-];
-function footCTA(){
- cbFoot.innerHTML='<button class="cb-cta" id="cbCTA">Quiero un chatbot así →</button>';
- document.getElementById('cbCTA').addEventListener('click',footLevels);
-}
-function footLevels(){
- var h='<div class="cb-chlab">Elige tu nivel</div><div class="cb-lv">';
- LEVELS.forEach(function(l){
-  h+='<button class="cb-lvb" data-lv="'+l.id+'"><b>'+esc(l.nombre)+'</b><span>'+esc(l.desc)+'</span></button>';
- });
- h+='<button class="cb-lvb off" disabled><b>Con IA</b><span>Próximamente</span></button></div>';
- cbFoot.innerHTML=h;
- cbFoot.querySelectorAll('.cb-lvb:not(.off)').forEach(function(b){
-  b.addEventListener('click',function(){
-   if(b.dataset.lv==='basico'){footChannels(buildQuote('basico'));}
-   else{startSpec();}
-  });
- });
-}
-function footHint(t){cbFoot.innerHTML='<p class="cb-hint">'+esc(t)+'</p>'}
-function buildQuote(level){
- var t='Hola Polux, quiero una cotización de chatbot ✨';
- t+='\n• Diseño: '+cur.nombre;
- if(level==='basico'){
-  t+='\n• Nivel: Básico (respuestas programadas)';
-  t+='\n• Estilo: burbuja '+cur.geo.label+' · animación '+cur.anim.label;
- }else{
-  t+='\n• Nivel: Personalizado';
-  t+='\n• Nombre: '+specAns[0];
-  t+='\n• Negocio: '+specAns[1];
-  t+='\n• Necesidades: '+specAns[2];
- }
- return t;
-}
-function copyText(t){
- if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(t);
- return new Promise(function(res,rej){
-  var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();
-  try{document.execCommand('copy')?res():rej(new Error('copy'))}catch(e){rej(e)}
-  document.body.removeChild(ta);
- });
-}
-function sendChannel(ch,quote){
- if(ch==='wa'){window.open('https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(quote),'_blank');}
- else if(ch==='sms'){window.location.href='sms:+'+WA_NUM+'?&body='+encodeURIComponent(quote);}
- else{
-  copyText(quote).then(function(){
-   var ok=document.getElementById('cbCopyOk');if(ok)ok.classList.add('show');
-   window.open(ch==='ig'?'https://ig.me/m/polux.ssee':'https://m.me/'+FB_MID,'_blank');
-  }).catch(function(){alert('No pudimos copiarla: vuelve a intentarlo')});
- }
-}
-function footChannels(quote){
- cbFoot.innerHTML=
- '<div class="cb-chlab">¿Por dónde nos la envías?</div><div class="cb-ch">'+
- '<button class="cb-chb wa" data-ch="wa"><span class="ic">💬</span><span>WhatsApp<small>Se abre con tu cotización lista</small></span></button>'+
- '<button class="cb-chb" data-ch="sms"><span class="ic">✉️</span><span>SMS<small>Texto normal al mismo número</small></span></button>'+
- '<button class="cb-chb" data-ch="ig"><span class="ic">📸</span><span>Instagram<small>Chat de @polux.ssee</small></span></button>'+
- '<button class="cb-chb" data-ch="fb"><span class="ic"><span class="fb-f">f</span></span><span>Facebook<small>Messenger de Polux</small></span></button>'+
- '</div><p class="cb-copyok" id="cbCopyOk">Tu cotización quedó copiada — pégala en el chat ✨</p>';
- cbFoot.querySelectorAll('.cb-chb').forEach(function(b){
-  b.addEventListener('click',function(){sendChannel(b.dataset.ch,quote)});
- });
-}
-/* flujo "Personalizado": el bot recoge nombre, negocio y necesidades */
-function startSpec(){
- mode='spec';specStep=0;specAns=[];
- footHint('Responde las preguntas en el chat 👆');
- botSay('¡Buena elección! Para diseñarlo a tu medida, ¿cómo te llamas?');
- setChips([]);
-}
-function handleSpec(text){
- specAns[specStep]=text;
- var t=typing();
- setTimeout(function(){
-  t.remove();busy=false;specStep++;
-  if(specStep===1){bubble('bot','¡Gracias, '+text+'! ¿Cómo se llama tu negocio?');}
-  else if(specStep===2){bubble('bot','Perfecto. Y ¿qué quieres que haga tu chatbot? Por ejemplo: agendar citas, responder preguntas, tomar pedidos…');}
-  else{
-   mode='chat';
-   bubble('bot','¡Listo! Con esto te armamos tu cotización personalizada 👇');
-   footChannels(buildQuote('personalizado'));
-  }
-  cbInput.focus();
- },650+Math.random()*450);
-}
-function botSay(text){
- var t=typing();
- setTimeout(function(){t.remove();bubble('bot',text)},600+Math.random()*400);
-}
-function userSay(text){
- text=(text||'').trim();if(!text||busy||!cur)return;busy=true;
- cbChips.innerHTML='';cbInput.value='';
- bubble('user',text);
- if(mode==='spec'){handleSpec(text);return}
- var t=typing();
- setTimeout(function(){
-  t.remove();busy=false;
-  bubble('bot',window.ChatbotBrain.replyFor(cur.data,text));
-  setChips(window.ChatbotBrain.chipsFor(cur.data));
-  cbInput.focus();
- },650+Math.random()*450);
-}
-function openTheme(id){
- cur=THEMES.filter(function(t){return t.id===id})[0];if(!cur)return;
- applyVars(cbLive,cur.vars);
- cbAv.className='cb-av '+cur.geo.cls+' '+cur.anim.cls;
- cbAv.textContent='✦';
- cbHead.classList.toggle('ctr',cur.vars.layout==='center');
- cbBotName.textContent='Polux';
- cbBiz.textContent='Diseño '+cur.famLabel+' · '+cur.geo.label+' · Recepcionista IA';
- cbInput.placeholder='Escríbele a Polux…';
- cbMsgs.className='cb-msgs cbg-'+cur.fam+(cur.mv?' mv':'');
- cbMsgs.innerHTML='';mode='chat';busy=false;specStep=0;specAns=[];
- footCTA();
- botSay(window.ChatbotBrain.replyFor(cur.data,'hola'));
- setChips(window.ChatbotBrain.chipsFor(cur.data));
- cbm.classList.add('open');cbm.setAttribute('aria-hidden','false');
- document.body.style.overflow='hidden';
- setTimeout(function(){cbInput.focus()},300);
-}
-function closeTheme(){
- cbm.classList.remove('open');cbm.setAttribute('aria-hidden','true');
- document.body.style.overflow='';cur=null;mode='chat';busy=false;
- cbMsgs.className='cb-msgs';cbAv.className='cb-av';
-}
-document.getElementById('cbmX').addEventListener('click',closeTheme);
-cbm.addEventListener('click',function(e){if(e.target===cbm)closeTheme()});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&cbm.classList.contains('open'))closeTheme()});
-cbForm.addEventListener('submit',function(e){e.preventDefault();userSay(cbInput.value)});
 })();
 </script>
 </body>
