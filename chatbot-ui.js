@@ -20,11 +20,15 @@ function applyVars(el,v){
  ';--cb-botbd:'+v.botbd+';--cb-user:'+v.user+';--cb-usertx:'+v.usertx+';--cb-userbd:'+v.userbd+';--cb-br:'+v.br+
  ';--cb-tail:'+v.tail+';--cb-av:'+v.av+';--cb-inbg:'+v.inbg+';--cb-bord:'+v.bord+';--cb-glow:'+v.glow+';';
 }
-/* ---------- tarjeta: la burbuja flotante en grande ---------- */
+/* ---------- tarjeta: LA BURBUJA en grande (pieza de diseño única) ---------- */
+function glyphSVG(g){
+ return '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+g+'</svg>';
+}
 function cardHTML(t){
  var v=t.vars;
+ var inner=(t.kind==='demo')?'<i>✦</i>':glyphSVG(t.glyph);
  return '<span class="cb-art cbg-'+t.fam+'">'+
-  '<span class="cb-bubble '+t.geo.cls+' '+t.anim.cls+'" style="--ac:'+v.ac+';--ac2:'+v.ac2+';--glow:'+v.glow+'"><i>✦</i></span>'+
+  '<span class="cb-bubble art '+t.tr+'" style="background:'+t.bg+';--gl:'+t.glowc+'">'+inner+'</span>'+
   '<span class="cb-demo-pill">DEMO</span>'+
   '<span class="cb-art-name">Polux</span></span>';
 }
@@ -111,7 +115,7 @@ function buildQuote(level){
  t+='\n• Diseño: '+cur.nombre;
  if(level==='basico'){
   t+='\n• Nivel: Básico (respuestas programadas)';
-  t+='\n• Estilo: burbuja '+cur.geo.label+' · animación '+cur.anim.label;
+  t+='\n• Estilo: '+cur.nombre+' ('+cur.trLabel+')';
  }else{
   t+='\n• Nivel: Personalizado';
   t+='\n• Nombre: '+specAns[0];
@@ -195,11 +199,13 @@ function openTheme(id){
  if(!t)return;
  cur=t;
  applyVars(cbLive,cur.vars);
- cbAv.className='cb-av '+cur.geo.cls+' '+cur.anim.cls;
- cbAv.textContent='✦';
+ cbAv.className='cb-av art '+cur.tr;
+ cbAv.style.background=cur.bg;
+ cbAv.style.setProperty('--gl',cur.glowc);
+ cbAv.innerHTML=(cur.kind==='demo')?'<i>✦</i>':glyphSVG(cur.glyph);
  cbHead.classList.toggle('ctr',cur.vars.layout==='center');
  cbBotName.textContent='Polux';
- cbBiz.textContent='Diseño '+cur.famLabel+' · '+cur.geo.label+' · Recepcionista IA';
+ cbBiz.textContent='Diseño '+cur.nombre+' · Recepcionista IA';
  cbInput.placeholder='Escríbele a Polux…';
  cbMsgs.className='cb-msgs cbg-'+cur.fam+(cur.mv?' mv':'');
  cbMsgs.innerHTML='';mode='chat';busy=false;specStep=0;specAns=[];
@@ -213,7 +219,7 @@ function openTheme(id){
 function closeTheme(){
  cbm.classList.remove('open');cbm.setAttribute('aria-hidden','true');
  document.body.style.overflow='';cur=null;mode='chat';busy=false;
- cbMsgs.className='cb-msgs';cbAv.className='cb-av';
+ cbMsgs.className='cb-msgs';cbAv.className='cb-av';cbAv.style.background='';cbAv.innerHTML='';
 }
 function isOpen(){return cbm.classList.contains('open')}
 document.getElementById('cbmX').addEventListener('click',closeTheme);
