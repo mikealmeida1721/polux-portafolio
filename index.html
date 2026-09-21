@@ -343,16 +343,25 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   function kick(){if(!rafOn){rafOn=true;requestAnimationFrame(tick)}}
   function measure(){copyW=track.scrollWidth/3}
   function centerX(el){return el.offsetLeft-(track.clientWidth-el.offsetWidth)/2}
-  function goTo(k,imm){const idx=((k%n)+n)%n;track.scrollTo({left:centerX(cards[n+idx]),behavior:imm?'auto':'smooth'});poke()}
+  function goTo(k,imm,silent){
+    const idx=((k%n)+n)%n;
+    let x=centerX(cards[n+idx]);
+    /* El destino siempre dentro del tercio central: así el salto del bucle
+       nunca se dispara a mitad de camino y el aterrizaje es exacto. */
+    if(copyW>0){if(x>copyW*1.6)x-=copyW;else if(x<copyW*0.4)x+=copyW}
+    track.scrollTo({left:x,behavior:imm?'auto':'smooth'});
+    if(!silent)poke();
+  }
   window.PoluxWheel={goTo:id=>{const i=DESIGNS.findIndex(d=>d.id===id);if(i>=0)goTo(i)},next:()=>goTo(active+1),prev:()=>goTo(active-1)};
   document.getElementById('wNext').addEventListener('click',()=>goTo(active+1));
   document.getElementById('wPrev').addEventListener('click',()=>goTo(active-1));
   track.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();goTo(active+1)}if(e.key==='ArrowLeft'){e.preventDefault();goTo(active-1)}});
-  /* auto-giro */
+  /* auto-giro: si nadie la toca por 10s, muestra la colección sola;
+     cualquier gesto (o el chatbot) la detiene y el conteo reinicia */
   let autoT=null,idleT=null;
   function stopAuto(){if(autoT){clearInterval(autoT);autoT=null}}
-  function startAuto(){stopAuto();if(!reduced)autoT=setInterval(()=>{if(!document.hidden)goTo(active+1)},6000)}
-  function poke(){stopAuto();clearTimeout(idleT);idleT=setTimeout(startAuto,9000)}
+  function startAuto(){stopAuto();if(!reduced)autoT=setInterval(()=>{if(!document.hidden)goTo(active+1,true,true)},4500)}
+  function poke(){stopAuto();clearTimeout(idleT);idleT=setTimeout(startAuto,10000)}
   track.addEventListener('pointerdown',poke);track.addEventListener('wheel',poke,{passive:true});track.addEventListener('touchstart',poke,{passive:true});
   /* Bucle infinito: 3 copias idénticas; el salto es inmediato y en el mismo
      arrastre (sin soltar), porque el contenido es pixel-idéntico y no se nota. */
