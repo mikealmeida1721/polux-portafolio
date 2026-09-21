@@ -186,7 +186,7 @@ function recMsg(r,lead){
   var nm=nombreDiseno(r.id);
   if(CTX==='hub'&&window.PoluxWheel){try{window.PoluxWheel.goTo(r.id)}catch(e){}}
   return lead+' el diseño <b>'+nm+'</b> encaja muy bien por '+r.porque+'.'+
-    (CTX==='hub'?' Lo puse al frente para que lo mires 👆':' <a href="../">Míralo en el catálogo →</a>');
+    (CTX==='hub'?' Lo puse al frente 👆 Son muestras: cualquiera se adapta a tu negocio, explora con confianza.':' <a href="../">Míralo en el catálogo →</a>');
 }
 function extractBiz(raw){
   var m=(raw||'').match(/tengo (un|una|mi) ([a-záéíóúñ ]{3,40})/i)||(raw||'').match(/mi negocio es ([a-záéíóúñ ]{3,40})/i)||
