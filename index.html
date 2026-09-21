@@ -95,9 +95,18 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
 .om-empty{font-size:.85rem;color:var(--muted);line-height:1.6;margin:0}
 .pz-chip button{background:none;border:0;color:#fff;font-size:.8rem;cursor:pointer;margin-left:6px;opacity:.8}
 .pz-chip button:hover{opacity:1}
-.demo{position:relative;display:block;aspect-ratio:16/10;border-radius:18px;overflow:hidden;cursor:pointer;background:#000;
+.demo{position:relative;display:block;aspect-ratio:16/10;border-radius:18px;overflow:hidden;cursor:pointer;background:#0d0d13;
   border:1px solid color-mix(in srgb,var(--ac) 38%,#14141c);
   transition:transform .22s,box-shadow .22s,border-color .22s}
+.w-card{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+/* Placeholder con el tinte del diseño: nunca se ve un cuadro negro mientras
+   el iframe carga o durante el deslizamiento rápido (bug 1) */
+.demo .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 30%,#14141c),#0d0d13)}
+.demo .ph b{font-family:var(--cf);font-size:1.7rem;line-height:1.1;color:#fff}
+.demo .ph span{font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;color:color-mix(in srgb,var(--ac) 78%,#fff)}
+.demo .thumb iframe{opacity:0;transition:opacity .45s}
+.demo .thumb iframe.on{opacity:1}
 .demo:hover,.demo:focus-visible{transform:translateY(-6px);border-color:var(--ac);
   box-shadow:0 18px 55px color-mix(in srgb,var(--ac) 32%,transparent);outline:none}
 .rv.vis.demo:hover{transform:translateY(-6px)}
@@ -367,13 +376,20 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
   size();addEventListener('resize',size);
   const P=[];for(let i=0;i<80;i++)P.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*2+.7,v:.15+Math.random()*.45,o:Math.random()*6.28});
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;let t=0;
-  (function tick(){
+  /* Bug 4: el rAF se detiene cuando el hero sale de vista (ahorra CPU/memoria en iPhone) */
+  let heroVis=true, tickOn=false;
+  function tick(){
+    tickOn=true;
     ctx.clearRect(0,0,W,H);t+=.016;
     P.forEach(p=>{p.y-=p.v;if(p.y<-4){p.y=H+4;p.x=Math.random()*W}
       ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);
       ctx.fillStyle='rgba(168,85,247,'+(0.18+0.28*Math.sin(t*2+p.o)).toFixed(3)+')';ctx.fill()});
-    if(!reduced)requestAnimationFrame(tick);
-  })();
+    if(!reduced&&heroVis)requestAnimationFrame(tick);else tickOn=false;
+  }
+  tick();
+  if('IntersectionObserver' in window&&cv.parentElement){
+    new IntersectionObserver(es=>{heroVis=es[0].isIntersecting;if(heroVis&&!tickOn&&!reduced)tick()},{threshold:0}).observe(cv.parentElement);
+  }
 })();
 /* ===== Rueda infinita + favoritos + pedido ===== */
 window.POLUX_WA = window.POLUX_WA || '16093316652';
@@ -403,7 +419,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   const SERVS=['Chatbot','Gestión de reseñas','Contenido para redes','Mensajes SMS','Llamada perdida → SMS','Alojamiento de mi página'];
   const n=DESIGNS.length, track=document.getElementById('wTrack'), reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const cardHTML=d=>`<article class="demo w-card" data-id="${d.id}" data-nombre="${d.nombre}" data-href="${d.href}" style="--ac:${d.ac};--cf:${d.cf}" aria-label="Diseño ${d.nombre}">
-      <span class="thumb"><iframe src="${d.href}?embed=1" loading="lazy" scrolling="no" title="Vista previa — ${d.nombre}" tabindex="-1"></iframe></span>
+      <span class="thumb"><span class="ph"><b>${d.nombre}</b><span>${d.kick}</span></span><iframe data-src="${d.href}?embed=1" src="about:blank" scrolling="no" title="Vista previa — ${d.nombre}" tabindex="-1"></iframe></span>
       <span class="scrim"></span>
       <button class="fav" aria-label="Guardar ${d.nombre} en mi selección" aria-pressed="false">♡</button>
       <span class="meta"><span class="txt"><span class="kick">${d.kick}</span><span class="name">${d.nombre}</span></span><span class="open">Abrir →</span></span>
@@ -412,6 +428,30 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   track.innerHTML=html;
   const cards=[...track.children], countEl=document.getElementById('wCount');
   let active=0, copyW=0;
+  /* Bugs 1+4: los iframes solo viven cerca del viewport (carga perezosa).
+     Antes había 60 documentos vivos a la vez → flash negro al repintar en el
+     deslizamiento y presión de memoria que crashea Safari en iPhone.
+     Lejos del viewport el documento se libera y queda el placeholder con tinte. */
+  if('IntersectionObserver' in window){
+    const ioLoad=new IntersectionObserver(es=>es.forEach(en=>{
+      if(!en.isIntersecting)return;
+      const fr=en.target.querySelector('iframe');
+      if(fr&&!fr.hasAttribute('data-live')){fr.setAttribute('data-live','1');fr.src=fr.getAttribute('data-src');}
+    }),{root:track,rootMargin:'700px 0px'});
+    const ioFree=new IntersectionObserver(es=>es.forEach(en=>{
+      if(en.isIntersecting)return;
+      const fr=en.target.querySelector('iframe');
+      if(fr&&fr.hasAttribute('data-live')){fr.removeAttribute('data-live');fr.classList.remove('on');fr.src='about:blank';}
+    }),{root:track,rootMargin:'1400px 0px'});
+    cards.forEach(c=>{ioLoad.observe(c);ioFree.observe(c)});
+  }else{
+    cards.forEach(c=>{const fr=c.querySelector('iframe');fr.setAttribute('data-live','1');fr.src=fr.getAttribute('data-src')});
+  }
+  /* fundido del iframe solo cuando su documento ya pintó (nunca negro de golpe) */
+  track.addEventListener('load',e=>{
+    const fr=e.target;
+    if(fr&&fr.tagName==='IFRAME'&&fr.hasAttribute('data-live'))fr.classList.add('on');
+  },true);
   /* Efecto 3D interpolado: los valores se acercan poco a poco al objetivo,
      así nada "salta" de tamaño — todo llega fluido, incluso en el salto del bucle. */
   const st3d=cards.map(()=>({r:0,s:1,o:1}));
@@ -452,7 +492,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   /* Deriva continua estilo marquesina: si nadie la toca por 10s, la rueda
      empieza a girar sola de forma fluida (sin saltos de tarjeta en tarjeta).
      Cualquier gesto —o el chatbot— la detiene y el conteo de 10s reinicia. */
-  let driftOn=false, driftRaf=null, idleT=null, lastTouch=0;
+  let driftOn=false, driftRaf=null, idleT=null, lastTouch=0, wheelVisible=true;
   const DRIFT_PX=2.6; /* ~156px/s: una vuelta completa en ~41s con 20 diseños */
   function driftStep(){
     if(!driftOn)return;
@@ -460,7 +500,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     driftRaf=requestAnimationFrame(driftStep);
   }
   function startDrift(){
-    if(driftOn||reduced||document.hidden)return;
+    if(driftOn||reduced||document.hidden||!wheelVisible)return;
     driftOn=true;
     track.style.scrollSnapType='none'; /* el snap pelearía con la deriva */
     driftRaf=requestAnimationFrame(driftStep);
@@ -473,9 +513,13 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   }
   function poke(){lastTouch=Date.now();stopDrift();clearTimeout(idleT);idleT=setTimeout(startDrift,10000)}
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stopDrift()});
+  /* Bug 4: la deriva también se detiene cuando la rueda sale de vista */
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(es=>{wheelVisible=es[0].isIntersecting;if(!wheelVisible)stopDrift()},{threshold:0}).observe(document.getElementById('wheel'));
+  }
   /* Vigilante: si pasan 10s sin interacción, la deriva arranca sí o sí.
      (Respaldo por si algún temporizador se pierde en el camino.) */
-  setInterval(()=>{if(!driftOn&&!reduced&&!document.hidden&&Date.now()-lastTouch>10000)startDrift()},3000);
+  setInterval(()=>{if(!driftOn&&!reduced&&!document.hidden&&wheelVisible&&Date.now()-lastTouch>10000)startDrift()},3000);
   track.addEventListener('pointerdown',poke);track.addEventListener('wheel',poke,{passive:true});track.addEventListener('touchstart',poke,{passive:true});
   /* Bucle infinito: 3 copias idénticas; el salto es inmediato y en el mismo
      arrastre (sin soltar), porque el contenido es pixel-idéntico y no se nota. */
@@ -714,16 +758,20 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
   function dockNow(st){
     st.dockRaf=0;
     if(reduced){clearDock(st);return}
-    var tiles=st.strip.children,best=null,bi=-1,bd=1e9,i,b,c,d;
-    for(i=0;i<tiles.length;i++){b=tiles[i].getBoundingClientRect();c=b.left+b.width/2;d=Math.abs(c-st.dockX);if(d<bd){bd=d;best=tiles[i];bi=i}}
+    var tiles=st.strip.children,n=tiles.length,best=null,bi=-1,bd=1e9,i,b,c,d;
+    /* Bug 2: ventana local alrededor del dedo (~9 mediciones en vez de 100+).
+       Medir todos los tiles en cada frame del scroll atascaba el hilo principal. */
+    var rb=st.row.getBoundingClientRect();
+    var approx=Math.round((st.dockX-rb.left+st.row.scrollLeft-36)/st.step);
+    for(i=Math.max(0,approx-4);i<Math.min(n,approx+5);i++){b=tiles[i].getBoundingClientRect();c=b.left+b.width/2;d=Math.abs(c-st.dockX);if(d<bd){bd=d;best=tiles[i];bi=i}}
     if(!best||bd>120){clearDock(st);return}
+    clearDock(st);
     var on=[];
-    for(i=0;i<tiles.length;i++){
-      var s=1;
-      if(i===bi)s=1.6;else if(Math.abs(i-bi)===1)s=1.2;
-      tiles[i].style.transform=s===1?'':'scale('+s+')';
-      tiles[i].style.zIndex=s===1?'':'2';
-      if(s!==1)on.push(tiles[i]);
+    for(i=Math.max(0,bi-1);i<Math.min(n,bi+2);i++){
+      var s=(i===bi)?1.6:1.2;
+      tiles[i].style.transform='scale('+s+')';
+      tiles[i].style.zIndex='2';
+      on.push(tiles[i]);
     }
     st.docked=on.length?on:null;
   }
@@ -902,24 +950,45 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     d.dx=Math.min(Math.max(dx,fr.left+d.r-d.baseCx),fr.right-d.r-d.baseCx);
     d.dy=Math.min(Math.max(dy,fr.top+d.r-d.baseCy),fr.bottom-d.r-d.lb-d.baseCy);
   }
+  /* Bug 3: el estado de arrastre no debe atascarse nunca.
+     Registro pointerId→burbuja + ruteo a nivel window (por si el pointerup no
+     llega al elemento) + lostpointercapture + limpieza forzada en pointerdown. */
+  var dragByPid={};
   function endDrag(o,e,cancelled){
     var d=dragState(o);
     if(d.pid===null||(e&&e.pointerId!==d.pid))return;
+    delete dragByPid[d.pid];
     d.pid=null;
-    o.el.classList.remove('dragging');
-    o.el.style.animationPlayState=''; /* reanudar solo la subida */
+    o.el.classList.remove('dragging'); /* SIEMPRE restaurar z-index */
+    o.el.style.animationPlayState=''; /* SIEMPRE reanudar la subida */
     o.dragged=false; /* vuelve al repel */
     if(cancelled)o.el._dragged=true; /* pointercancel: no abrir el modal */
     /* si fue tap (moved=false), el click natural abre el modal */
   }
+  /* Respaldo a nivel window: si el pointerup/pointercancel no llegó a la burbuja
+     (captura fallida, dedo fuera del elemento), se rutea por pointerId. */
+  window.addEventListener('pointerup',function(e){
+    var o=dragByPid[e.pointerId];
+    if(o)endDrag(o,e,false);
+  },true);
+  window.addEventListener('pointercancel',function(e){
+    var o=dragByPid[e.pointerId];
+    if(o)endDrag(o,e,true);
+  },true);
   for(var k=0;k<bits.length;k++)(function(o){
     var b=o.el;
     b.addEventListener('pointerdown',function(e){
       var d=dragState(o);
-      if(d.pid!==null)return; /* una burbuja, un dedo a la vez */
+      if(d.pid!==null){
+        /* Arrastre anterior atascado (o segundo dedo en la misma burbuja):
+           limpiarlo a la fuerza para que el dedo nuevo sí tome la burbuja. */
+        endDrag(o,null,true);
+        d=dragState(o);
+      }
       b._dragged=false;
       d.pid=e.pointerId;d.sx=e.clientX;d.sy=e.clientY;d.moved=false;
       d.dx0=d.dx;d.dy0=d.dy;
+      dragByPid[e.pointerId]=o;
       measureBase(o);
       try{b.setPointerCapture(e.pointerId)}catch(_){}
     });
@@ -941,6 +1010,11 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     });
     b.addEventListener('pointerup',function(e){endDrag(o,e,false)});
     b.addEventListener('pointercancel',function(e){endDrag(o,e,true)});
+    /* Si la captura se pierde sin pointerup (típico en iOS), terminar igual */
+    b.addEventListener('lostpointercapture',function(e){
+      var d=dragState(o);
+      if(d.pid!==null&&e.pointerId===d.pid)endDrag(o,null,true);
+    });
   })(bits[k]);
   /* en resize, re-clampear los offsets persistentes que queden fuera */
   var rzT=null;
