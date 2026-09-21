@@ -163,11 +163,17 @@ p.sub{text-align:center;color:var(--muted);margin-bottom:40px;max-width:660px;ma
 .sis small{color:var(--muted);font-size:.76rem;line-height:1.4;display:block}
 .sis.on{border-color:var(--acento);background:rgba(168,85,247,.12)}
 .sis.on .sis-x{opacity:1}
-.sis-custom{border:1.5px dashed var(--acento);background:rgba(168,85,247,.07);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:8px;min-height:196px}
-.sis-custom:hover{background:rgba(168,85,247,.14)}
-.sis-custom .sis-plus{font-size:1.5rem;color:var(--acento);line-height:1}
-.sis-custom b{font-size:.95rem}
-.sis-custom small{color:var(--muted);font-size:.78rem;line-height:1.45;display:block}
+.sis-custom{display:none}
+/* Idea libre: panel ancho con campo de texto directo en la sección */
+.sis-idea{margin-top:14px;background:rgba(168,85,247,.06);border:1.5px dashed var(--acento);border-radius:16px;padding:18px}
+.si-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.si-x{font-size:1.4rem;color:var(--acento);line-height:1.2;flex:none}
+.si-head b{font-size:1rem;display:block;margin-bottom:4px}
+.si-head small{color:var(--muted);font-size:.8rem;line-height:1.5;display:block}
+.sis-idea textarea{width:100%;background:#0d0d13;border:1px solid var(--borde);border-radius:12px;color:#fff;padding:12px 14px;font-size:.92rem;outline:none;font-family:inherit;resize:vertical;min-height:84px;line-height:1.5}
+.sis-idea textarea:focus{border-color:var(--acento)}
+.sis-idea textarea::placeholder{color:var(--muted);opacity:.8}
+.si-note{font-size:.74rem;color:var(--muted);margin-top:8px}
 /* Combos de ejemplo: sistemas reales que se marcan de un toque */
 .sis-combos{display:flex;gap:10px;margin-top:14px;overflow-x:auto;padding:4px 2px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .sis-combos::-webkit-scrollbar{display:none}
@@ -290,6 +296,11 @@ footer img{width:34px;height:34px;border-radius:50%;vertical-align:middle;margin
     <h2 class="sec rv">Sistemas a medida</h2>
     <p class="sub rv">Más que una página: el sistema que opera tu negocio por dentro.<br>Marca con ✦ lo que necesitas — entra directo en tu cotización.</p>
     <div class="sis-grid rv" id="sisGrid"></div>
+    <div class="sis-idea rv">
+      <div class="si-head"><span class="si-x">✦</span><div><b>¿Algo diferente? Describe tu idea</b><small>Si lo que buscas no está aquí — otro estilo de página, un sistema para tu negocio, o todo junto — escríbelo. Llega directo en tu cotización.</small></div></div>
+      <textarea id="sisIdea" rows="3" placeholder="Ej.: tengo un negocio de piezas de PC y reparaciones; quiero una página futurista estilo Apple y un sistema para inventario y órdenes de trabajo…"></textarea>
+      <p class="si-note">Se incluye automáticamente cuando pidas tu cotización ↓</p>
+    </div>
     <div class="sis-combos rv" id="sisCombos"></div>
     <div style="text-align:center;margin-top:26px">
       <button class="btn rv" id="ctaSis" type="button">Pedir cotización con mi sistema →</button>
@@ -630,6 +641,8 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     const id=b.dataset.id;picked.has(id)?picked.delete(id):picked.add(id);b.classList.toggle('on')});
   window.PoluxOrder={open(pre){favs.forEach(id=>picked.add(id));renderOm();
     if(pre&&pre.length)[...omServs.querySelectorAll('input')].forEach(i=>{i.checked=pre.indexOf(i.value)>=0});
+    var omC=document.getElementById('omCustom');
+    if(omC&&!omC.value.trim()&&window.PoluxIdea){var iv=window.PoluxIdea.get();if(iv)omC.value=iv;}
     omBack.classList.add('open')}};
   function closeOm(){omBack.classList.remove('open')}
   document.getElementById('omX').addEventListener('click',closeOm);
@@ -645,6 +658,7 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     const servs=[...omServs.querySelectorAll('input:checked')].map(i=>i.value).join(', ');
     const nom=document.getElementById('omNombre').value.trim(), neg=document.getElementById('omNegocio').value.trim();
     const custom=document.getElementById('omCustom').value.trim();
+    if(window.PoluxIdea&&custom!==window.PoluxIdea.get())window.PoluxIdea.set(custom);
     const logo=document.querySelector('input[name=omLogo]:checked').value;
     let txt='Hola Polux, quiero una cotización personalizada ✨';
     if(dis)txt+='\n• Diseño base: '+dis;
@@ -1135,16 +1149,16 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     });
     grid.appendChild(b);
   });
-  /* Tarjeta especial: "¿Algo diferente?" — abre la cotización con el campo de texto */
+  /* Idea libre: campo ancho en la sección; se guarda y viaja en la cotización */
   (function(){
-    var c=document.createElement('button');
-    c.type='button';c.className='sis sis-custom';
-    c.innerHTML='<span class="sis-plus">✦</span><b>¿Algo diferente?</b><small>Descríbenos lo que necesitas y lo diseñamos a tu medida</small>';
-    c.addEventListener('click',function(){
-      window.PoluxOrder.open();
-      setTimeout(function(){var t=document.getElementById('omCustom');if(t){t.scrollIntoView({block:'center',behavior:'smooth'});t.focus({preventScroll:true});}},380);
-    });
-    grid.appendChild(c);
+    var ta=document.getElementById('sisIdea');if(!ta)return;
+    var KEY='poluxIdea';
+    try{ta.value=localStorage.getItem(KEY)||'';}catch(e){}
+    ta.addEventListener('input',function(){try{localStorage.setItem(KEY,ta.value);}catch(e){}});
+    window.PoluxIdea={
+      get:function(){return ta.value.trim();},
+      set:function(v){ta.value=v||'';try{localStorage.setItem(KEY,ta.value);}catch(e){}}
+    };
   })();
   /* Combos de ejemplo: un toque marca las capacidades del sistema */
   (function(){
