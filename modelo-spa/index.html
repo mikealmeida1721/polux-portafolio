@@ -20,8 +20,8 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo);line-height:1.65}
 .wrap{max-width:1060px;margin:0 auto;padding:0 20px}
-.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acento);border:1px solid var(--acento);border-radius:999px;padding:5px 14px;background:rgba(247,244,236,.9)}
-.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:rgba(247,244,236,.9);border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acento);border:1px solid var(--acento);border-radius:999px;padding:5px 14px;background:var(--tarjeta)}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:var(--tarjeta);border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
 .volver:hover{color:var(--acento);border-color:var(--acento)}
 header.site{border-bottom:1px solid var(--borde);background:linear-gradient(180deg,var(--fondo2),var(--fondo));padding-top:52px}
 .bar{display:flex;align-items:center;gap:16px;padding:18px 0}
@@ -62,7 +62,7 @@ p.sub{color:var(--muted);margin-bottom:24px}
 #recorrido{height:320vh;padding:0;position:relative;background:#0c1512}
 #recorrido .pin{position:sticky;top:0;height:100vh;overflow:hidden}
 #ritual{position:absolute;inset:0;width:100%;height:100%}
-.pin .kicker{position:absolute;top:26px;left:0;right:0;text-align:center;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:#7ba889;z-index:2}
+.pin .kicker{position:absolute;top:26px;left:0;right:0;text-align:center;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--acento2);z-index:2}
 .etapas{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2}
 .etapa{position:absolute;text-align:center;max-width:560px;padding:0 24px;opacity:0;transform:translateY(26px);transition:opacity .5s,transform .5s}
 .etapa.ver{opacity:1;transform:none}
@@ -77,7 +77,7 @@ p.sub{color:var(--muted);margin-bottom:24px}
 .campo label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:6px}
 .campo input,.campo select{width:100%;background:var(--fondo);border:1px solid var(--borde);border-radius:10px;color:var(--texto);padding:11px 14px;font-size:1rem}
 .campo input:focus,.campo select:focus{outline:none;border-color:var(--acento)}
-.confirm{display:none;background:#eef5ee;border:1px solid var(--acento2);border-radius:12px;padding:20px;margin-top:6px}
+.confirm{display:none;background:var(--fondo2);border:1px solid var(--acento2);border-radius:12px;padding:20px;margin-top:6px}
 .confirm.ver{display:block}
 .confirm h4{font-family:var(--fuente-titular);color:var(--acento);margin-bottom:6px}
 /* Testimonios */
@@ -93,7 +93,7 @@ p.sub{color:var(--muted);margin-bottom:24px}
 footer.site{border-top:1px solid var(--borde);padding:30px 0;color:var(--muted);font-size:.88rem;text-align:center}
 footer.site a{color:var(--acento)}
 /* Chat demo */
-.chat-fab{position:fixed;right:20px;bottom:20px;z-index:99;width:58px;height:58px;border-radius:50%;background:var(--acento);color:#fff;border:none;font-size:1.5rem;cursor:pointer;box-shadow:0 6px 20px rgba(79,122,106,.4)}
+.chat-fab{position:fixed;right:20px;bottom:20px;z-index:99;width:58px;height:58px;border-radius:50%;background:var(--acento);color:#fff;border:none;font-size:1.5rem;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.28)}
 .chat-panel{position:fixed;right:20px;bottom:90px;z-index:99;width:min(340px,calc(100vw - 40px));background:var(--tarjeta);border:1px solid var(--borde);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.18);display:none;flex-direction:column;overflow:hidden}
 .chat-panel.ver{display:flex}
 .chat-head{background:var(--acento);color:#fff;padding:12px 16px;font-weight:700;font-size:.95rem}
@@ -224,6 +224,11 @@ footer.site a{color:var(--acento)}
   </div>
 </section>
 
+<section class="pz-ideal" style="padding:60px 20px;text-align:center;border-top:1px solid var(--borde)">
+  <p style="max-width:640px;margin:0 auto;color:var(--muted);font-size:1.02rem;line-height:1.7"><strong style="color:var(--texto);font-size:1.15rem">¿Este estilo es para tu negocio?</strong><br>Ideal para spas, centros de bienestar, estudios de yoga y clínicas estéticas.</p>
+  <button onclick="var b=document.getElementById('pz-fab');b&&b.click()" style="margin-top:18px;background:var(--acento);color:#fff;border:none;border-radius:999px;padding:13px 30px;font-weight:700;cursor:pointer;font-size:.95rem">Verlo con mis colores 🎨</button>
+  <p style="margin-top:12px;font-size:.82rem;color:var(--muted)">Si te gustaron varios, los combinamos en tu página a medida.</p>
+</section>
 <footer class="site" id="contacto">
   <div class="wrap">
     <p><strong style="font-family:var(--fuente-titular);color:var(--texto)">Armonía Spa</strong> · Calle Ejemplo 123 · (555) 000-0000</p>
@@ -260,8 +265,12 @@ document.getElementById('formReserva').addEventListener('submit',e=>{
   const ctx=cv.getContext('2d'),DPR=Math.min(2,devicePixelRatio||1);
   let W,H;function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
   size();addEventListener('resize',size);
-  const COLS=['rgba(201,168,106,','rgba(123,168,137,','rgba(190,160,140,'];
-  const P=[];for(let i=0;i<46;i++)P.push({x:Math.random()*W,y:Math.random()*H,r:3+Math.random()*5,vy:.25+Math.random()*.5,vx:.15+Math.random()*.35,rot:Math.random()*6.28,vr:(Math.random()-.5)*.02,c:COLS[i%3]});
+  const V=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const hexRGB=h=>{h=(h||'#888888').replace('#','');if(h.length===3)h=h.split('').map(x=>x+x).join('');return [parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]};
+  let COLS=[];
+  function refrescar(){COLS=[hexRGB(V('--dorado')),hexRGB(V('--acento2')),hexRGB(V('--acento'))];}
+  refrescar();addEventListener('polux-palette',refrescar);
+  const P=[];for(let i=0;i<46;i++)P.push({x:Math.random()*W,y:Math.random()*H,r:3+Math.random()*5,vy:.25+Math.random()*.5,vx:.15+Math.random()*.35,rot:Math.random()*6.28,vr:(Math.random()-.5)*.02,c:i%3});
   const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;let t=0;
   (function tick(){
     ctx.clearRect(0,0,W,H);t+=.016;
@@ -269,7 +278,7 @@ document.getElementById('formReserva').addEventListener('submit',e=>{
       if(p.y>H+12){p.y=-12;p.x=Math.random()*W} if(p.x>W+12)p.x=-12;
       ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);
       ctx.beginPath();ctx.ellipse(0,0,p.r*1.7,p.r,0,0,7);
-      ctx.fillStyle=p.c+(0.35+0.25*Math.sin(t*2+p.rot)).toFixed(3)+')';ctx.fill();ctx.restore()});
+      ctx.fillStyle=`rgba(${COLS[p.c][0]},${COLS[p.c][1]},${COLS[p.c][2]},${(0.35+0.25*Math.sin(t*2+p.rot)).toFixed(3)})`;ctx.fill();ctx.restore()});
     if(!REDUCED)requestAnimationFrame(tick);
   })();
 })();
@@ -282,7 +291,10 @@ document.getElementById('formReserva').addEventListener('submit',e=>{
   const DPR=Math.min(2,devicePixelRatio||1);let W,H;
   function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
   size();addEventListener('resize',()=>{size();draw()});
-  const PET=[];for(let i=0;i<34;i++)PET.push({rx:Math.random(),ry:Math.random(),r:3+Math.random()*5,o:Math.random()*6.28,c:['#c9a86a','#7ba889','#d8c6a8'][i%3]});
+  const V=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const PET=[];for(let i=0;i<34;i++)PET.push({rx:Math.random(),ry:Math.random(),r:3+Math.random()*5,o:Math.random()*6.28,c:i%3});
+  function refrescarPET(){const cs=[V('--dorado'),V('--acento2'),V('--acento')];PET.forEach(p=>p.cc=cs[p.c]);}
+  refrescarPET();addEventListener('polux-palette',refrescarPET);
   let p=0;
   function loto(x,y,b){
     const anillos=[{n:8,r:110,c1:'#dcead9',c2:'#9dbfa2'},{n:8,r:72,c1:'#f0f6ec',c2:'#b7d3ba'},{n:6,r:40,c1:'#fffdf4',c2:'#e3d5a8'}];
@@ -298,7 +310,7 @@ document.getElementById('formReserva').addEventListener('submit',e=>{
         ctx.fillStyle=g;ctx.fill();
       }
     });
-    ctx.beginPath();ctx.arc(x,y,4+9*b,0,7);ctx.fillStyle='#c9a86a';ctx.fill();
+    ctx.beginPath();ctx.arc(x,y,4+9*b,0,7);ctx.fillStyle=V('--dorado');ctx.fill();
   }
   function draw(){
     const bg=ctx.createLinearGradient(0,0,0,H);
@@ -325,7 +337,7 @@ document.getElementById('formReserva').addEventListener('submit',e=>{
       const x=((pt.rx+p*.9)%1)*W,y=pt.ry*H+Math.sin(p*22+pt.o)*14;
       ctx.save();ctx.translate(x,y);ctx.rotate(pt.o+p*3);
       ctx.globalAlpha=(.12+.5*w2);
-      ctx.beginPath();ctx.ellipse(0,0,pt.r*1.7,pt.r,0,0,7);ctx.fillStyle=pt.c;ctx.fill();
+      ctx.beginPath();ctx.ellipse(0,0,pt.r*1.7,pt.r,0,0,7);ctx.fillStyle=pt.cc||pt.c;ctx.fill();
       ctx.restore();
     });
     ctx.globalAlpha=1;
