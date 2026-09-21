@@ -26,12 +26,16 @@ function getParams(){
   return q;
 }
 var q = getParams();
+var EMBED = q.embed === '1'; // miniatura dentro del hub: sin botones ni badges
 
 function setAccent(hex){
   if(HEX.test(hex)) root.style.setProperty('--acento','#'+hex);
 }
 function setFondo(hex){
   if(HEX.test(hex)) root.style.setProperty('--fondo','#'+hex);
+}
+function setTexto(hex){
+  if(HEX.test(hex)) root.style.setProperty('--texto','#'+hex);
 }
 function setNombre(nombre){
   if(!nombre) return;
@@ -69,13 +73,21 @@ function clearLogo(){
 }
 
 function aplicarTodo(){
-  setAccent(q.c); setFondo(q.f);
+  setAccent(q.c); setFondo(q.f); setTexto(q.t);
   setNombre(q.n); setTagline(q.s); setLogo(q.logo);
+  try{ window.dispatchEvent(new Event('polux-palette')); }catch(e){}
 }
 aplicarTodo();
 
+if(EMBED){
+  // ocultar badges y botones dentro de las miniaturas del hub
+  ['.demo-badge','.volver'].forEach(function(sel){
+    document.querySelectorAll(sel).forEach(function(el){ el.style.display='none'; });
+  });
+} else {
 /* ---------- Panel flotante "Personalizar" ---------- */
 var btn = document.createElement('button');
+btn.id = 'pz-fab';
 btn.textContent = '🎨 Personalizar';
 btn.setAttribute('aria-label','Personalizar demo');
 btn.style.cssText = 'position:fixed;left:20px;bottom:20px;z-index:120;background:#111;color:#fff;border:1px solid #444;border-radius:999px;padding:10px 18px;font-size:.85rem;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.25)';
@@ -92,6 +104,7 @@ panel.innerHTML =
     '<label>Color<br><input id="pz-c" type="color" value="#4f7a6a" style="width:100%;height:36px;border:1px solid #ddd2ba;border-radius:8px"></label>' +
     '<label>Fondo<br><input id="pz-f" type="color" value="#f7f4ec" style="width:100%;height:36px;border:1px solid #ddd2ba;border-radius:8px"></label>' +
   '</div>' +
+  '<div style="margin-bottom:10px"><div style="font-size:.78rem;color:#75807a;margin-bottom:6px">Paletas listas — combinaciones que no se arruinan:</div><div id="pz-paletas" style="display:flex;gap:8px;flex-wrap:wrap"></div></div>' +
   '<label style="display:block;margin-bottom:4px">Logo (URL de imagen)<br><input id="pz-logo" placeholder="https://…" style="width:100%;padding:8px;border:1px solid #ddd2ba;border-radius:8px;margin-top:4px"></label>' +
   '<label style="display:block;margin-bottom:10px;font-size:.78rem;color:#75807a">o súbelo (solo se ve en esta vista)<br><input id="pz-file" type="file" accept="image/*" style="margin-top:4px"></label>' +
   '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
@@ -106,12 +119,45 @@ btn.addEventListener('click', function(){
   panel.style.display = panel.style.display==='none' ? 'block' : 'none';
 });
 
+// Paletas curadas: combinaciones que no se arruinan (acento, fondo, texto)
+var PALETAS = [
+  {n:'Océano',    c:'0e7c8c', f:'f2f7f7', t:'14343c'},
+  {n:'Terracota', c:'c1553b', f:'faf5ef', t:'3a2a20'},
+  {n:'Bosque',    c:'3f6b4f', f:'f4f6f1', t:'22302a'},
+  {n:'Medianoche',c:'a855f7', f:'121218', t:'eceaf2'},
+  {n:'Dorado',    c:'a67c1a', f:'faf7ef', t:'3a2f1d'},
+  {n:'Rosa',      c:'d63384', f:'fdf2f7', t:'4a2438'}
+];
+var palBox = document.getElementById('pz-paletas');
+PALETAS.forEach(function(p){
+  var b = document.createElement('button');
+  b.title = p.n; b.setAttribute('aria-label','Paleta '+p.n);
+  b.style.cssText = 'width:38px;height:38px;border-radius:50%;cursor:pointer;border:2px solid #ddd2ba;background:linear-gradient(135deg,#'+p.c+' 50%,#'+p.f+' 50%);padding:0';
+  b.addEventListener('click', function(){
+    document.getElementById('pz-c').value = '#'+p.c;
+    document.getElementById('pz-f').value = '#'+p.f;
+    q.c = p.c; q.f = p.f; q.t = p.t; aplicarTodo();
+    try{ history.replaceState(null,'',construirURL(leer())); }catch(e){}
+  });
+  palBox.appendChild(b);
+});
+// Si elige el fondo a mano, el texto se ajusta solo para no romperse
+function luminancia(hex){
+  var h=hex.replace('#',''),r=parseInt(h.substr(0,2),16)/255,g=parseInt(h.substr(2,2),16)/255,b=parseInt(h.substr(4,2),16)/255;
+  return 0.2126*r+0.7152*g+0.0722*b;
+}
+document.getElementById('pz-f').addEventListener('input', function(e){
+  q.t = luminancia(e.target.value) < 0.45 ? 'eceaf2' : '1f2937';
+  setTexto(q.t);
+});
+
 function leer(){
   return {
     n: document.getElementById('pz-n').value.trim(),
     s: document.getElementById('pz-s').value.trim(),
     c: document.getElementById('pz-c').value.replace('#',''),
     f: document.getElementById('pz-f').value.replace('#',''),
+    t: q.t || '',
     logo: document.getElementById('pz-logo').value.trim()
   };
 }
@@ -121,6 +167,7 @@ function construirURL(v){
   if(v.s) p.set('s', v.s);
   if(v.c) p.set('c', v.c);
   if(v.f) p.set('f', v.f);
+  if(v.t && HEX.test(v.t)) p.set('t', v.t);
   if(v.logo) p.set('logo', v.logo);
   var base = (location.origin && location.origin !== 'null')
     ? location.origin + location.pathname
@@ -128,7 +175,7 @@ function construirURL(v){
   return base + (p.toString() ? '?'+p.toString() : '');
 }
 document.getElementById('pz-aplicar').addEventListener('click', function(){
-  var v = leer(); q = { n:v.n||undefined, s:v.s||undefined, c:v.c, f:v.f, logo:v.logo||undefined };
+  var v = leer(); q = { n:v.n||undefined, s:v.s||undefined, c:v.c, f:v.f, t:v.t||undefined, logo:v.logo||undefined };
   aplicarTodo();
   try{ history.replaceState(null,'',construirURL(v)); }catch(e){}
 });
@@ -157,4 +204,5 @@ try{
   document.getElementById('pz-f').value = (q.f && HEX.test(q.f)) ? '#'+q.f : (HEX.test(fon.replace('#','')) ? fon : '#f7f4ec');
   if(q.logo) document.getElementById('pz-logo').value = q.logo;
 }catch(e){}
+} // fin else (no EMBED)
 })();
