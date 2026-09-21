@@ -812,12 +812,16 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     b.style.setProperty('--dur',dur.toFixed(2)+'s');
     b.style.setProperty('--del',(-(rnd()*dur)).toFixed(2)+'s');
     var sw=(4.5+rnd()*4).toFixed(2);
-    b.innerHTML='<span class="cb-sway" style="--sw:'+sw+'s;--swd:-'+(rnd()*9).toFixed(2)+'s">'+
+    b.innerHTML='<span class="cb-drag"><span class="cb-sway" style="--sw:'+sw+'s;--swd:-'+(rnd()*9).toFixed(2)+'s">'+
       '<span class="cb-repel">'+
       UI.bubbleHTML(t,-(rnd()*4).toFixed(2))+
       '<span class="cb-bname">'+UI.esc(t.nombre)+'</span>'+
-      '<span class="cb-bdemo">DEMO</span></span></span>';
-    b.addEventListener('click',function(){UI.openTheme(t.id)});
+      '<span class="cb-bdemo">DEMO</span></span></span></span>';
+    b.addEventListener('click',function(e){
+      /* si fue arrastre (>=10px), suprimir el click posterior */
+      if(b._dragged){b._dragged=false;e.preventDefault();e.stopPropagation();return}
+      UI.openTheme(t.id);
+    });
     return b;
   }
   if(reduced){
@@ -851,13 +855,16 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     if(active&&now-lastSample>120){
       lastSample=now;
       for(var i=0;i<bits.length;i++){
+        if(bits[i].dragged)continue; /* la arrastrada no recalcula layout */
         var r=bits[i].bub.getBoundingClientRect();
         bits[i].cx=r.left+r.width/2;bits[i].cy=r.top+r.height/2;
       }
     }
     var need=false;
     for(var j=0;j<bits.length;j++){
-      var o=bits[j],dx=o.cx-ppx,dy=o.cy-ppy,d=Math.sqrt(dx*dx+dy*dy);
+      var o=bits[j];
+      if(o.dragged)continue; /* fuera del repel mientras se arrastra */
+      var dx=o.cx-ppx,dy=o.cy-ppy,d=Math.sqrt(dx*dx+dy*dy);
       if(active&&d<R&&d>1){var f=(1-d/R)*MAXP;o.tx=dx/d*f;o.ty=dy/d*f}
       else{o.tx=0;o.ty=0}
       o.ox+=(o.tx-o.ox)*0.2;o.oy+=(o.ty-o.oy)*0.2;
@@ -873,6 +880,81 @@ window.POLUX_WA = window.POLUX_WA || '16093316652';
     if(need)raf=requestAnimationFrame(loop);
   }
   function kick(){if(!raf&&!pausedNow())raf=requestAnimationFrame(loop)}
+  /* ---------- arrastre con el dedo: mover burbujas una por una ----------
+     El offset persistente vive en --dx/--dy (nivel .cb-drag), separado de
+     la subida (.cb-bit, animación CSS), el balanceo (.cb-sway) y el repel
+     (.cb-repel, --px/--py). Tap (<10px) abre el modal; arrastre no. */
+  function dragState(o){return o.d||(o.d={pid:null,sx:0,sy:0,dx0:0,dy0:0,dx:0,dy:0,baseCx:0,baseCy:0,r:40,lb:44,moved:false})}
+  function setOff(o){
+    o.el.style.setProperty('--dx',o.d.dx.toFixed(1)+'px');
+    o.el.style.setProperty('--dy',o.d.dy.toFixed(1)+'px');
+  }
+  function measureBase(o){
+    var d=dragState(o);
+    var bub=o.el.querySelector('.cb-bubble'),br=bub.getBoundingClientRect(),rr=o.el.getBoundingClientRect();
+    d.r=br.width/2;
+    d.lb=Math.max(0,rr.bottom-br.bottom);
+    d.baseCx=br.left+d.r-d.dx;   /* centro sin el offset de arrastre actual */
+    d.baseCy=br.top+br.height/2-d.dy;
+  }
+  function clampOff(o,dx,dy){
+    var d=dragState(o),fr=field.getBoundingClientRect();
+    d.dx=Math.min(Math.max(dx,fr.left+d.r-d.baseCx),fr.right-d.r-d.baseCx);
+    d.dy=Math.min(Math.max(dy,fr.top+d.r-d.baseCy),fr.bottom-d.r-d.lb-d.baseCy);
+  }
+  function endDrag(o,e,cancelled){
+    var d=dragState(o);
+    if(d.pid===null||(e&&e.pointerId!==d.pid))return;
+    d.pid=null;
+    o.el.classList.remove('dragging');
+    o.el.style.animationPlayState=''; /* reanudar solo la subida */
+    o.dragged=false; /* vuelve al repel */
+    if(cancelled)o.el._dragged=true; /* pointercancel: no abrir el modal */
+    /* si fue tap (moved=false), el click natural abre el modal */
+  }
+  for(var k=0;k<bits.length;k++)(function(o){
+    var b=o.el;
+    b.addEventListener('pointerdown',function(e){
+      var d=dragState(o);
+      if(d.pid!==null)return; /* una burbuja, un dedo a la vez */
+      b._dragged=false;
+      d.pid=e.pointerId;d.sx=e.clientX;d.sy=e.clientY;d.moved=false;
+      d.dx0=d.dx;d.dy0=d.dy;
+      measureBase(o);
+      try{b.setPointerCapture(e.pointerId)}catch(_){}
+    });
+    b.addEventListener('pointermove',function(e){
+      var d=dragState(o);
+      if(d.pid===null||e.pointerId!==d.pid)return;
+      if(!d.moved&&Math.hypot(e.clientX-d.sx,e.clientY-d.sy)>10){
+        d.moved=true;b._dragged=true;
+        b.classList.add('dragging'); /* z-index alto + cursor grabbing */
+        b.style.animationPlayState='paused'; /* pausa solo la subida; el balanceo sigue */
+        o.dragged=true; /* excluir del repel mientras se arrastra */
+        o.tx=0;o.ty=0;o.ox=0;o.oy=0;
+        b.style.setProperty('--px','0px');b.style.setProperty('--py','0px');
+      }
+      if(d.moved){
+        clampOff(o,d.dx0+(e.clientX-d.sx),d.dy0+(e.clientY-d.sy));
+        setOff(o);
+      }
+    });
+    b.addEventListener('pointerup',function(e){endDrag(o,e,false)});
+    b.addEventListener('pointercancel',function(e){endDrag(o,e,true)});
+  })(bits[k]);
+  /* en resize, re-clampear los offsets persistentes que queden fuera */
+  var rzT=null;
+  window.addEventListener('resize',function(){
+    clearTimeout(rzT);
+    rzT=setTimeout(function(){
+      for(var i=0;i<bits.length;i++){
+        var o=bits[i],d=dragState(o);
+        if(d.pid!==null)continue;
+        if(d.dx===0&&d.dy===0)continue;
+        measureBase(o);clampOff(o,d.dx,d.dy);setOff(o);
+      }
+    },200);
+  });
   /* pausar cuando el modal abre, cuando la pestaña se oculta o el campo sale de vista */
   function refreshPause(){
     var p=UI.isOpen()||document.hidden||!inView;
