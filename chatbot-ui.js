@@ -32,6 +32,13 @@ function cardHTML(t){
   '<span class="cb-demo-pill">DEMO</span>'+
   '<span class="cb-art-name">Polux</span></span>';
 }
+/* ---------- burbuja limpia: SOLO la burbuja, sin cuadros ni contenedores ----------
+   La usa el campo ascendente del hub y la retícula de la galería. */
+function bubbleHTML(t,delay){
+ var inner=(t.kind==='demo')?'<i>✦</i>':glyphSVG(t.glyph);
+ var st='background:'+t.bg+';--gl:'+t.glowc+';'+(delay?('animation-delay:'+delay+'s;'):'');
+ return '<span class="cb-bubble art '+t.tr+'" style="'+st+'">'+inner+'</span>';
+}
 /* ---------- modal (se inyecta una sola vez) ---------- */
 var cbm=document.getElementById('cbm');
 if(!cbm){
@@ -227,5 +234,5 @@ cbm.addEventListener('click',function(e){if(e.target===cbm)closeTheme()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&isOpen())closeTheme()});
 cbForm.addEventListener('submit',function(e){e.preventDefault();userSay(cbInput.value)});
 /* API pública para la galería y el hub */
-window.PoluxChatUI={openTheme:openTheme,closeTheme:closeTheme,isOpen:isOpen,cardHTML:cardHTML,esc:esc};
+window.PoluxChatUI={openTheme:openTheme,closeTheme:closeTheme,isOpen:isOpen,cardHTML:cardHTML,bubbleHTML:bubbleHTML,esc:esc};
 })();
