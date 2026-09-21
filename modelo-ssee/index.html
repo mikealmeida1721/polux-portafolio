@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Negocio Demo — Panel Interactivo (Modelo base)</title>
+<style>
+/* ============================================================
+   PERSONALIZACIÓN RÁPIDA — cambia logo y colores aquí (2 min)
+   --logo: pega la URL del logo del prospecto (o deja "" y se usa texto)
+   ============================================================ */
+:root{
+  --logo: "";
+  --fondo:#1c1917; --fondo2:#292524; --tarjeta:#292524; --borde:#44403c;
+  --acento:#fbbf24; --acento2:#d97706;
+  --texto:#e7e5e4; --muted:#a8a29e;
+  --fuente-titular: Georgia, "Times New Roman", serif;
+  --fuente-cuerpo: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fuente-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--fondo);color:var(--texto);font-family:var(--fuente-cuerpo);line-height:1.6}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.mono{font-family:var(--fuente-mono)}
+/* Distintivo demo */
+.demo-badge{position:fixed;top:12px;right:12px;z-index:99;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:#1c1917;background:var(--acento);border-radius:999px;padding:5px 14px;opacity:.95;font-weight:700}
+.volver{position:fixed;top:12px;left:12px;z-index:99;font-size:.75rem;color:var(--muted);text-decoration:none;background:#292524;border:1px solid var(--borde);border-radius:999px;padding:5px 14px}
+.volver:hover{color:var(--acento);border-color:var(--acento)}
+/* Header */
+header.site{background:rgba(28,25,23,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--borde);position:sticky;top:0;z-index:50;padding-top:44px}
+.bar{display:flex;align-items:center;gap:14px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--texto)}
+.logo-slot{width:46px;height:46px;border-radius:10px;border:2px solid var(--acento);background:var(--logo) center/contain no-repeat,#292524;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--acento);font-size:1.2rem;font-family:var(--fuente-mono)}
+.brand b{font-family:var(--fuente-titular);letter-spacing:.12em;font-size:1.05rem}
+.brand small{display:block;font-size:.66rem;letter-spacing:.24em;color:var(--muted);text-transform:uppercase;font-family:var(--fuente-mono)}
+nav.menu{margin-left:auto;display:flex;gap:20px;font-size:.85rem;align-items:center;font-family:var(--fuente-mono);letter-spacing:.08em}
+nav.menu a{color:var(--muted);text-decoration:none}
+nav.menu a:hover{color:var(--acento)}
+.btn{display:inline-block;background:var(--acento);color:#1c1917;font-weight:700;text-decoration:none;padding:12px 26px;border-radius:8px;border:none;cursor:pointer;font-size:1rem;font-family:var(--fuente-mono);letter-spacing:.04em}
+.btn:hover{background:var(--acento2);color:#fff}
+.btn.ghost{background:transparent;color:var(--acento);border:1px solid var(--acento)}
+.btn.ghost:hover{background:var(--acento);color:#1c1917}
+/* Hero */
+.hero{position:relative;overflow:hidden;padding:90px 0 70px;text-align:center;border-bottom:1px solid var(--borde)}
+#red{position:absolute;inset:0;opacity:.55}
+.hero .wrap{position:relative}
+.hero .kicker{font-family:var(--fuente-mono);font-size:.78rem;letter-spacing:.3em;color:var(--acento);text-transform:uppercase;margin-bottom:18px}
+.hero h1{font-family:var(--fuente-titular);font-size:clamp(2.2rem,5.5vw,3.8rem);letter-spacing:.1em;margin-bottom:16px}
+.hero h1 em{font-style:normal;color:var(--acento)}
+.hero p.lead{max-width:640px;margin:0 auto 30px;color:var(--muted)}
+.hero .ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+/* Stats */
+.stats{border-bottom:1px solid var(--borde);background:var(--fondo2)}
+.stats .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.stat{padding:28px 18px;text-align:center;border-left:1px solid var(--borde)}
+.stat:first-child{border-left:none}
+.stat .n{font-family:var(--fuente-mono);font-size:2rem;color:var(--acento);font-weight:700}
+.stat .l{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-family:var(--fuente-mono)}
+/* Secciones */
+section.bloque{padding:64px 0}
+h2.sec{font-family:var(--fuente-titular);font-size:1.9rem;letter-spacing:.08em;margin-bottom:6px}
+h2.sec::before{content:"◆ ";color:var(--acento);font-size:.7em}
+p.sub{color:var(--muted);margin-bottom:32px;max-width:640px}
+/* Registros */
+.regs{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.reg{background:var(--tarjeta);border:1px solid var(--borde);border-radius:10px;padding:26px;transition:border-color .18s,transform .18s}
+.reg:hover{border-color:var(--acento);transform:translateY(-4px)}
+.reg .cod{font-family:var(--fuente-mono);font-size:.72rem;letter-spacing:.18em;color:var(--acento);text-transform:uppercase;margin-bottom:10px}
+.reg h3{font-family:var(--fuente-titular);font-size:1.2rem;margin-bottom:8px;letter-spacing:.04em}
+.reg p{color:var(--muted);font-size:.93rem}
+/* Terminal */
+.term{background:#0c0a09;border:1px solid var(--borde);border-radius:10px;overflow:hidden;max-width:760px;margin:0 auto}
+.term .tbar{display:flex;gap:8px;padding:12px 16px;border-bottom:1px solid var(--borde);align-items:center}
+.term .tbar i{width:11px;height:11px;border-radius:50%;display:block}
+.term .tbar span{margin-left:8px;font-family:var(--fuente-mono);font-size:.75rem;color:var(--muted)}
+#tout{font-family:var(--fuente-mono);font-size:.88rem;padding:22px;min-height:220px;white-space:pre-wrap;color:#d6d3d1}
+#tout .p{color:var(--acento)}
+#tout .ok{color:#10b981}
+.cursor{display:inline-block;width:9px;height:16px;background:var(--acento);vertical-align:-3px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+/* Protocolos */
+.protos{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.proto{border:1px solid var(--borde);border-radius:10px;padding:30px 26px;background:linear-gradient(180deg,#292524,#1c1917);text-align:center}
+.proto .num{font-family:var(--fuente-mono);font-size:2.4rem;color:var(--acento);margin-bottom:6px}
+.proto h3{font-family:var(--fuente-titular);letter-spacing:.1em;margin-bottom:10px}
+.proto p{color:var(--muted);font-size:.92rem}
+/* Testimonios */
+.testis{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.testi{background:var(--tarjeta);border:1px solid var(--borde);border-radius:10px;padding:26px}
+.testi .stars{color:var(--acento);margin-bottom:8px;letter-spacing:.1em}
+.testi p{font-style:italic;color:#d6d3d1}
+.testi footer{margin-top:10px;font-size:.85rem;color:var(--muted)}
+.testi .eje{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acento);font-style:normal;font-family:var(--fuente-mono)}
+/* CTA */
+.cta{border:1px solid var(--acento);border-radius:14px;padding:52px 32px;text-align:center;background:radial-gradient(600px 260px at 50% 0,rgba(251,191,36,.12),transparent)}
+.cta h2{font-family:var(--fuente-titular);letter-spacing:.08em;font-size:1.8rem;margin-bottom:10px}
+.cta p{color:var(--muted);margin-bottom:26px}
+footer.site{background:#0c0a09;border-top:1px solid var(--borde);padding:34px 0;text-align:center;font-size:.88rem;color:var(--muted)}
+footer.site a{color:var(--acento)}
+@media(max-width:900px){.regs,.protos{grid-template-columns:1fr}.stats .wrap{grid-template-columns:1fr 1fr}.stat{border-left:none;border-top:1px solid var(--borde)}.testis{grid-template-columns:1fr}nav.menu a:not(.btn){display:none}}
+</style>
+</head>
+<body>
+<div class="demo-badge">Diseño demo</div>
+<a class="volver" href="../index.html">← Portafolio</a>
+
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="#">
+      <span class="logo-slot" data-logo>N</span>
+      <span><b data-nombre>NEGOCIO DEMO</b><small data-tagline>Registro interactivo</small></span>
+    </a>
+    <nav class="menu">
+      <a href="#registros">REGISTROS</a>
+      <a href="#terminal">TERMINAL</a>
+      <a href="#protocolos">PROTOCOLOS</a>
+      <a class="btn ghost" href="#cta" style="padding:9px 18px">Demo →</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <canvas id="red"></canvas>
+  <div class="wrap">
+    <div class="kicker">// Panel interactivo en vivo</div>
+    <h1>REGISTRO <em>MAESTRO</em></h1>
+    <p class="lead">Un sitio oscuro e interactivo que muestra tus datos, tus procesos y tu operación en tiempo real. Así se ve la tecnología de tu negocio cuando Polux la instala.</p>
+    <div class="ctas">
+      <a class="btn" href="#registros">Explorar registros</a>
+      <a class="btn ghost" href="#terminal">Ver terminal</a>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="wrap">
+    <div class="stat"><div class="n" data-n="99.98" data-suf="%">0%</div><div class="l">Disponibilidad</div></div>
+    <div class="stat"><div class="n" data-n="12480" data-suf="+">0</div><div class="l">Registros activos</div></div>
+    <div class="stat"><div class="n" data-n="24" data-suf="/7">0</div><div class="l">Monitoreo</div></div>
+    <div class="stat"><div class="n" data-n="3.2" data-suf="s">0</div><div class="l">Respuesta media</div></div>
+  </div>
+</div>
+
+<section class="bloque" id="registros">
+  <div class="wrap">
+    <h2 class="sec">Registros del sistema</h2>
+    <p class="sub">Cada bloque es una capacidad real que instalamos: datos visibles, procesos claros, todo bajo un mismo panel.</p>
+    <div class="regs">
+      <div class="reg"><div class="cod">REGISTRO · 01</div><h3>Tablero en vivo</h3><p>Tus números importantes a la vista: ventas, citas, inventario. Sin hojas de cálculo perdidas.</p></div>
+      <div class="reg"><div class="cod">REGISTRO · 02</div><h3>Bitácora automática</h3><p>Cada pedido, cada mensaje y cada cambio queda registrado con fecha y hora.</p></div>
+      <div class="reg"><div class="cod">REGISTRO · 03</div><h3>Alertas inteligentes</h3><p>El sistema avisa cuando algo necesita tu atención. Tú decides, él vigila.</p></div>
+      <div class="reg"><div class="cod">REGISTRO · 04</div><h3>Historial por cliente</h3><p>Todo lo de cada cliente en un solo lugar: compras, mensajes y preferencias.</p></div>
+      <div class="reg"><div class="cod">REGISTRO · 05</div><h3>Reportes simples</h3><p>Resúmenes claros cada semana, sin tecnicismos. Lo que importa, al grano.</p></div>
+      <div class="reg"><div class="cod">REGISTRO · 06</div><h3>Respaldo seguro</h3><p>Tu información copiada y protegida. Si algo falla, se restaura en minutos.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="terminal" style="background:var(--fondo2);border-top:1px solid var(--borde);border-bottom:1px solid var(--borde)">
+  <div class="wrap">
+    <h2 class="sec">Terminal de operaciones</h2>
+    <p class="sub">Así se ve por dentro: el sistema trabajando mientras tú atiendes tu negocio.</p>
+    <div class="term">
+      <div class="tbar"><i style="background:#f43f5e"></i><i style="background:#fbbf24"></i><i style="background:#10b981"></i><span>polux — sesión demo</span></div>
+      <div id="tout"></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="protocolos">
+  <div class="wrap">
+    <h2 class="sec">Protocolos de instalación</h2>
+    <p class="sub">Nada es genérico: cada protocolo se configura para tu operación.</p>
+    <div class="protos">
+      <div class="proto"><div class="num">I</div><h3>CONEXIÓN</h3><p>Conectamos tus herramientas actuales: agenda, inventario, WhatsApp y redes.</p></div>
+      <div class="proto"><div class="num">II</div><h3>ENTRENAMIENTO</h3><p>El asistente aprende tu negocio: tus precios, tus horarios, tu forma de atender.</p></div>
+      <div class="proto"><div class="num">III</div><h3>CUIDADO HUMANO</h3><p>Una persona supervisa que todo funcione. La tecnología trabaja, el humano cuida.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" style="padding-top:0">
+  <div class="wrap">
+    <h2 class="sec">Lo que dicen (ejemplos)</h2>
+    <p class="sub">Testimonios de ejemplo para mostrar el formato.</p>
+    <div class="testis">
+      <div class="testi"><div class="stars">★★★★★</div><p>"Desde que instalaron el panel veo todo mi negocio en una pantalla. Ya no se me escapa nada."</p><footer>— Cliente de ejemplo · <span class="eje">Testimonio de ejemplo</span></footer></div>
+      <div class="testi"><div class="stars">★★★★★</div><p>"El asistente responde a mis clientes de noche y yo amanezco con las citas listas."</p><footer>— Cliente de ejemplo · <span class="eje">Testimonio de ejemplo</span></footer></div>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="cta" style="padding-top:0">
+  <div class="wrap">
+    <div class="cta">
+      <h2>¿Y SI FUERA TU NEGOCIO?</h2>
+      <p>Te mostramos tu vista previa personalizada con tu logo y tus colores. Sin compromiso.</p>
+      <a class="btn" href="../index.html#modelos">Pedir mi vista previa</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <p><strong class="mono">NEGOCIO DEMO</strong> · Panel interactivo · Contenido ficticio de demostración</p>
+    <p style="margin-top:8px">Diseño demo por <a href="../index.html">Polux</a> — caso de estudio · proyecto piloto. Modelo base personalizable.</p>
+  </div>
+</footer>
+
+<script>
+// Red de partículas
+(function(){
+  const c=document.getElementById('red'),x=c.getContext('2d');let W,H,pts=[];
+  function size(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight}
+  size();addEventListener('resize',size);
+  for(let i=0;i<70;i++)pts.push({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.0009,vy:(Math.random()-.5)*.0009});
+  (function tick(){
+    x.clearRect(0,0,W,H);
+    pts.forEach(p=>{p.x=(p.x+p.vx+1)%1;p.y=(p.y+p.vy+1)%1});
+    x.strokeStyle='rgba(251,191,36,.14)';x.lineWidth=1;
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=dx*dx+dy*dy;
+      if(d<.012){x.beginPath();x.moveTo(pts[i].x*W,pts[i].y*H);x.lineTo(pts[j].x*W,pts[j].y*H);x.stroke()}
+    }
+    x.fillStyle='#fbbf24';
+    pts.forEach(p=>{x.beginPath();x.arc(p.x*W,p.y*H,1.6,0,7);x.fill()});
+    requestAnimationFrame(tick);
+  })();
+})();
+// Contadores
+(function(){
+  const els=document.querySelectorAll('.stat .n');let done=false;
+  function fmt(v,suf){return (v>=1000?Math.round(v).toLocaleString('en-US'):v.toFixed(v%1?1:2).replace(/\.00$/,''))+suf}
+  function run(){
+    if(done)return;done=true;
+    els.forEach(el=>{
+      const target=parseFloat(el.dataset.n),suf=el.dataset.suf||'',t0=performance.now();
+      (function step(t){const k=Math.min(1,(t-t0)/1400),e=1-Math.pow(1-k,3);
+        el.textContent=fmt(target*e,suf);if(k<1)requestAnimationFrame(step)})(t0);
+    });
+  }
+  new IntersectionObserver(e=>{if(e[0].isIntersecting)run()},{threshold:.3}).observe(els[0]);
+})();
+// Terminal escribiendo
+(function(){
+  const out=document.getElementById('tout');
+  const lines=[
+    ['p','$ polux conectar --negocio "demo"'],
+    ['ok','✓ Conectado: agenda · inventario · WhatsApp'],
+    ['p','$ polux entrenar --datos negocio-demo'],
+    ['ok','✓ Asistente listo: conoce precios y horarios'],
+    ['p','$ polux vigilar --24/7'],
+    ['ok','✓ Vigilancia activa. Humano a cargo: tú tranquilo.'],
+    ['','_']
+  ];
+  let li=0;
+  function next(){
+    if(li>=lines.length){out.innerHTML=out.innerHTML.replace('<span class="cursor"></span>','');return}
+    const [cls,txt]=lines[li++];
+    const div=document.createElement('div');if(cls)div.className=cls;
+    out.appendChild(div);out.appendChild(Object.assign(document.createElement('span'),{className:'cursor'}));
+    let ci=0;(function type(){
+      if(ci<=txt.length){div.textContent=txt.slice(0,ci++);setTimeout(type,txt?22:400)}
+      else setTimeout(next,420);
+    })();
+  }
+  new IntersectionObserver(e=>{if(e[0].isIntersecting){next()}},{threshold:.4}).observe(out);
+})();
+</script>
+<script src="../personalizar.js"></script>
+</body>
+</html>
