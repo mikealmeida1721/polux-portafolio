@@ -1932,7 +1932,7 @@ document.getElementById('demoWant').addEventListener('click',function(){
 })();
 </script>
 <script>
-/* Contacto: se llena una vez y viaja solo (cotización ⇄ diagnóstico) */
+/* Contacto: se llena una vez y viaja solo (cotizacion - diagnostico) */
 (function(){
   var KEY='poluxContacto';
   function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return{}}}
@@ -1942,7 +1942,7 @@ document.getElementById('demoWant').addEventListener('click',function(){
     var c=load(),n=el('omNombre'),g=el('omNegocio'),d=el('cvDNombre');
     if(n&&!n.value.trim()&&c.nombre)n.value=c.nombre;
     if(g&&!g.value.trim()&&c.negocio)g.value=c.negocio;
-    if(d&&!d.value.trim()&&(c.nombre||c.negocio))d.value=(c.nombre||'')+(c.negocio?' — '+c.negocio:'');
+    if(d&&!d.value.trim()&&(c.nombre||c.negocio))d.value=(c.nombre||'')+(c.negocio?' - '+c.negocio:'');
   }
   function fromModal(){
     var n=el('omNombre'),g=el('omNegocio');
@@ -1952,227 +1952,11 @@ document.getElementById('demoWant').addEventListener('click',function(){
   function fromDiag(){
     var d=el('cvDNombre');if(!d)return;
     var v=d.value.trim();if(!v)return;
-    var parts=v.split(/\s*[—–-]\s*/).filter(Boolean);
+    var parts=v.split(/\s*[-]/).map(function(s){return s.trim()}).filter(Boolean);
     save({nombre:parts[0]||'',negocio:parts.slice(1).join(' - ')||''});
   }
   function bind(){
-    var n=el('omNombre'),g=el('omNegocio'),d=el('cvDNombre'),done=false;
-    function syncD(){var dd=el('cvDNombre');if(dd&&!dd.value.trim())paint();}
-    if(n&&!n._px){n._px=1;n.addEventListener('input',function(){fromModal();syncD();});}
-    if(g&&!g._px){g._px=1;g.addEventListener('input',function(){fromModal();syncD();});}
-    if(d&&!d._px){d._px=1;d.addEventListener('input',fromDiag);}
-  }
-  window.PoluxContacto={get:load,paint:paint};
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){bind();paint();});
-  else{bind();paint();}
-})();
-</script>
-<script>
-/* Contacto: se llena una vez y viaja solo (cotización ⇄ diagnóstico) */
-(function(){
-  var KEY='poluxContacto';
-  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return{}}}
-  function save(c){try{localStorage.setItem(KEY,JSON.stringify(c||{}))}catch(e){}}
-  function el(id){return document.getElementById(id)}
-  function paint(){
-    var c=load(),n=el('omNombre'),g=el('omNegocio'),d=el('cvDNombre');
-    if(n&&!n.value.trim()&&c.nombre)n.value=c.nombre;
-    if(g&&!g.value.trim()&&c.negocio)g.value=c.negocio;
-    if(d&&!d.value.trim()&&(c.nombre||c.negocio))d.value=(c.nombre||'')+(c.negocio?' — '+c.negocio:'');
-  }
-  function fromModal(){
-    var n=el('omNombre'),g=el('omNegocio');
-    var c={nombre:n?n.value.trim():'',negocio:g?g.value.trim():''};
-    if(c.nombre||c.negocio)save(c);
-  }
-  function fromDiag(){
-    var d=el('cvDNombre');if(!d)return;
-    var v=d.value.trim();if(!v)return;
-    var parts=v.split(/\s*[—–-]\s*/).filter(Boolean);
-    save({nombre:parts[0]||'',negocio:parts.slice(1).join(' - ')||''});
-  }
-  function bind(){
-    var n=el('omNombre'),g=el('omNegocio'),d=el('cvDNombre'),done=false;
-    function syncD(){var dd=el('cvDNombre');if(dd&&!dd.value.trim())paint();}
-    if(n&&!n._px){n._px=1;n.addEventListener('input',function(){fromModal();syncD();});}
-    if(g&&!g._px){g._px=1;g.addEventListener('input',function(){fromModal();syncD();});}
-    if(d&&!d._px){d._px=1;d.addEventListener('input',fromDiag);}
-  }
-  window.PoluxContacto={get:load,paint:paint};
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){bind();paint();});
-  else{bind();paint();}
-})();
-</script>
-<script>
-/* Contacto: se llena una vez y viaja solo (cotización ⇄ diagnóstico) */
-(function(){
-  var KEY='poluxContacto';
-  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return{}}}
-  function save(c){try{localStorage.setItem(KEY,JSON.stringify(c||{}))}catch(e){}}
-  function el(id){return document.getElementById(id)}
-  function paint(){
-    var c=load(),n=el('omNombre'),g=el('omNegocio'),d=el('cvDNombre');
-    if(n&&!n.value.trim()&&c.nombre)n.value=c.nombre;
-    if(g&&!g.value.trim()&&c.negocio)g.value=c.negocio;
-    if(d&&!d.value.trim()&&(c.nombre||c.negocio))d.value=(c.nombre||'')+(c.negocio?' — '+c.negocio:'');
-  }
-  function fromModal(){
-    var n=el('omNombre'),g=el('omNegocio');
-    var c={nombre:n?n.value.trim():'',negocio:g?g.value.trim():''};
-    if(c.nombre||c.negocio)save(c);
-  }
-  function fromDiag(){
-    var d=el('cvDNombre');if(!d)return;
-    var v=d.value.trim();if(!v)return;
-    var parts=v.split(/\s*[—–-]\s*/).filter(Boolean);
-    save({nombre:parts[0]||'',negocio:parts.slice(1).join(' - ')||''});
-  }
-  function bind(){
-    var n=el('omNombre'),g=el('omNegocio'),d=el('cvDNombre'),done=false;
-    function syncD(){var dd=el('cvDNombre');if(dd&&!dd.value.trim())paint();}
-    if(n&&!n._px){n._px=1;n.addEventListener('input',function(){fromModal();syncD();});}
-    if(g&&!g._px){g._px=1;g.addEventListener('input',function(){fromModal();syncD();});}
-    if(d&&!d._px){d._px=1;d.addEventListener('input',fromDiag);}
-  }
-  window.PoluxContacto={get:load,paint:paint};
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){bind();paint();});
-  else{bind();paint();}
-})();
-</script>
-<script>
-/* Contacto: se llena una vez y viaja solo (cotización ⇄ diagnóstico) */
-(function(){
-  var KEY='poluxContacto';
-  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return{}}}
-  function save(c){try{localStorage.setItem(KEY,JSON.stringify(c||{}))}catch(e){}}
-  function el(id){return document.getElementById(id)}
-  function paint(){
-    var c=load(),n=el('omNombre'),g=el('omNegocio'),d=el('cvDNombre');
-    if(n&&!n.value.trim()&&c.nombre)n.value=c.nombre;
-    if(g&&!g.value.trim()&&c.negocio)g.value=c.negocio;
-    if(d&&!d.value.trim()&&(c.nombre||c.negocio))d.value=(c.nombre||'')+(c.negocio?' — '+c.negocio:'');
-  }
-  function fromModal(){
-    var n=el('omNombre'),g=el('omNegocio');
-    var c={nombre:n?n.value.trim():'',negocio:g?g.value.trim():''};
-    if(c.nombre||c.negocio)save(c);
-  }
-  function fromDiag(){
-    var d=el('cvDNombre');if(!d)return;
-    var v=d.value.trim();if(!v)return;
-    var parts=v.split(/\s*[—–-]\s*/).filter(Boolean);
-    save({nombre:parts[0]||'',negocio:parts.slice(1).join(' - ')||''});
-  }
-  function bind(){
-    var n=el('omNombre'),g=el('omNegocio'),d=el('cvDNombre'),done=false;
-    function syncD(){var dd=el('cvDNombre');if(dd&&!dd.value.trim())paint();}
-    if(n&&!n._px){n._px=1;n.addEventListener('input',function(){fromModal();syncD();});}
-    if(g&&!g._px){g._px=1;g.addEventListener('input',function(){fromModal();syncD();});}
-    if(d&&!d._px){d._px=1;d.addEventListener('input',fromDiag);}
-  }
-  window.PoluxContacto={get:load,paint:paint};
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){bind();paint();});
-  else{bind();paint();}
-})();
-</script>
-<script>
-/* Contacto: se llena una vez y viaja solo (cotización ⇄ diagnóstico) */
-(function(){
-  var KEY='poluxContacto';
-  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return{}}}
-  function save(c){try{localStorage.setItem(KEY,JSON.stringify(c||{}))}catch(e){}}
-  function el(id){return document.getElementById(id)}
-  function paint(){
-    var c=load(),n=el('omNombre'),g=el('omNegocio'),d=el('cvDNombre');
-    if(n&&!n.value.trim()&&c.nombre)n.value=c.nombre;
-    if(g&&!g.value.trim()&&c.negocio)g.value=c.negocio;
-    if(d&&!d.value.trim()&&(c.nombre||c.negocio))d.value=(c.nombre||'')+(c.negocio?' — '+c.negocio:'');
-  }
-  function fromModal(){
-    var n=el('omNombre'),g=el('omNegocio');
-    var c={nombre:n?n.value.trim():'',negocio:g?g.value.trim():''};
-    if(c.nombre||c.negocio)save(c);
-  }
-  function fromDiag(){
-    var d=el('cvDNombre');if(!d)return;
-    var v=d.value.trim();if(!v)return;
-    var parts=v.split(/\s*[—–-]\s*/).filter(Boolean);
-    save({nombre:parts[0]||'',negocio:parts.slice(1).join(' - ')||''});
-  }
-  function bind(){
-    var n=el('omNombre'),g=el('omNegocio'),d=el('cvDNombre'),done=false;
-    function syncD(){var dd=el('cvDNombre');if(dd&&!dd.value.trim())paint();}
-    if(n&&!n._px){n._px=1;n.addEventListener('input',function(){fromModal();syncD();});}
-    if(g&&!g._px){g._px=1;g.addEventListener('input',function(){fromModal();syncD();});}
-    if(d&&!d._px){d._px=1;d.addEventListener('input',fromDiag);}
-  }
-  window.PoluxContacto={get:load,paint:paint};
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){bind();paint();});
-  else{bind();paint();}
-})();
-</script>
-<script>
-/* Contacto: se llena una vez y viaja solo (cotización ⇄ diagnóstico) */
-(function(){
-  var KEY='poluxContacto';
-  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return{}}}
-  function save(c){try{localStorage.setItem(KEY,JSON.stringify(c||{}))}catch(e){}}
-  function el(id){return document.getElementById(id)}
-  function paint(){
-    var c=load(),n=el('omNombre'),g=el('omNegocio'),d=el('cvDNombre');
-    if(n&&!n.value.trim()&&c.nombre)n.value=c.nombre;
-    if(g&&!g.value.trim()&&c.negocio)g.value=c.negocio;
-    if(d&&!d.value.trim()&&(c.nombre||c.negocio))d.value=(c.nombre||'')+(c.negocio?' — '+c.negocio:'');
-  }
-  function fromModal(){
-    var n=el('omNombre'),g=el('omNegocio');
-    var c={nombre:n?n.value.trim():'',negocio:g?g.value.trim():''};
-    if(c.nombre||c.negocio)save(c);
-  }
-  function fromDiag(){
-    var d=el('cvDNombre');if(!d)return;
-    var v=d.value.trim();if(!v)return;
-    var parts=v.split(/\s*[—–-]\s*/).filter(Boolean);
-    save({nombre:parts[0]||'',negocio:parts.slice(1).join(' - ')||''});
-  }
-  function bind(){
-    var n=el('omNombre'),g=el('omNegocio'),d=el('cvDNombre'),done=false;
-    function syncD(){var dd=el('cvDNombre');if(dd&&!dd.value.trim())paint();}
-    if(n&&!n._px){n._px=1;n.addEventListener('input',function(){fromModal();syncD();});}
-    if(g&&!g._px){g._px=1;g.addEventListener('input',function(){fromModal();syncD();});}
-    if(d&&!d._px){d._px=1;d.addEventListener('input',fromDiag);}
-  }
-  window.PoluxContacto={get:load,paint:paint};
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){bind();paint();});
-  else{bind();paint();}
-})();
-</script>
-<script>
-/* Contacto: se llena una vez y viaja solo (cotización ⇄ diagnóstico) */
-(function(){
-  var KEY='poluxContacto';
-  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return{}}}
-  function save(c){try{localStorage.setItem(KEY,JSON.stringify(c||{}))}catch(e){}}
-  function el(id){return document.getElementById(id)}
-  function paint(){
-    var c=load(),n=el('omNombre'),g=el('omNegocio'),d=el('cvDNombre');
-    if(n&&!n.value.trim()&&c.nombre)n.value=c.nombre;
-    if(g&&!g.value.trim()&&c.negocio)g.value=c.negocio;
-    if(d&&!d.value.trim()&&(c.nombre||c.negocio))d.value=(c.nombre||'')+(c.negocio?' — '+c.negocio:'');
-  }
-  function fromModal(){
-    var n=el('omNombre'),g=el('omNegocio');
-    var c={nombre:n?n.value.trim():'',negocio:g?g.value.trim():''};
-    if(c.nombre||c.negocio)save(c);
-  }
-  function fromDiag(){
-    var d=el('cvDNombre');if(!d)return;
-    var v=d.value.trim();if(!v)return;
-    var parts=v.split(/\s*[—–-]\s*/).filter(Boolean);
-    save({nombre:parts[0]||'',negocio:parts.slice(1).join(' - ')||''});
-  }
-  function bind(){
-    var n=el('omNombre'),g=el('omNegocio'),d=el('cvDNombre'),done=false;
+    var n=el('omNombre'),g=el('omNegocio'),d=el('cvDNombre');
     function syncD(){var dd=el('cvDNombre');if(dd&&!dd.value.trim())paint();}
     if(n&&!n._px){n._px=1;n.addEventListener('input',function(){fromModal();syncD();});}
     if(g&&!g._px){g._px=1;g.addEventListener('input',function(){fromModal();syncD();});}
