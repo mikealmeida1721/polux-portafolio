@@ -122,7 +122,7 @@ btn.id='pw-btn';btn.setAttribute('aria-label','Abrir chat de Polux');btn.innerHT
 var panel=document.createElement('div');panel.id='pw-panel';panel.setAttribute('role','dialog');panel.setAttribute('aria-label','Chat de Polux');
 panel.innerHTML=
  '<div id="pw-head"><span class="pw-ic">'+svg(ICON)+'</span>'+
- '<span><b>Polux · Asistente</b><small>'+(CTX==='demo'&&DESIGN?('Diseño '+DESIGN):'Catálogo · precios · pedidos')+'</small></span>'+
+ '<span><b>Polux · Asistente</b><small>'+(CTX==='demo'&&DESIGN?('Diseño '+DESIGN):'Diseños · chatbots · pedidos')+'</small></span>'+
  '<button class="pw-x" aria-label="Cerrar chat">✕</button></div>'+
  '<div id="pw-msgs"></div><div id="pw-chips"></div>'+
  '<div id="pw-bar"><input id="pw-in" placeholder="Escríbeme…" autocomplete="off" aria-label="Escribir mensaje">'+
@@ -148,11 +148,11 @@ function setChips(list){
   });
 }
 var CHIPS_HUB=[
- {label:'Ver diseños',q:'muéstrame los diseños'},{label:'Precios',q:'¿qué precios tienen?'},
+ {label:'Ver diseños',q:'muéstrame los diseños'},{label:'Cómo funciona',q:'¿cómo funciona?'},
  {label:'Armar mi pedido',q:'quiero armar mi pedido'},{label:'WhatsApp',q:'quiero hablar por whatsapp'}
 ];
 var CHIPS_DEMO=[
- {label:'Precios',q:'¿qué precios tienen?'},{label:'Ver catálogo',q:'muéstrame los diseños'},
+ {label:'Cómo funciona',q:'¿cómo funciona?'},{label:'Ver catálogo',q:'muéstrame los diseños'},
  {label:'WhatsApp',q:'quiero hablar por whatsapp'}
 ];
 function vibeChips(){return[
@@ -199,7 +199,7 @@ function extractBiz(raw){
 function brain(text){
   var t=norm(text);
   if(/^(hola|buenas|hey|hello|que tal|saludos|buenos dias|buenas tardes|buenas noches)\b/.test(t))
-    return '¡Hola! Soy el asistente de Polux. Te ayudo a explorar diseños, ver precios o armar tu pedido. ¿Qué negocio tienes?';
+    return '¡Hola! Soy el asistente de Polux. Te ayudo a explorar diseños, resolver tus dudas o armar tu pedido. ¿Qué negocio tienes?';
   /* 1. VER DISEÑOS explícito — antes de recomendar, para no confundir "muéstrame los diseños" */
   if(/disen|modelo|catalogo/.test(t)&&/muestr|ensen|ver |mira|lista|opcion|conocer|todos|enseñame/.test(t)){
     var lista=DISENOS.map(function(d){return d.nombre}).join(', ');
@@ -217,6 +217,9 @@ function brain(text){
     state.chips=vibeChips();
     return 'Dime el ambiente con una palabra: ¿<b>tradicional</b>, <b>moderna</b>, <b>elegante</b> o <b>fresca</b>?';
   }
+  /* 2b. privacidad: "datos" no es un negocio — responder antes de recomendar */
+  if(/datos (de|usan|tienen|manejan|guardan)|privacidad/.test(t))
+    return 'Los datos de tus clientes <b>son tuyos</b>: no los vendemos, no los compartimos, y te decimos exactamente dónde vive cada dato antes de instalar nada.';
   /* 3. negocio: recomendar directo, o preguntar ambiente si no lo reconozco */
   var biz=extractBiz(text), rec=recomendar(t);
   if(rec)return recMsg(rec,'Para tu <b>'+(biz||rec.key)+'</b>,');
@@ -225,22 +228,36 @@ function brain(text){
     return '¡<b>'+cap(biz)+'</b>! Para recomendarte bien: ¿qué ambiente quieres que transmita tu página?';
   }
   /* 4. intenciones clásicas */
-  if(/precio|cuanto|cuesta|costo|plan|planes|tarifa/.test(t))
-    return '<b>Precios claros:</b><br>· Starter $349/mes <i>(30 días gratis)</i><br>· Pro $499/mes <i>(15 días gratis)</i><br>· Elite $799/mes <i>(7 días gratis)</i><br>· Página web $299 pago único<br>· Logo $99 pago único<br>Sin tarjeta en la prueba y sin contratos.';
+  if(/fundador/.test(t))
+    return 'Estamos tomando <b>3 negocios fundadores</b>: 30% de descuento de por vida en el plan que elijas, a cambio de medir resultados 60-90 días y un testimonio en video de 30-60 segundos. ¿Quieres uno de los cupos? Escríbenos por <a href="'+waLink('Hola Polux, quiero ser uno de los 3 negocios fundadores.')+'" target="_blank" rel="noopener">WhatsApp</a>.';
+  if(/cuanto tarda|cuanto demora|tardan|demoran|tiempo de entrega|cuanto tiempo/.test(t))
+    return 'Página o chatbot básico: <b>3 a 5 días hábiles</b>. Sistema a medida: <b>2 a 4 semanas</b> según la complejidad. Antes de empezar te damos fecha exacta — con colchón incluido.';
+  if(/precio|cuanto|cuesta|costo|tarifa/.test(t))
+    return 'No hay precios fijos porque no hay dos negocios iguales: te armamos un <b>paquete a tu medida</b> y te lo cotizamos por <a href="'+waLink('Hola Polux, quiero una cotización.')+'" target="_blank" rel="noopener">WhatsApp</a>. Lo que sí es fijo: los planes mensuales se prueban <b>gratis antes de pagar</b> — el plan inicial, el primer mes completo, sin tarjeta. Los planes oficiales están en <a href="https://polux.online" target="_blank" rel="noopener">polux.online</a>.';
+  if(/plan\b|planes/.test(t))
+    return 'Los planes y precios oficiales están en <a href="https://polux.online" target="_blank" rel="noopener">polux.online</a> — y también armamos <b>paquetes personalizados</b> según tu negocio. Pide tu cotización por <a href="'+waLink('Hola Polux, quiero una cotización.')+'" target="_blank" rel="noopener">WhatsApp</a>.';
   if(/prueba|gratis|trial|test/.test(t))
-    return 'Puedes probar sin tarjeta y sin compromiso: Starter 30 días, Pro 15 días, Elite 7 días.';
-  if(/que es polux|quienes son|que hacen|socio tecnologico|a que se dedican/.test(t))
-    return 'Somos tu <b>socio tecnológico</b>: instalamos y operamos la IA dentro de tu negocio — reservas, reseñas, mensajes, contenido — con un humano cuidándola. Nada queda abandonado a su suerte.';
+    return 'Puedes probar <b>sin tarjeta y sin compromiso</b>: los planes mensuales se prueban gratis antes de pagar — el plan inicial trae el primer mes completo gratis.';
+  if(/que es polux|quienes son|quienes somos|que hacen|a que se dedican|socio tecnologico/.test(t))
+    return '<b>Polux, tu agencia de inteligencia artificial.</b> Instalamos y operamos la IA dentro de tu negocio — reservas, reseñas, mensajes, contenido — con <b>humanos + IA</b>: personas reales detrás. Nunca un negocio 100% abandonado a un software.';
   if(/como funciona|como empiezo|contratar|empezar|quiero una|me interesa/.test(t))
     return CTX==='hub'
       ? 'Fácil: 1) explora los diseños en la rueda, 2) marca tus favoritos con ♡, 3) toca <b>Armar mi pedido</b> y lo enviamos a nuestro WhatsApp. ¿Te armo el pedido?'
       : 'Fácil: elige tu diseño favorito en el <a href="../">catálogo</a>, márcalo con ♡ y arma tu pedido. O escríbenos directo por <a href="'+waLink('Hola Polux, vengo del portafolio y quiero información.')+'" target="_blank" rel="noopener">WhatsApp</a>.';
+  if(/chatbot|bot\b/.test(t))
+    return 'Nuestros chatbots vienen en 3 niveles: <b>Básico</b> (respuestas programadas con los datos de tu negocio), <b>Con IA</b> (responde con inteligencia real, se cotiza según lo que necesites) y <b>Personalizado</b> (a tu medida). Pruébalos en la sección de chatbots o pide tu cotización por <a href="'+waLink('Hola Polux, me interesa un chatbot.')+'" target="_blank" rel="noopener">WhatsApp</a>.';
+  if(/sistema/.test(t))
+    return 'Armamos <b>sistemas a medida</b>: reservas, pedidos, seguimiento de clientes, reportes — lo que tu negocio necesite por dentro. Se cotizan según la complejidad, de 2 a 4 semanas de entrega. Cuéntanos tu caso por <a href="'+waLink('Hola Polux, necesito un sistema a medida.')+'" target="_blank" rel="noopener">WhatsApp</a>.';
   if(/web\b|pagina|sitio/.test(t))
-    return 'La <b>página web a medida cuesta $299</b> pago único: tomamos el diseño que elijas del catálogo y la construimos con tu logo, tus colores y tu contenido.';
-  if(/paquete|descuento|todo junto|bundle|juntos|combo/.test(t))
-    return 'Arma tu paquete en el catálogo: eliges diseño, plan y servicios, y ves tu total al instante — pago único y mensual separados. Y el logo te sale en <b>$75</b> en vez de $99 cuando va con tu página. '+(CTX==='hub'&&window.PoluxOrder?'<button class="pc-chip" data-act="pedido">Armar mi pedido</button>':'<a href="../">Ir al catálogo →</a>');
+    return 'Construimos tu <b>página web a medida</b> desde el diseño que elijas: tu logo, tus colores, tu contenido. Cotización personalizada por <a href="'+waLink('Hola Polux, quiero una página web.')+'" target="_blank" rel="noopener">WhatsApp</a> — lista en 3 a 5 días hábiles.';
+  if(/artista|creador|musico|musica|influencer|youtuber|tiktoker|podcast/.test(t))
+    return 'También trabajamos con <b>artistas y creadores</b>: página personal, videos con IA, contenido semanal para TikTok e Instagram. Mira los planes en <a href="https://polux.online/Polux/artistas" target="_blank" rel="noopener">polux.online/Polux/artistas</a> o escríbenos por <a href="'+waLink('Hola Polux, soy creador y quiero información.')+'" target="_blank" rel="noopener">WhatsApp</a>.';
   if(/logo/.test(t))
-    return 'Diseñamos tu <b>logo por $99</b> pago único… pero si lo pides <b>con tu página te sale en $75</b>. Y si ya tienes uno, lo integramos gratis.';
+    return 'Diseñamos tu <b>logo a medida</b> en el estilo de tu negocio. Y si lo pides <b>junto con tu página</b>, te sale mejor precio en paquete. Cotízalo por <a href="'+waLink('Hola Polux, quiero un logo.')+'" target="_blank" rel="noopener">WhatsApp</a>.';
+  if(/paquete|descuento|todo junto|bundle|juntos|combo/.test(t))
+    return 'Armamos <b>paquetes a tu medida</b>: combinas página, logo, chatbot y sistemas, y te cotizamos todo junto por <a href="'+waLink('Hola Polux, quiero armar un paquete.')+'" target="_blank" rel="noopener">WhatsApp</a>. '+(CTX==='hub'&&window.PoluxOrder?'<button class="pc-chip" data-act="pedido">Armar mi pedido</button>':'<a href="../">Ir al catálogo →</a>');
+  if(/garantia|si no funciona|si no me sirve|no me gusta|reembolso/.test(t))
+    return 'Por eso se prueba <b>gratis antes de pagar</b>: lo usas con clientes reales y si no te sirve, no pagas. Y detrás hay <b>personas, no solo software</b> — lo ajustamos contigo hasta que funcione como debe.';
   if(/pedido|armar|comprar|orden/.test(t)){
     if(CTX==='hub'&&window.PoluxOrder){setTimeout(function(){window.PoluxOrder.open()},700);return '¡De una! Te abro el formulario del pedido…'}
     return 'Puedes armar tu pedido en el <a href="../">catálogo</a> o escribirnos por <a href="'+waLink('Hola Polux, quiero armar mi pedido.')+'" target="_blank" rel="noopener">WhatsApp</a>.';
@@ -258,7 +275,7 @@ function brain(text){
     state.vibeBiz=t.trim();state.chips=vibeChips();
     return '¡<b>'+cap(t.trim())+'</b>! Para recomendarte el diseño ideal: ¿qué ambiente buscas?';
   }
-  return 'Te puedo ayudar con <b>precios</b>, <b>diseños</b> o <b>armar tu pedido</b>. ¿Qué te interesa? También puedes hablar con una persona por <a href="'+waLink('Hola Polux, tengo una pregunta.')+'" target="_blank" rel="noopener">WhatsApp</a>.';
+  return 'Te puedo ayudar con <b>diseños</b>, <b>chatbots</b>, <b>cotizaciones</b> o <b>armar tu pedido</b>. ¿Qué te interesa? También puedes hablar con una persona por <a href="'+waLink('Hola Polux, tengo una pregunta.')+'" target="_blank" rel="noopener">WhatsApp</a>.';
 }
 var busy=false;
 function userSay(text){
@@ -282,7 +299,7 @@ input.addEventListener('keydown',e=>{if(e.key==='Enter')userSay(input.value)});
 setTimeout(function(){
   addMsg('bot', CTX==='demo'&&DESIGN
     ? '¡Hola! Estás viendo el diseño <b>'+DESIGN+'</b>. Pregúntame por precios, otros diseños o cómo pedir la tuya.'
-    : '¡Hola! Soy el asistente de Polux. Te ayudo a explorar el catálogo, ver precios o armar tu pedido. ¿Qué negocio tienes?');
+    : '¡Hola! Soy el asistente de Polux. Te ayudo a explorar el catálogo, resolver tus dudas o armar tu pedido. ¿Qué negocio tienes?');
   setChips(CTX==='hub'?CHIPS_HUB:CHIPS_DEMO);
 },400);
 })();
