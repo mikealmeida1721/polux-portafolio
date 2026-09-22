@@ -159,6 +159,35 @@ a.edificio svg{display:block;width:100%;height:auto}
 .btn-polux:hover{transform:translateY(-2px)}
 .fin-made{color:var(--muted);font-size:.85rem;margin-top:1.5rem}
 .cta-resena p{color:var(--muted);margin-bottom:1.1rem}
+/* ============ gestión de reseñas · demo ============ */
+.gr-demo{max-width:460px;margin:2rem auto 0;background:var(--tarjeta);border:1px solid var(--borde);border-radius:22px;padding:1.2rem;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.gr-tabs{display:flex;gap:.5rem;margin-bottom:1rem}
+.gr-tab{flex:1;background:transparent;border:1px solid var(--borde);color:var(--muted);border-radius:999px;padding:.55rem .3rem;font-size:.78rem;font-weight:700;cursor:pointer;font-family:var(--sans)}
+.gr-tab.on{background:var(--dorado);border-color:var(--dorado);color:#231a08}
+.gr-pane{display:none}
+.gr-pane.on{display:block;animation:grIn .35s ease}
+@keyframes grIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.gr-alert{background:#0d1d42;border:1px solid var(--borde);border-radius:16px;padding:1rem;margin-bottom:1rem}
+.gr-alert-head{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;font-weight:800;color:#fff;margin-bottom:.4rem}
+.gr-alert-head small{color:var(--muted);font-weight:600;font-size:.72rem;white-space:nowrap}
+.gr-review{font-style:italic;color:var(--texto);margin:.4rem 0 .8rem}
+.gr-who{display:flex;align-items:center;gap:.6rem;color:#fff;font-size:.85rem}
+.gr-who .avatar{width:34px;height:34px;border-radius:50%;background:var(--brasa);display:inline-flex;align-items:center;justify-content:center;font-weight:800;color:#fff;flex:none}
+.gr-stars{color:var(--dorado2);letter-spacing:.12em;margin-left:auto}
+.gr-next{width:100%}
+.gr-label{color:var(--muted);font-size:.85rem;margin:0 0 .6rem}
+.gr-draft{background:#0d1d42;border:1px solid var(--borde);border-radius:16px;padding:1rem;color:var(--texto);margin-bottom:1rem}
+.gr-draft p{margin:0}
+.gr-edit{width:100%;min-height:110px;background:#0d1d42;border:1px solid var(--dorado);border-radius:16px;padding:1rem;color:var(--texto);font-family:var(--sans);font-size:.95rem;margin-bottom:1rem;box-sizing:border-box}
+.gr-actions{display:flex;gap:.6rem}
+.gr-actions .btn{flex:1;margin:0}
+.gr-done{background:rgba(46,160,67,.12);border:1px solid #2ea043;border-radius:16px;padding:1rem;color:#fff}
+.gr-done p{margin:0 0 .8rem;font-weight:700}
+.gr-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:1rem}
+.gr-stat{background:#0d1d42;border:1px solid var(--borde);border-radius:14px;padding:.8rem .4rem;text-align:center}
+.gr-stat b{display:block;font-size:1.3rem;color:var(--dorado2)}
+.gr-stat span{font-size:.72rem;color:var(--muted)}
+.gr-note{font-size:.8rem;color:var(--muted);text-align:center;margin:0}
 /* ============ calculadora (crema, acentos dorados) ============ */
 .calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.1rem;margin-bottom:1.4rem}
 .calc-card{background:#fff;border:1px solid var(--borde-c);border-radius:18px;padding:1.6rem 1.4rem;box-shadow:0 8px 24px #7c2d120d}
@@ -524,6 +553,53 @@ footer .mini{color:#A855F7;font-weight:700}
   </div>
 </section>
 
+<!-- ============ GESTIÓN DE RESEÑAS · DEMO (oscura) ============ -->
+<section class="seccion oscura" id="gestion">
+  <div class="wrap">
+    <span class="kicker rv" data-i18n="grKicker">REVIEW MANAGEMENT &middot; DEMO</span>
+    <h2 class="titulo rv d1" data-i18n="grTitle">Every review, answered.</h2>
+    <p class="bajada rv d1" data-i18n="grSub">A new review arrives &rarr; we draft the reply in the customer&rsquo;s language &rarr; you approve it with one tap. Try the demo:</p>
+    <div class="gr-demo rv d2">
+      <div class="gr-tabs">
+        <button class="gr-tab on" data-gr="1" data-i18n="grS1">1 &middot; The alert</button>
+        <button class="gr-tab" data-gr="2" data-i18n="grS2">2 &middot; The draft</button>
+        <button class="gr-tab" data-gr="3" data-i18n="grS3">3 &middot; The report</button>
+      </div>
+      <div class="gr-pane on" id="grP1">
+        <div class="gr-alert">
+          <div class="gr-alert-head"><span data-i18n="grAlertT">&#11088; New Google review</span><small data-i18n="grAlertMeta">Google &middot; just now</small></div>
+          <p class="gr-review" data-i18n="q2">"Hot, beautifully plated food delivered right to my door &mdash; the tacos are undeniably on point."</p>
+          <div class="gr-who"><span class="avatar">R</span><b>Rosa Lezama</b><span class="gr-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></div>
+        </div>
+        <button class="btn dorado gr-next" data-grgo="2" data-i18n="grNext1">See the draft &rarr;</button>
+      </div>
+      <div class="gr-pane" id="grP2">
+        <p class="gr-label" data-i18n="grDraftT">Draft reply &mdash; in English, like the review:</p>
+        <div class="gr-draft" id="grDraftBox"><p data-i18n="grDraft">Hi Rosa, thank you for the 4 stars! We&rsquo;re so glad the tacos hit the spot &mdash; hope to see you again soon.</p></div>
+        <textarea class="gr-edit" id="grEditBox" hidden></textarea>
+        <div class="gr-actions" id="grActions">
+          <button class="btn dorado" id="grApproveBtn" data-i18n="grApprove">&#10003; Approve &amp; publish</button>
+          <button class="btn fantasma" id="grEditBtn" data-i18n="grEdit">Edit first</button>
+          <button class="btn dorado" id="grSaveBtn" data-i18n="grSave" hidden>Save draft</button>
+        </div>
+        <div class="gr-done" id="grDoneBox" hidden>
+          <p data-i18n="grDone">&#10003; Published &mdash; the customer sees your reply.</p>
+          <button class="btn fantasma gr-next" data-grgo="3" data-i18n="grNext2">See the monthly report &rarr;</button>
+        </div>
+      </div>
+      <div class="gr-pane" id="grP3">
+        <p class="gr-label" data-i18n="grRepT">September report</p>
+        <div class="gr-stats">
+          <div class="gr-stat"><b>12</b><span data-i18n="grRep1">new reviews</span></div>
+          <div class="gr-stat"><b>4.6&#9733;</b><span data-i18n="grRep2">average rating</span></div>
+          <div class="gr-stat"><b>100%</b><span data-i18n="grRep3">answered</span></div>
+        </div>
+        <p class="gr-note" data-i18n="grNote">Demo with sample data. With the real service, you always approve before anything is published.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <div class="picado-banda" aria-hidden="true">
 <svg viewBox="0 0 360 46" preserveAspectRatio="none">
   <rect width="360" height="46" fill="url(#pic)"/>
@@ -851,7 +927,7 @@ orderTitle:"Order your way",orderSub:"Pickup direct from us, or delivery through
 delKicker:"DELIVERY",delTitle:"Delivery to your door",delSub:"Find us on every major app — or pick up and pay zero fees.",ddDesc:"4.5★ from 1,000+ orders. Live tracking.",orderDD:"Order on DoorDash",ghDesc:"Pickup & delivery through Grubhub.",orderGH:"Order on Grubhub",caviarDesc:"Same kitchen, same flavor — order through Caviar.",orderCaviar:"Order on Caviar",seamDesc:"Pickup & delivery through Seamless.",orderSeam:"Order on Seamless",
 menuKicker:"THE MENU",menuTitle:"The full menu",menuSub:"Everything they make — real dishes, real prices. Tap 🛒 to order any of these for pickup.",priceNote:"💡 Prices confirmed from their published menu — final in-store prices confirmed with the restaurant.",
 famousKicker:"HOUSE FAVORITES",famousTitle:"House favorites",famousSub:"The dishes people ask for by name.",platGoogle:"Google review",platSite:"Guest book",socialT:"Follow us",f1t:"Tomatillo Salsa",f1d:"“Acidic and vibrant” — our signature kick.",f2t:"Open Kitchen",f2d:"Watch your meal being made.",f3t:"Horchata & Licuados",f3d:"Banana, melon & house-made horchata.",f4t:"Fair Prices",f4d:"Real flavor, no compromise on quality.",
-m4:"The food was very delicious and well priced. I had the mixed tacos — al pastor, carne asada and chorizo. My favorite was the al pastor.",revKicker:"REVIEWS",revTitle:"Trenton has spoken",revSub:"Real reviews from real customers — 4.1★ on Google (533 reviews), 4.5★ on DoorDash.",m1:"“Literally OBSESSED with the Fajitas De Pollo! The peppers and onions are grilled so good, with Salsa Verde delicious.”",m2:"“I've never seen such a stuffed pupusa. 10 out of 10 recommend.”",q1:"“The tomatillo salsa is acidic and vibrant — it gives the tacos and flautas an unforgettable kick.”",q1who:"— Jenna McKinney · taqueriaelmariachi.shop",q2:"“Hot, beautifully plated food delivered right to my door — the tacos are undeniably on point.”",q2who:"— Rosa Lezama · taqueriaelmariachi.shop",q3:"“The open kitchen lets you watch your meal being made — marinated pork and chicken soup as authentic as it gets.”",q3who:"— Danny Mcguiness · taqueriaelmariachi.shop",revCta:"Ate with us? Tell Trenton about it 👇",leaveReview:"⭐ Leave a Google Review",revPrev:"Previous",revNext:"Next",r1:"I love this place! Great authentic cuisine — I love the marinated pork and the chicken soup, very delicious. Tacos are great and the prices are very good as well.",r2:"Just had Mexican in Mexico 2 weeks ago. No complaints whatsoever, but I still prefer TEM.",r3:"What a gem!! Excellent food and service — super delicious and authentic home cooking.",r4:"Small, family-owned taqueria. They make their own horchata from scratch! The food makes up for the drive.",r5:"Food was amazing and seasoned perfectly. Fed 7 people for $70!!",r6:"A friend recommended this place and it was awesome. Portions are huge and prices are cheap — the papusas con loroco were amazing.",r7:"Had lunch today and it was remarkable! Guacamole was out of this world... A+ all the way. Our new favorite.",r8:"Awesome steak tacos! A must try if you're in the Trenton area.",r9:"Best tacos in town — try the salsa verde.",r10:"Best pupusas ever!",r11:"Price, quantity, and quality is amazing. Brought me back to my childhood.",r12:"Crazy affordable and very tasty — small menu but everything I've had is spot on.",r13:"Great food, fresh everything, extremely reasonable prices.",r14:"Very good food and service.",r15:"Very good food overall... reasonable prices...",platGuest:"Guest review",anonGuest:"Anonymous guest",revGrows:"✨ This wheel can keep growing with your new 4 and 5-star reviews.",finKicker:"POLUX · YOUR ARTIFICIAL INTELLIGENCE AGENCY",finTitle:"Like how your business looks here?",finSub:"This is a live concept of your page, your reviews and your numbers — built with your real menu, your real reviews, your real ratings. Here is the itemized quote:",finBtn:"See my quote →",finMade:"Concept prepared for Taqueria El Mariachi by Polux.",
+m4:"The food was very delicious and well priced. I had the mixed tacos — al pastor, carne asada and chorizo. My favorite was the al pastor.",revKicker:"REVIEWS",revTitle:"Trenton has spoken",revSub:"Real reviews from real customers — 4.1★ on Google (533 reviews), 4.5★ on DoorDash.",m1:"“Literally OBSESSED with the Fajitas De Pollo! The peppers and onions are grilled so good, with Salsa Verde delicious.”",m2:"“I've never seen such a stuffed pupusa. 10 out of 10 recommend.”",q1:"“The tomatillo salsa is acidic and vibrant — it gives the tacos and flautas an unforgettable kick.”",q1who:"— Jenna McKinney · taqueriaelmariachi.shop",q2:"“Hot, beautifully plated food delivered right to my door — the tacos are undeniably on point.”",q2who:"— Rosa Lezama · taqueriaelmariachi.shop",q3:"“The open kitchen lets you watch your meal being made — marinated pork and chicken soup as authentic as it gets.”",q3who:"— Danny Mcguiness · taqueriaelmariachi.shop",revCta:"Ate with us? Tell Trenton about it 👇",leaveReview:"⭐ Leave a Google Review",revPrev:"Previous",revNext:"Next",r1:"I love this place! Great authentic cuisine — I love the marinated pork and the chicken soup, very delicious. Tacos are great and the prices are very good as well.",r2:"Just had Mexican in Mexico 2 weeks ago. No complaints whatsoever, but I still prefer TEM.",r3:"What a gem!! Excellent food and service — super delicious and authentic home cooking.",r4:"Small, family-owned taqueria. They make their own horchata from scratch! The food makes up for the drive.",r5:"Food was amazing and seasoned perfectly. Fed 7 people for $70!!",r6:"A friend recommended this place and it was awesome. Portions are huge and prices are cheap — the papusas con loroco were amazing.",r7:"Had lunch today and it was remarkable! Guacamole was out of this world... A+ all the way. Our new favorite.",r8:"Awesome steak tacos! A must try if you're in the Trenton area.",r9:"Best tacos in town — try the salsa verde.",r10:"Best pupusas ever!",r11:"Price, quantity, and quality is amazing. Brought me back to my childhood.",r12:"Crazy affordable and very tasty — small menu but everything I've had is spot on.",r13:"Great food, fresh everything, extremely reasonable prices.",r14:"Very good food and service.",r15:"Very good food overall... reasonable prices...",platGuest:"Guest review",anonGuest:"Anonymous guest",revGrows:"✨ This wheel can keep growing with your new 4 and 5-star reviews.",grKicker:"REVIEW MANAGEMENT · DEMO",grTitle:"Every review, answered.",grSub:"A new review arrives → we draft the reply in the customer\u2019s language → you approve it with one tap. Try the demo:",grS1:"1 · The alert",grS2:"2 · The draft",grS3:"3 · The report",grAlertT:"⭐ New Google review",grAlertMeta:"Google · just now",grNext1:"See the draft →",grDraftT:"Draft reply — in English, like the review:",grDraft:"Hi Rosa, thank you for the 4 stars! We\u2019re so glad the tacos hit the spot — hope to see you again soon.",grApprove:"✓ Approve & publish",grEdit:"Edit first",grSave:"Save draft",grDone:"✓ Published — the customer sees your reply.",grNext2:"See the monthly report →",grRepT:"September report",grRep1:"new reviews",grRep2:"average rating",grRep3:"answered",grNote:"Demo with sample data. With the real service, you always approve before anything is published.",finKicker:"POLUX · YOUR ARTIFICIAL INTELLIGENCE AGENCY",finTitle:"Like how your business looks here?",finSub:"This is a live concept of your page, your reviews and your numbers — built with your real menu, your real reviews, your real ratings. Here is the itemized quote:",finBtn:"See my quote →",finMade:"Concept prepared for Taqueria El Mariachi by Polux.",
 calcKicker:"THE MATH",calcTitle:"What is this costing you?",calcSub:"Your real numbers, pre-filled where we know them. Move the sliders — this is an honest estimate, not a promise.",
 calcRevT:"⭐ Reviews",calcRevSrc:"Harvard Business School: 1 extra star = 5–9% more revenue for independent restaurants. Starting point: your public Google rating today (4.1★, 533 reviews). Ratings move every day — drag the slider up to see what you'd gain, or down to see what unanswered bad reviews cost. Every response is approved by you or your manager — nothing goes out on its own.",calcRatingNow:"Your rating today",calcRatingGoal:"If your rating were…",calcSales:"Yearly sales (estimate)",revGain:"You'd gain",revLoss:"You'd lose",revEven:"Right where you are",calcRevNote:"A customer who writes a 1★ review still values your food — silence is what costs you. A timely, owner-approved apology (“it won't happen again, we're fixing it”) can turn that 1★ into a 3★. Responding sells trust, not just stars.",
 calcCallT:"📞 Missed calls",calcCallSrc:"We found at least one review of a customer left ~6 minutes on hold (Dec 2025). How many calls like that happen each week? Only you know — adjust it.",calcCallsW:"Missed calls / week",calcConv:"% that would have ordered",calcTicket:"Average ticket",calcCallOut:"Lost now → recoverable",calcRec:"Of every 10 missed calls, how many would order with an instant text?",deCada:"of 10",
@@ -866,7 +942,7 @@ orderTitle:"Pide como quieras",orderSub:"Recoge directo con nosotros, o delivery
 delKicker:"DELIVERY",delTitle:"Delivery a tu puerta",delSub:"Encuéntranos en todas las apps — o recoge y paga cero cargos.",ddDesc:"4.5★ en más de 1,000 pedidos. Rastreo en vivo.",orderDD:"Pedir en DoorDash",ghDesc:"Recoger y delivery por Grubhub.",orderGH:"Pedir en Grubhub",caviarDesc:"La misma cocina, el mismo sabor — pide por Caviar.",orderCaviar:"Pedir en Caviar",seamDesc:"Recoger y delivery por Seamless.",orderSeam:"Pedir en Seamless",
 menuKicker:"EL MENÚ",menuTitle:"El menú completo",menuSub:"Todo lo que preparan — platos reales, precios reales. Toca 🛒 para pedir cualquiera para recoger.",priceNote:"💡 Precios confirmados de su menú publicado — precios finales del local por confirmar con el restaurante.",
 famousKicker:"LOS DE LA CASA",famousTitle:"Los de la casa",famousSub:"Los platos que la gente pide por su nombre.",platGoogle:"Reseña de Google",platSite:"Libro de visitas",socialT:"Síguenos",f1t:"Salsa de Tomatillo",f1d:"“Ácida y vibrante” — nuestro toque insignia.",f2t:"Cocina Abierta",f2d:"Mira cómo preparan tu comida.",f3t:"Horchata y Licuados",f3d:"Plátano, melón y horchata de la casa.",f4t:"Precios Justos",f4d:"Sabor de verdad, sin sacrificar calidad.",
-m4:"La comida estaba muy deliciosa y a buen precio. Tengo los tacos mixtos, al pastor, carne asada y chorizo. Mi favorita fue la versión al pastor.",revKicker:"RESEÑAS",revTitle:"Trenton ya habló",revSub:"Reseñas reales de clientes reales — 4.1★ en Google (533 reseñas), 4.5★ en DoorDash.",m1:"“¡Obsesionada con las Fajitas de Pollo! Los pimientos y la cebolla a la parrilla buenísimos, con una salsa verde deliciosa.”",m2:"“Nunca había visto una pupusa tan rellena. 10 de 10, recomendadísima.”",q1:"“La salsa de tomatillo es ácida y vibrante — les da a los tacos y flautas un toque inolvidable.”",q1who:"— Jenna McKinney · taqueriaelmariachi.shop",q2:"“Comida caliente y bien presentada, entregada en mi puerta — los tacos están en su punto.”",q2who:"— Rosa Lezama · taqueriaelmariachi.shop",q3:"“La cocina abierta te deja ver cómo preparan tu comida — cerdo marinado y caldo de pollo de lo más auténtico.”",q3who:"— Danny Mcguiness · taqueriaelmariachi.shop",revCta:"¿Comiste con nosotros? Cuéntale a Trenton 👇",leaveReview:"⭐ Dejar reseña en Google",revPrev:"Anteriores",revNext:"Siguientes",r1:"¡Me encanta este lugar! Cocina auténtica excelente — me encantan el cerdo marinado y el caldo de pollo, riquísimos. Los tacos son geniales y los precios muy buenos.",r2:"Comí comida mexicana en México hace 2 semanas. Ninguna queja, pero sigo prefiriendo TEM.",r3:"¡Una joya! Comida y servicio excelentes — cocina casera súper deliciosa y auténtica.",r4:"Taquería pequeña y familiar. ¡Hacen su propia horchata desde cero! La comida vale el viaje.",r5:"La comida estaba increíble y perfectamente sazonada. ¡Comimos 7 personas por $70!",r6:"Un amigo me recomendó este lugar y fue increíble. Porciones enormes y precios baratos — las pupusas con loroco estaban increíbles.",r7:"¡Almorzamos hoy y fue extraordinario! El guacamole estaba de otro mundo... A+ en todo. Nuestro nuevo favorito.",r8:"¡Tacos de bistec increíbles! Obligatorios si estás en el área de Trenton.",r9:"Los mejores tacos del pueblo — prueba la salsa verde.",r10:"¡Las mejores pupusas!",r11:"Precio, cantidad y calidad increíbles. Me devolvió a mi infancia.",r12:"Increíblemente barato y muy sabroso — menú pequeño pero todo lo que he probado está en su punto.",r13:"Comida excelente, todo fresco, precios extremadamente razonables.",r14:"Muy buena comida y servicio.",r15:"Muy buena la comida en general... precios razonables...",platGuest:"Reseña de invitado",anonGuest:"Invitado anónimo",revGrows:"✨ Esta rueda puede seguir creciendo con tus nuevas reseñas de 4 y 5 estrellas.",finKicker:"POLUX · TU AGENCIA DE INTELIGENCIA ARTIFICIAL",finTitle:"¿Te gusta cómo se ve tu negocio aquí?",finSub:"Esto es un concepto vivo de tu página, tus reseñas y tus números — construido con tu menú real, tus reseñas reales, tus calificaciones reales. Aquí está la cotización desglosada:",finBtn:"Ver mi cotización →",finMade:"Concepto preparado para Taqueria El Mariachi por Polux.",
+m4:"La comida estaba muy deliciosa y a buen precio. Tengo los tacos mixtos, al pastor, carne asada y chorizo. Mi favorita fue la versión al pastor.",revKicker:"RESEÑAS",revTitle:"Trenton ya habló",revSub:"Reseñas reales de clientes reales — 4.1★ en Google (533 reseñas), 4.5★ en DoorDash.",m1:"“¡Obsesionada con las Fajitas de Pollo! Los pimientos y la cebolla a la parrilla buenísimos, con una salsa verde deliciosa.”",m2:"“Nunca había visto una pupusa tan rellena. 10 de 10, recomendadísima.”",q1:"“La salsa de tomatillo es ácida y vibrante — les da a los tacos y flautas un toque inolvidable.”",q1who:"— Jenna McKinney · taqueriaelmariachi.shop",q2:"“Comida caliente y bien presentada, entregada en mi puerta — los tacos están en su punto.”",q2who:"— Rosa Lezama · taqueriaelmariachi.shop",q3:"“La cocina abierta te deja ver cómo preparan tu comida — cerdo marinado y caldo de pollo de lo más auténtico.”",q3who:"— Danny Mcguiness · taqueriaelmariachi.shop",revCta:"¿Comiste con nosotros? Cuéntale a Trenton 👇",leaveReview:"⭐ Dejar reseña en Google",revPrev:"Anteriores",revNext:"Siguientes",r1:"¡Me encanta este lugar! Cocina auténtica excelente — me encantan el cerdo marinado y el caldo de pollo, riquísimos. Los tacos son geniales y los precios muy buenos.",r2:"Comí comida mexicana en México hace 2 semanas. Ninguna queja, pero sigo prefiriendo TEM.",r3:"¡Una joya! Comida y servicio excelentes — cocina casera súper deliciosa y auténtica.",r4:"Taquería pequeña y familiar. ¡Hacen su propia horchata desde cero! La comida vale el viaje.",r5:"La comida estaba increíble y perfectamente sazonada. ¡Comimos 7 personas por $70!",r6:"Un amigo me recomendó este lugar y fue increíble. Porciones enormes y precios baratos — las pupusas con loroco estaban increíbles.",r7:"¡Almorzamos hoy y fue extraordinario! El guacamole estaba de otro mundo... A+ en todo. Nuestro nuevo favorito.",r8:"¡Tacos de bistec increíbles! Obligatorios si estás en el área de Trenton.",r9:"Los mejores tacos del pueblo — prueba la salsa verde.",r10:"¡Las mejores pupusas!",r11:"Precio, cantidad y calidad increíbles. Me devolvió a mi infancia.",r12:"Increíblemente barato y muy sabroso — menú pequeño pero todo lo que he probado está en su punto.",r13:"Comida excelente, todo fresco, precios extremadamente razonables.",r14:"Muy buena comida y servicio.",r15:"Muy buena la comida en general... precios razonables...",platGuest:"Reseña de invitado",anonGuest:"Invitado anónimo",revGrows:"✨ Esta rueda puede seguir creciendo con tus nuevas reseñas de 4 y 5 estrellas.",grKicker:"GESTIÓN DE RESEÑAS · DEMO",grTitle:"Cada reseña, respondida.",grSub:"Llega una reseña nueva → redactamos la respuesta en el idioma del cliente → usted la aprueba con un toque. Pruebe la demo:",grS1:"1 · La alerta",grS2:"2 · El borrador",grS3:"3 · El informe",grAlertT:"⭐ Nueva reseña en Google",grAlertMeta:"Google · ahora mismo",grNext1:"Ver el borrador →",grDraftT:"Borrador de respuesta — en inglés, como la reseña:",grDraft:"Hi Rosa, thank you for the 4 stars! We\u2019re so glad the tacos hit the spot — hope to see you again soon.",grEdit:"Editar antes",grSave:"Guardar borrador",grApprove:"✓ Aprobar y publicar",grDone:"✓ Publicada — el cliente ve su respuesta.",grNext2:"Ver el informe mensual →",grRepT:"Informe de septiembre",grRep1:"reseñas nuevas",grRep2:"calificación promedio",grRep3:"respondidas",grNote:"Demo con datos de ejemplo. Con el servicio real, usted siempre aprueba antes de que se publique algo.",finKicker:"POLUX · TU AGENCIA DE INTELIGENCIA ARTIFICIAL",finTitle:"¿Te gusta cómo se ve tu negocio aquí?",finSub:"Esto es un concepto vivo de tu página, tus reseñas y tus números — construido con tu menú real, tus reseñas reales, tus calificaciones reales. Aquí está la cotización desglosada:",finBtn:"Ver mi cotización →",finMade:"Concepto preparado para Taqueria El Mariachi por Polux.",
 calcKicker:"LOS NÚMEROS",calcTitle:"¿Cuánto te está costando?",calcSub:"Tus números reales, pre-llenados donde los conocemos. Mueve los controles — es una estimación honesta, no una promesa.",
 calcRevT:"⭐ Reseñas",calcRevSrc:"Harvard Business School: 1 estrella más = 5–9% más ingresos en restaurantes independientes. Punto de partida: tu calificación pública de Google hoy (4.1★, 533 reseñas). Las calificaciones se mueven todos los días — mueve el control hacia arriba para ver lo que ganarías, o hacia abajo para ver lo que cuestan las malas reseñas sin responder. Cada respuesta la apruebas tú o tu encargado — nada se publica solo.",calcRatingNow:"Tu calificación hoy",calcRatingGoal:"Si tu calificación fuera…",calcSales:"Ventas anuales (estimado)",revGain:"Ganarías",revLoss:"Perderías",revEven:"Donde estás ahora",calcRevNote:"El cliente que escribe una reseña de 1★ valora tu comida — el silencio es lo que te cuesta. Una disculpa a tiempo, aprobada por ti (“no volverá a pasar, estamos trabajando en ello”), puede convertir ese 1★ en 3★. Responder vende confianza, no solo estrellas.",
 calcCallT:"📞 Llamadas perdidas",calcCallSrc:"Encontramos al menos una reseña de un cliente dejado ~6 minutos en espera (dic 2025). ¿Cuántas llamadas así pasan cada semana? Solo tú lo sabes — ajústalo.",calcCallsW:"Llamadas perdidas / semana",calcConv:"% que habría pedido",calcTicket:"Ticket promedio",calcCallOut:"Pierdes ahora → recuperable",calcRec:"De cada 10 llamadas perdidas, ¿cuántas pedirían con un mensaje al instante?",deCada:"de 10",
@@ -933,6 +1009,30 @@ calcRender();
   }));
   arrancar();
 })();
+/* ===== gestión demo ===== */
+function grGo(n){
+  document.querySelectorAll('.gr-pane').forEach(p=>p.classList.remove('on'));
+  document.getElementById('grP'+n).classList.add('on');
+  document.querySelectorAll('.gr-tab').forEach(t=>t.classList.toggle('on',t.dataset.gr===String(n)));
+}
+document.querySelectorAll('[data-grgo]').forEach(b=>b.addEventListener('click',()=>grGo(b.dataset.grgo)));
+document.querySelectorAll('.gr-tab').forEach(t=>t.addEventListener('click',()=>grGo(t.dataset.gr)));
+document.getElementById('grApproveBtn').addEventListener('click',()=>{
+  document.getElementById('grActions').hidden=true;
+  document.getElementById('grDoneBox').hidden=false;
+});
+document.getElementById('grEditBtn').addEventListener('click',()=>{
+  const box=document.getElementById('grEditBox');
+  box.value=document.querySelector('#grDraftBox p').textContent;
+  box.hidden=false;document.getElementById('grDraftBox').hidden=true;
+  document.getElementById('grEditBtn').hidden=true;document.getElementById('grSaveBtn').hidden=false;
+});
+document.getElementById('grSaveBtn').addEventListener('click',()=>{
+  const box=document.getElementById('grEditBox');
+  document.querySelector('#grDraftBox p').textContent=box.value;
+  box.hidden=true;document.getElementById('grDraftBox').hidden=false;
+  document.getElementById('grSaveBtn').hidden=true;document.getElementById('grEditBtn').hidden=false;
+});
 </script>
 </body>
 </html>
