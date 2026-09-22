@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taqueria El Mariachi — Order Ahead (Sample Page)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS — ATENEO (oscuro elegante) × Brasa (cálido) × Taquería ============ */
+:root{
+  --noche:#0A1633; --noche2:#0d1d42; --tarjeta:#12234e; --borde:#2c3f73;
+  --dorado:#c9a227; --dorado2:#e8c766;
+  --crema:#fff9f3; --crema2:#fdeede; --tarjeta-c:#ffffff; --borde-c:#f0dcc8;
+  --brasa:#D62828; --brasa-osc:#9E1B20;
+  --rojo:#D62828; --rojo-osc:#9E1B20;
+  --azul:#1D4ED8; --azul-noche:#0A1633;
+  --amarillo:#FFC53D;
+  --texto:#eef1f9; --muted:#9dabcf;
+  --tinta:#3b2417; --muted-c:#8a6a52;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--noche);color:var(--texto);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg{max-width:100%}
+.tricolor{height:7px;background:linear-gradient(90deg,var(--rojo) 0 33.3%,var(--amarillo) 33.3% 66.6%,var(--azul) 66.6% 100%)}
+/* ============ reveal on scroll ============ */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.rv.on{opacity:1;transform:none}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+/* ============ header ============ */
+header.topo{position:sticky;top:0;z-index:50;background:rgba(16,13,8,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--borde);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:.8rem;padding:.7rem 1.1rem}
+.marca{display:flex;align-items:center;gap:.6rem;font-weight:800;font-size:.95rem;letter-spacing:.06em}
+.marca .sombrero{width:34px;height:34px;flex:none}
+.topo .acciones{display:flex;align-items:center;gap:.6rem}
+.lang{display:flex;background:#ffffff14;border:1px solid #ffffff2e;border-radius:999px;overflow:hidden;font-size:.78rem;font-weight:700}
+.lang button{background:transparent;border:0;color:#fff;padding:.35rem .8rem;cursor:pointer;font-weight:700;font-family:inherit}
+.lang button.activo{background:var(--dorado);color:#231a08}
+.llamar{background:var(--rojo);color:#fff;text-decoration:none;font-weight:700;font-size:.82rem;border-radius:999px;padding:.5rem 1.1rem;white-space:nowrap}
+/* ============ secciones ============ */
+.seccion{padding:3.4rem 1.3rem;position:relative}
+.seccion.oscura{background:linear-gradient(180deg,var(--noche2),var(--noche));color:var(--texto)}
+.seccion.crema{background:linear-gradient(180deg,var(--crema),var(--crema2));color:var(--tinta)}
+.wrap{max-width:1060px;margin:0 auto}
+.kicker{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--dorado);margin-bottom:1rem}
+.seccion.crema .kicker{color:var(--brasa)}
+h2.titulo{font-family:var(--serif);font-weight:700;font-size:clamp(2rem,6vw,3rem);line-height:1.12;margin-bottom:.6rem}
+.seccion.oscura h2.titulo{color:#fff}
+.seccion.crema h2.titulo{color:var(--tinta)}
+.bajada{color:var(--muted);margin-bottom:2rem;max-width:44rem;font-size:1.02rem}
+.seccion.crema .bajada{color:var(--muted-c)}
+/* ============ papel picado divider ============ */
+.picado-banda{background:var(--noche);line-height:0}
+.picado-banda svg{display:block;width:100%;height:44px}
+/* ============ hero ============ */
+.hero{background:radial-gradient(900px 420px at 50% -60px,rgba(201,162,39,.16),transparent),radial-gradient(700px 380px at 85% 110%,rgba(214,40,40,.18),transparent),linear-gradient(180deg,#0d1d42 0%,#0A1633 100%);color:#fff;text-align:center;padding:3rem 1.3rem 3.4rem;position:relative;overflow:hidden}
+.hero .kicker-pill{display:inline-block;max-width:100%;box-sizing:border-box;background:var(--dorado);color:#231a08;font-weight:800;font-size:.72rem;letter-spacing:.16em;border-radius:999px;padding:.4rem 1.1rem;margin-bottom:1.2rem}
+.hero h1{font-family:var(--serif);font-weight:700;font-size:clamp(2.6rem,9vw,4.2rem);line-height:1.04;margin-bottom:.9rem}
+.hero h1 .r{color:#FF7B7B}.hero h1 .a{color:var(--dorado2)}
+.hero p.sub{color:var(--muted);max-width:36rem;margin:0 auto 1.7rem;font-size:1.05rem}
+.ctas{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.4rem}
+.btn{display:inline-block;text-decoration:none;font-weight:800;border-radius:999px;padding:.95rem 1.9rem;font-size:1rem;cursor:pointer;border:0;font-family:inherit;transition:transform .12s}
+.btn:active{transform:scale(.97)}
+.btn.rojo{background:var(--rojo);color:#fff;box-shadow:0 8px 24px #C1272D55}
+.btn.fantasma{border:2px solid #ffffff55;color:#fff;background:transparent}
+.btn.dorado{background:linear-gradient(180deg,var(--dorado2),var(--dorado));color:#231a08;box-shadow:0 8px 24px #c9a22744}
+.btn.ghub{background:#F26522;color:#fff;box-shadow:0 8px 24px #F2652255}
+.btn.caviar{background:#161616;color:#fff;box-shadow:0 8px 24px #00000066}
+.btn.seam{background:var(--azul);color:#fff;box-shadow:0 8px 24px #1D4ED855}
+/* edificio */
+a.edificio{display:block;max-width:520px;margin:0 auto;text-decoration:none;transition:transform .2s ease;filter:drop-shadow(0 26px 44px rgba(0,0,0,.5))}
+a.edificio:hover{transform:translateY(-4px)}
+a.edificio:active{transform:scale(.98)}
+a.edificio svg{display:block;width:100%;height:auto}
+.edificio-hint{margin-top:1rem;color:var(--dorado2);font-size:.92rem;font-weight:600}
+.edificio-dir{margin-top:.4rem;color:var(--muted);font-size:.88rem}
+.edificio-dir strong{color:#fff}
+/* confianza */
+.confianza{margin-top:2.2rem;display:flex;flex-direction:column;align-items:center;gap:.9rem}
+.confianza .ratings{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center}
+.badge{display:inline-flex;align-items:center;gap:.45rem;background:#ffffff0d;border:1px solid #ffffff26;border-radius:999px;padding:.45rem 1rem;font-size:.88rem;color:#cdd5ee}
+.badge strong{color:#fff;font-size:1.02rem}
+.estrellas{color:#E8A100;letter-spacing:.1em}
+.confianza blockquote{margin:0;font-family:var(--serif);font-weight:700;font-size:1.45rem;color:var(--dorado2);line-height:1.3;max-width:34rem}
+.confianza cite{display:block;font-style:normal;font-family:var(--sans);font-weight:400;font-size:.8rem;color:var(--muted);margin-top:.4rem}
+/* ============ historia (crema) ============ */
+.historia-lista{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.1rem}
+.historia-paso{background:var(--tarjeta-c);border:1px solid var(--borde-c);border-radius:18px;padding:1.7rem 1.4rem;position:relative;overflow:hidden}
+.historia-paso::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--rojo),var(--amarillo),var(--azul))}
+.historia-paso .ico{font-size:2rem;margin-bottom:.7rem}
+.historia-paso h3{font-family:var(--serif);font-size:1.45rem;color:var(--tinta);margin-bottom:.5rem}
+.historia-paso p{font-size:.92rem;color:var(--muted-c)}
+/* ============ pasos + pedido (oscuro) ============ */
+.pasos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:2.6rem}
+.paso{background:var(--tarjeta);border:1px solid var(--borde);border-radius:18px;padding:1.6rem 1.3rem;text-align:center}
+.paso .n{width:44px;height:44px;border-radius:50%;background:var(--dorado);color:#231a08;font-weight:800;display:inline-flex;align-items:center;justify-content:center;margin-bottom:.8rem;font-size:1.15rem}
+.paso strong{display:block;margin-bottom:.35rem;font-size:1.02rem;color:#fff;font-family:var(--serif);font-size:1.3rem}
+.paso p{font-size:.88rem;color:var(--muted)}
+.pedidos{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem}
+.tarjeta-pedido{background:var(--tarjeta);border:2px solid var(--borde);border-radius:20px;padding:1.8rem 1.5rem;text-align:center;transition:transform .15s}
+.tarjeta-pedido:hover{transform:translateY(-3px)}
+.tarjeta-pedido.destacada{border-color:var(--dorado);box-shadow:0 14px 40px #c9a22722}
+.tarjeta-pedido .logo-plataforma{font-weight:800;font-size:1.3rem;margin-bottom:.35rem;color:#fff;font-family:var(--serif);font-size:1.6rem}
+.tarjeta-pedido p{font-size:.9rem;color:var(--muted);margin-bottom:1.2rem}
+.etiqueta{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.12em;background:#e8c76622;color:var(--dorado2);border:1px solid #c9a22755;border-radius:999px;padding:.3rem .9rem;margin-bottom:.8rem}
+/* ============ delivery (crema) ============ */
+.delivery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.delivery-card{background:var(--tarjeta-c);border:1px solid var(--borde-c);border-radius:20px;padding:1.7rem 1.4rem;text-align:center;box-shadow:0 10px 30px #7c2d1212}
+.delivery-card .app{font-weight:800;font-size:1.5rem;font-family:var(--serif);margin-bottom:.35rem}
+.delivery-card p{font-size:.88rem;color:var(--muted-c);margin-bottom:1.2rem}
+/* ============ menú (crema) ============ */
+.nota-precios{background:var(--amarillo);background:#FFF6DE;border:1px solid #F0DDA6;border-radius:14px;padding:.85rem 1.2rem;font-size:.85rem;color:#7a5b00;margin-bottom:1.8rem}
+.categorias{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.2rem}
+.categoria{background:#fff;border:1px solid var(--borde-c);border-radius:18px;overflow:hidden;box-shadow:0 8px 24px #7c2d120d}
+.categoria .cab{background:var(--noche2);color:var(--dorado2);font-family:var(--serif);font-weight:700;padding:.85rem 1.2rem;font-size:1.25rem}
+.categoria .cab.roja{background:var(--rojo);color:#fff}
+.categoria .cab.dorada{background:linear-gradient(180deg,var(--dorado2),var(--dorado));color:#231a08}
+.plato{display:flex;justify-content:space-between;gap:1rem;padding:.7rem 1.2rem;border-bottom:1px dashed var(--borde-c);font-size:.93rem;color:var(--tinta)}
+.plato:last-child{border-bottom:0}
+.plato .nombre{font-weight:600}
+.plato .precio{font-weight:800;color:var(--rojo-osc);white-space:nowrap}
+/* ============ sabores (oscuro) ============ */
+.sabores-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.sabor{background:var(--tarjeta);border:1px solid var(--borde);border-radius:18px;padding:1.7rem 1.4rem;text-align:center}
+.sabor .ico{font-size:2.2rem;margin-bottom:.7rem}
+.sabor h3{font-family:var(--serif);font-size:1.4rem;color:var(--dorado2);margin-bottom:.4rem}
+.sabor p{font-size:.88rem;color:var(--muted)}
+/* ============ reseñas marquee (oscuro) ============ */
+.rueda{overflow-x:auto;position:relative;margin:0 -1.3rem;padding:.4rem 0 1.2rem;scroll-snap-type:x mandatory;scrollbar-width:none;cursor:grab;touch-action:pan-x pan-y;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.rueda::-webkit-scrollbar{display:none}
+.rueda.arrastrando{cursor:grabbing;scroll-snap-type:none}
+.rueda .pista{display:flex;gap:1rem;width:max-content;padding:0 1.3rem}
+.rueda .resena-card{scroll-snap-align:center}
+.rueda-nav{display:flex;gap:.6rem;margin-top:1rem}
+.rueda-btn{width:48px;height:48px;border-radius:50%;border:1px solid var(--borde);background:#ffffff14;color:var(--texto);font-size:1.6rem;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:transform .15s,background .15s}
+.rueda-btn:active{transform:scale(.9);background:#ffffff30}
+@media (prefers-reduced-motion:reduce){.rueda{scroll-snap-type:none}}
+.resena-card{flex:0 0 290px;background:#fffdf7;border:1px solid var(--borde-c);border-radius:14px;padding:1.7rem 1.3rem 1.3rem;text-decoration:none;display:block;position:relative;box-shadow:0 10px 26px #0A163322;transition:transform .15s}
+.resena-card:active{transform:scale(.97)}
+.resena-card::before{content:"";position:absolute;top:-1px;left:1.1rem;width:22px;height:34px;background:linear-gradient(180deg,var(--rojo),var(--rojo-osc));clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%)}
+.resena-card .estrellas{margin:.1rem 0 .7rem;font-size:1rem;color:#E9A400;letter-spacing:.15em;text-align:center}
+.resena-card p{font-family:var(--serif);font-size:1.02rem;color:#3b2417;margin-bottom:1rem;line-height:1.5;text-align:center}
+.resena-card .firma{display:flex;align-items:center;justify-content:center;gap:.7rem}
+.resena-card .avatar{width:44px;height:44px;border-radius:50%;background:var(--amarillo);border:2px solid var(--dorado);display:inline-flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:700;font-size:1.2rem;color:#5c3a06;flex:0 0 44px}
+.resena-card .firma-txt{font-size:.82rem;color:#8a6a52;font-style:italic;line-height:1.45;text-align:left}
+.resena-card .firma-txt b{color:#3b2417;font-style:normal}
+.resena-card .firma-txt small{font-style:normal;font-size:.72rem;color:#a3835f}
+.cta-resena{text-align:center;margin-top:2rem}
+.crece{text-align:center;color:var(--muted);font-size:.92rem;margin:.6rem 1.3rem 0}
+.cierre-polux{background:linear-gradient(180deg,#0A0A0C,#171130);border-top:2px solid #A855F7;text-align:center}
+.cierre-polux .kicker{color:#A855F7}
+.cierre-polux h2{font-family:var(--serif);font-size:2rem;margin:.7rem 0;color:#fff}
+.cierre-polux .bajada{max-width:36rem;margin:0 auto 1.5rem}
+.btn-polux{background:#A855F7;color:#fff}
+.btn-polux:hover{transform:translateY(-2px)}
+.fin-made{color:var(--muted);font-size:.85rem;margin-top:1.5rem}
+.cta-resena p{color:var(--muted);margin-bottom:1.1rem}
+/* ============ calculadora (crema, acentos dorados) ============ */
+.calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.1rem;margin-bottom:1.4rem}
+.calc-card{background:#fff;border:1px solid var(--borde-c);border-radius:18px;padding:1.6rem 1.4rem;box-shadow:0 8px 24px #7c2d120d}
+.calc-card h3{font-family:var(--serif);font-size:1.35rem;margin-bottom:.5rem;color:var(--tinta)}
+.calc-fuente{font-size:.82rem;color:var(--muted-c);margin-bottom:1rem;line-height:1.55}
+.calc-card label{display:block;font-size:.85rem;font-weight:600;margin:.75rem 0 .3rem;color:var(--tinta)}
+.calc-card label b{color:var(--rojo-osc)}
+.calc-card input[type=number]{width:100%;border:1px solid var(--borde-c);border-radius:10px;padding:.65rem .8rem;font-size:1rem;font-family:inherit;color:var(--tinta);background:#fff}
+.calc-card .money-wrap{position:relative}
+.calc-card .money-wrap::before{content:'$';position:absolute;left:.95rem;top:50%;transform:translateY(-50%);color:var(--muted-c);font-weight:700;pointer-events:none;z-index:1}
+.calc-card .money-wrap input{padding-left:2.1rem}
+.calc-card input[type=range]{width:100%;accent-color:var(--brasa)}
+.calc-result{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;background:#FFF6DE;border:1px solid #F0DDA6;border-radius:12px;padding:.75rem .95rem;margin-top:1rem;font-size:.85rem;color:#7a5b00}
+.calc-result b{color:var(--rojo-osc);font-size:1.02rem;white-space:nowrap}
+.calc-result b.ganancia{color:#1a7a3a}
+.calc-ahora{display:flex;justify-content:space-between;align-items:center;background:var(--noche2);color:#fff;border-radius:10px;padding:.65rem .95rem;font-size:.88rem;font-weight:600;margin:.2rem 0 .6rem}
+.calc-ahora b{color:var(--dorado2);font-size:1.05rem;white-space:nowrap}
+.calc-nota{font-size:.82rem;color:var(--muted-c);margin-top:.9rem;line-height:1.55}
+.calc-total{background:linear-gradient(160deg,#101c40,#0a1230 75%);border:1px solid var(--dorado);color:#fff;border-radius:20px;padding:2rem 1.5rem;text-align:center}
+.calc-total>span{font-size:.9rem;color:#A9BBDD}
+.calc-total b{display:block;font-family:var(--serif);font-weight:700;font-size:clamp(2rem,7vw,2.8rem);color:var(--dorado2);margin:.4rem 0 .8rem}
+.calc-total b.verde{color:#7CFC9A;margin-bottom:1rem}
+.calc-total p{font-size:.88rem;color:#A9BBDD;max-width:36rem;margin:0 auto}
+/* ============ visita (oscuro) ============ */
+.visita-card{max-width:620px;margin:0 auto;background:var(--tarjeta);border:1px solid var(--dorado);border-radius:22px;padding:2rem 1.6rem;position:relative;overflow:hidden}
+.visita-card::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--rojo),var(--amarillo),var(--azul))}
+.visita-fila{display:flex;gap:1rem;align-items:flex-start;padding:1rem 0;border-bottom:1px solid #ffffff14}
+.visita-fila:last-of-type{border-bottom:0}
+.visita-fila .ico{font-size:1.5rem;flex:none}
+.visita-fila strong{color:#fff;display:block;font-size:1.02rem}
+.visita-fila small{color:var(--muted);font-size:.88rem;line-height:1.5}
+.visita-fila a.tel{color:var(--dorado2);font-weight:800;text-decoration:none;font-size:1.15rem}
+.visita-acciones{display:flex;gap:.8rem;margin-top:1.4rem;flex-wrap:wrap}
+.visita-acciones .btn{flex:1;min-width:200px;text-align:center}
+.catering{margin-top:1.6rem;border-top:1px solid #ffffff14;padding-top:1.4rem}
+.catering h3{font-family:var(--serif);font-size:1.5rem;color:var(--dorado2);margin-bottom:.4rem}
+.catering p{color:var(--muted);font-size:.92rem;margin-bottom:1.1rem}
+/* ============ footer ============ */
+footer{background:var(--noche);color:#8b8b93;text-align:center;padding:2.2rem 1rem;font-size:.82rem;border-top:1px solid #ffffff10}
+footer .f-nombre{font-family:var(--serif);font-size:1.3rem;color:var(--dorado2);margin-bottom:.4rem}
+footer .mini{color:#A855F7;font-weight:700}
+.social-row{display:flex;align-items:center;justify-content:center;gap:.9rem;margin-top:1.8rem}
+.social-row span{font-size:.72rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--dorado2)}
+.social-row a{width:46px;height:46px;border-radius:50%;background:#0d1d42;border:1px solid var(--borde);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:1.15rem;text-decoration:none}
+/* ============ overlay pedido ============ */
+.overlay{position:fixed;inset:0;z-index:200;background:rgba(10,22,51,.8);display:none;align-items:center;justify-content:center;padding:1rem}
+.overlay.abierto{display:flex}
+.panel{background:var(--crema);color:var(--tinta);border-radius:20px;max-width:920px;width:100%;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 30px 80px #000a;border:1px solid var(--dorado)}
+.panel-cab{background:linear-gradient(160deg,#0d1d42,#0A1633);color:#fff;padding:1rem 1.3rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--dorado)}
+.panel-cab h3{font-family:var(--serif);font-size:1.35rem}
+.panel-cab .demo-tag{background:var(--dorado);color:#231a08;font-size:.68rem;font-weight:800;border-radius:999px;padding:.2rem .7rem;margin-left:.5rem;vertical-align:middle;font-family:var(--sans)}
+.cerrar{background:#ffffff22;border:0;color:#fff;font-size:1.3rem;width:36px;height:36px;border-radius:50%;cursor:pointer;line-height:1}
+.panel-cuerpo{display:grid;grid-template-columns:1fr 300px;overflow:hidden;flex:1;min-height:0}
+@media(max-width:700px){.panel-cuerpo{grid-template-columns:1fr}.carrito{border-top:2px solid var(--borde-c)}}
+.menu-demo{overflow-y:auto;padding:1rem 1.2rem;min-height:0}
+.tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
+.tabs button{border:1px solid var(--borde-c);background:#fff;border-radius:999px;padding:.4rem .9rem;font-size:.82rem;font-weight:700;cursor:pointer;color:var(--tinta);font-family:inherit}
+.tabs button.activo{background:var(--noche2);color:var(--dorado2);border-color:var(--noche2)}
+.fila-plato{display:flex;align-items:center;justify-content:space-between;gap:.8rem;padding:.6rem .2rem;border-bottom:1px dashed var(--borde-c)}
+.fila-plato .nom{font-weight:600;font-size:.93rem}
+.fila-plato .pre{color:var(--rojo-osc);font-weight:800;font-size:.93rem;white-space:nowrap}
+.btn-add{background:var(--rojo);color:#fff;border:0;border-radius:999px;width:34px;height:34px;font-size:1.2rem;font-weight:800;cursor:pointer;flex:none}
+.btn-add:disabled{background:#ddd;cursor:not-allowed}
+.carrito{background:#fff;border-left:1px solid var(--borde-c);padding:1.2rem;display:flex;flex-direction:column;min-height:0}
+.carrito h4{font-family:var(--serif);font-size:1.3rem;margin-bottom:.8rem}
+.carrito-items{overflow-y:auto;flex:1;min-height:60px}
+.item-carrito{display:flex;align-items:center;justify-content:space-between;gap:.5rem;font-size:.87rem;padding:.4rem 0;border-bottom:1px dashed var(--borde-c)}
+.qty{display:flex;align-items:center;gap:.45rem}
+.qty button{width:24px;height:24px;border-radius:50%;border:1px solid var(--borde-c);background:#fff;cursor:pointer;font-weight:800}
+.carrito .total{display:flex;justify-content:space-between;font-weight:800;font-size:1.05rem;margin:.9rem 0}
+.carrito .vacio{color:var(--muted-c);font-size:.88rem;text-align:center;padding:1.4rem 0}
+.paso-form label{display:block;font-size:.85rem;font-weight:600;margin:.7rem 0 .25rem}
+.paso-form input{width:100%;border:1px solid var(--borde-c);border-radius:10px;padding:.7rem .9rem;font-size:1rem;font-family:inherit}
+.exito{text-align:center;padding:2.4rem 1.5rem}
+.exito .check{font-size:3rem;margin-bottom:.8rem}
+.exito h4{font-family:var(--serif);font-size:1.6rem;margin-bottom:.5rem}
+.exito p{color:var(--muted-c);font-size:.92rem;margin-bottom:.4rem}
+.nota-demo{background:#E8F0FE;border:1px solid #B9CDF5;color:#12306B;border-radius:10px;padding:.7rem 1rem;font-size:.8rem;margin-top:1.2rem}
+@media(max-width:560px){.llamar{display:none}.seccion{padding:2.6rem 1.1rem}}
+</style>
+</head>
+<body>
+<div class="tricolor"></div>
+
+<header class="topo">
+  <div class="marca">
+    <svg class="sombrero" viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="30" rx="18" ry="5" fill="#c9a227"/><ellipse cx="20" cy="28" rx="18" ry="5" fill="#D62828"/><path d="M12 28c0-10 4-16 8-16s8 6 8 16z" fill="#D62828"/><path d="M12 28c0-10 4-16 8-16s8 6 8 16z" fill="none" stroke="#c9a227" stroke-width="1.6"/><circle cx="20" cy="14" r="2.4" fill="#c9a227"/></svg>
+    <span>TAQUERIA EL MARIACHI</span>
+  </div>
+  <div class="acciones">
+    <div class="lang" role="group" aria-label="Language">
+      <button id="btnEN" class="activo" onclick="setLang('en')">EN</button>
+      <button id="btnES" onclick="setLang('es')">ES</button>
+    </div>
+    <a class="llamar" href="tel:+16099898010" data-i18n="call">📞 Call us</a>
+  </div>
+</header>
+
+<!-- ============ HERO + EDIFICIO ============ -->
+<section class="hero">
+  <span class="kicker-pill rv" data-i18n="kicker">TRENTON, NJ · SKIP THE PHONE LINE</span>
+  <h1 class="rv d1"><span class="r" data-i18n="h1a">Order ahead.</span><br><span class="a" data-i18n="h1b">Skip the wait.</span></h1>
+  <p class="sub rv d2" data-i18n="heroSub">Tacos al pastor, pupusas &amp; more — order pickup in 30 seconds, or get it delivered. Your food, your way.</p>
+  <div class="ctas rv d2">
+    <button class="btn rojo" onclick="abrirPedido()" data-i18n="orderPickup">🛒 Order Pickup</button>
+    <a class="btn fantasma" href="#delivery" data-i18n="deliveryOpts">🚗 Delivery Options</a>
+  </div>
+
+  <a class="edificio rv d3" href="https://www.google.com/maps/search/?api=1&query=Taqueria+El+Mariachi+109+S+Olden+Ave+Trenton+NJ+08609" target="_blank" rel="noopener" data-i18n-aria="edificioAria" aria-label="Get directions to Taqueria El Mariachi">
+  <svg viewBox="0 0 380 360" role="img" aria-label="Taqueria El Mariachi storefront">
+    <defs>
+      <radialGradient id="luz" cx="50%" cy="45%" r="65%">
+        <stop offset="0%" stop-color="#FFE9A8"/><stop offset="100%" stop-color="#E8963C"/>
+      </radialGradient>
+      <radialGradient id="suelo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#000" stop-opacity=".45"/><stop offset="100%" stop-color="#000" stop-opacity="0"/>
+      </radialGradient>
+      <pattern id="serape" width="48" height="20" patternUnits="userSpaceOnUse">
+        <rect width="48" height="20" fill="#D62828"/>
+        <rect x="9.6" width="9.6" height="20" fill="#FFC53D"/>
+        <rect x="19.2" width="9.6" height="20" fill="#1D4ED8"/>
+        <rect x="28.8" width="9.6" height="20" fill="#2E9E5B"/>
+        <rect x="38.4" width="9.6" height="20" fill="#E8641C"/>
+      </pattern>
+      <linearGradient id="muro" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#f8ecd8"/><stop offset="100%" stop-color="#ecd9b8"/>
+      </linearGradient>
+    </defs>
+    <ellipse cx="190" cy="310" rx="155" ry="15" fill="url(#suelo)"/>
+    <!-- fachada -->
+    <rect x="46" y="86" width="288" height="208" rx="6" fill="url(#muro)" stroke="#7c2d12" stroke-width="3"/>
+    <!-- letrero -->
+    <rect x="46" y="86" width="288" height="56" fill="#0A1633"/>
+    <rect x="46" y="86" width="288" height="5" fill="#c9a227"/>
+    <rect x="46" y="137" width="288" height="5" fill="#c9a227"/>
+    <text x="190" y="122" text-anchor="middle" font-family="'Cormorant Garamond',Georgia,serif" font-weight="700" font-size="23" fill="#e8c766" textLength="262" lengthAdjust="spacingAndGlyphs">TAQUERIA EL MARIACHI</text>
+    <!-- logo placeholder -->
+    <circle cx="190" cy="176" r="25" fill="#ffffff" stroke="#c9a227" stroke-width="2.5" stroke-dasharray="6 5"/>
+    <text x="190" y="174" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="800" font-size="11" letter-spacing="1.5" fill="#7c2d12">LOGO</text>
+    <text x="190" y="188" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="8" letter-spacing="1" fill="#8a6a52" data-i18n="logoAqui">YOUR LOGO HERE</text>
+    <!-- toldo serape -->
+    <path d="M60,206 h260 v16 q-13,12 -26,0 q-13,12 -26,0 q-13,12 -26,0 q-13,12 -26,0 q-13,12 -26,0 q-13,12 -26,0 q-13,12 -26,0 q-13,12 -26,0 q-13,12 -26,0 q-13,12 -26,0 z" fill="url(#serape)" stroke="#7c2d12" stroke-width="2"/>
+    <!-- ventanas cálidas -->
+    <rect x="72" y="242" width="64" height="44" rx="4" fill="url(#luz)" stroke="#7c2d12" stroke-width="3"/>
+    <line x1="104" y1="242" x2="104" y2="286" stroke="#7c2d12" stroke-width="3"/>
+    <line x1="72" y1="264" x2="136" y2="264" stroke="#7c2d12" stroke-width="3"/>
+    <rect x="244" y="242" width="64" height="44" rx="4" fill="url(#luz)" stroke="#7c2d12" stroke-width="3"/>
+    <line x1="276" y1="242" x2="276" y2="286" stroke="#7c2d12" stroke-width="3"/>
+    <line x1="244" y1="264" x2="308" y2="264" stroke="#7c2d12" stroke-width="3"/>
+    <!-- puerta -->
+    <rect x="168" y="244" width="44" height="50" rx="4" fill="#6b3a1f" stroke="#4a2413" stroke-width="3"/>
+    <rect x="176" y="252" width="28" height="16" rx="2" fill="url(#luz)" stroke="#4a2413" stroke-width="2"/>
+    <circle cx="204" cy="282" r="3.5" fill="#e8c766"/>
+    <!-- letrero OPEN colgando -->
+    <line x1="178" y1="228" x2="178" y2="236" stroke="#c9a227" stroke-width="2"/>
+    <line x1="202" y1="228" x2="202" y2="236" stroke="#c9a227" stroke-width="2"/>
+    <rect x="164" y="236" width="52" height="18" rx="9" fill="#0A1633" stroke="#c9a227" stroke-width="2"/>
+    <text x="190" y="249" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="10" font-weight="800" letter-spacing="2.5" fill="#e8c766">OPEN</text>
+    <!-- cactus -->
+    <path d="M126,294 l6,-18 h20 l6,18 z" fill="#b4552d" stroke="#7c2d12" stroke-width="2"/>
+    <rect x="132" y="258" width="14" height="22" rx="7" fill="#2E9E5B"/>
+    <rect x="121" y="266" width="10" height="14" rx="5" fill="#2E9E5B"/>
+    <rect x="147" y="266" width="10" height="14" rx="5" fill="#2E9E5B"/>
+    <!-- base -->
+    <rect x="46" y="288" width="288" height="6" fill="#7c2d12"/>
+  </svg>
+  </a>
+  <p class="edificio-hint rv" data-i18n="edificioHint">👆 Tap the building for directions</p>
+  <p class="edificio-dir rv"><strong>Taqueria El Mariachi</strong> · 109 S Olden Ave, Trenton, NJ 08609 · <strong>(609) 989-8010</strong></p>
+
+  <div class="confianza rv">
+    <div class="ratings">
+      <span class="badge"><span class="estrellas">★★★★☆</span> <strong>4.1</strong> <span data-i18n="onGoogle">on Google · 533 reviews</span></span>
+      <span class="badge"><span class="estrellas">★★★★★</span> <strong>4.5</strong> <span data-i18n="onDoorDash">on DoorDash · 1k+ ratings</span></span>
+    </div>
+    <blockquote><span data-i18n="cita">"The tacos are always ON POINT!"</span><cite data-i18n="citaQuien">— Rosa Lezama · Google review</cite></blockquote>
+  </div>
+</section>
+
+<div class="picado-banda" aria-hidden="true">
+<svg viewBox="0 0 360 46" preserveAspectRatio="none">
+  <defs>
+    <pattern id="pic" width="180" height="46" patternUnits="userSpaceOnUse">
+      <path d="M0,4 Q90,12 180,4" stroke="#c9a227" stroke-width="2" fill="none"/>
+      <g>
+        <path d="M8,7 h29 v27 q-3.6,7 -7.25,0 q-3.6,7 -7.25,0 q-3.6,7 -7.25,0 q-3.6,7 -7.25,0 z" fill="#D62828"/>
+        <circle cx="22.5" cy="18" r="4.5" fill="#100d08"/><circle cx="15" cy="27" r="2.6" fill="#100d08"/><circle cx="30" cy="27" r="2.6" fill="#100d08"/>
+      </g>
+      <g>
+        <path d="M53,7 h29 v27 q-3.6,7 -7.25,0 q-3.6,7 -7.25,0 q-3.6,7 -7.25,0 q-3.6,7 -7.25,0 z" fill="#FFC53D"/>
+        <circle cx="67.5" cy="18" r="4.5" fill="#100d08"/><circle cx="60" cy="27" r="2.6" fill="#100d08"/><circle cx="75" cy="27" r="2.6" fill="#100d08"/>
+      </g>
+      <g>
+        <path d="M98,7 h29 v27 q-3.6,7 -7.25,0 q-3.6,7 -7.25,0 q-3.6,7 -7.25,0 q-3.6,7 -7.25,0 z" fill="#1D4ED8"/>
+        <circle cx="112.5" cy="18" r="4.5" fill="#100d08"/><circle cx="105" cy="27" r="2.6" fill="#100d08"/><circle cx="120" cy="27" r="2.6" fill="#100d08"/>
+      </g>
+      <g>
+        <path d="M143,7 h29 v27 q-3.6,7 -7.25,0 q-3.6,7 -7.25,0 q-3.6,7 -7.25,0 q-3.6,7 -7.25,0 z" fill="#2E9E5B"/>
+        <circle cx="157.5" cy="18" r="4.5" fill="#100d08"/><circle cx="150" cy="27" r="2.6" fill="#100d08"/><circle cx="165" cy="27" r="2.6" fill="#100d08"/>
+      </g>
+    </pattern>
+  </defs>
+  <rect width="360" height="46" fill="url(#pic)"/>
+</svg>
+</div>
+
+<!-- ============ HISTORIA (crema) ============ -->
+<section class="seccion crema" id="historia">
+  <div class="wrap">
+    <span class="kicker rv" data-i18n="storyKicker">OUR STORY</span>
+    <h2 class="titulo rv d1" data-i18n="storyTitle">A hidden gem on Olden Ave</h2>
+    <p class="bajada rv d1" data-i18n="storySub">Straight from taqueriaelmariachi.shop — who they are, in their own words.</p>
+    <div class="historia-lista">
+      <div class="historia-paso rv"><div class="ico">💎</div><h3 data-i18n="st1t">A hidden gem</h3><p data-i18n="st1d">A charming taqueria at 109 S Olden Ave — Trenton's hidden gem.</p></div>
+      <div class="historia-paso rv d1"><div class="ico">🔥</div><h3 data-i18n="st2t">An open kitchen</h3><p data-i18n="st2d">An open layout that invites you to watch your food being made — marinated pork, chicken soup, everything out in the open.</p></div>
+      <div class="historia-paso rv d2"><div class="ico">💰</div><h3 data-i18n="st3t">Fair prices, real flavor</h3><p data-i18n="st3d">Fair prices that don't compromise on quality — real Mexican flavor, every day.</p></div>
+      <div class="historia-paso rv d3"><div class="ico">🌶️</div><h3 data-i18n="st4t">The signatures</h3><p data-i18n="st4d">Tomatillo salsa — acidic and vibrant. Horchata and licuados (banana, melon). Pupusas, tacos al pastor, carne asada.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CÓMO PEDIR (oscuro) ============ -->
+<section class="seccion oscura" id="como">
+  <div class="wrap">
+    <span class="kicker rv" data-i18n="howKicker">HOW IT WORKS</span>
+    <h2 class="titulo rv d1" data-i18n="howTitle">From click to counter</h2>
+    <p class="bajada rv d1" data-i18n="howSub">Three steps. No phone tag, no waiting on hold.</p>
+    <div class="pasos">
+      <div class="paso rv"><div class="n">1</div><strong data-i18n="s1t">Pick your dishes</strong><p data-i18n="s1d">The full menu, with real prices — right here.</p></div>
+      <div class="paso rv d1"><div class="n">2</div><strong data-i18n="s2t">We fire up the grill</strong><p data-i18n="s2d">Your order goes straight to the kitchen.</p></div>
+      <div class="paso rv d2"><div class="n">3</div><strong data-i18n="s3t">Ready in ~15–20 min</strong><p data-i18n="s3d">Hot and waiting when you walk in.</p></div>
+    </div>
+    <h2 class="titulo rv" id="order" data-i18n="orderTitle" style="margin-top:1rem">Order your way</h2>
+    <p class="bajada rv" data-i18n="orderSub">Pickup direct from us, or delivery through your favorite app.</p>
+    <div class="pedidos">
+      <div class="tarjeta-pedido destacada rv">
+        <span class="etiqueta" data-i18n="pickupDemo">PICKUP · INTERACTIVE DEMO</span>
+        <div class="logo-plataforma">🛒 <span data-i18n="direct">Direct pickup</span></div>
+        <p data-i18n="directDesc">Order here and skip the line — ready when you arrive. No commission, no middleman.</p>
+        <button class="btn rojo" onclick="abrirPedido()" data-i18n="startOrder">Start a demo order</button>
+      </div>
+      <div class="tarjeta-pedido rv d1">
+        <div class="logo-plataforma">📞 <span data-i18n="callDirect">Call ahead</span></div>
+        <p data-i18n="callDirectDesc">Old school works too — call and we'll have it ready.</p>
+        <a class="btn dorado" href="tel:+16099898010" data-i18n="callOrder">Call (609) 989-8010</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="picado-banda" aria-hidden="true">
+<svg viewBox="0 0 360 46" preserveAspectRatio="none">
+  <rect width="360" height="46" fill="url(#pic)"/>
+</svg>
+</div>
+
+<!-- ============ DELIVERY (crema) ============ -->
+<section class="seccion crema" id="delivery">
+  <div class="wrap">
+    <span class="kicker rv" data-i18n="delKicker">DELIVERY</span>
+    <h2 class="titulo rv d1" data-i18n="delTitle">Delivery to your door</h2>
+    <p class="bajada rv d1" data-i18n="delSub">Find us on every major app — or pick up and pay zero fees.</p>
+    <div class="delivery-grid">
+      <div class="delivery-card rv">
+        <div class="app" style="color:#EB1700">DoorDash</div>
+        <p data-i18n="ddDesc">4.5★ from 1,000+ orders. Live tracking.</p>
+        <a class="btn rojo" href="https://www.doordash.com/en-US/en-NZ/store/taqueria-el-mariachi-trenton-866379/" target="_blank" rel="noopener" data-i18n="orderDD">Order on DoorDash</a>
+      </div>
+      <div class="delivery-card rv d1">
+        <div class="app" style="color:#00A699">Grubhub</div>
+        <p data-i18n="ghDesc">Pickup &amp; delivery through Grubhub.</p>
+        <a class="btn ghub" href="https://www.grubhub.com" target="_blank" rel="noopener" data-i18n="orderGH">Order on Grubhub</a>
+      </div>
+      <div class="delivery-card rv d2">
+        <div class="app" style="color:#0A1633">Caviar</div>
+        <p data-i18n="caviarDesc">Same kitchen, same flavor — order through Caviar.</p>
+        <a class="btn caviar" href="https://www.trycaviar.com/store/taqueria-el-mariachi-trenton-866379/" target="_blank" rel="noopener" data-i18n="orderCaviar">Order on Caviar</a>
+      </div>
+      <div class="delivery-card rv d3">
+        <div class="app" style="color:#FF8000">Seamless</div>
+        <p data-i18n="seamDesc">Pickup &amp; delivery through Seamless.</p>
+        <a class="btn seam" href="https://www.seamless.com" target="_blank" rel="noopener" data-i18n="orderSeam">Order on Seamless</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MENÚ (crema) ============ -->
+<section class="seccion crema" id="menu" style="padding-top:0">
+  <div class="wrap">
+    <span class="kicker rv" data-i18n="menuKicker">THE MENU</span>
+    <h2 class="titulo rv d1" data-i18n="menuTitle">The full menu</h2>
+    <p class="bajada rv d1" data-i18n="menuSub">Everything they make — real dishes, real prices. Tap 🛒 to order any of these for pickup.</p>
+    <div class="nota-precios rv" data-i18n="priceNote">💡 Prices confirmed from their published menu — final in-store prices confirmed with the restaurant.</div>
+    <div class="categorias" id="menuCompleto"></div>
+  </div>
+</section>
+
+<div class="picado-banda" aria-hidden="true">
+<svg viewBox="0 0 360 46" preserveAspectRatio="none">
+  <rect width="360" height="46" fill="url(#pic)"/>
+</svg>
+</div>
+
+<!-- ============ SABORES (oscuro) ============ -->
+<section class="seccion oscura" id="sabores">
+  <div class="wrap">
+    <span class="kicker rv" data-i18n="famousKicker">SIGNATURES</span>
+    <h2 class="titulo rv d1" data-i18n="famousTitle">Known for</h2>
+    <p class="bajada rv d1" data-i18n="famousSub">The flavors people mention by name.</p>
+    <div class="sabores-grid">
+      <div class="sabor rv"><div class="ico">🌶️</div><h3 data-i18n="f1t">Tomatillo Salsa</h3><p data-i18n="f1d">"Acidic and vibrant" — our signature kick.</p></div>
+      <div class="sabor rv d1"><div class="ico">🔥</div><h3 data-i18n="f2t">Open Kitchen</h3><p data-i18n="f2d">Watch your meal being made.</p></div>
+      <div class="sabor rv d2"><div class="ico">🥤</div><h3 data-i18n="f3t">Horchata &amp; Licuados</h3><p data-i18n="f3d">Banana, melon &amp; house-made horchata.</p></div>
+      <div class="sabor rv d3"><div class="ico">💰</div><h3 data-i18n="f4t">Fair Prices</h3><p data-i18n="f4d">Real flavor, no compromise on quality.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESEÑAS MARQUEE (oscuro) ============ -->
+<section class="seccion oscura" id="reviews" style="padding-top:0">
+  <div class="wrap">
+    <span class="kicker rv" data-i18n="revKicker">REVIEWS</span>
+    <h2 class="titulo rv d1" data-i18n="revTitle">Trenton has spoken</h2>
+    <p class="bajada rv d1" data-i18n="revSub">Real reviews from real customers — 4.1★ on Google (533 reviews), 4.5★ on DoorDash.</p>
+    <div class="rueda-nav">
+      <button class="rueda-btn" data-rueda="prev" data-i18n-aria="revPrev" aria-label="Previous">‹</button>
+      <button class="rueda-btn" data-rueda="next" data-i18n-aria="revNext" aria-label="Next">›</button>
+    </div>
+  </div>
+  <div class="rueda rv" id="ruedaResenas" tabindex="0" aria-label="Customer reviews">
+    <div class="pista">
+      <a class="resena-card" href="https://www.doordash.com/en-US/en-NZ/store/taqueria-el-mariachi-trenton-866379/" target="_blank" rel="noopener"><p data-i18n="m1">"Literally OBSESSED with the Fajitas De Pollo! The peppers and onions are grilled so good, with Salsa Verde delicious."</p><div class="firma"><span class="avatar">T</span><span class="firma-txt"><b>— Trinity M</b><br><small>DoorDash</small></span></div></a>
+      <a class="resena-card" href="https://www.doordash.com/en-US/en-NZ/store/taqueria-el-mariachi-trenton-866379/" target="_blank" rel="noopener"><p data-i18n="m2">"I've never seen such a stuffed pupusa. 10 out of 10 recommend."</p><div class="firma"><span class="avatar">J</span><span class="firma-txt"><b>— Jasmine D</b><br><small>DoorDash</small></span></div></a>
+      <a class="resena-card" href="https://wanderlog.com/place/details/2999098/taqueria-el-mariachi" target="_blank" rel="noopener"><div class="estrellas">★★★★☆</div><p data-i18n="cita">"The tacos are always ON POINT!"</p><div class="firma"><span class="avatar">R</span><span class="firma-txt"><b>— Rosa Lezama</b><br><small data-i18n="platGoogle">Google review</small></span></div></a>
+      <a class="resena-card" href="https://taqueriaelmariachi.shop" target="_blank" rel="noopener"><p data-i18n="q1">"The tomatillo salsa is acidic and vibrant — it gives the tacos and flautas an unforgettable kick."</p><div class="firma"><span class="avatar">J</span><span class="firma-txt"><b>— Jenna McKinney</b><br><small data-i18n="platSite">Guest book</small></span></div></a>
+      <a class="resena-card" href="https://taqueriaelmariachi.shop" target="_blank" rel="noopener"><p data-i18n="q2">"Hot, beautifully plated food delivered right to my door — the tacos are undeniably on point."</p><div class="firma"><span class="avatar">R</span><span class="firma-txt"><b>— Rosa Lezama</b><br><small data-i18n="platSite">Guest book</small></span></div></a>
+      <a class="resena-card" href="https://taqueriaelmariachi.shop" target="_blank" rel="noopener"><p data-i18n="q3">"The open kitchen lets you watch your meal being made — marinated pork and chicken soup as authentic as it gets."</p><div class="firma"><span class="avatar">D</span><span class="firma-txt"><b>— Danny Mcguiness</b><br><small data-i18n="platSite">Guest book</small></span></div></a>
+      <a class="resena-card" href="https://wanderlog.com/place/details/2999098/taqueria-el-mariachi" target="_blank" rel="noopener"><div class="estrellas">★★★★★</div><p data-i18n="m4">"The food was very delicious and well priced. I had the mixed tacos — al pastor, carne asada and chorizo. My favorite was the al pastor."</p><div class="firma"><span class="avatar">A</span><span class="firma-txt"><b>— Alvin</b><br><small data-i18n="platGoogle">Google review</small></span></div></a>
+      <a class="resena-card" href="https://wanderlog.com/place/details/2999098/taqueria-el-mariachi" target="_blank" rel="noopener"><div class="estrellas">★★★★★</div><p data-i18n="r1">"I love this place! Great authentic cuisine — I love the marinated pork and the chicken soup, very delicious. Tacos are great and the prices are very good as well."</p><div class="firma"><span class="avatar">D</span><span class="firma-txt"><b>— Danny M</b><br><small data-i18n="platGoogle">Google review</small></span></div></a>
+      <a class="resena-card" href="https://restaurants-cafes.com/New_Jersey/Trenton/Taqueria_El_Mariachi" target="_blank" rel="noopener"><p data-i18n="r2">"Just had Mexican in Mexico 2 weeks ago. No complaints whatsoever, but I still prefer TEM."</p><div class="firma"><span class="avatar">M</span><span class="firma-txt"><b>— Michael Brady</b><br><small data-i18n="platGuest">Guest review</small></span></div></a>
+      <a class="resena-card" href="https://restaurants-cafes.com/New_Jersey/Trenton/Taqueria_El_Mariachi" target="_blank" rel="noopener"><p data-i18n="r3">"What a gem!! Excellent food and service — super delicious and authentic home cooking."</p><div class="firma"><span class="avatar">R</span><span class="firma-txt"><b>— Roger Fuentes</b><br><small data-i18n="platGuest">Guest review</small></span></div></a>
+      <a class="resena-card" href="https://restaurants-cafes.com/New_Jersey/Trenton/Taqueria_El_Mariachi" target="_blank" rel="noopener"><p data-i18n="r4">"Small, family-owned taqueria. They make their own horchata from scratch! The food makes up for the drive."</p><div class="firma"><span class="avatar">J</span><span class="firma-txt"><b>— John Marquette</b><br><small data-i18n="platGuest">Guest review</small></span></div></a>
+      <a class="resena-card" href="https://restaurants-cafes.com/New_Jersey/Trenton/Taqueria_El_Mariachi" target="_blank" rel="noopener"><p data-i18n="r5">"Food was amazing and seasoned perfectly. Fed 7 people for $70!!"</p><div class="firma"><span class="avatar">J</span><span class="firma-txt"><b>— Jazie Perez</b><br><small data-i18n="platGuest">Guest review</small></span></div></a>
+      <a class="resena-card" href="https://restaurants-cafes.com/New_Jersey/Trenton/Taqueria_El_Mariachi" target="_blank" rel="noopener"><p data-i18n="r6">"A friend recommended this place and it was awesome. Portions are huge and prices are cheap — the papusas con loroco were amazing."</p><div class="firma"><span class="avatar">A</span><span class="firma-txt"><b data-i18n="anonGuest">Anonymous guest</b><br><small data-i18n="platGuest">Guest review</small></span></div></a>
+      <a class="resena-card" href="https://restaurants-cafes.com/New_Jersey/Trenton/Taqueria_El_Mariachi" target="_blank" rel="noopener"><p data-i18n="r7">"Had lunch today and it was remarkable! Guacamole was out of this world... A+ all the way. Our new favorite."</p><div class="firma"><span class="avatar">A</span><span class="firma-txt"><b data-i18n="anonGuest">Anonymous guest</b><br><small data-i18n="platGuest">Guest review</small></span></div></a>
+      <a class="resena-card" href="https://restaurants-cafes.com/New_Jersey/Trenton/Taqueria_El_Mariachi" target="_blank" rel="noopener"><p data-i18n="r8">"Awesome steak tacos! A must try if you're in the Trenton area."</p><div class="firma"><span class="avatar">R</span><span class="firma-txt"><b>— Ruth Archila</b><br><small data-i18n="platGuest">Guest review</small></span></div></a>
+      <a class="resena-card" href="https://restaurants-cafes.com/New_Jersey/Trenton/Taqueria_El_Mariachi" target="_blank" rel="noopener"><p data-i18n="r9">"Best tacos in town — try the salsa verde."</p><div class="firma"><span class="avatar">J</span><span class="firma-txt"><b>— Juan Pablo Ramirez</b><br><small data-i18n="platGuest">Guest review</small></span></div></a>
+      <a class="resena-card" href="https://restaurants-cafes.com/New_Jersey/Trenton/Taqueria_El_Mariachi" target="_blank" rel="noopener"><p data-i18n="r10">"Best pupusas ever!"</p><div class="firma"><span class="avatar">P</span><span class="firma-txt"><b>— Park VanderVeur</b><br><small data-i18n="platGuest">Guest review</small></span></div></a>
+      <a class="resena-card" href="https://restaurants-cafes.com/New_Jersey/Trenton/Taqueria_El_Mariachi" target="_blank" rel="noopener"><p data-i18n="r11">"Price, quantity, and quality is amazing. Brought me back to my childhood."</p><div class="firma"><span class="avatar">A</span><span class="firma-txt"><b>— Ana Chesonis</b><br><small data-i18n="platGuest">Guest review</small></span></div></a>
+      <a class="resena-card" href="https://restaurants-cafes.com/New_Jersey/Trenton/Taqueria_El_Mariachi" target="_blank" rel="noopener"><p data-i18n="r12">"Crazy affordable and very tasty — small menu but everything I've had is spot on."</p><div class="firma"><span class="avatar">L</span><span class="firma-txt"><b>— LazarusXVII</b><br><small data-i18n="platGuest">Guest review</small></span></div></a>
+      <a class="resena-card" href="https://restaurants-cafes.com/New_Jersey/Trenton/Taqueria_El_Mariachi" target="_blank" rel="noopener"><p data-i18n="r13">"Great food, fresh everything, extremely reasonable prices."</p><div class="firma"><span class="avatar">R</span><span class="firma-txt"><b>— Ray Forte</b><br><small data-i18n="platGuest">Guest review</small></span></div></a>
+      <a class="resena-card" href="https://restaurants-cafes.com/New_Jersey/Trenton/Taqueria_El_Mariachi" target="_blank" rel="noopener"><p data-i18n="r14">"Very good food and service."</p><div class="firma"><span class="avatar">M</span><span class="firma-txt"><b>— Mario Vignets</b><br><small data-i18n="platGuest">Guest review</small></span></div></a>
+      <a class="resena-card" href="https://restaurants-cafes.com/New_Jersey/Trenton/Taqueria_El_Mariachi" target="_blank" rel="noopener"><p data-i18n="r15">"Muy buena la comida en general... precios razonables..."</p><div class="firma"><span class="avatar">A</span><span class="firma-txt"><b>— Allan Blanco</b><br><small data-i18n="platGuest">Guest review</small></span></div></a>
+    </div>
+  </div>
+  <p class="crece" data-i18n="revGrows">✨ This wheel grows on its own with your newest 5-star reviews.</p>
+  <div class="wrap">
+    <div class="cta-resena rv">
+      <p data-i18n="revCta">Ate with us? Tell Trenton about it 👇</p>
+      <a class="btn dorado" href="https://www.google.com/maps/search/?api=1&query=Taqueria+El+Mariachi+109+S+Olden+Ave+Trenton+NJ" target="_blank" rel="noopener" data-i18n="leaveReview">⭐ Leave a Google Review</a>
+    </div>
+  </div>
+</section>
+
+<div class="picado-banda" aria-hidden="true">
+<svg viewBox="0 0 360 46" preserveAspectRatio="none">
+  <rect width="360" height="46" fill="url(#pic)"/>
+</svg>
+</div>
+
+<!-- ============ CALCULADORA (crema) ============ -->
+<section class="seccion crema" id="calculadora">
+  <div class="wrap">
+    <span class="kicker rv" data-i18n="calcKicker">THE MATH</span>
+    <h2 class="titulo rv d1" data-i18n="calcTitle">What is this costing you?</h2>
+    <p class="bajada rv d1" data-i18n="calcSub">Your real numbers, pre-filled where we know them. Move the sliders — this is an honest estimate, not a promise.</p>
+    <div class="calc-grid">
+      <div class="calc-card rv">
+        <h3 data-i18n="calcRevT">⭐ Reviews</h3>
+        <p class="calc-fuente" data-i18n="calcRevSrc">Harvard Business School: 1 extra star = 5–9% more revenue for independent restaurants. Starting point: your public Google rating today (4.1★, 533 reviews). Ratings move every day — drag the slider up to see what you'd gain, or down to see what unanswered bad reviews cost. Every response is approved by you or your manager — nothing goes out on its own.</p>
+        <div class="calc-ahora"><span data-i18n="calcRatingNow">Your rating today</span><b>4.1★</b></div>
+        <label><span data-i18n="calcRatingGoal">If your rating were…</span> <b id="vTarget">4.5★</b></label>
+        <input type="range" min="3" max="5" step="0.1" value="4.5" oninput="updCalc('target',parseFloat(this.value))" aria-label="Target rating">
+        <label data-i18n="calcSales">Yearly sales (estimate)</label>
+        <div class="money-wrap"><input type="number" value="150000" min="0" step="5000" oninput="updCalc('sales',parseFloat(this.value)||0)"></div>
+        <div class="calc-result"><span id="rRevLbl" data-i18n="revGain">You'd gain</span><b id="rRev" class="ganancia">+$3,000–$5,400 / yr</b></div>
+        <p class="calc-nota" data-i18n="calcRevNote">A customer who writes a 1★ review still values your food — silence is what costs you. A timely, owner-approved apology ("it won't happen again, we're fixing it") can turn that 1★ into a 3★. Responding sells trust, not just stars.</p>
+      </div>
+      <div class="calc-card rv d1">
+        <h3 data-i18n="calcCallT">📞 Missed calls</h3>
+        <p class="calc-fuente" data-i18n="calcCallSrc">We found at least one review of a customer left ~6 minutes on hold (Dec 2025). How many calls like that happen each week? Only you know — adjust it.</p>
+        <label data-i18n="calcCallsW">Missed calls / week</label>
+        <input type="number" value="10" min="0" oninput="updCalc('calls',parseFloat(this.value)||0)">
+        <label data-i18n="calcConv">% that would have ordered</label>
+        <input type="number" value="50" min="0" max="100" oninput="updCalc('conv',parseFloat(this.value)||0)">
+        <label data-i18n="calcTicket">Average ticket</label>
+        <div class="money-wrap"><input type="number" value="25" min="0" step="1" oninput="updCalc('ticket',parseFloat(this.value)||0)"></div>
+        <label><span data-i18n="calcRec">Of every 10 missed calls, how many would order with an instant text?</span> <b id="vRec">7 of 10</b></label>
+        <input type="range" min="0" max="10" step="1" value="7" oninput="updCalc('recN',parseFloat(this.value))" aria-label="Recovered calls">
+        <div class="calc-result"><span data-i18n="calcCallOut">Lost now → recoverable</span><b id="rCall">~$6,500 → ~$4,550 / yr</b></div>
+      </div>
+      <div class="calc-card rv d2">
+        <h3 data-i18n="calcAppT">🛵 Pickup orders</h3>
+        <p class="calc-fuente" data-i18n="calcAppSrc">Your DoorDash (4.5★, 1,000+ ratings) is visibility you shouldn't lose — and delivery without hiring a driver or a car. The opportunity is pickup: customers who'd pick up anyway can order direct from your page, and that commission stays with you.</p>
+        <label data-i18n="calcAppW">Pickup orders / week (now through apps)</label>
+        <input type="number" value="20" min="0" oninput="updCalc('appOrders',parseFloat(this.value)||0)">
+        <label data-i18n="calcAppTicket">Average ticket</label>
+        <div class="money-wrap"><input type="number" value="25" min="0" step="1" oninput="updCalc('appTicket',parseFloat(this.value)||0)"></div>
+        <label data-i18n="calcComm">Commission %</label>
+        <input type="number" value="15" min="0" max="40" oninput="updCalc('comm',parseFloat(this.value)||0)">
+        <div class="calc-result"><span data-i18n="calcAppOut">Stays with you with direct pickup</span><b id="rApp">~$3,900 / yr</b></div>
+        <p class="calc-nota" data-i18n="calcAppNote">If you already raise prices on the apps to cover the commission, direct pickup lets you give the customer a better price and still keep more.</p>
+      </div>
+    </div>
+    <div class="calc-total rv">
+      <span data-i18n="calcTotalL">Leaking every year</span>
+      <b id="rTotal">~$10,400 / yr</b>
+      <span data-i18n="calcGainL">Potential gain</span>
+      <b id="rGan" class="verde">+$3,000–$5,400 / yr</b>
+      <span data-i18n="calcRecL">Recoverable</span>
+      <b id="rRecup" class="verde">~$8,450 / yr</b>
+      <p data-i18n="calcTotalN">Adjust every number to your reality. What you see in green is what a system like this is built to recover.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VISITA (oscuro) ============ -->
+<section class="seccion oscura" id="visita">
+  <div class="wrap">
+    <span class="kicker rv" data-i18n="visitKicker">VISIT US</span>
+    <h2 class="titulo rv d1" data-i18n="visitTitle">Come hungry</h2>
+    <p class="bajada rv d1" data-i18n="visitSub">Walk-ins welcome. Groups and families — there's room.</p>
+    <div class="visita-card rv d2">
+      <div class="visita-fila">
+        <span class="ico">📍</span>
+        <div><strong>Taqueria El Mariachi</strong><small>109 S Olden Ave, Trenton, NJ 08609</small></div>
+      </div>
+      <div class="visita-fila">
+        <span class="ico">📞</span>
+        <div><a class="tel" href="tel:+16099898010">(609) 989-8010</a><br><small data-i18n="visitCallNote">Call ahead — we'll have it hot and ready.</small></div>
+      </div>
+      <div class="visita-fila">
+        <span class="ico">🕙</span>
+        <div><strong data-i18n="hoursTitle">Hours</strong><small data-i18n="hoursNote">Hours to be confirmed with the restaurant — published sources disagree.</small></div>
+      </div>
+      <div class="visita-acciones">
+        <a class="btn rojo" href="tel:+16099898010" data-i18n="visitCallBtn">📞 Call now</a>
+        <a class="btn dorado" href="https://www.google.com/maps/search/?api=1&query=Taqueria+El+Mariachi+109+S+Olden+Ave+Trenton+NJ+08609" target="_blank" rel="noopener" data-i18n="dirBtn">📍 Get directions</a>
+      </div>
+      <div class="catering">
+        <h3 data-i18n="cateringTitle">Feed the crew</h3>
+        <p data-i18n="cateringDesc">Taco platters, pupusa trays &amp; party orders — call ahead and we'll have it hot and ready.</p>
+        <a class="btn fantasma" href="tel:+16099898010" data-i18n="cateringBtn">📲 Order for your party</a>
+      </div>
+    </div>
+    <div class="social-row rv">
+      <span data-i18n="socialT">Follow us</span>
+      <a href="https://www.facebook.com/ElMariachi109SouthOldenAvenue/" target="_blank" rel="noopener" aria-label="Facebook">f</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=Taqueria+El+Mariachi+109+S+Olden+Ave+Trenton+NJ" target="_blank" rel="noopener" aria-label="Google">G</a>
+    </div>
+  </div>
+</section>
+
+<div class="tricolor"></div>
+<footer>
+  <p class="f-nombre">Taqueria El Mariachi</p>
+  <p>© 2026 · 109 S Olden Ave, Trenton NJ · (609) 989-8010</p>
+  <p style="margin-top:.5rem"><span class="mini">✨ Polux</span> · <span data-i18n="madeBy">sample concept — your agency of artificial intelligence</span></p>
+</footer>
+
+<section class="seccion cierre-polux">
+  <div class="wrap">
+    <p class="kicker" data-i18n="finKicker">POLUX · YOUR ARTIFICIAL INTELLIGENCE AGENCY</p>
+    <h2 data-i18n="finTitle">Like how your business looks here?</h2>
+    <p class="bajada" data-i18n="finSub">This is a live concept of your page, your reviews and your numbers — built with your real menu, your real reviews, your real ratings. Here is the itemized quote:</p>
+    <a class="btn btn-polux" href="cotizacion.html" data-i18n="finBtn">See my quote →</a>
+    <p class="fin-made" data-i18n="finMade">Concept prepared for Taqueria El Mariachi by Polux.</p>
+  </div>
+</section>
+
+<!-- Overlay: demo de pedido pickup -->
+<div class="overlay" id="overlayPedido">
+  <div class="panel">
+    <div class="panel-cab">
+      <h3><span data-i18n="panelTitle">Order Pickup</span><span class="demo-tag" data-i18n="demoTag">DEMO</span></h3>
+      <button class="cerrar" onclick="cerrarPedido()" aria-label="Close">×</button>
+    </div>
+    <div class="panel-cuerpo">
+      <div class="menu-demo" id="vistaMenu">
+        <div class="tabs" id="tabs"></div>
+        <div id="listaPlatos"></div>
+      </div>
+      <div class="menu-demo paso-form" id="vistaDatos" style="display:none">
+        <h4 style="font-family:var(--serif);font-size:1.4rem;margin-bottom:.4rem" data-i18n="yourInfo">Your info</h4>
+        <p style="font-size:.88rem;color:var(--muted-c)" data-i18n="yourInfoSub">So we can call you when it's ready.</p>
+        <label data-i18n="nameLabel">Name</label>
+        <input id="fldNombre" placeholder="Juan">
+        <label data-i18n="phoneLabel">Phone</label>
+        <input id="fldTelefono" type="tel" placeholder="(609) 555-0123">
+        <div style="margin-top:1.2rem;display:flex;gap:.6rem">
+          <button class="btn fantasma" style="border-color:var(--brasa);color:var(--brasa)" onclick="volverMenu()" data-i18n="backBtn">← Back</button>
+          <button class="btn rojo" onclick="confirmarPedido()" data-i18n="placeOrder">Place demo order</button>
+        </div>
+      </div>
+      <div class="menu-demo exito" id="vistaExito" style="display:none">
+        <div class="check">✅</div>
+        <h4 data-i18n="okTitle">Order received!</h4>
+        <p><span data-i18n="okNum">Order</span> <strong id="numOrden">#0000</strong></p>
+        <p data-i18n="okMsg">Ready in ~15–20 min. We'll call you when it's hot.</p>
+        <div class="nota-demo" data-i18n="okDemo">This is a demo — in the real system, your order goes straight to the restaurant's tablet the second you send it.</div>
+        <div style="margin-top:1.4rem"><button class="btn rojo" onclick="cerrarPedido()" data-i18n="doneBtn">Done</button></div>
+      </div>
+      <aside class="carrito">
+        <h4 data-i18n="cartTitle">Your order</h4>
+        <div class="carrito-items" id="carritoItems"><p class="vacio" data-i18n="cartEmpty">Nothing yet — tap + to add dishes.</p></div>
+        <div class="total"><span data-i18n="totalLbl">Total</span><span id="cartTotal">$0.00</span></div>
+        <button class="btn rojo" id="btnEnviar" onclick="irADatos()" disabled data-i18n="sendOrder">Send order →</button>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== MENÚ REAL (nombres en español = nombres propios del menú) ===== */
+const MENU=[
+{id:'house',en:'🌮 House Specialties',es:'🌮 Especialidades de la Casa',items:[
+["Tacos de Camarón","$12"],["Tacos al Pastor","$10"],["Tacos de Lengua","$12"],["Tacos de Pollo","$10"],["Tacos de Chorizo","$10"],["Tacos de Carne Asada","$10"],["Tacos Mixtos","$10"],
+["Pupusas Mixtas","$9"],["Pupusas de Queso","$9"],["Pupusas de Loroco","$9"],["Pupusas de Chicharrón","$9"],["Pupusas de Frijol","$9"],
+["Flautas","$9"],
+["Torta de Pollo","$10"],["Torta de Carne Asada","$10"],["Torta de Jamón","$10"],
+["Tostada de Pollo","$7"],["Tostada de Chao Mein","$9"],["Tostada de Guacamole","$7"],
+["Enchiladas Rojas o Verdes","$8.50"],["Quesadilla","$9"],["Empanadas","$9"],
+["Burrito de Pollo o Asada","—"],["Vegetarian Burrito","$6"]]},
+{id:'breakfast',en:'🍳 Breakfast',es:'🍳 Desayunos',items:[
+["Huevos a la Mexicana","$7"],["Huevos con Chorizo","$7.50"],["Huevos con Jamón","$7.50"],["Desayuno Especial","$9"]]},
+{id:'steak',en:'🥩 Steak',es:'🥩 Carnes',items:[
+["Bistec a la Mexicana","$11"],["Bistec Ranchero","$11"],["Bistec Encebollado","$11"],["Carne Asada","$10"],["Carne Guisada","$10"],["Orden de 3 Carnes","$12"]]},
+{id:'seafood',en:'🦐 Seafood',es:'🦐 Mariscos',items:[
+["Mojarra Frita","$12"],["Camarón al Mojo de Ajo","$11"],["Camarón a la Mexicana","$11"],["Camarón Ranchero","$11"],["Ceviche Mixto","$10.50"]]},
+{id:'chicken',en:'🍗 Chicken',es:'🍗 Pollo',items:[
+["Pollo en Crema","$11"],["Pechuga Encebollada","$11"],["Pechuga a la Plancha","$10"],["Pollo Frito","$10"],["Ensalada con Pollo","$9"]]},
+{id:'pork',en:'🐖 Pork',es:'🐖 Cerdo',items:[
+["Carne Adobada","$10"],["Chuleta Frita","$10"],["Chile Relleno","$10"]]},
+{id:'soups',en:'🍲 Soups',es:'🍲 Sopas',items:[
+["Sopa de Gallina","$10"],["Sopa de Pata y Panza","$11"],["Sopa de Res","$11.50"],["Sopa de Marisco","$12"]]},
+{id:'kids',en:'🧒 Kids',es:'🧒 Niños',items:[
+["Jr. Cheese Burger","$4.50"],["Chicken Nuggets","$4.50"],["Hot Dogs","$4"],["Grilled Cheese","$3.50"]]},
+{id:'extras',en:'🍟 Sides & Extras',es:'🍟 Extras y Guarniciones',items:[
+["Plátano Frito","$3.50"],["Frijoles","$2"],["Arroz","$2"],["Papas Fritas","$3"],["Chips con Salsa","$2"],["Guacamole con Chips","$5.50"],["Chorizo (extra)","$1.50"],
+["Tortillas","$1"],["Jalapeños","$1"],["Salsa Verde","$1"],["Pico de Gallo","$1"],["Crema","$0.50"],
+["Pechuga Asada (extra)","$4"],["Pierna Asada (extra)","$3"],["Carne Asada (extra)","$3"]]},
+{id:'drinks',en:'🥤 Beverages',es:'🥤 Bebidas',items:[
+["Horchata","$2.50"],["Tamarindo","$2.50"],["Jamaica","$2.50"],["Jarritos","$2"],["Sangría","$2"],["Gatorade","$2"],
+["Agua","$1"],["Sodas","$1"],["Coca-Cola 20oz","$2"],["Tikis","$2"],["Orange Crush","$2"],["Soda 2 Litros","$3"],
+["Licuados","$3"],["Café","$1.50"],["Atol de Elote","$2.50"]]}
+];
+const CABCLS=['roja','dorada',''];
+let LANG='en', carrito={}, catActiva=0;
+const precioNum=p=>p==='—'?NaN:parseFloat(p.replace('$',''));
+
+/* ===== Render menú completo ===== */
+function renderMenuCompleto(){
+  const c=document.getElementById('menuCompleto');c.innerHTML='';
+  MENU.forEach((cat,ci)=>{
+    const d=document.createElement('div');d.className='categoria';
+    d.innerHTML='<div class="cab '+CABCLS[ci%3]+'">'+cat[LANG]+'</div>';
+    cat.items.forEach(it=>{
+      const r=document.createElement('div');r.className='plato';
+      r.innerHTML='<span class="nombre">'+it[0]+'</span><span class="precio">'+it[1]+'</span>';
+      d.appendChild(r);
+    });
+    c.appendChild(d);
+  });
+}
+/* ===== Demo pedido ===== */
+function abrirPedido(){
+  document.getElementById('overlayPedido').classList.add('abierto');
+  document.body.style.overflow='hidden';
+  mostrarVista('vistaMenu');renderTabs();renderPlatos(catActiva);renderCarrito();
+}
+function cerrarPedido(){
+  document.getElementById('overlayPedido').classList.remove('abierto');
+  document.body.style.overflow='';
+}
+function mostrarVista(id){
+  ['vistaMenu','vistaDatos','vistaExito'].forEach(v=>document.getElementById(v).style.display=v===id?'block':'none');
+  if(id!=='vistaMenu')document.querySelector('.carrito').style.display='none';
+  else document.querySelector('.carrito').style.display='flex';
+}
+function renderTabs(){
+  const t=document.getElementById('tabs');t.innerHTML='';
+  MENU.forEach((cat,ci)=>{
+    const b=document.createElement('button');
+    b.textContent=cat[LANG];if(ci===catActiva)b.classList.add('activo');
+    b.onclick=()=>{catActiva=ci;renderTabs();renderPlatos(ci);};
+    t.appendChild(b);
+  });
+}
+function renderPlatos(ci){
+  const l=document.getElementById('listaPlatos');l.innerHTML='';
+  MENU[ci].items.forEach(it=>{
+    const num=precioNum(it[1]);
+    const r=document.createElement('div');r.className='fila-plato';
+    r.innerHTML='<span><span class="nom">'+it[0]+'</span><br><span class="pre">'+it[1]+(isNaN(num)?' <small style="color:var(--muted-c)">(confirm)</small>':'')+'</span></span>';
+    const b=document.createElement('button');b.className='btn-add';b.textContent='+';
+    b.disabled=isNaN(num);
+    b.onclick=()=>{addCarrito(it[0],it[1]);};
+    r.appendChild(b);l.appendChild(r);
+  });
+}
+function addCarrito(nom,pre){
+  if(!carrito[nom])carrito[nom]={pre:pre,qty:0};
+  carrito[nom].qty++;renderCarrito();
+}
+function cambiarQty(nom,d){
+  carrito[nom].qty+=d;
+  if(carrito[nom].qty<=0)delete carrito[nom];
+  renderCarrito();
+}
+function renderCarrito(){
+  const box=document.getElementById('carritoItems');box.innerHTML='';
+  const ks=Object.keys(carrito);
+  const T=TR[LANG];
+  if(!ks.length)box.innerHTML='<p class="vacio">'+T.cartEmpty+'</p>';
+  let total=0;
+  ks.forEach(nom=>{
+    const it=carrito[nom];const num=precioNum(it.pre);total+=num*it.qty;
+    const r=document.createElement('div');r.className='item-carrito';
+    r.innerHTML='<span>'+nom+' <small>('+it.pre+')</small></span>';
+    const q=document.createElement('span');q.className='qty';
+    q.innerHTML='<button>−</button><b>'+it.qty+'</b><button>+</button>';
+    q.children[0].onclick=()=>cambiarQty(nom,-1);
+    q.children[2].onclick=()=>cambiarQty(nom,1);
+    r.appendChild(q);box.appendChild(r);
+  });
+  document.getElementById('cartTotal').textContent='$'+total.toFixed(2);
+  document.getElementById('btnEnviar').disabled=!ks.length;
+}
+function irADatos(){mostrarVista('vistaDatos');}
+function volverMenu(){mostrarVista('vistaMenu');renderCarrito();}
+function confirmarPedido(){
+  document.getElementById('fldNombre').value.trim();
+  document.getElementById('numOrden').textContent='#'+(1000+Math.floor(Math.random()*9000));
+  carrito={};
+  mostrarVista('vistaExito');
+}
+/* ===== Calculadora de fugas (ambos lados: pérdida y ganancia) ===== */
+const RATING_NOW=4.1; /* calificación real del local: fija, no se mueve */
+const CALC={target:4.5,sales:150000,calls:10,conv:50,ticket:25,recN:7,appOrders:20,appTicket:25,comm:15};
+const fmtMoney=n=>'$'+Math.round(n).toLocaleString('en-US');
+function updCalc(k,v){CALC[k]=v;calcRender();}
+function calcRender(){
+  const T=TR[LANG];
+  document.getElementById('vTarget').textContent=CALC.target.toFixed(1)+'★';
+  document.getElementById('vRec').textContent=CALC.recN+' '+T.deCada;
+  const gap=CALC.target-RATING_NOW, agap=Math.abs(gap);
+  const revL=CALC.sales*agap*0.05, revH=CALC.sales*agap*0.09;
+  const lbl=document.getElementById('rRevLbl'), val=document.getElementById('rRev');
+  if(gap>0.001){lbl.textContent=T.revGain;val.textContent='+'+fmtMoney(revL)+'–'+fmtMoney(revH)+' '+T.perYear;val.classList.add('ganancia');}
+  else if(gap<-0.001){lbl.textContent=T.revLoss;val.textContent='−'+fmtMoney(revL)+'–'+fmtMoney(revH)+' '+T.perYear;val.classList.remove('ganancia');}
+  else{lbl.textContent=T.revEven;val.textContent=fmtMoney(0)+' '+T.perYear;val.classList.remove('ganancia');}
+  const callL=CALC.calls*52*(CALC.conv/100)*CALC.ticket;
+  const callR=callL*CALC.recN/10;
+  document.getElementById('rCall').textContent='~'+fmtMoney(callL)+' → ~'+fmtMoney(callR)+' '+T.perYear;
+  const appS=CALC.appOrders*52*CALC.appTicket*(CALC.comm/100);
+  document.getElementById('rApp').textContent='~'+fmtMoney(appS)+' '+T.perYear;
+  /* El total sigue el escenario: la fuga suma la caída de rating solo si el escenario está bajo el 4.1 de hoy */
+  const revPerdL=gap<-0.001?revL:0, revPerdH=gap<-0.001?revH:0;
+  const fugaL=callL+appS+revPerdL, fugaH=callL+appS+revPerdH;
+  const fmtRango=(l,h)=>l===h?'~'+fmtMoney(l)+' '+T.perYear:'~'+fmtMoney(l)+'–'+fmtMoney(h)+' '+T.perYear;
+  document.getElementById('rTotal').textContent=fmtRango(fugaL,fugaH);
+  const ganL=gap>0.001?revL:0, ganH=gap>0.001?revH:0;
+  document.getElementById('rGan').textContent=(gap>0.001?'+':'')+fmtMoney(ganL)+'–'+fmtMoney(ganH)+' '+T.perYear;
+  document.getElementById('rRecup').textContent='~'+fmtMoney(callR+appS)+' '+T.perYear;
+}
+/* ===== reveal on scroll ===== */
+(function(){
+  const els=document.querySelectorAll('.rv');
+  if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches){els.forEach(e=>e.classList.add('on'));return;}
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target);}}),{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+  els.forEach(e=>io.observe(e));
+})();
+/* ===== i18n ===== */
+const TR={
+en:{call:"📞 Call us",kicker:"TRENTON, NJ · SKIP THE PHONE LINE",h1a:"Order ahead.",h1b:"Skip the wait.",heroSub:"Tacos al pastor, pupusas & more — order pickup in 30 seconds, or get it delivered. Your food, your way.",orderPickup:"🛒 Order Pickup",deliveryOpts:"🚗 Delivery Options",edificioHint:"👆 Tap the building for directions",edificioAria:"Get directions to Taqueria El Mariachi",logoAqui:"YOUR LOGO HERE",onGoogle:"on Google · 533 reviews",onDoorDash:"on DoorDash · 1k+ ratings",cita:"The tacos are always ON POINT!",citaQuien:"— Rosa Lezama · Google review",
+storyKicker:"OUR STORY",storyTitle:"A hidden gem on Olden Ave",storySub:"Straight from taqueriaelmariachi.shop — who they are, in their own words.",st1t:"A hidden gem",st1d:"A charming taqueria at 109 S Olden Ave — Trenton's hidden gem.",st2t:"An open kitchen",st2d:"An open layout that invites you to watch your food being made — marinated pork, chicken soup, everything out in the open.",st3t:"Fair prices, real flavor",st3d:"Fair prices that don't compromise on quality — real Mexican flavor, every day.",st4t:"The signatures",st4d:"Tomatillo salsa — acidic and vibrant. Horchata and licuados (banana, melon). Pupusas, tacos al pastor, carne asada.",
+howKicker:"HOW IT WORKS",howTitle:"From click to counter",howSub:"Three steps. No phone tag, no waiting on hold.",s1t:"Pick your dishes",s1d:"The full menu, with real prices — right here.",s2t:"We fire up the grill",s2d:"Your order goes straight to the kitchen.",s3t:"Ready in ~15–20 min",s3d:"Hot and waiting when you walk in.",
+orderTitle:"Order your way",orderSub:"Pickup direct from us, or delivery through your favorite app.",pickupDemo:"PICKUP · INTERACTIVE DEMO",direct:"Direct pickup",directDesc:"Order here and skip the line — ready when you arrive. No commission, no middleman.",startOrder:"Start a demo order",callDirect:"Call ahead",callDirectDesc:"Old school works too — call and we'll have it ready.",callOrder:"Call (609) 989-8010",
+delKicker:"DELIVERY",delTitle:"Delivery to your door",delSub:"Find us on every major app — or pick up and pay zero fees.",ddDesc:"4.5★ from 1,000+ orders. Live tracking.",orderDD:"Order on DoorDash",ghDesc:"Pickup & delivery through Grubhub.",orderGH:"Order on Grubhub",caviarDesc:"Same kitchen, same flavor — order through Caviar.",orderCaviar:"Order on Caviar",seamDesc:"Pickup & delivery through Seamless.",orderSeam:"Order on Seamless",
+menuKicker:"THE MENU",menuTitle:"The full menu",menuSub:"Everything they make — real dishes, real prices. Tap 🛒 to order any of these for pickup.",priceNote:"💡 Prices confirmed from their published menu — final in-store prices confirmed with the restaurant.",
+famousKicker:"HOUSE FAVORITES",famousTitle:"House favorites",famousSub:"The dishes people ask for by name.",platGoogle:"Google review",platSite:"Guest book",socialT:"Follow us",f1t:"Tomatillo Salsa",f1d:"“Acidic and vibrant” — our signature kick.",f2t:"Open Kitchen",f2d:"Watch your meal being made.",f3t:"Horchata & Licuados",f3d:"Banana, melon & house-made horchata.",f4t:"Fair Prices",f4d:"Real flavor, no compromise on quality.",
+m4:"The food was very delicious and well priced. I had the mixed tacos — al pastor, carne asada and chorizo. My favorite was the al pastor.",revKicker:"REVIEWS",revTitle:"Trenton has spoken",revSub:"Real reviews from real customers — 4.1★ on Google (533 reviews), 4.5★ on DoorDash.",m1:"“Literally OBSESSED with the Fajitas De Pollo! The peppers and onions are grilled so good, with Salsa Verde delicious.”",m2:"“I've never seen such a stuffed pupusa. 10 out of 10 recommend.”",q1:"“The tomatillo salsa is acidic and vibrant — it gives the tacos and flautas an unforgettable kick.”",q1who:"— Jenna McKinney · taqueriaelmariachi.shop",q2:"“Hot, beautifully plated food delivered right to my door — the tacos are undeniably on point.”",q2who:"— Rosa Lezama · taqueriaelmariachi.shop",q3:"“The open kitchen lets you watch your meal being made — marinated pork and chicken soup as authentic as it gets.”",q3who:"— Danny Mcguiness · taqueriaelmariachi.shop",revCta:"Ate with us? Tell Trenton about it 👇",leaveReview:"⭐ Leave a Google Review",revPrev:"Previous",revNext:"Next",r1:"I love this place! Great authentic cuisine — I love the marinated pork and the chicken soup, very delicious. Tacos are great and the prices are very good as well.",r2:"Just had Mexican in Mexico 2 weeks ago. No complaints whatsoever, but I still prefer TEM.",r3:"What a gem!! Excellent food and service — super delicious and authentic home cooking.",r4:"Small, family-owned taqueria. They make their own horchata from scratch! The food makes up for the drive.",r5:"Food was amazing and seasoned perfectly. Fed 7 people for $70!!",r6:"A friend recommended this place and it was awesome. Portions are huge and prices are cheap — the papusas con loroco were amazing.",r7:"Had lunch today and it was remarkable! Guacamole was out of this world... A+ all the way. Our new favorite.",r8:"Awesome steak tacos! A must try if you're in the Trenton area.",r9:"Best tacos in town — try the salsa verde.",r10:"Best pupusas ever!",r11:"Price, quantity, and quality is amazing. Brought me back to my childhood.",r12:"Crazy affordable and very tasty — small menu but everything I've had is spot on.",r13:"Great food, fresh everything, extremely reasonable prices.",r14:"Very good food and service.",r15:"Very good food overall... reasonable prices...",platGuest:"Guest review",anonGuest:"Anonymous guest",revGrows:"✨ This wheel grows on its own with your newest 5-star reviews.",finKicker:"POLUX · YOUR ARTIFICIAL INTELLIGENCE AGENCY",finTitle:"Like how your business looks here?",finSub:"This is a live concept of your page, your reviews and your numbers — built with your real menu, your real reviews, your real ratings. Here is the itemized quote:",finBtn:"See my quote →",finMade:"Concept prepared for Taqueria El Mariachi by Polux.",
+calcKicker:"THE MATH",calcTitle:"What is this costing you?",calcSub:"Your real numbers, pre-filled where we know them. Move the sliders — this is an honest estimate, not a promise.",
+calcRevT:"⭐ Reviews",calcRevSrc:"Harvard Business School: 1 extra star = 5–9% more revenue for independent restaurants. Starting point: your public Google rating today (4.1★, 533 reviews). Ratings move every day — drag the slider up to see what you'd gain, or down to see what unanswered bad reviews cost. Every response is approved by you or your manager — nothing goes out on its own.",calcRatingNow:"Your rating today",calcRatingGoal:"If your rating were…",calcSales:"Yearly sales (estimate)",revGain:"You'd gain",revLoss:"You'd lose",revEven:"Right where you are",calcRevNote:"A customer who writes a 1★ review still values your food — silence is what costs you. A timely, owner-approved apology (“it won't happen again, we're fixing it”) can turn that 1★ into a 3★. Responding sells trust, not just stars.",
+calcCallT:"📞 Missed calls",calcCallSrc:"We found at least one review of a customer left ~6 minutes on hold (Dec 2025). How many calls like that happen each week? Only you know — adjust it.",calcCallsW:"Missed calls / week",calcConv:"% that would have ordered",calcTicket:"Average ticket",calcCallOut:"Lost now → recoverable",calcRec:"Of every 10 missed calls, how many would order with an instant text?",deCada:"of 10",
+calcAppT:"🛵 Pickup orders",calcAppSrc:"Your DoorDash (4.5★, 1,000+ ratings) is visibility you shouldn't lose — and delivery without hiring a driver or a car. The opportunity is pickup: customers who'd pick up anyway can order direct from your page, and that commission stays with you.",calcAppW:"Pickup orders / week (now through apps)",calcAppTicket:"Average ticket",calcComm:"Commission %",calcAppOut:"Stays with you with direct pickup",calcAppNote:"If you already raise prices on the apps to cover the commission, direct pickup lets you give the customer a better price and still keep more.",
+calcTotalL:"Leaking every year",calcGainL:"Potential gain",calcRecL:"Recoverable",calcTotalN:"Adjust every number to your reality. In green: what a system like this is built to recover — or help you gain.",perYear:"/ yr",
+visitKicker:"VISIT US",visitTitle:"Come hungry",visitSub:"Walk-ins welcome. Groups and families — there's room.",visitCallNote:"Call ahead — we'll have it hot and ready.",hoursTitle:"Hours",hoursNote:"Hours to be confirmed with the restaurant — published sources disagree.",visitCallBtn:"📞 Call now",dirBtn:"📍 Get directions",cateringTitle:"Feed the crew",cateringDesc:"Taco platters, pupusa trays & party orders — call ahead and we'll have it hot and ready.",cateringBtn:"📲 Order for your party",
+panelTitle:"Order Pickup",demoTag:"DEMO",yourInfo:"Your info",yourInfoSub:"So we can call you when it's ready.",nameLabel:"Name",phoneLabel:"Phone",backBtn:"← Back",placeOrder:"Place demo order",okTitle:"Order received!",okNum:"Order",okMsg:"Ready in ~15–20 min. We'll call you when it's hot.",okDemo:"This is a demo — in the real system, your order goes straight to the restaurant's tablet the second you send it.",doneBtn:"Done",cartTitle:"Your order",cartEmpty:"Nothing yet — tap + to add dishes.",totalLbl:"Total",sendOrder:"Send order →",madeBy:"sample concept — your agency of artificial intelligence"},
+es:{call:"📞 Llámanos",kicker:"TRENTON, NJ · SIN ESPERAR AL TELÉFONO",h1a:"Pide por adelantado.",h1b:"Sin hacer fila.",heroSub:"Tacos al pastor, pupusas y más — pide para recoger en 30 segundos, o a domicilio. Tu comida, a tu manera.",orderPickup:"🛒 Pedir para recoger",deliveryOpts:"🚗 Opciones de delivery",edificioHint:"👆 Toca el edificio para llegar",edificioAria:"Cómo llegar a Taqueria El Mariachi",logoAqui:"TU LOGO AQUÍ",onGoogle:"en Google · 533 reseñas",onDoorDash:"en DoorDash · +1,000 calificaciones",cita:"¡Los tacos siempre están en su punto!",citaQuien:"— Rosa Lezama · reseña de Google",
+storyKicker:"NUESTRA HISTORIA",storyTitle:"Un tesoro escondido en Olden Ave",storySub:"Directo de taqueriaelmariachi.shop — quiénes son, en sus propias palabras.",st1t:"Un tesoro escondido",st1d:"Una encantadora taquería en el 109 de Olden Ave — el tesoro escondido de Trenton.",st2t:"Cocina abierta",st2d:"Un local abierto que te invita a ver cómo preparan tu comida — cerdo marinado, caldo de pollo, todo a la vista.",st3t:"Precios justos, sabor de verdad",st3d:"Precios justos que no sacrifican la calidad — auténtico sabor mexicano, todos los días.",st4t:"Los de la casa",st4d:"Salsa de tomatillo — ácida y vibrante. Horchata y licuados (plátano, melón). Pupusas, tacos al pastor, carne asada.",
+howKicker:"CÓMO FUNCIONA",howTitle:"Del clic al mostrador",howSub:"Tres pasos. Sin llamadas perdidas, sin espera.",s1t:"Elige tus platos",s1d:"El menú completo, con precios reales — aquí mismo.",s2t:"Encendemos la parrilla",s2d:"Tu pedido llega directo a la cocina.",s3t:"Listo en ~15–20 min",s3d:"Caliente y esperándote al llegar.",
+orderTitle:"Pide como quieras",orderSub:"Recoge directo con nosotros, o delivery por tu app favorita.",pickupDemo:"RECOGER · DEMO INTERACTIVA",direct:"Recoger directo",directDesc:"Pide aquí y evita la fila — listo cuando llegues. Sin comisión, sin intermediarios.",startOrder:"Probar pedido demo",callDirect:"Llama por adelantado",callDirectDesc:"A la antigua también funciona — llama y lo tenemos listo.",callOrder:"Llamar (609) 989-8010",
+delKicker:"DELIVERY",delTitle:"Delivery a tu puerta",delSub:"Encuéntranos en todas las apps — o recoge y paga cero cargos.",ddDesc:"4.5★ en más de 1,000 pedidos. Rastreo en vivo.",orderDD:"Pedir en DoorDash",ghDesc:"Recoger y delivery por Grubhub.",orderGH:"Pedir en Grubhub",caviarDesc:"La misma cocina, el mismo sabor — pide por Caviar.",orderCaviar:"Pedir en Caviar",seamDesc:"Recoger y delivery por Seamless.",orderSeam:"Pedir en Seamless",
+menuKicker:"EL MENÚ",menuTitle:"El menú completo",menuSub:"Todo lo que preparan — platos reales, precios reales. Toca 🛒 para pedir cualquiera para recoger.",priceNote:"💡 Precios confirmados de su menú publicado — precios finales del local por confirmar con el restaurante.",
+famousKicker:"LOS DE LA CASA",famousTitle:"Los de la casa",famousSub:"Los platos que la gente pide por su nombre.",platGoogle:"Reseña de Google",platSite:"Libro de visitas",socialT:"Síguenos",f1t:"Salsa de Tomatillo",f1d:"“Ácida y vibrante” — nuestro toque insignia.",f2t:"Cocina Abierta",f2d:"Mira cómo preparan tu comida.",f3t:"Horchata y Licuados",f3d:"Plátano, melón y horchata de la casa.",f4t:"Precios Justos",f4d:"Sabor de verdad, sin sacrificar calidad.",
+m4:"La comida estaba muy deliciosa y a buen precio. Tengo los tacos mixtos, al pastor, carne asada y chorizo. Mi favorita fue la versión al pastor.",revKicker:"RESEÑAS",revTitle:"Trenton ya habló",revSub:"Reseñas reales de clientes reales — 4.1★ en Google (533 reseñas), 4.5★ en DoorDash.",m1:"“¡Obsesionada con las Fajitas de Pollo! Los pimientos y la cebolla a la parrilla buenísimos, con una salsa verde deliciosa.”",m2:"“Nunca había visto una pupusa tan rellena. 10 de 10, recomendadísima.”",q1:"“La salsa de tomatillo es ácida y vibrante — les da a los tacos y flautas un toque inolvidable.”",q1who:"— Jenna McKinney · taqueriaelmariachi.shop",q2:"“Comida caliente y bien presentada, entregada en mi puerta — los tacos están en su punto.”",q2who:"— Rosa Lezama · taqueriaelmariachi.shop",q3:"“La cocina abierta te deja ver cómo preparan tu comida — cerdo marinado y caldo de pollo de lo más auténtico.”",q3who:"— Danny Mcguiness · taqueriaelmariachi.shop",revCta:"¿Comiste con nosotros? Cuéntale a Trenton 👇",leaveReview:"⭐ Dejar reseña en Google",revPrev:"Anteriores",revNext:"Siguientes",r1:"¡Me encanta este lugar! Cocina auténtica excelente — me encantan el cerdo marinado y el caldo de pollo, riquísimos. Los tacos son geniales y los precios muy buenos.",r2:"Comí comida mexicana en México hace 2 semanas. Ninguna queja, pero sigo prefiriendo TEM.",r3:"¡Una joya! Comida y servicio excelentes — cocina casera súper deliciosa y auténtica.",r4:"Taquería pequeña y familiar. ¡Hacen su propia horchata desde cero! La comida vale el viaje.",r5:"La comida estaba increíble y perfectamente sazonada. ¡Comimos 7 personas por $70!",r6:"Un amigo me recomendó este lugar y fue increíble. Porciones enormes y precios baratos — las pupusas con loroco estaban increíbles.",r7:"¡Almorzamos hoy y fue extraordinario! El guacamole estaba de otro mundo... A+ en todo. Nuestro nuevo favorito.",r8:"¡Tacos de bistec increíbles! Obligatorios si estás en el área de Trenton.",r9:"Los mejores tacos del pueblo — prueba la salsa verde.",r10:"¡Las mejores pupusas!",r11:"Precio, cantidad y calidad increíbles. Me devolvió a mi infancia.",r12:"Increíblemente barato y muy sabroso — menú pequeño pero todo lo que he probado está en su punto.",r13:"Comida excelente, todo fresco, precios extremadamente razonables.",r14:"Muy buena comida y servicio.",r15:"Muy buena la comida en general... precios razonables...",platGuest:"Reseña de invitado",anonGuest:"Invitado anónimo",revGrows:"✨ Esta rueda crece sola con tus nuevas reseñas de 5 estrellas.",finKicker:"POLUX · TU AGENCIA DE INTELIGENCIA ARTIFICIAL",finTitle:"¿Te gusta cómo se ve tu negocio aquí?",finSub:"Esto es un concepto vivo de tu página, tus reseñas y tus números — construido con tu menú real, tus reseñas reales, tus calificaciones reales. Aquí está la cotización desglosada:",finBtn:"Ver mi cotización →",finMade:"Concepto preparado para Taqueria El Mariachi por Polux.",
+calcKicker:"LOS NÚMEROS",calcTitle:"¿Cuánto te está costando?",calcSub:"Tus números reales, pre-llenados donde los conocemos. Mueve los controles — es una estimación honesta, no una promesa.",
+calcRevT:"⭐ Reseñas",calcRevSrc:"Harvard Business School: 1 estrella más = 5–9% más ingresos en restaurantes independientes. Punto de partida: tu calificación pública de Google hoy (4.1★, 533 reseñas). Las calificaciones se mueven todos los días — mueve el control hacia arriba para ver lo que ganarías, o hacia abajo para ver lo que cuestan las malas reseñas sin responder. Cada respuesta la apruebas tú o tu encargado — nada se publica solo.",calcRatingNow:"Tu calificación hoy",calcRatingGoal:"Si tu calificación fuera…",calcSales:"Ventas anuales (estimado)",revGain:"Ganarías",revLoss:"Perderías",revEven:"Donde estás ahora",calcRevNote:"El cliente que escribe una reseña de 1★ valora tu comida — el silencio es lo que te cuesta. Una disculpa a tiempo, aprobada por ti (“no volverá a pasar, estamos trabajando en ello”), puede convertir ese 1★ en 3★. Responder vende confianza, no solo estrellas.",
+calcCallT:"📞 Llamadas perdidas",calcCallSrc:"Encontramos al menos una reseña de un cliente dejado ~6 minutos en espera (dic 2025). ¿Cuántas llamadas así pasan cada semana? Solo tú lo sabes — ajústalo.",calcCallsW:"Llamadas perdidas / semana",calcConv:"% que habría pedido",calcTicket:"Ticket promedio",calcCallOut:"Pierdes ahora → recuperable",calcRec:"De cada 10 llamadas perdidas, ¿cuántas pedirían con un mensaje al instante?",deCada:"de 10",
+calcAppT:"🛵 Pedidos para recoger",calcAppSrc:"Tu DoorDash (4.5★, 1,000+ reseñas) es visibilidad que no debes perder — y delivery sin contratar repartidor ni tener carro. La oportunidad está en la recogida: el cliente que de todos modos va a pasar a recoger puede pedir directo en tu página, y esa comisión se queda contigo.",calcAppW:"Pedidos para recoger / semana (hoy por apps)",calcAppTicket:"Ticket promedio",calcComm:"% de comisión",calcAppOut:"Se queda contigo con pedido directo",calcAppNote:"Si ya subes el precio en las apps para cubrir la comisión, con pedido directo le das mejor precio al cliente y aun así te quedas con más.",
+calcTotalL:"Fuga cada año",calcGainL:"Ganancia potencial",calcRecL:"Recuperable",calcTotalN:"Ajusta cada número a tu realidad. En verde: lo que un sistema así está hecho para recuperar — o para ayudarte a ganar.",perYear:"/ año",
+visitKicker:"VISÍTANOS",visitTitle:"Ven con hambre",visitSub:"Sin reservación. Grupos y familias — hay lugar.",visitCallNote:"Llama por adelantado — lo tenemos caliente y listo.",hoursTitle:"Horario",hoursNote:"Horario por confirmar con el restaurante — las fuentes públicas se contradicen.",visitCallBtn:"📞 Llamar ahora",dirBtn:"📍 Cómo llegar",cateringTitle:"Para toda la banda",cateringDesc:"Charolas de tacos, pupusas y pedidos para fiestas — llama y lo tenemos caliente y listo.",cateringBtn:"📲 Pide para tu fiesta",
+panelTitle:"Pedir para recoger",demoTag:"DEMO",yourInfo:"Tus datos",yourInfoSub:"Para llamarte cuando esté listo.",nameLabel:"Nombre",phoneLabel:"Teléfono",backBtn:"← Atrás",placeOrder:"Enviar pedido demo",okTitle:"¡Pedido recibido!",okNum:"Pedido",okMsg:"Listo en ~15–20 min. Te llamamos cuando esté caliente.",okDemo:"Esto es una demo — en el sistema real, tu pedido llega a la tableta del restaurante en el segundo que lo envías.",doneBtn:"Listo",cartTitle:"Tu pedido",cartEmpty:"Nada aún — toca + para agregar platos.",totalLbl:"Total",sendOrder:"Enviar pedido →",madeBy:"concepto de muestra — tu agencia de inteligencia artificial"}
+};
+function setLang(l){
+  LANG=l;document.documentElement.lang=l;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(TR[l][k]!==undefined)el.innerHTML=TR[l][k];
+  });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=>{
+    const k=el.getAttribute('data-i18n-aria');
+    if(TR[l][k]!==undefined)el.setAttribute('aria-label',TR[l][k]);
+  });
+  document.getElementById('btnEN').classList.toggle('activo',l==='en');
+  document.getElementById('btnES').classList.toggle('activo',l==='es');
+  renderMenuCompleto();
+  calcRender();
+  if(document.getElementById('overlayPedido').classList.contains('abierto')){renderTabs();renderPlatos(catActiva);renderCarrito();}
+}
+renderMenuCompleto();
+calcRender();
+/* ===== Rueda de reseñas: arrastre libre + avance auto que cede al usuario ===== */
+(function(){
+  const rueda=document.getElementById('ruedaResenas');
+  if(!rueda)return;
+  const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let arrastrando=false,movido=false,x0=0,s0=0,suprimirClick=false,auto=null,idle=null;
+  const paso=()=>{const c=rueda.querySelector('.resena-card');return c?c.offsetWidth+16:320;};
+  const parar=()=>{if(auto){clearInterval(auto);auto=null;}if(idle){clearTimeout(idle);idle=null;}idle=setTimeout(arrancar,9000);};
+  function arrancar(){if(auto||RM)return;auto=setInterval(()=>{
+    const max=rueda.scrollWidth-rueda.clientWidth-10;
+    if(rueda.scrollLeft>=max){rueda.scrollTo({left:0,behavior:'smooth'});}
+    else{rueda.scrollBy({left:paso(),behavior:'smooth'});}
+  },4500);}
+  rueda.addEventListener('pointerdown',e=>{
+    parar();
+    if(e.pointerType!=='mouse')return;
+    arrastrando=true;movido=false;x0=e.clientX;s0=rueda.scrollLeft;
+    rueda.classList.add('arrastrando');
+    try{rueda.setPointerCapture(e.pointerId);}catch(_){}
+  });
+  rueda.addEventListener('pointermove',e=>{
+    if(!arrastrando||e.pointerType!=='mouse')return;
+    if(Math.abs(e.clientX-x0)>8)movido=true;
+    rueda.scrollLeft=s0-(e.clientX-x0);
+  });
+  ['pointerup','pointercancel'].forEach(ev=>rueda.addEventListener(ev,()=>{
+    arrastrando=false;rueda.classList.remove('arrastrando');
+    if(movido){suprimirClick=true;setTimeout(()=>{suprimirClick=false;},80);}
+    parar();
+  }));
+  rueda.addEventListener('click',e=>{
+    if(suprimirClick){e.preventDefault();e.stopPropagation();suprimirClick=false;}
+  },true);
+  rueda.addEventListener('touchstart',parar,{passive:true});
+  document.querySelectorAll('[data-rueda]').forEach(b=>b.addEventListener('click',()=>{
+    parar();
+    rueda.scrollBy({left:(b.getAttribute('data-rueda')==='next'?1:-1)*paso(),behavior:'smooth'});
+  }));
+  arrancar();
+})();
+</script>
+</body>
+</html>
