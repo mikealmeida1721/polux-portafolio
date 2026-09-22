@@ -74,7 +74,7 @@ var cbLive=document.getElementById('cbLive'),
     cbForm=document.getElementById('cbForm'), cbInput=document.getElementById('cbInput'),
     cbFoot=document.getElementById('cbFoot');
 var THEMES=window.CHATBOT_THEMES;
-var cur=null, mode='chat', busy=false, specStep=0, specAns=[];
+var cur=null, mode='chat', busy=false, specStep=0, specAns=[], specLevel='personalizado';
 var WA_NUM='16093316652', FB_MID='61575590535677';
 function scrollMsgs(){requestAnimationFrame(function(){requestAnimationFrame(function(){cbMsgs.scrollTop=cbMsgs.scrollHeight})})}
 function bubble(who,text){
@@ -92,10 +92,11 @@ function setChips(list){
  });
 }
 /* Niveles del producto chatbot.
-   FUTURO: el nivel "Con IA" (IA real detrás, ej. Gemini) se agrega como {id:'ia',...}
-   con su propio flujo. PROHIBIDO: poner API keys en esta página estática. */
+   El nivel "Con IA" (IA real detrás) se ofrece con cotización: se conecta
+   a medida al negocio del cliente. PROHIBIDO: poner API keys en esta página estática. */
 var LEVELS=[
  {id:'basico',nombre:'Básico',desc:'Responde con los datos de tu negocio: horarios, citas y preguntas frecuentes. Respuestas programadas, siempre disponible.'},
+ {id:'ia',nombre:'Con IA',desc:'Responde con inteligencia real, no solo respuestas fijas: entiende lo que le escriben. Lo conectamos a tu negocio y te cotizamos según lo que necesites.'},
  {id:'personalizado',nombre:'Personalizado',desc:'Lo diseñamos a tu medida: cuéntanos qué necesitas en el chat y te armamos la cotización.'}
 ];
 function footCTA(){
@@ -107,12 +108,12 @@ function footLevels(){
  LEVELS.forEach(function(l){
   h+='<button class="cb-lvb" data-lv="'+l.id+'"><b>'+esc(l.nombre)+'</b><span>'+esc(l.desc)+'</span></button>';
  });
- h+='<button class="cb-lvb off" disabled><b>Con IA</b><span>Próximamente</span></button></div>';
+ h+='</div>';
  cbFoot.innerHTML=h;
- cbFoot.querySelectorAll('.cb-lvb:not(.off)').forEach(function(b){
+ cbFoot.querySelectorAll('.cb-lvb').forEach(function(b){
   b.addEventListener('click',function(){
    if(b.dataset.lv==='basico'){footChannels(buildQuote('basico'));}
-   else{startSpec();}
+   else{startSpec(b.dataset.lv);}
   });
  });
 }
@@ -124,7 +125,7 @@ function buildQuote(level){
   t+='\n• Nivel: Básico (respuestas programadas)';
   t+='\n• Estilo: '+cur.nombre+' ('+cur.trLabel+')';
  }else{
-  t+='\n• Nivel: Personalizado';
+  t+='\n• Nivel: '+(level==='ia'?'Con IA':'Personalizado');
   t+='\n• Nombre: '+specAns[0];
   t+='\n• Negocio: '+specAns[1];
   t+='\n• Necesidades: '+specAns[2];
@@ -161,9 +162,9 @@ function footChannels(quote){
   b.addEventListener('click',function(){sendChannel(b.dataset.ch,quote)});
  });
 }
-/* flujo "Personalizado": el bot recoge nombre, negocio y necesidades */
-function startSpec(){
- mode='spec';specStep=0;specAns=[];
+/* flujo "Personalizado" / "Con IA": el bot recoge nombre, negocio y necesidades */
+function startSpec(level){
+ mode='spec';specStep=0;specAns=[];specLevel=level||'personalizado';
  footHint('Responde las preguntas en el chat 👆');
  botSay('¡Buena elección! Para diseñarlo a tu medida, ¿cómo te llamas?');
  setChips([]);
@@ -178,7 +179,7 @@ function handleSpec(text){
   else{
    mode='chat';
    bubble('bot','¡Listo! Con esto te armamos tu cotización personalizada 👇');
-   footChannels(buildQuote('personalizado'));
+   footChannels(buildQuote(specLevel));
   }
   cbInput.focus();
  },650+Math.random()*450);
